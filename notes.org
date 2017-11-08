@@ -1,0 +1,45 @@
+* Keys (Controls)
+  - C ctrl
+  - M alt/option
+* Common Commands
+  - M-x                       : Execute a command.
+                              : e.g.       M-x eval-buffer
+  - eval-buffer               : Execute elisp in current buffer.
+  - eval-region               : Evaluates just the region that you have marked.
+                              : see region.
+                              : see mark.
+
+* Discovery
+  - package-list-packages     : List all packages from (m)elpa.
+  - C-h i m <menu item>       : Look up specific e  - C-h i m <menu item>
+                              : Look up specific emacs documentation from info manual.
+                              : e.g.       C-h i m Emacs
+                              :            C-h i m Emacs Lisp Intro
+  - apropos-command           : Shows all commands that match a given pattern.
+                              : e.g.       -word$
+                              :      returns
+                              :               Command         Key       Purpose
+                              :               ispell-word     M-$       Check spelling...
+                              :               kill-word       M-d       Kill characters..
+                              :               left-word       C-<left>  Move point N wo..
+                              :               (...)
+                              :
+                              : e.g.       C-h a .+
+                              :      returns all commands emacs knows about. Approx. 8k.
+  - apropos                   : Shows all symbols that match a given pattern (variables,
+                              : commands and functions).
+  - apropos-documentation     : Searches just the doc-string of symbols.
+  - apropos-library           : Search symbols inside a library.
+  - describe-mode             : Displays documentation for the current major mode and
+                              : minor modes along with any keybindings introduced by said
+                              : modes in the current buffer. Note that symbols introduced
+                              : by the enabled modes which are not bound to any keys are
+                              : not listed.
+  - describe-function         : Displays the elisp function signature, bounded keys,
+                              : hyperlink to declaration, and doc-string. If the function
+                              : is 'interactive', then it is a command.
+  - describe-variable         : 
+  - describe-key              : 
+
+  
+
