@@ -93,3 +93,95 @@
 
 (req-package-finish)
 
+(use-package ivy
+  :ensure t
+  :config
+  (setq ivy-use-virtual-buffers nil)
+  (setq ivy-initial-inputs-alist nil)
+  ;; swapping behavior
+  (define-key ivy-minibuffer-map (kbd "RET") 'ivy-alt-done)
+  (define-key ivy-minibuffer-map (kbd "C-j") 'ivy-done)
+  (define-key ivy-minibuffer-map (kbd "<C-return>") 'ivy-immediate-done)
+  ;; Escape quits.
+  (with-eval-after-load 'evil
+    (define-key ivy-minibuffer-map [escape] 'minibuffer-keyboard-quit))
+  (setq ivy-count-format "")
+  (setq ivy-height 15)
+  (ivy-mode)) 
+(use-package counsel
+  :ensure t
+  :bind (("M-x" . counsel-M-x))
+  :commands (counsel-ag
+             counsel-find-file
+             counsel-rg
+             counsel-git
+             counsel-fzf)
+  :init
+  (setq projectile-switch-project-action 'counsel-fzf)
+  :config
+  (ivy-set-prompt 'counsel-fzf (lambda () "> "))
+  (setenv "FZF_DEFAULT_COMMAND"
+          "(git ls-files --exclude-standard --others --cached ||
+        find . -maxdepth 2 -path \"*/\\.*\" -prune -o -print -o -type l -print |
+           sed s/^..//) 2> /dev/null")
+  (setq counsel-async-filter-update-time 100000)
+  (setq counsel-git-cmd "git ls-files --exclude-standard --full-name --others --cached --")
+  (setq counsel-rg-base-command "rg --max-columns 80 -i --no-heading --line-number --color never %s .")
+  (setq counsel-ag-base-command "ag -U --nocolor --nogroup %s -- .")) 
+(use-package swiper
+  :ensure t
+  :commands (swiper)
+  :bind (:map evil-normal-state-map
+              ("C-s" . swiper))
+  :diminish ivy-mode) 
+
+(use-package company-mode
+  :ensure t
+  :init (global-company-mode))
+
+(use-package typescript-mode
+  ;; npm install -g typescript
+  :ensure t
+  :mode
+  ("\\.ts\\'" . typescript-mode)
+  ("\\.ts$\\'" . typescript-mode)
+  :init
+  (add-hook 'typescript-mode-hook
+            (lambda ()
+              (setq-local typescript-indent-level (+indent-offset))
+              (with-eval-after-load 'evil
+                (setq-local evil-shift-width typescript-indent-level))))
+  :config
+  (setq typescript-enabled-frameworks '(typescript)))
+
+(use-package typescript-mode
+  ;; npm install -g typescript
+  :ensure t
+  :mode
+  ("\\.ts\\'" . typescript-mode)
+  ("\\.ts$\\'" . typescript-mode)
+  :init
+  (add-hook 'typescript-mode-hook
+            (lambda ()
+              (setq-local typescript-indent-level (+indent-offset))
+              (with-eval-after-load 'evil
+                (setq-local evil-shift-width typescript-indent-level))))
+  :config
+  (setq typescript-enabled-frameworks '(typescript)))
+
+;; end use-package configuration
+
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(package-selected-packages
+   (quote
+    (typescript-mode company-mode counsel ivy rainbow-delimiters hydra evil seoul256-theme ht log4e dash))))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
