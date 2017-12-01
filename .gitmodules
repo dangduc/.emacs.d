@@ -4,3 +4,6 @@
 [submodule "vendor/req-package"]
 	path = vendor/req-package
 	url = https://github.com/edvorg/req-package.git
+[submodule "vendor/company-mode"]
+	path = vendor/company-mode
+	url = https://github.com/company-mode/company-mode.git

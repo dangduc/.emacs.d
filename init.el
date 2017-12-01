@@ -6,7 +6,7 @@
 (setq gc-cons-threshold 100000000) ; 100 mb
 
 ;; Get rid of extraneous UI
-(menu-bar-mode -1)
+;;(menu-bar-mode -1)
 (tool-bar-mode -1)
 (scroll-bar-mode -1)
 (setq inhibit-startup-message t
@@ -46,18 +46,72 @@
 (require 'use-package)
 (require 'req-package)
 
+;; notes: counsel-fzf
+
 ;; Package declarations
 ;;
 
+(use-package exec-path-from-shell
+  ;; Set the shell environment properly.
+  :ensure t
+  :if (memq window-system '(mac ns x))
+  :config
+  (setq exec-path-from-shell-check-startup-files nil)
+  (exec-path-from-shell-initialize))
+(use-package web-mode
+  :ensure t
+  :mode
+  ("\\.phtml\\'" . web-mode)
+  ("\\.tpl\\.php\\'" . web-mode)
+  ("\\.blade\\.php\\'" . web-mode)
+  ("/\\(views\\|html\\|theme\\|templates\\)/.*\\.php\\'" . web-mode)
+  ("\\.[agj]sp\\'" . web-mode)
+  ("\\.as[cp]x\\'" . web-mode)
+  ("\\.erb\\'" . web-mode)
+  ("\\.mustache\\'" . web-mode)
+  ("\\.djhtml\\'" . web-mode)
+  ("\\.jsp\\'" . web-mode)
+  ("\\.eex\\'" . web-mode)
+  ("\\.tsx\\'" . web-mode)
+  :init
+  (add-hook 'web-mode-hook
+            (lambda ()
+              ;; Set up indentation.
+              (let ((n 2))
+                (setq-local web-mode-markup-indent-offset n)
+                (setq-local web-mode-css-indent-offset n)
+                (setq-local web-mode-code-indent-offset n)
+                (with-eval-after-load 'evil
+                  (setq-local evil-shift-width n)))))
+  :config
+  ;; Use `company-dabbrev-code' with `web-mode'.
+  (when (boundp 'company-dabbrev-code-modes)
+    (push 'web-mode company-dabbrev-code-modes))
+
+  (with-eval-after-load 'evil
+    (evil-define-key 'normal web-mode-map
+      (kbd "C-d") 'evil-scroll-down)))
+
 (req-package seoul256-theme
   :ensure t
-  :init (setq seoul256-background 255)
+  :init (setq seoul256-background 235)
         (load-theme 'seoul256 t))
+
 (req-package evil
   :require hydra
   :ensure t
   :config (evil-mode 1)
-          (define-key evil-normal-state-map (kbd "<SPC>") 'hydra-main-menu/body))
+          (define-key evil-normal-state-map (kbd "M-.") nil)
+          ;(define-key evil-normal-state-map (kbd "C-o") 'counsel-fzf)
+          ;(define-key evil-normal-state-map (kbd "C-n") 'counsel-fzf)
+          (define-key evil-normal-state-map (kbd "C-m") 'counsel-fzf)
+          (define-key evil-normal-state-map (kbd "C-h") 'evil-window-left)
+          (define-key evil-normal-state-map (kbd "C-j") 'evil-window-down)
+          (define-key evil-normal-state-map (kbd "C-k") 'evil-window-up)
+          (define-key evil-normal-state-map (kbd "C-l") 'evil-window-right)
+          (define-key evil-normal-state-map (kbd "C-\\") 'evil-window-vsplit)
+          (define-key evil-normal-state-map (kbd "C--") 'evil-window-split)
+	  (define-key evil-normal-state-map (kbd "<SPC>") 'hydra-main-menu/body))
 (req-package hydra
   :ensure t
   :config (defhydra hydra-submenu-buffer (:exit t)
@@ -75,6 +129,7 @@
             ("d" delete-window "delete window"))
           (defhydra hydra-submenu-help (:exit t)
             ("p" package-list-packages)
+            ("q" package)
             ("a" apropos)
             ("c" describe-command)
             ("f" describe-function)
@@ -84,7 +139,7 @@
             ("b" hydra-submenu-buffer/body "buffer")
             ("e" hydra-submenu-eval/body "eval")
             ("w" hydra-submenu-window/body "window")
-            ("h" hydra-submenu-help "help")))
+            ("h" hydra-submenu-help/body "help")))
 (req-package rainbow-delimiters
   :ensure t
   :config (setq show-paren-delay 0)
@@ -92,6 +147,17 @@
   :init (add-hook 'prog-mode-hook #'rainbow-delimiters-mode))
 
 (req-package-finish)
+
+;; Terminal
+(use-package multi-term
+  :ensure t
+  :commands (multi-term multi-term-next multi-term-prev)
+  :config
+  (evil-define-key 'insert term-raw-map (kbd "TAB") 'term-send-raw) ;; rebinding
+  (evil-define-key 'normal term-raw-map (kbd "p") 'term-paste)
+  (define-key term-raw-map (kbd "C-y") 'term-paste)
+  (add-to-list 'term-unbind-key-list "C-q") ; C-q binds to raw input by default
+  (setq multi-term-program "/bin/zsh"))
 
 (use-package ivy
   :ensure t
@@ -135,9 +201,23 @@
               ("C-s" . swiper))
   :diminish ivy-mode) 
 
-(use-package company-mode
-  :ensure t
-  :init (global-company-mode))
+; (package-refresh-contents) to fix a weird issue with eval deps
+(package-refresh-contents)
+
+;(use-package company-mode
+;  :ensure t
+;  :commands (global-company-mode)
+;  :config (company-tng-configure-default)
+;          (setq company-idle-delay .01)
+;          (setq company-minimum-prefix-length 1)
+;          (global-company-mode))
+
+(require 'company)
+(require 'company-tng)
+(company-tng-configure-default)
+(setq company-idle-delay .01)
+(setq company-minimum-prefix-length 1)
+(global-company-mode)
 
 (use-package typescript-mode
   ;; npm install -g typescript
@@ -148,26 +228,104 @@
   :init
   (add-hook 'typescript-mode-hook
             (lambda ()
-              (setq-local typescript-indent-level (+indent-offset))
+              (setq-local typescript-indent-level 2)
               (with-eval-after-load 'evil
                 (setq-local evil-shift-width typescript-indent-level))))
   :config
   (setq typescript-enabled-frameworks '(typescript)))
 
-(use-package typescript-mode
-  ;; npm install -g typescript
+(use-package tide
   :ensure t
-  :mode
-  ("\\.ts\\'" . typescript-mode)
-  ("\\.ts$\\'" . typescript-mode)
+  :commands (tide-setup)
   :init
-  (add-hook 'typescript-mode-hook
+  (defun +setup-tide-mode ()
+    (interactive)
+    (when (locate-dominating-file default-directory "tsfmt.json")
+      (add-hook 'before-save-hook #'tide-format-before-save nil t))
+    ;; Disable linting for Typescript Definition files.
+    (when (and (buffer-file-name)
+               (string-match-p ".d.ts$" (buffer-file-name)))
+      (flycheck-mode -1))
+    (tide-setup)
+    (tide-hl-identifier-mode +1))
+  (add-hook 'typescript-mode-hook #'+setup-tide-mode)
+
+  (add-hook 'web-mode-hook
             (lambda ()
-              (setq-local typescript-indent-level (+indent-offset))
-              (with-eval-after-load 'evil
-                (setq-local evil-shift-width typescript-indent-level))))
+              ;; Set up Tide mode if Typescript.
+              (when (string-equal (file-name-extension buffer-file-name) "tsx")
+                (setq-local web-mode-enable-auto-quoting nil)
+                (when (fboundp 'yas-activate-extra-mode)
+                  (yas-activate-extra-mode 'typescript-mode))
+                (+setup-tide-mode))))
   :config
-  (setq typescript-enabled-frameworks '(typescript)))
+  ;; Set up Typescript linting with `web-mode'.
+  ;; https://github.com/ananthakumaran/tide/pull/161
+  (eval-after-load 'flycheck
+    (lambda ()
+      (flycheck-add-mode 'typescript-tslint 'web-mode))))
+
+(use-package magit
+  :ensure t
+  :commands (magit-toplevel
+             magit-status
+             magit-blame
+             magit-log
+             magit-find-file
+             magit-find-file-other-window)
+  :config
+  (defun +magit-git-submodule-update--init--recursive ()
+    "Run $ git submodule update --init --recursive."
+    (interactive)
+    (magit-run-git-async "submodule" "update" "--init" "--recursive"))
+
+  (magit-define-popup-action
+   'magit-submodule-popup ?U
+   "Update Init Recursive"
+   #'+magit-git-submodule-update--init--recursive)
+
+  (setq magit-bury-buffer-function 'magit-mode-quit-window)
+
+  ;; Save buffers automatically instead of asking.
+  (setq magit-save-repository-buffers 'dontask)
+
+  (setq magit-repository-directories '("~/dev" "~/.emacs.d"))
+  (setq magit-refresh-status-buffer nil)
+
+  ;; Add rebase argument to pull
+  ;; https://github.com/magit/magit/issues/2597
+  (magit-define-popup-switch 'magit-pull-popup ?R "Rebase" "--rebase"))
+
+(use-package dired-subtree
+  :ensure t
+  :commands (dired-subtree-toggle dired-subtree-cycle)
+  :config
+  (setq dired-subtree-use-backgrounds nil))
+
+(use-package dired-sidebar
+  :bind (("C-x C-n" . dired-sidebar-toggle-sidebar))
+  :ensure t
+  :commands (dired-sidebar-toggle-sidebar)
+  :config
+  (when (eq system-type 'windows-nt)
+    (setq dired-sidebar-use-all-the-icons nil))
+
+  (setq dired-sidebar-use-term-integration t)
+  (setq dired-sidebar-use-custom-font t)
+  (setq dired-sidebar-face
+        (cond
+         ((eq system-type 'darwin)
+          '(:family "Helvetica" :height 160))
+         ((eq system-type 'windows-nt)
+          '(:family "Times New Roman" :height 130))
+         (:default
+          '(:family "Arial" :height 140))))
+
+  (use-package all-the-icons-dired
+    ;; M-x all-the-icons-install-fonts
+    :ensure t
+    :commands (all-the-icons-dired-mode)))
+
 
 ;; end use-package configuration
 
@@ -178,7 +336,7 @@
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (typescript-mode company-mode counsel ivy rainbow-delimiters hydra evil seoul256-theme ht log4e dash))))
+    (multi-term magit all-the-icons-dired dired-sidebar dired-subtree tide web-mode exec-path-from-shell typescript-mode company-mode counsel ivy rainbow-delimiters hydra evil seoul256-theme ht log4e dash))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
