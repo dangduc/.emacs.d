@@ -1,6 +1,21 @@
 ;;; init.el --- duddang Initialization File
 ;;
 
+;; duc namespace
+
+(defmacro duc/alist-replace (list-var element)
+  `(let
+       ((replaced-list-var
+	 (assq-delete-all
+	  (car ',element) ,list-var)))
+     (setq ,list-var
+	   (add-to-list 'replaced-list-var ',element))))
+
+(defmacro duc/alist-replace-set (list-var element)
+  `(setq ,list-var (duc/alist-replace ,list-var ,element)))
+
+;; duc namespace (end)
+
 ;; (package-initialize)
 
 (setq gc-cons-threshold 100000000) ; 100 mb
@@ -10,17 +25,25 @@
 (tool-bar-mode -1)
 (scroll-bar-mode -1)
 (setq inhibit-startup-message t
-  inhibit-startup-echo-area-message t) 
-(add-to-list 'default-frame-alist '(ns-transparent-titlebar . t))
-;; or 'dark, to switch to white title text
-(add-to-list 'default-frame-alist '(ns-appearance . 'nil)) 
-(add-to-list 'default-frame-alist '(ns-use-thin-smoothing . t))
+      inhibit-startup-echo-area-message t)
+
+(duc/alist-replace-set default-frame-alist (ns-transparent-titlebar . t))
+
+;; nil or dark, to switch to between black or white title text
+(duc/alist-replace-set default-frame-alist (ns-appearance . dark))
+
+;;(add-to-list 'default-frame-alist '(ns-use-thin-smoothing . t))
+(duc/alist-replace-set default-frame-alist (ns-use-thin-smoothing . t))
+
+;; line numbers (emacs 26 and above)
+(global-display-line-numbers-mode)
 
 ;; Set font
 ;; To see current font M-x (face-attribute 'default :font)
 (set-face-attribute 'default nil
+                    ;; :family "Input Mono"
                     :family "Input Mono"
-                    :height 140
+                    :height 180
                     :weight 'normal
                     :width 'normal)
 
@@ -37,14 +60,19 @@
   (normal-top-level-add-subdirs-to-load-path))
 
 ;; Setup built-in package manager
-(require 'package)
-(add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/"))
+(setq package-archives '(("melpa" . "http://melpa.org/packages/")))
 
 (package-initialize)
 
+
+;; Bootstrap `use-package'.
+(unless (package-installed-p 'use-package)
+  (package-refresh-contents)
+  (package-install 'use-package))
+
 ;; Bootstrap use-package as package manager
-(require 'use-package)
-(require 'req-package)
+(eval-when-compile
+  (require 'use-package))
 
 ;; notes: counsel-fzf
 
@@ -58,6 +86,7 @@
   :config
   (setq exec-path-from-shell-check-startup-files nil)
   (exec-path-from-shell-initialize))
+
 (use-package web-mode
   :ensure t
   :mode
@@ -92,27 +121,57 @@
     (evil-define-key 'normal web-mode-map
       (kbd "C-d") 'evil-scroll-down)))
 
-(req-package seoul256-theme
+(use-package seoul256-theme
   :ensure t
-  :init (setq seoul256-background 235)
-        (load-theme 'seoul256 t))
+  :init
+  (setq seoul256-background 235)
+  (with-eval-after-load 'ivy
+    (set-face-attribute 'mode-line nil
+                        :weight 'bold
+                        :height .97
+                        :box `(
+                               :line-width 3
+                               :color "#a1706f"))
+    (set-face-attribute 'mode-line-inactive nil
+                        :height .96
+                        :box `(
+                               :line-width 3
+                               :color "#a1706f")))
+  (load-theme 'seoul256 t))
 
-(req-package evil
-  :require hydra
+(use-package macrostep
+  :ensure t
+  :init
+  (with-eval-after-load 'evil
+    (define-key evil-normal-state-map (kbd "C-;") 'macrostep-collapse)
+    (define-key evil-normal-state-map (kbd "C-'") 'macrostep-expand)
+    ))
+
+(use-package evil
   :ensure t
   :config (evil-mode 1)
-          (define-key evil-normal-state-map (kbd "M-.") nil)
-          ;(define-key evil-normal-state-map (kbd "C-o") 'counsel-fzf)
-          ;(define-key evil-normal-state-map (kbd "C-n") 'counsel-fzf)
-          (define-key evil-normal-state-map (kbd "C-m") 'counsel-fzf)
-          (define-key evil-normal-state-map (kbd "C-h") 'evil-window-left)
-          (define-key evil-normal-state-map (kbd "C-j") 'evil-window-down)
-          (define-key evil-normal-state-map (kbd "C-k") 'evil-window-up)
-          (define-key evil-normal-state-map (kbd "C-l") 'evil-window-right)
-          (define-key evil-normal-state-map (kbd "C-\\") 'evil-window-vsplit)
-          (define-key evil-normal-state-map (kbd "C--") 'evil-window-split)
-	  (define-key evil-normal-state-map (kbd "<SPC>") 'hydra-main-menu/body))
-(req-package hydra
+  (setq evil-want-C-u-scroll t)
+  (define-key evil-normal-state-map (kbd "M-.") nil)
+  ;(define-key evil-normal-state-map (kbd "C-o") 'counsel-fzf)
+  ;(define-key evil-normal-state-map (kbd "C-n") 'counsel-fzf)
+  (define-key evil-normal-state-map (kbd "C-m") 'counsel-fzf)
+  (define-key evil-normal-state-map (kbd "C-h") 'evil-window-left)
+  (define-key evil-normal-state-map (kbd "C-j") 'evil-window-down)
+  (define-key evil-normal-state-map (kbd "C-k") 'evil-window-up)
+  (define-key evil-normal-state-map (kbd "C-l") 'evil-window-right)
+  (define-key evil-normal-state-map (kbd "C-\\") 'evil-window-vsplit)
+  (define-key evil-normal-state-map (kbd "C--") 'evil-window-split)
+  ;(define-key evil-normal-state-map (kbd "<SPC>") 'hydra-main-menu/body)
+  (use-package general
+    :ensure t
+    :config
+    (general-override-mode)
+    (general-define-key
+     :states '(normal motion visual)
+     :keymaps 'override
+     "<SPC>" 'hydra-main-menu/body)))
+
+(use-package hydra
   :ensure t
   :config (defhydra hydra-submenu-buffer (:exit t)
             ("p" previous-buffer "prev buffer")
@@ -121,32 +180,112 @@
             ("o" switch-to-buffer "open/create buffer")
             ("s" save-buffer "save buffer")
             ("k" kill-buffer "kill buffer"))
-          (defhydra hydra-submenu-eval (:exit t)
-            ("e" eval-last-sexp "eval sexp")
-            ("p" eval-print-last-sexp "eval sexp & print")
-            ("f" eval-defun "eval defun"))
-          (defhydra hydra-submenu-window (:exit t)
-            ("d" delete-window "delete window"))
-          (defhydra hydra-submenu-help (:exit t)
-            ("p" package-list-packages)
-            ("q" package)
-            ("a" apropos)
-            ("c" describe-command)
-            ("f" describe-function)
-            ("v" describe-variable))
-          (defhydra hydra-main-menu (:exit t)
-            ("SPC" execute-extended-command "M-x")
-            ("b" hydra-submenu-buffer/body "buffer")
-            ("e" hydra-submenu-eval/body "eval")
-            ("w" hydra-submenu-window/body "window")
-            ("h" hydra-submenu-help/body "help")))
-(req-package rainbow-delimiters
+  (defhydra hydra-submenu-eval (:exit t)
+    ("e" eval-last-sexp "eval sexp")
+    ("p" eval-print-last-sexp "eval sexp & print")
+    ("f" eval-defun "eval defun"))
+  (defhydra hydra-submenu-window (:exit t)
+    ("d" delete-window "delete window"))
+  (defhydra hydra-submenu-help (:exit t)
+    ("p" package-list-packages)
+    ("q" package)
+    ("a" apropos)
+    ("c" describe-command)
+    ("f" describe-function)
+    ("v" describe-variable))
+  (defhydra hydra-main-menu (:exit t)
+    ("SPC" execute-extended-command "M-x")
+    ("b" hydra-submenu-buffer/body "buffer")
+    ("e" hydra-submenu-eval/body "eval")
+    ("w" hydra-submenu-window/body "window")
+    ("h" hydra-submenu-help/body "help")))
+
+(use-package diminish
+  :ensure t
+  :config
+  (diminish 'subword-mode)
+  (diminish 'visual-line-mode)
+  (diminish 'abbrev-mode)
+  (with-eval-after-load 'eldoc
+    (diminish 'eldoc-mode))
+  (with-eval-after-load 'hideshow
+    (diminish 'hs-minor-mode))
+  (with-eval-after-load 'autorevert
+    (diminish 'auto-revert-mode)))
+
+(use-package smartparens
+  :ensure t
+  :diminish smartparens-mode
+  :init
+  (dolist (hook '(lisp-mode-hook
+                  scheme-mode-hook
+                  clojure-mode-hook
+                  emacs-lisp-mode-hook))
+    (add-hook hook #'smartparens-strict-mode))
+  :config
+  ;; Disable highlights.
+  (setq sp-highlight-pair-overlay nil
+        sp-highlight-wrap-overlay nil
+        sp-highlight-wrap-tag-overlay nil)
+  (setq sp-cancel-autoskip-on-backward-movement nil
+        sp-autoskip-closing-pair 'always-end
+        sp-autoskip-opening-pair t)
+
+  (use-package smartparens-config :ensure nil)
+  (smartparens-global-mode 1)
+  (sp-pair "(" ")" :wrap "M-(")
+  (sp-pair "(" ")" :wrap "M-)")
+  (sp-pair "[" "]" :wrap "M-[")
+  (sp-pair "[" "]" :wrap "M-]")
+  (sp-pair "{" "}" :wrap "M-{")
+  (sp-pair "{" "}" :wrap "M-}")
+  (sp-pair "\"" "\"" :wrap "M-\""))
+
+(use-package lispyville
+  :ensure t
+  :diminish (lispyville-mode)
+  :commands
+  (lispyville-mode)
+  :init
+  (dolist (hook '(lisp-mode-hook
+                  scheme-mode-hook
+                  clojure-mode-hook
+                  emacs-lisp-mode-hook))
+    (add-hook hook (lambda ()
+                     (lispyville-mode))))
+  :config
+  (lispyville-set-key-theme
+   '(operators
+     s-operators
+     (additional-movement normal)
+     slurp/barf-cp
+     additional
+     escape)))
+
+(use-package projectile
+  :ensure t
+  :commands (projectile-project-p
+             projectile-project-root
+             projectile-find-file
+             projectile-switch-project
+             projectile-switch-to-buffer
+             projectile-ag
+             projectile-recentf)
+  :diminish projectile-mode
+  :init
+  (when (eq system-type 'windows-nt)
+    (setq projectile-indexing-method 'alien)
+    (setq projectile-enable-caching t))
+  :config
+  (setq projectile-enable-caching t)
+  (projectile-mode))
+
+(use-package rainbow-delimiters
   :ensure t
   :config (setq show-paren-delay 0)
-          (show-paren-mode 1)
+  (show-paren-mode 1)
   :init (add-hook 'prog-mode-hook #'rainbow-delimiters-mode))
 
-(req-package-finish)
 
 ;; Terminal
 (use-package multi-term
@@ -161,19 +300,34 @@
 
 (use-package ivy
   :ensure t
+  :bind (:map ivy-minibuffer-map
+              ("M-x" . ivy-dispatching-done))
   :config
   (setq ivy-use-virtual-buffers nil)
+  (setq ivy-flx-limit 100)
+  (setq ivy-re-builders-alist
+        '((counsel-git-log . ivy--regex-plus)
+          (swiper . ivy--regex-plus)
+          (swiper-multi . ivy--regex-plus)
+          (projectile-completing-read . ivy--regex-fuzzy)
+          (counsel-fzf . regexp-quote)
+          (t . ivy--regex-fuzzy)))
   (setq ivy-initial-inputs-alist nil)
+
   ;; swapping behavior
   (define-key ivy-minibuffer-map (kbd "RET") 'ivy-alt-done)
   (define-key ivy-minibuffer-map (kbd "C-j") 'ivy-done)
+
   (define-key ivy-minibuffer-map (kbd "<C-return>") 'ivy-immediate-done)
+
   ;; Escape quits.
   (with-eval-after-load 'evil
     (define-key ivy-minibuffer-map [escape] 'minibuffer-keyboard-quit))
+
   (setq ivy-count-format "")
   (setq ivy-height 15)
-  (ivy-mode)) 
+  (ivy-mode))
+
 (use-package counsel
   :ensure t
   :bind (("M-x" . counsel-M-x))
@@ -193,31 +347,34 @@
   (setq counsel-async-filter-update-time 100000)
   (setq counsel-git-cmd "git ls-files --exclude-standard --full-name --others --cached --")
   (setq counsel-rg-base-command "rg --max-columns 80 -i --no-heading --line-number --color never %s .")
-  (setq counsel-ag-base-command "ag -U --nocolor --nogroup %s -- .")) 
+  (setq counsel-ag-base-command "ag -U --nocolor --nogroup %s -- ."))
+
 (use-package swiper
   :ensure t
   :commands (swiper)
-  :bind (:map evil-normal-state-map
-              ("C-s" . swiper))
-  :diminish ivy-mode) 
+  ;;  :bind (:map evil-normal-state-map
+  ;;              ("C-s" . swiper))
+  :diminish ivy-mode)
 
-; (package-refresh-contents) to fix a weird issue with eval deps
-(package-refresh-contents)
+(use-package flycheck
+  :if (not (eq system-type 'windows-nt))
+  :defer 8
+  :ensure t
+  :diminish flycheck-mode
+  :commands (flycheck-mode)
+  :config
+  (setq flycheck-idle-change-delay 1.2)
+  (setq-default flycheck-emacs-lisp-load-path 'inherit)
+  (setq-default flycheck-disabled-checkers '(emacs-lisp-checkdoc))
+  (global-flycheck-mode))
 
-;(use-package company-mode
-;  :ensure t
-;  :commands (global-company-mode)
-;  :config (company-tng-configure-default)
-;          (setq company-idle-delay .01)
-;          (setq company-minimum-prefix-length 1)
-;          (global-company-mode))
-
-(require 'company)
-(require 'company-tng)
-(company-tng-configure-default)
-(setq company-idle-delay .01)
-(setq company-minimum-prefix-length 1)
-(global-company-mode)
+(use-package company
+  :ensure t
+  :diminish company
+  :config (company-tng-configure-default)
+  (setq company-idle-delay .01)
+  (setq company-minimum-prefix-length 1)
+  (global-company-mode))
 
 (use-package typescript-mode
   ;; npm install -g typescript
@@ -296,6 +453,12 @@
   ;; https://github.com/magit/magit/issues/2597
   (magit-define-popup-switch 'magit-pull-popup ?R "Rebase" "--rebase"))
 
+(use-package evil-magit
+  :ensure t
+  :after magit
+  :init
+  (setq evil-magit-want-horizontal-movement t))
+
 (use-package dired-subtree
   :ensure t
   :commands (dired-subtree-toggle dired-subtree-cycle)
@@ -326,7 +489,6 @@
     :ensure t
     :commands (all-the-icons-dired-mode)))
 
-
 ;; end use-package configuration
 
 (custom-set-variables
@@ -334,9 +496,12 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(custom-safe-themes
+   (quote
+    ("6fc0ae7cc2abd82d8add1140874ccf8773feaaae73a704981d52fdf357341038" "4b207752aa69c0b182c6c3b8e810bbf3afa429ff06f274c8ca52f8df7623eb60" "2a739405edf418b8581dcd176aaf695d319f99e3488224a3c495cb0f9fd814e3" "5cd0afd0ca01648e1fff95a7a7f8abec925bd654915153fb39ee8e72a8b56a1f" "d2c61aa11872e2977a07969f92630a49e30975220a079cd39bec361b773b4eb3" "10e3d04d524c42b71496e6c2e770c8e18b153fcfcc838947094dad8e5aa02cef" default)))
  '(package-selected-packages
    (quote
-    (multi-term magit all-the-icons-dired dired-sidebar dired-subtree tide web-mode exec-path-from-shell typescript-mode company-mode counsel ivy rainbow-delimiters hydra evil seoul256-theme ht log4e dash))))
+    (macrostep zenburn-theme anti-zenburn-theme minimap doom-themes dracula-theme projectile lispyville smartparens diminish evil-magit company multi-term magit all-the-icons-dired dired-sidebar dired-subtree tide web-mode exec-path-from-shell typescript-mode company-mode counsel ivy rainbow-delimiters hydra evil seoul256-theme ht log4e dash))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
