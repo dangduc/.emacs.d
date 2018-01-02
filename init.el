@@ -6,10 +6,10 @@
 (defmacro duc/alist-replace (list-var element)
   `(let
        ((replaced-list-var
-	 (assq-delete-all
-	  (car ',element) ,list-var)))
+         (assq-delete-all
+          (car ',element) ,list-var)))
      (setq ,list-var
-	   (add-to-list 'replaced-list-var ',element))))
+           (add-to-list 'replaced-list-var ',element))))
 
 (defmacro duc/alist-replace-set (list-var element)
   `(setq ,list-var (duc/alist-replace ,list-var ,element)))
@@ -27,6 +27,7 @@
 (setq inhibit-startup-message t
       inhibit-startup-echo-area-message t)
 
+;; enable transparent osx titlebar (a la Chrome)
 (duc/alist-replace-set default-frame-alist (ns-transparent-titlebar . t))
 
 ;; nil or dark, to switch to between black or white title text
@@ -36,16 +37,32 @@
 (duc/alist-replace-set default-frame-alist (ns-use-thin-smoothing . t))
 
 ;; line numbers (emacs 26 and above)
-(global-display-line-numbers-mode)
+;(global-display-line-numbers-mode)
+
+;; nowrap
+(set-default 'truncate-lines t)
+
+;; use spaces instead of tabs
+(setq-default indent-tabs-mode nil)
 
 ;; Set font
 ;; To see current font M-x (face-attribute 'default :font)
 (set-face-attribute 'default nil
                     ;; :family "Input Mono"
                     :family "Input Mono"
-                    :height 180
+                    :height 140
                     :weight 'normal
                     :width 'normal)
+
+;; Save all tempfiles in $TMPDIR/emacs$UID/
+(defconst emacs-tmp-dir (expand-file-name (format "emacs%d" (user-uid))
+                                          temporary-file-directory))
+(setq backup-directory-alist
+      `((".*" . ,emacs-tmp-dir)))
+(setq auto-save-file-name-transforms
+      `((".*" ,emacs-tmp-dir t)))
+(setq auto-save-list-file-prefix
+      emacs-tmp-dir)
 
 ;; Disable in favor of `use-package'.
 (setq package-enable-at-startup nil)
@@ -64,7 +81,6 @@
 
 (package-initialize)
 
-
 ;; Bootstrap `use-package'.
 (unless (package-installed-p 'use-package)
   (package-refresh-contents)
@@ -75,9 +91,21 @@
   (require 'use-package))
 
 ;; notes: counsel-fzf
-
+(what-cursor-position)
 ;; Package declarations
 ;;
+(use-package whitespace
+  :ensure t
+  :config
+  (setq whitespace-line-column 80) ;; limit line length
+  (setq whitespace-style '(face lines-tail
+                                tabs
+                                trailing
+                                empty
+                                space-before-tab::tab
+                                space-before-tab::space))
+  :init
+  (add-hook 'prog-mode-hook 'whitespace-mode))
 
 (use-package exec-path-from-shell
   ;; Set the shell environment properly.
@@ -86,6 +114,14 @@
   :config
   (setq exec-path-from-shell-check-startup-files nil)
   (exec-path-from-shell-initialize))
+
+;(use-package highlight-indent-guides
+;  :ensure t
+;  :config
+;  (setq highlight-indent-guides-method 'character)
+;  :init
+;  (add-hook 'prog-mode-hook 'highlight-indent-guides-mode)
+;  (highlight-indent-guides-mode))
 
 (use-package web-mode
   :ensure t
@@ -124,20 +160,22 @@
 (use-package seoul256-theme
   :ensure t
   :init
-  (setq seoul256-background 235)
-  (with-eval-after-load 'ivy
-    (set-face-attribute 'mode-line nil
-                        :weight 'bold
-                        :height .97
-                        :box `(
-                               :line-width 3
-                               :color "#a1706f"))
-    (set-face-attribute 'mode-line-inactive nil
-                        :height .96
-                        :box `(
-                               :line-width 3
-                               :color "#a1706f")))
-  (load-theme 'seoul256 t))
+  (setq seoul256-background 234)
+  (load-theme 'seoul256 t)
+  (set-face-attribute  'vertical-border nil
+                       :background "#323232"
+                       :foreground "#323232")
+  (set-face-attribute 'mode-line nil
+                      :weight 'bold
+                      :height .97
+                      :box `(
+                             :line-width 3
+                             :color "#a1706f"))
+  (set-face-attribute 'mode-line-inactive nil
+                      :height .97
+                      :box `(
+                             :line-width 3
+                             :color "#565656")))
 
 (use-package macrostep
   :ensure t
@@ -151,17 +189,25 @@
   :ensure t
   :config (evil-mode 1)
   (setq evil-want-C-u-scroll t)
-  (define-key evil-normal-state-map (kbd "M-.") nil)
-  ;(define-key evil-normal-state-map (kbd "C-o") 'counsel-fzf)
-  ;(define-key evil-normal-state-map (kbd "C-n") 'counsel-fzf)
-  (define-key evil-normal-state-map (kbd "C-m") 'counsel-fzf)
-  (define-key evil-normal-state-map (kbd "C-h") 'evil-window-left)
-  (define-key evil-normal-state-map (kbd "C-j") 'evil-window-down)
-  (define-key evil-normal-state-map (kbd "C-k") 'evil-window-up)
-  (define-key evil-normal-state-map (kbd "C-l") 'evil-window-right)
-  (define-key evil-normal-state-map (kbd "C-\\") 'evil-window-vsplit)
-  (define-key evil-normal-state-map (kbd "C--") 'evil-window-split)
+  ;(define-key evil-normal-state-map (kbd "M-.") nil)
+  (define-key evil-normal-state-map (kbd "s-.") 'tide-jump-to-definition)
+  (define-key evil-normal-state-map (kbd "s-,") 'xref-pop-marker-stack)
+  (define-key evil-normal-state-map (kbd "s-o") 'counsel-rg)
+  (define-key evil-normal-state-map (kbd "s-n") 'switch-to-buffer)
+  (define-key evil-normal-state-map (kbd "s-m") 'counsel-fzf)
+  (define-key evil-normal-state-map (kbd "s-h") 'evil-window-left)
+  (define-key evil-normal-state-map (kbd "s-j") 'evil-window-down)
+  (define-key evil-normal-state-map (kbd "s-k") 'evil-window-up)
+  (define-key evil-normal-state-map (kbd "s-l") 'evil-window-right)
+  (define-key evil-normal-state-map (kbd "s-\\") 'evil-window-vsplit)
+  (define-key evil-normal-state-map (kbd "s--") 'evil-window-split)
   ;(define-key evil-normal-state-map (kbd "<SPC>") 'hydra-main-menu/body)
+
+  (use-package evil-collection
+    :ensure t
+    :init
+    (evil-collection-init))
+
   (use-package general
     :ensure t
     :config
@@ -178,19 +224,24 @@
             ("n" next-buffer "next buffer")
             ("l" list-buffers "list buffers")
             ("o" switch-to-buffer "open/create buffer")
-            ("s" save-buffer "save buffer")
+            ("r" revert-buffer "reload buffer")
+            ("w" save-buffer "save buffer")
             ("k" kill-buffer "kill buffer"))
   (defhydra hydra-submenu-eval (:exit t)
     ("e" eval-last-sexp "eval sexp")
     ("p" eval-print-last-sexp "eval sexp & print")
     ("f" eval-defun "eval defun"))
   (defhydra hydra-submenu-window (:exit t)
-    ("d" delete-window "delete window"))
+    ("k" delete-window "kill window"))
+  (defhydra hydra-submenu-file (:exit t)
+    ("f" find-file "find file")
+    ("w" save-buffer "write file")
+    ("i" (find-file "~/.emacs.d/init.el" ) "init.el"))
   (defhydra hydra-submenu-help (:exit t)
     ("p" package-list-packages)
     ("q" package)
     ("a" apropos)
-    ("c" describe-command)
+    ("k" describe-key "describe key")
     ("f" describe-function)
     ("v" describe-variable))
   (defhydra hydra-main-menu (:exit t)
@@ -198,7 +249,9 @@
     ("b" hydra-submenu-buffer/body "buffer")
     ("e" hydra-submenu-eval/body "eval")
     ("w" hydra-submenu-window/body "window")
-    ("h" hydra-submenu-help/body "help")))
+    ("h" hydra-submenu-help/body "help")
+    ("f" hydra-submenu-file/body "file")
+    ("g" magit-status "magit")))
 
 (use-package diminish
   :ensure t
@@ -335,15 +388,17 @@
              counsel-find-file
              counsel-rg
              counsel-git
-             counsel-fzf)
+             counsel-fzf
+             counsel-fzf-occur)
   :init
   (setq projectile-switch-project-action 'counsel-fzf)
   :config
   (ivy-set-prompt 'counsel-fzf (lambda () "> "))
   (setenv "FZF_DEFAULT_COMMAND"
           "(git ls-files --exclude-standard --others --cached ||
-        find . -maxdepth 2 -path \"*/\\.*\" -prune -o -print -o -type l -print |
+        ind . -maxdepth 9 -path \"*/\\.*\" -prune -o -print -o -type l -print |
            sed s/^..//) 2> /dev/null")
+  
   (setq counsel-async-filter-update-time 100000)
   (setq counsel-git-cmd "git ls-files --exclude-standard --full-name --others --cached --")
   (setq counsel-rg-base-command "rg --max-columns 80 -i --no-heading --line-number --color never %s .")
@@ -453,6 +508,22 @@
   ;; https://github.com/magit/magit/issues/2597
   (magit-define-popup-switch 'magit-pull-popup ?R "Rebase" "--rebase"))
 
+(use-package evil-ediff
+  :ensure t
+  :commands (evil-ediff-init)
+  :init
+  (defun +evil-ediff-init ()
+    "Initialize with `evil-ediff-init' and remove the hook."
+    (evil-ediff-init)
+    (remove-hook 'ediff-mode-hook #'evil-ediff-init))
+  (add-hook 'ediff-mode-hook #'+evil-ediff-init)
+  :config
+  (setq magit-ediff-dwim-show-on-hunks t)
+  (setq ediff-window-setup-function 'ediff-setup-windows-plain)
+  (setq ediff-split-window-function 'split-window-horizontally)
+  (setq ediff-diff-options "-w")
+  (add-hook 'ediff-after-quit-hook-internal 'winner-undo))
+
 (use-package evil-magit
   :ensure t
   :after magit
@@ -489,6 +560,19 @@
     :ensure t
     :commands (all-the-icons-dired-mode)))
 
+(use-package diff-hl
+  :ensure t
+  :commands (global-diff-hl-mode)
+  :init (global-diff-hl-mode))
+
+(use-package markdown-mode
+  :ensure t
+  :commands (markdown-mode gfm-mode)
+  :mode (("README\\.md\\'" . gfm-mode)
+         ("\\.md\\'" . markdown-mode)
+         ("\\.markdown\\'" . markdown-mode))
+  :init (setq markdown-command "multimarkdown"))
+
 ;; end use-package configuration
 
 (custom-set-variables
@@ -501,7 +585,7 @@
     ("6fc0ae7cc2abd82d8add1140874ccf8773feaaae73a704981d52fdf357341038" "4b207752aa69c0b182c6c3b8e810bbf3afa429ff06f274c8ca52f8df7623eb60" "2a739405edf418b8581dcd176aaf695d319f99e3488224a3c495cb0f9fd814e3" "5cd0afd0ca01648e1fff95a7a7f8abec925bd654915153fb39ee8e72a8b56a1f" "d2c61aa11872e2977a07969f92630a49e30975220a079cd39bec361b773b4eb3" "10e3d04d524c42b71496e6c2e770c8e18b153fcfcc838947094dad8e5aa02cef" default)))
  '(package-selected-packages
    (quote
-    (macrostep zenburn-theme anti-zenburn-theme minimap doom-themes dracula-theme projectile lispyville smartparens diminish evil-magit company multi-term magit all-the-icons-dired dired-sidebar dired-subtree tide web-mode exec-path-from-shell typescript-mode company-mode counsel ivy rainbow-delimiters hydra evil seoul256-theme ht log4e dash))))
+    (highlight-indent-guides evil-collection anti-zenburn zenburn markdown-mode sublimity-map sublimity diff-hl macrostep zenburn-theme anti-zenburn-theme minimap doom-themes dracula-theme projectile lispyville smartparens diminish evil-magit company multi-term magit all-the-icons-dired dired-sidebar dired-subtree tide web-mode exec-path-from-shell typescript-mode company-mode counsel ivy rainbow-delimiters hydra evil seoul256-theme ht log4e dash))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
