@@ -14,14 +14,23 @@
 (defmacro duc/alist-replace-set (list-var element)
   `(setq ,list-var (duc/alist-replace ,list-var ,element)))
 
+;; font chooser
+(defun duc/ivy-font ()
+  (interactive)
+  (set-face-attribute 'default nil
+                      :family (completing-read "font: "
+                                               (font-family-list))
+                      :height 130
+                      :weight 'normal
+                      :width 'normal))
+
 ;; duc namespace (end)
 
-;; (package-initialize)
+(setq ring-bell-function #'ignore)
 
 (setq gc-cons-threshold 100000000) ; 100 mb
 
 ;; Get rid of extraneous UI
-;;(menu-bar-mode -1)
 (tool-bar-mode -1)
 (scroll-bar-mode -1)
 (setq inhibit-startup-message t
@@ -33,11 +42,23 @@
 ;; nil or dark, to switch to between black or white title text
 (duc/alist-replace-set default-frame-alist (ns-appearance . dark))
 
-;;(add-to-list 'default-frame-alist '(ns-use-thin-smoothing . t))
-(duc/alist-replace-set default-frame-alist (ns-use-thin-smoothing . t))
+;(duc/alist-replace-set default-frame-alist (ns-use-thin-smoothing . t))
+(duc/alist-replace-set default-frame-alist (ns-antialias-text . t))
 
-;; line numbers (emacs 26 and above)
-;(global-display-line-numbers-mode)
+; line numbers (emacs 26 and above)
+(when (fboundp 'display-line-numbers-mode)
+  (dolist (hook '(prog-mode-hook
+                  nroff-mode-hook
+                  nxml-mode-hook
+                  conf-space-mode-hook))
+    (add-hook hook
+              (lambda ()
+                (when (boundp 'display-line-numbers-widen)
+                  (setq-default display-line-numbers-widen t))
+                (set-face-attribute 'line-number-current-line nil :weight 'bold)
+                (when (boundp 'display-line-numbers-type)
+                  (setq display-line-numbers-type 't))
+                (display-line-numbers-mode)))))
 
 ;; nowrap
 (set-default 'truncate-lines t)
@@ -46,13 +67,25 @@
 (setq-default indent-tabs-mode nil)
 
 ;; Set font
-;; To see current font M-x (face-attribute 'default :font)
 (set-face-attribute 'default nil
-                    ;; :family "Input Mono"
-                    :family "Input Mono"
-                    :height 140
+                    :family "InconsolateG for Powerline"
+                    :height 130
                     :weight 'normal
                     :width 'normal)
+
+;; make mode-line taller
+(defun +make-modeline-taller (&rest _)
+  "Make the mode line taller."
+  (dolist (sym '(mode-line mode-line-inactive))
+    (set-face-attribute
+     sym nil
+     :family "iA Writer Duospace"
+     :height 120
+     :weight 'normal
+     :width 'normal
+     :box `(:line-width 3 :color ,(face-attribute `,sym :background)))))
+
+(advice-add 'load-theme :after '+make-modeline-taller)
 
 ;; Save all tempfiles in $TMPDIR/emacs$UID/
 (defconst emacs-tmp-dir (expand-file-name (format "emacs%d" (user-uid))
@@ -63,6 +96,12 @@
       `((".*" ,emacs-tmp-dir t)))
 (setq auto-save-list-file-prefix
       emacs-tmp-dir)
+
+;; Don't let osx swallow Meta key.
+(setq mac-pass-command-to-system nil)
+
+(setq mac-option-modifier 'super)
+(setq mac-command-modifier 'meta)
 
 ;; Disable in favor of `use-package'.
 (setq package-enable-at-startup nil)
@@ -96,6 +135,7 @@
 ;;
 (use-package whitespace
   :ensure t
+  :diminish whitespace-mode
   :config
   (setq whitespace-line-column 80) ;; limit line length
   (setq whitespace-style '(face lines-tail
@@ -106,6 +146,13 @@
                                 space-before-tab::space))
   :init
   (add-hook 'prog-mode-hook 'whitespace-mode))
+
+(use-package which-key
+  :ensure t
+  :init
+  (setq which-key-idle-delay 0.2)
+  (which-key-setup-minibuffer)
+  (which-key-mode))
 
 (use-package exec-path-from-shell
   ;; Set the shell environment properly.
@@ -157,51 +204,64 @@
     (evil-define-key 'normal web-mode-map
       (kbd "C-d") 'evil-scroll-down)))
 
-(use-package seoul256-theme
+(use-package plan9-theme
+  :disabled
   :ensure t
   :init
-  (setq seoul256-background 234)
-  (load-theme 'seoul256 t)
-  (set-face-attribute  'vertical-border nil
-                       :background "#323232"
-                       :foreground "#323232")
+  (load-theme 'plan9 t)
+
+  (with-eval-after-load 'whitespace-mode
+    (set-face-attribute 'whitespace-line nil
+                        :foreground "black"
+                        :background "#e6e6d1"))
+  (when (boundp 'window-divider-mode)
+    (setq window-divider-default-places t
+          window-divider-default-bottom-width 1
+          window-divider-default-right-width 1)
+    (window-divider-mode +1))
+  (set-face-attribute 'mode-line-buffer-id nil
+                      :foreground "#424242")
   (set-face-attribute 'mode-line nil
-                      :weight 'bold
-                      :height .97
-                      :box `(
-                             :line-width 3
-                             :color "#a1706f"))
+                      :background "#e5fbff"
+                      :box '(:line-width 3 :color "#e5fbff"))
   (set-face-attribute 'mode-line-inactive nil
-                      :height .97
-                      :box `(
-                             :line-width 3
-                             :color "#565656")))
+                      :foreground "#888888"
+                      :background "#e5fbff"
+                      :box '(:line-width 3 :color "#e5fbff"))
+  (set-face-attribute 'vertical-border nil
+                      :foreground "#000000")
+  (set-face-attribute 'fringe nil
+                      ;:background "#efeccb"
+                      :background "#FFFFE8"))
+
+(use-package doom-themes
+  :disabled
+  :ensure t
+  :init
+  (load-theme 'doom-spacegrey t))
+
+(use-package seoul256-theme
+  :ensure t
+  :config
+  :init
+  (setq seoul256-background 234)
+  (set-face-attribute  'vertical-border nil
+                       :foreground "#323232")
+  (load-theme 'seoul256 t))
 
 (use-package macrostep
   :ensure t
   :init
   (with-eval-after-load 'evil
     (define-key evil-normal-state-map (kbd "C-;") 'macrostep-collapse)
-    (define-key evil-normal-state-map (kbd "C-'") 'macrostep-expand)
-    ))
+    (define-key evil-normal-state-map (kbd "C-'") 'macrostep-expand)))
 
 (use-package evil
   :ensure t
-  :config (evil-mode 1)
+  :config
+  (evil-mode 1)
   (setq evil-want-C-u-scroll t)
-  ;(define-key evil-normal-state-map (kbd "M-.") nil)
-  (define-key evil-normal-state-map (kbd "s-.") 'tide-jump-to-definition)
-  (define-key evil-normal-state-map (kbd "s-,") 'xref-pop-marker-stack)
-  (define-key evil-normal-state-map (kbd "s-o") 'counsel-rg)
-  (define-key evil-normal-state-map (kbd "s-n") 'switch-to-buffer)
-  (define-key evil-normal-state-map (kbd "s-m") 'counsel-fzf)
-  (define-key evil-normal-state-map (kbd "s-h") 'evil-window-left)
-  (define-key evil-normal-state-map (kbd "s-j") 'evil-window-down)
-  (define-key evil-normal-state-map (kbd "s-k") 'evil-window-up)
-  (define-key evil-normal-state-map (kbd "s-l") 'evil-window-right)
-  (define-key evil-normal-state-map (kbd "s-\\") 'evil-window-vsplit)
-  (define-key evil-normal-state-map (kbd "s--") 'evil-window-split)
-  ;(define-key evil-normal-state-map (kbd "<SPC>") 'hydra-main-menu/body)
+  (define-key evil-normal-state-map (kbd "M-.") nil)
 
   (use-package evil-collection
     :ensure t
@@ -215,7 +275,10 @@
     (general-define-key
      :states '(normal motion visual)
      :keymaps 'override
-     "<SPC>" 'hydra-main-menu/body)))
+     "<SPC>" 'hydra-main-menu/body))
+  (use-package undo-tree
+    :ensure t
+    :diminish undo-tree-mode))
 
 (use-package hydra
   :ensure t
@@ -233,25 +296,62 @@
     ("f" eval-defun "eval defun"))
   (defhydra hydra-submenu-window (:exit t)
     ("k" delete-window "kill window"))
+  (defhydra hydra-submenu-window (:exit t)
+    ("fn" make-frame-command "new frame")
+    ("ff" toggle-frame-fullscreen "toggle fullscreen")
+    ("k" delete-window "kill window"))
   (defhydra hydra-submenu-file (:exit t)
     ("f" find-file "find file")
     ("w" save-buffer "write file")
-    ("i" (find-file "~/.emacs.d/init.el" ) "init.el"))
+    ("i" (find-file "~/.emacs.d/init.el" ) "init.el")
+    ("b" dired-sidebar-toggle-sidebar "sidebar"))
   (defhydra hydra-submenu-help (:exit t)
-    ("p" package-list-packages)
-    ("q" package)
-    ("a" apropos)
+    ("p" package-list-packages "list packages")
+    ("a" counsel-apropos "apropos")
     ("k" describe-key "describe key")
-    ("f" describe-function)
-    ("v" describe-variable))
-  (defhydra hydra-main-menu (:exit t)
+    ("f" counsel-describe-function "describe function")
+    ("v" counsel-describe-variable "describe variable"))
+  (defhydra hydra-submenu-customize-face (:exit t)
+    ("f" duc/ivy-font "change font")
+    ("d" counsel-describe-face "describe face"))
+  (defhydra hydra-submenu-git (:exit t :hint nil)
+    "
+              ^Git^
+^^^^^^^^---------------------------------
+_g_: status    _l_: log      _b_: blame
+"
+    ("g" magit-status)
+    ("l" magit-log)
+    ("b" magit-blame))
+  (defhydra hydra-main-menu (:exit t :idle .2 :hint nil)
+    "
+^Window^       ^Fuzzy^           ^Action^          ^Application
+^^^^^^^^-----------------------------------------------------------------
+_h_: left      _o_: contents   _SPC_: M-x          _g_: magit
+_l_: right     _n_: buffers      _b_: buffers
+_k_: up        _m_: files        _e_: eval
+_j_: down      ^ ^               _w_: window
+_\\_: vsplit   ^ ^                _?_: help
+_-_: hsplit    ^ ^               _f_: file
+^ ^            ^ ^               _c_: customize
+"
+    ("h" evil-window-left)
+    ("l" evil-window-right)
+    ("k" evil-window-up)
+    ("j" evil-window-down)
+    ("-" split-window-below)
+    ("\\" split-window-right)
+    ("o" counsel-rg)
+    ("n" switch-to-buffer)
+    ("m" counsel-fzf)
     ("SPC" execute-extended-command "M-x")
-    ("b" hydra-submenu-buffer/body "buffer")
-    ("e" hydra-submenu-eval/body "eval")
-    ("w" hydra-submenu-window/body "window")
-    ("h" hydra-submenu-help/body "help")
-    ("f" hydra-submenu-file/body "file")
-    ("g" magit-status "magit")))
+    ("b" hydra-submenu-buffer/body)
+    ("c" hydra-submenu-customize-face/body)
+    ("e" hydra-submenu-eval/body)
+    ("w" hydra-submenu-window/body)
+    ("?" hydra-submenu-help/body)
+    ("f" hydra-submenu-file/body)
+    ("g" hydra-submenu-git/body)))
 
 (use-package diminish
   :ensure t
@@ -310,7 +410,7 @@
   (lispyville-set-key-theme
    '(operators
      s-operators
-     (additional-movement normal)
+     ;(additional-movement normal)
      slurp/barf-cp
      additional
      escape)))
@@ -379,6 +479,7 @@
 
   (setq ivy-count-format "")
   (setq ivy-height 15)
+
   (ivy-mode))
 
 (use-package counsel
@@ -398,7 +499,6 @@
           "(git ls-files --exclude-standard --others --cached ||
         ind . -maxdepth 9 -path \"*/\\.*\" -prune -o -print -o -type l -print |
            sed s/^..//) 2> /dev/null")
-  
   (setq counsel-async-filter-update-time 100000)
   (setq counsel-git-cmd "git ls-files --exclude-standard --full-name --others --cached --")
   (setq counsel-rg-base-command "rg --max-columns 80 -i --no-heading --line-number --color never %s .")
@@ -407,8 +507,6 @@
 (use-package swiper
   :ensure t
   :commands (swiper)
-  ;;  :bind (:map evil-normal-state-map
-  ;;              ("C-s" . swiper))
   :diminish ivy-mode)
 
 (use-package flycheck
@@ -425,7 +523,7 @@
 
 (use-package company
   :ensure t
-  :diminish company
+  :diminish company-mode
   :config (company-tng-configure-default)
   (setq company-idle-delay .01)
   (setq company-minimum-prefix-length 1)
@@ -498,6 +596,8 @@
 
   (setq magit-bury-buffer-function 'magit-mode-quit-window)
 
+  (setq magit-diff-refine-hunk 'all)
+
   ;; Save buffers automatically instead of asking.
   (setq magit-save-repository-buffers 'dontask)
 
@@ -506,7 +606,36 @@
 
   ;; Add rebase argument to pull
   ;; https://github.com/magit/magit/issues/2597
-  (magit-define-popup-switch 'magit-pull-popup ?R "Rebase" "--rebase"))
+  (magit-define-popup-switch 'magit-pull-popup ?R "Rebase" "--rebase")
+  (defun +magit-submodule-remove (path &optional leave-in-work-tree)
+    "Remove the submodule at PATH.
+     https://stackoverflow.com/questions/1260748/how-do-i-remove-a-submodule"
+    (interactive
+     (list (magit-completing-read "Remove module" (magit-get-submodules)
+                                  nil t nil nil (magit-section-when module))))
+    (magit-with-toplevel
+     ;; 0. mv a/submodule a/submodule_tmp
+     (shell-command (format "mv %s %s_tmp" path path))
+
+     ;; 1. git submodule deinit -f -- a/submodule
+     (magit-run-git "submodule" "deinit" "-f" "--" path)
+
+     ;; (magit-run-git-async "submodule" "deinit" path)
+
+     ;; 2. rm -rf .git/modules/a/submodule
+     (shell-command (format "rm -rf .git/modules/%s" path))
+
+     (if (not leave-in-work-tree)
+         ;; 3. git rm -f a/submodule
+         (magit-run-git "rm" "-f" path)
+       ;; # If you want to leave it in your working tree and have done step 0.
+       ;; 3b. git rm --cached a/submodule
+       ;; 3b. mv a/submodule_tmp a/submodule
+       (magit-run-git "rm" "--cached" path)
+       (shell-command-to-string (format "mv %s_tmp %s" path path)))))
+
+  (magit-define-popup-action
+   'magit-submodule-popup ?x "Remove" #'+magit-submodule-remove))
 
 (use-package evil-ediff
   :ensure t
@@ -549,7 +678,7 @@
   (setq dired-sidebar-face
         (cond
          ((eq system-type 'darwin)
-          '(:family "Helvetica" :height 160))
+          '(:family "iA Writer Duospace" :height 130))
          ((eq system-type 'windows-nt)
           '(:family "Times New Roman" :height 130))
          (:default
@@ -559,11 +688,6 @@
     ;; M-x all-the-icons-install-fonts
     :ensure t
     :commands (all-the-icons-dired-mode)))
-
-(use-package diff-hl
-  :ensure t
-  :commands (global-diff-hl-mode)
-  :init (global-diff-hl-mode))
 
 (use-package markdown-mode
   :ensure t
@@ -582,10 +706,10 @@
  ;; If there is more than one, they won't work right.
  '(custom-safe-themes
    (quote
-    ("6fc0ae7cc2abd82d8add1140874ccf8773feaaae73a704981d52fdf357341038" "4b207752aa69c0b182c6c3b8e810bbf3afa429ff06f274c8ca52f8df7623eb60" "2a739405edf418b8581dcd176aaf695d319f99e3488224a3c495cb0f9fd814e3" "5cd0afd0ca01648e1fff95a7a7f8abec925bd654915153fb39ee8e72a8b56a1f" "d2c61aa11872e2977a07969f92630a49e30975220a079cd39bec361b773b4eb3" "10e3d04d524c42b71496e6c2e770c8e18b153fcfcc838947094dad8e5aa02cef" default)))
+    ("ef1e992ef341e86397b39ee6b41c1368e1b33d45b0848feac6a8e8d5753daa67" "0e0c37ee89f0213ce31205e9ae8bce1f93c9bcd81b1bcda0233061bb02c357a8" "086970da368bb95e42fd4ddac3149e84ce5f165e90dfc6ce6baceae30cf581ef" "444238426b59b360fb74f46b521933f126778777c68c67841c31e0a68b0cc920" "31992d4488dba5b28ddb0c16914bf5726dc41588c2b1c1a2fd16516ea92c1d8e" "39dffaee0e575731c909bb3e4b411f1c4759c3d7510bf02aa5aef322a596dd57" "6be42070d23e832a7493166f90e9bb08af348a818ec18389c1f21d33542771af" "3481e594ae6866d72c40ad77d86a1ffa338d01daa9eb0977e324f365cef4f47c" "d61fc0e6409f0c2a22e97162d7d151dee9e192a90fa623f8d6a071dbf49229c6" "718fb4e505b6134cc0eafb7dad709be5ec1ba7a7e8102617d87d3109f56d9615" "15348febfa2266c4def59a08ef2846f6032c0797f001d7b9148f30ace0d08bcf" "43c1a8090ed19ab3c0b1490ce412f78f157d69a29828aa977dae941b994b4147" "9a155066ec746201156bb39f7518c1828a73d67742e11271e4f24b7b178c4710" "d494af9adbd2c04bec4b5c414983fefe665cd5dadc5e5c79fd658a17165e435a" "70f5a47eb08fe7a4ccb88e2550d377ce085fedce81cf30c56e3077f95a2909f2" "0ee3fc6d2e0fc8715ff59aed2432510d98f7e76fe81d183a0eb96789f4d897ca" "c3e6b52caa77cb09c049d3c973798bc64b5c43cc437d449eacf35b3e776bf85c" "6fc0ae7cc2abd82d8add1140874ccf8773feaaae73a704981d52fdf357341038" "4b207752aa69c0b182c6c3b8e810bbf3afa429ff06f274c8ca52f8df7623eb60" "2a739405edf418b8581dcd176aaf695d319f99e3488224a3c495cb0f9fd814e3" "5cd0afd0ca01648e1fff95a7a7f8abec925bd654915153fb39ee8e72a8b56a1f" "d2c61aa11872e2977a07969f92630a49e30975220a079cd39bec361b773b4eb3" "10e3d04d524c42b71496e6c2e770c8e18b153fcfcc838947094dad8e5aa02cef" default)))
  '(package-selected-packages
    (quote
-    (highlight-indent-guides evil-collection anti-zenburn zenburn markdown-mode sublimity-map sublimity diff-hl macrostep zenburn-theme anti-zenburn-theme minimap doom-themes dracula-theme projectile lispyville smartparens diminish evil-magit company multi-term magit all-the-icons-dired dired-sidebar dired-subtree tide web-mode exec-path-from-shell typescript-mode company-mode counsel ivy rainbow-delimiters hydra evil seoul256-theme ht log4e dash))))
+    (which-key plan9-theme tao-theme eink-theme inverse-acme-theme sublime-themes gruber-darker-theme flatui-dark-theme flatui-theme leuven-theme creamsody-theme apropospriate-theme highlight-indent-guides evil-collection anti-zenburn zenburn markdown-mode sublimity-map sublimity diff-hl macrostep zenburn-theme anti-zenburn-theme minimap doom-themes dracula-theme projectile lispyville smartparens diminish evil-magit company multi-term magit all-the-icons-dired dired-sidebar dired-subtree tide web-mode exec-path-from-shell typescript-mode company-mode counsel ivy rainbow-delimiters hydra evil seoul256-theme ht log4e dash))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
