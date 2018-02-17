@@ -14,13 +14,16 @@
 (defmacro duc/alist-replace-set (list-var element)
   `(setq ,list-var (duc/alist-replace ,list-var ,element)))
 
+(defvar duc/font-height)
+(setq duc/font-height 140)
+
 ;; font chooser
 (defun duc/ivy-font ()
   (interactive)
   (set-face-attribute 'default nil
                       :family (completing-read "font: "
                                                (font-family-list))
-                      :height 130
+                      :height duc/font-height
                       :weight 'normal
                       :width 'normal))
 
@@ -35,6 +38,16 @@
 (scroll-bar-mode -1)
 (setq inhibit-startup-message t
       inhibit-startup-echo-area-message t)
+
+;; Set title of window to current file or buffer name if not a file.
+(setq frame-title-format
+      '(""(:eval (if (buffer-file-name)
+                     (abbreviate-file-name (buffer-file-name))
+                   "%b"))))
+(setq scroll-margin 1
+      scroll-conservatively 0
+      scroll-up-aggressively 0.01
+      scroll-down-aggressively 0.01)
 
 ;; enable transparent osx titlebar (a la Chrome)
 (duc/alist-replace-set default-frame-alist (ns-transparent-titlebar . t))
@@ -69,7 +82,7 @@
 ;; Set font
 (set-face-attribute 'default nil
                     :family "InconsolateG for Powerline"
-                    :height 130
+                    :height duc/font-height
                     :weight 'normal
                     :width 'normal)
 
@@ -234,17 +247,11 @@
                       ;:background "#efeccb"
                       :background "#FFFFE8"))
 
-(use-package doom-themes
-  :disabled
-  :ensure t
-  :init
-  (load-theme 'doom-spacegrey t))
-
 (use-package seoul256-theme
   :ensure t
   :config
   :init
-  (setq seoul256-background 234)
+  (setq seoul256-background 235)
   (set-face-attribute  'vertical-border nil
                        :foreground "#323232")
   (load-theme 'seoul256 t))
@@ -313,7 +320,8 @@
     ("v" counsel-describe-variable "describe variable"))
   (defhydra hydra-submenu-customize-face (:exit t)
     ("f" duc/ivy-font "change font")
-    ("d" counsel-describe-face "describe face"))
+    ("d" counsel-describe-face "describe face")
+    ("t" counsel-load-theme "load theme"))
   (defhydra hydra-submenu-git (:exit t :hint nil)
     "
               ^Git^
@@ -367,6 +375,7 @@ _-_: hsplit    ^ ^               _f_: file
     (diminish 'auto-revert-mode)))
 
 (use-package smartparens
+  :disabled
   :ensure t
   :diminish smartparens-mode
   :init
@@ -670,22 +679,20 @@ _-_: hsplit    ^ ^               _f_: file
   :ensure t
   :commands (dired-sidebar-toggle-sidebar)
   :config
-  (when (eq system-type 'windows-nt)
-    (setq dired-sidebar-use-all-the-icons nil))
-
+  (setq dired-sidebar-use-all-the-icons nil)
   (setq dired-sidebar-use-term-integration t)
   (setq dired-sidebar-use-custom-font t)
+  (setq dired-sidebar-width 30)
   (setq dired-sidebar-face
         (cond
          ((eq system-type 'darwin)
-          '(:family "iA Writer Duospace" :height 130))
+          '(:family "iA Writer Duospace" :height 120))
          ((eq system-type 'windows-nt)
-          '(:family "Times New Roman" :height 130))
+          '(:family "iA Writer Duospace" :height 120))
          (:default
-          '(:family "Arial" :height 140))))
+          '(:family "Arial" :height 130))))
 
   (use-package all-the-icons-dired
-    ;; M-x all-the-icons-install-fonts
     :ensure t
     :commands (all-the-icons-dired-mode)))
 
