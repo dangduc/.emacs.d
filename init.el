@@ -54,7 +54,7 @@
 (duc/alist-replace-set default-frame-alist (ns-transparent-titlebar . t))
 
 ;; nil or dark, to switch to between black or white title text
-(duc/alist-replace-set default-frame-alist (ns-appearance . dark))
+(duc/alist-replace-set default-frame-alist (ns-appearance . white))
 
 ;(duc/alist-replace-set default-frame-alist (ns-use-thin-smoothing . t))
 (duc/alist-replace-set default-frame-alist (ns-antialias-text . t))
@@ -215,6 +215,7 @@
   (defhydra hydra-submenu-window (:exit t)
     ("fn" make-frame-command "new frame")
     ("ff" toggle-frame-fullscreen "toggle fullscreen")
+    ("b" balance-windows "balance windows")
     ("k" delete-window "kill window"))
   (defhydra hydra-submenu-file (:exit t)
     ("f" find-file "find file")
@@ -225,21 +226,35 @@
     ("p" package-list-packages "list packages")
     ("a" counsel-apropos "apropos")
     ("k" describe-key "describe key")
+    ("m" describe-mode "describe mode")
     ("f" counsel-describe-function "describe function")
     ("v" counsel-describe-variable "describe variable"))
   (defhydra hydra-submenu-customize-face (:exit t)
     ("f" duc/ivy-font "change font")
     ("d" counsel-describe-face "describe face")
-    ("t" counsel-load-theme "load theme"))
+    ("t" counsel-load-theme "load theme")
+    ("r" rainbow-mode "show hex colors")
+    ("w" whitespace-mode "show whitespace"))
   (defhydra hydra-submenu-git (:exit t :hint nil)
     "
               ^Git^
 ^^^^^^^^---------------------------------
-_g_: status    _l_: log      _b_: blame
+_g_: status    _L_: log       _b_: blame
+^ ^            _f_: file log
+_j_: next      _u_: upper     _e_: ediff
+_k_: prev      _l_: lower
 "
     ("g" magit-status)
-    ("l" magit-log)
-    ("b" magit-blame))
+    ("L" magit-log)
+    ("f" magit-log-buffer-file)
+    ("b" magit-blame)
+    ("j" smerge-next)
+    ("k" smerge-prev)
+    ("u" smerge-keep-upper)
+    ("l" smerge-keep-lower)
+    ("e" smerge-ediff))
+  (defhydra hydra-submenu-org-mode (:exit t)
+    ("c" org-ctrl-c-ctrl-c))
   (defhydra hydra-main-menu (:exit t :idle .2 :hint nil)
     "
 ^Window^       ^Fuzzy^           ^Action^          ^Application
@@ -268,46 +283,18 @@ _-_: hsplit    ^ ^               _f_: file
     ("w" hydra-submenu-window/body)
     ("?" hydra-submenu-help/body)
     ("f" hydra-submenu-file/body)
-    ("g" hydra-submenu-git/body)))
-
-(use-package plan9-theme
-  :disabled
-  :ensure t
-  :init
-  (load-theme 'plan9 t)
-
-  (with-eval-after-load 'whitespace-mode
-    (set-face-attribute 'whitespace-line nil
-                        :foreground "black"
-                        :background "#e6e6d1"))
-  (when (boundp 'window-divider-mode)
-    (setq window-divider-default-places t
-          window-divider-default-bottom-width 1
-          window-divider-default-right-width 1)
-    (window-divider-mode +1))
-  (set-face-attribute 'mode-line-buffer-id nil
-                      :foreground "#424242")
-  (set-face-attribute 'mode-line nil
-                      :background "#e5fbff"
-                      :box '(:line-width 3 :color "#e5fbff"))
-  (set-face-attribute 'mode-line-inactive nil
-                      :foreground "#888888"
-                      :background "#e5fbff"
-                      :box '(:line-width 3 :color "#e5fbff"))
-  (set-face-attribute 'vertical-border nil
-                      :foreground "#000000")
-  (set-face-attribute 'fringe nil
-                      ;:background "#efeccb"
-                      :background "#FFFFE8"))
+    ("g" hydra-submenu-git/body)
+    ("1" hydra-submenu-org-mode/body)))
 
 (use-package seoul256-theme
   :disabled
   :ensure t
   :init
-  (setq seoul256-background 235)
-  (set-face-attribute  'vertical-border nil
-                       :foreground "#323232")
-  (load-theme 'seoul256 t))
+  (setq seoul256-background 252))
+
+(use-package habamax-theme
+  :disabled
+  :ensure t)
 
 (use-package undo-tree
   :ensure t
@@ -613,6 +600,7 @@ _-_: hsplit    ^ ^               _f_: file
   (setq magit-bury-buffer-function 'magit-mode-quit-window)
 
   (setq magit-diff-refine-hunk 'all)
+  ;(setq magit-diff-arguments '("--no-ext-diff" "--stat" "-U5"))
 
   ;; Save buffers automatically instead of asking.
   (setq magit-save-repository-buffers 'dontask)
@@ -718,6 +706,9 @@ _-_: hsplit    ^ ^               _f_: file
 (use-package swift3-mode
   :ensure t)
 
+(use-package rainbow-mode
+  :ensure t)
+
 ;; end use-package configuration
 
 (custom-set-variables
@@ -725,11 +716,15 @@ _-_: hsplit    ^ ^               _f_: file
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(ansi-color-faces-vector
+   [default default default italic underline success warning error])
  '(ansi-color-names-vector
    ["#E8E8E8" "#3C3C3C" "#616161" "#0E0E0E" "#252525" "#3C3C3C" "#171717" "#0E0E0E"])
  '(ansi-term-color-vector
    [unspecified "#fdf6e3" "#dc322f" "#859900" "#b58900" "#268bd2" "#6c71c4" "#268bd2" "#586e75"] t)
  '(beacon-color "#F8BBD0")
+ '(company-quickhelp-color-background "#e8e8e8")
+ '(company-quickhelp-color-foreground "#444444")
  '(compilation-message-face (quote default))
  '(custom-safe-themes
    (quote
@@ -762,7 +757,7 @@ _-_: hsplit    ^ ^               _f_: file
  '(org-fontify-whole-heading-line t)
  '(package-selected-packages
    (quote
-    (kaolin-themes swift3-mode nimbus-theme hydandata-light-theme monotropic-theme darkokai-theme cyberpunk-theme objc-font-lock base16-themes base16 base16-theme swift-mode darktooth-theme kotlin-mode csharp-mode doom hemisu-theme material-theme flatland-theme light-soap-theme yoshi-theme sexy-monochrome-theme paper-theme hc-zenburn-theme sourcerer-theme github-modern-theme green-is-the-new-black-theme greymatters-theme eclipse-theme distinguished-theme dark-mint-theme dakrone-light-theme cherry-blossom-theme atom-one-dark-theme atom-dark-theme ahungry-theme color-theme-approximate graphene-meta-theme spacemacs-theme elogcat which-key plan9-theme tao-theme eink-theme inverse-acme-theme sublime-themes gruber-darker-theme flatui-dark-theme flatui-theme leuven-theme creamsody-theme apropospriate-theme highlight-indent-guides evil-collection anti-zenburn zenburn markdown-mode sublimity-map sublimity diff-hl macrostep zenburn-theme anti-zenburn-theme minimap doom-themes dracula-theme projectile lispyville smartparens diminish evil-magit company multi-term magit all-the-icons-dired dired-sidebar dired-subtree tide web-mode exec-path-from-shell typescript-mode company-mode counsel ivy rainbow-delimiters hydra evil seoul256-theme ht log4e dash)))
+    (one-themes ones-theme doneburn-theme plain-theme basic-theme iodine-theme xresources-theme nofrils-acme-theme nofrils-acme groovy-mode gradle-mode rainbow-blocks rainbow-mode challenger-deep-theme kosmos-theme cosmos-theme habamax-theme kaolin-themes swift3-mode nimbus-theme hydandata-light-theme monotropic-theme darkokai-theme cyberpunk-theme objc-font-lock base16-themes base16 base16-theme swift-mode darktooth-theme kotlin-mode csharp-mode doom hemisu-theme material-theme flatland-theme light-soap-theme yoshi-theme sexy-monochrome-theme paper-theme hc-zenburn-theme sourcerer-theme github-modern-theme green-is-the-new-black-theme greymatters-theme eclipse-theme distinguished-theme dark-mint-theme dakrone-light-theme cherry-blossom-theme atom-one-dark-theme atom-dark-theme ahungry-theme color-theme-approximate graphene-meta-theme spacemacs-theme elogcat which-key plan9-theme tao-theme eink-theme inverse-acme-theme sublime-themes gruber-darker-theme flatui-dark-theme flatui-theme leuven-theme creamsody-theme apropospriate-theme highlight-indent-guides evil-collection anti-zenburn zenburn markdown-mode sublimity-map sublimity diff-hl macrostep zenburn-theme anti-zenburn-theme minimap doom-themes dracula-theme projectile lispyville smartparens diminish evil-magit company multi-term magit all-the-icons-dired dired-sidebar dired-subtree tide web-mode exec-path-from-shell typescript-mode company-mode counsel ivy rainbow-delimiters hydra evil seoul256-theme ht log4e dash)))
  '(pdf-view-midnight-colors (quote ("#6a737d" . "#fffbdd")))
  '(pos-tip-background-color "#ffffffffffff")
  '(pos-tip-foreground-color "#78909C")
