@@ -17,6 +17,33 @@
 (defvar duc/font-height)
 (setq duc/font-height 140)
 
+(defun duc/font-size-increase ()
+  (interactive)
+  (setq duc/font-height (+ duc/font-height 20))
+  (set-face-attribute 'default nil
+                      :height duc/font-height
+                      :weight 'normal
+                      :width 'normal)
+  (print duc/font-height))
+
+(defun duc/font-size-decrease ()
+  (interactive)
+  (setq duc/font-height (+ duc/font-height -20))
+  (set-face-attribute 'default nil
+                      :height duc/font-height
+                      :weight 'normal
+                      :width 'normal)
+  (print duc/font-height))
+
+(defun duc/font-size ()
+  (interactive)
+  (setq duc/font-height (string-to-number (completing-read "font size: "
+                                         '("140"))))
+  (set-face-attribute 'default nil
+                      :height duc/font-height
+                      :weight 'normal
+                      :width 'normal))
+
 ;; font chooser
 (defun duc/ivy-font ()
   (interactive)
@@ -54,7 +81,8 @@
 (duc/alist-replace-set default-frame-alist (ns-transparent-titlebar . t))
 
 ;; nil or dark, to switch to between black or white title text
-(duc/alist-replace-set default-frame-alist (ns-appearance . white))
+;(duc/alist-replace-set default-frame-alist (ns-appearance . white))
+(duc/alist-replace-set default-frame-alist (ns-appearance . nil))
 
 ;(duc/alist-replace-set default-frame-alist (ns-use-thin-smoothing . t))
 (duc/alist-replace-set default-frame-alist (ns-antialias-text . t))
@@ -171,7 +199,6 @@
 ;  :init
 ;  (add-hook 'prog-mode-hook 'highlight-indent-guides-mode)
 ;  (highlight-indent-guides-mode))
-
 (use-package evil
   :ensure t
   :config
@@ -213,8 +240,9 @@
     ("p" eval-print-last-sexp "eval sexp & print")
     ("f" eval-defun "eval defun"))
   (defhydra hydra-submenu-window (:exit t)
-    ("fn" make-frame-command "new frame")
-    ("ff" toggle-frame-fullscreen "toggle fullscreen")
+    ("f" toggle-frame-maximized "maximize frame")
+    ("n" make-frame-command "new frame")
+    ("w" maximize-window "maximize window")
     ("b" balance-windows "balance windows")
     ("k" delete-window "kill window"))
   (defhydra hydra-submenu-file (:exit t)
@@ -230,11 +258,19 @@
     ("f" counsel-describe-function "describe function")
     ("v" counsel-describe-variable "describe variable"))
   (defhydra hydra-submenu-customize-face (:exit t)
-    ("f" duc/ivy-font "change font")
+    ("ff" duc/ivy-font "change font")
+    ("fs" duc/font-size "set font size")
+    ("f=" duc/font-size-increase "increase font size")
+    ("f-" duc/font-size-decrease "decrease font size")
     ("d" counsel-describe-face "describe face")
     ("t" counsel-load-theme "load theme")
     ("r" rainbow-mode "show hex colors")
     ("w" whitespace-mode "show whitespace"))
+  (defhydra hydra-submenu-system (:exit t)
+    ("r" package-refresh-contents "package-refresh-contents")
+    ("i" package-install "package-install")
+    ("l" package-list-packages "package-list")
+    ("d" package-delete "package-delete"))
   (defhydra hydra-submenu-git (:exit t :hint nil)
     "
               ^Git^
@@ -260,7 +296,7 @@ _k_: prev      _l_: lower
 ^Window^       ^Fuzzy^           ^Action^          ^Application
 ^^^^^^^^-----------------------------------------------------------------
 _h_: left      _o_: contents   _SPC_: M-x          _g_: magit
-_l_: right     _n_: buffers      _b_: buffers
+_l_: right     _n_: buffers      _b_: buffers      _s_: system
 _k_: up        _m_: files        _e_: eval
 _j_: down      ^ ^               _w_: window
 _\\_: vsplit   ^ ^                _?_: help
@@ -284,13 +320,14 @@ _-_: hsplit    ^ ^               _f_: file
     ("?" hydra-submenu-help/body)
     ("f" hydra-submenu-file/body)
     ("g" hydra-submenu-git/body)
-    ("1" hydra-submenu-org-mode/body)))
+    ("1" hydra-submenu-org-mode/body)
+    ("s" hydra-submenu-system/body)))
 
 (use-package seoul256-theme
-  :disabled
   :ensure t
   :init
-  (setq seoul256-background 252))
+  (setq seoul256-background 256)
+  (load-theme 'seoul256 t))
 
 (use-package habamax-theme
   :disabled
@@ -342,8 +379,8 @@ _-_: hsplit    ^ ^               _f_: file
   (dolist (hook '(lisp-mode-hook
                   scheme-mode-hook
                   clojure-mode-hook
-                  emacs-lisp-mode-hook))
-    (add-hook hook #'smartparens-strict-mode))
+                  emacs-lisp-mode-hook)))
+    ;(add-hook hook #'smartparens-strict-mode)
   :config
   ;; Disable highlights.
   (setq sp-highlight-pair-overlay nil
@@ -757,7 +794,7 @@ _-_: hsplit    ^ ^               _f_: file
  '(org-fontify-whole-heading-line t)
  '(package-selected-packages
    (quote
-    (one-themes ones-theme doneburn-theme plain-theme basic-theme iodine-theme xresources-theme nofrils-acme-theme nofrils-acme groovy-mode gradle-mode rainbow-blocks rainbow-mode challenger-deep-theme kosmos-theme cosmos-theme habamax-theme kaolin-themes swift3-mode nimbus-theme hydandata-light-theme monotropic-theme darkokai-theme cyberpunk-theme objc-font-lock base16-themes base16 base16-theme swift-mode darktooth-theme kotlin-mode csharp-mode doom hemisu-theme material-theme flatland-theme light-soap-theme yoshi-theme sexy-monochrome-theme paper-theme hc-zenburn-theme sourcerer-theme github-modern-theme green-is-the-new-black-theme greymatters-theme eclipse-theme distinguished-theme dark-mint-theme dakrone-light-theme cherry-blossom-theme atom-one-dark-theme atom-dark-theme ahungry-theme color-theme-approximate graphene-meta-theme spacemacs-theme elogcat which-key plan9-theme tao-theme eink-theme inverse-acme-theme sublime-themes gruber-darker-theme flatui-dark-theme flatui-theme leuven-theme creamsody-theme apropospriate-theme highlight-indent-guides evil-collection anti-zenburn zenburn markdown-mode sublimity-map sublimity diff-hl macrostep zenburn-theme anti-zenburn-theme minimap doom-themes dracula-theme projectile lispyville smartparens diminish evil-magit company multi-term magit all-the-icons-dired dired-sidebar dired-subtree tide web-mode exec-path-from-shell typescript-mode company-mode counsel ivy rainbow-delimiters hydra evil seoul256-theme ht log4e dash)))
+    (moom pkg one-themes ones-theme doneburn-theme plain-theme iodine-theme nofrils-acme-theme nofrils-acme groovy-mode gradle-mode rainbow-blocks rainbow-mode challenger-deep-theme kosmos-theme cosmos-theme habamax-theme kaolin-themes swift3-mode nimbus-theme hydandata-light-theme monotropic-theme darkokai-theme cyberpunk-theme objc-font-lock base16-themes base16 swift-mode darktooth-theme kotlin-mode csharp-mode doom hemisu-theme material-theme flatland-theme light-soap-theme yoshi-theme sexy-monochrome-theme paper-theme hc-zenburn-theme sourcerer-theme github-modern-theme green-is-the-new-black-theme greymatters-theme eclipse-theme distinguished-theme dark-mint-theme dakrone-light-theme cherry-blossom-theme atom-one-dark-theme atom-dark-theme ahungry-theme color-theme-approximate graphene-meta-theme spacemacs-theme elogcat which-key plan9-theme tao-theme eink-theme inverse-acme-theme gruber-darker-theme flatui-dark-theme flatui-theme leuven-theme creamsody-theme apropospriate-theme highlight-indent-guides evil-collection anti-zenburn zenburn markdown-mode sublimity-map sublimity diff-hl macrostep zenburn-theme anti-zenburn-theme minimap doom-themes dracula-theme projectile lispyville smartparens diminish evil-magit company multi-term magit all-the-icons-dired dired-sidebar dired-subtree tide web-mode exec-path-from-shell typescript-mode company-mode counsel ivy rainbow-delimiters hydra evil ht log4e dash)))
  '(pdf-view-midnight-colors (quote ("#6a737d" . "#fffbdd")))
  '(pos-tip-background-color "#ffffffffffff")
  '(pos-tip-foreground-color "#78909C")

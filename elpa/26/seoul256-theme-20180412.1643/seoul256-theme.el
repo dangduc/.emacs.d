@@ -217,18 +217,18 @@
      `(isearch-fail    ((t (:background ,(hex 196 196) :foreground ,(hex (+ dark-bg 3) 253)))))
 
      ;; line number
-     `(line-number                 ((t (:foreground ,(hex 101 101) :background ,(hex (+ dark-bg 1) (- light-bg 2))))))
+     `(line-number                 ((t (:foreground ,(hex 101 101) :background ,(hex dark-bg light-bg)))))
      `(line-number-current-line    ((t (:foreground ,(hex 131 131) :background ,(hex (- dark-bg 1) (- light-bg 1))))))
 
      ;; linum
      `(linum    ((t (:inherit line-number))))
 
      ;; mode-line
-     `(mode-line            ((t (:foreground ,(hex 187 187) :background ,(hex 95 95) :box (:line-width -1 :style released-button)))))
-     `(mode-line-buffer-id  ((t (:foreground ,(hex 230 230)))))
+     `(mode-line            ((t (:foreground ,(hex 232 232) :background ,(hex 187 187) :box (:line-width -1 :style released-button)))))
+     `(mode-line-buffer-id  ((t (:foreground ,(hex 232 232)))))
      `(mode-line-emphasis   ((t (:foreground ,(hex 256 256) :weight bold))))
      `(mode-line-highlight  ((t (:inherit highlight))))
-     `(mode-line-inactive   ((t (:foreground ,(hex (+ dark-bg 10) (- light-bg 10)) :background ,(hex (+ dark-bg 2) (- light-bg 2) ) :box (:line-width -1 :style released-button)))))
+     `(mode-line-inactive   ((t (:foreground ,(hex (+ dark-bg 10) (- light-bg 10)) :background ,(hex (+ dark-bg 1) (- light-bg 1) ) :box (:line-width -1 :style released-button)))))
 
      ;; show-paren
      `(show-paren-match     ((t (:foreground ,(hex 226 200) :background ,(hex (+ dark-bg 3) (- light-bg 3)) :weight bold))))
