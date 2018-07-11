@@ -54,6 +54,16 @@
                       :weight 'normal
                       :width 'normal))
 
+(defun duc/ivy-eshell ()
+  (interactive)
+  (eshell (string-to-number (completing-read "eshell #: " ()))))
+
+(defun duc/sidebar-toggle ()
+  "Toggle both `dired-sidebar' and `ibuffer-sidebar'."
+  (interactive)
+  (dired-sidebar-toggle-sidebar)
+  (ibuffer-sidebar-toggle-sidebar))
+
 ;; duc namespace (end)
 
 (setq ring-bell-function #'ignore)
@@ -242,34 +252,60 @@
     ("e" eval-last-sexp "eval sexp")
     ("p" eval-print-last-sexp "eval sexp & print")
     ("f" eval-defun "eval defun"))
-  (defhydra hydra-submenu-window (:exit t)
-    ("f" toggle-frame-maximized "maximize frame")
-    ("n" make-frame-command "new frame")
-    ("w" maximize-window "maximize window")
-    ("b" balance-windows "balance windows")
-    ("k" delete-window "kill window"))
+  (defhydra hydra-submenu-window (:exit t :hint nil)
+    "
+^Frame^           ^Window^
+^^^^^^^^----------------------------
+_f_: maximize     _w_: maximize
+_n_: next         _b_: balance
+_c_: create       _k_: delete
+"
+    ("f" toggle-frame-maximized)
+    ("n" other-frame)
+    ("c" make-frame-command)
+    ("w" maximize-window)
+    ("b" balance-windows)
+    ("k" delete-window))
   (defhydra hydra-submenu-file (:exit t)
     ("f" find-file "find file")
     ("w" save-buffer "write file")
     ("i" (find-file "~/.emacs.d/init.el" ) "init.el")
-    ("b" dired-sidebar-toggle-sidebar "sidebar"))
-  (defhydra hydra-submenu-help (:exit t)
-    ("p" package-list-packages "list packages")
-    ("a" counsel-apropos "apropos")
-    ("k" describe-key "describe key")
-    ("m" describe-mode "describe mode")
-    ("f" counsel-describe-function "describe function")
-    ("v" counsel-describe-variable "describe variable"))
-  (defhydra hydra-submenu-customize-face (:exit t)
-    ("ff" duc/ivy-font "change font")
-    ("fs" duc/font-size "set font size")
-    ("f=" duc/font-size-increase "increase font size")
-    ("f-" duc/font-size-decrease "decrease font size")
-    ("d" counsel-describe-face "describe face")
-    ("t" counsel-load-theme "load theme")
-    ("r" rainbow-mode "show hex colors")
-    ("w" whitespace-mode "show whitespace"))
-  (defhydra hydra-submenu-system (:exit t)
+    ("b" duc/sidebar-toggle "sidebar"))
+  (defhydra hydra-submenu-help (:exit t :hint nil)
+    "
+^Describe^           ^Info^
+^^^^^^^^-------------------------------------
+_m_: mode            _p_: list packages
+_k_: key             _a_: apropos
+_f_: function
+_v_: variable
+_c_: face
+"
+    ("m" describe-mode)
+    ("f" counsel-describe-function)
+    ("v" counsel-describe-variable)
+    ("k" describe-key)
+    ("p" package-list-packages)
+    ("a" counsel-apropos))
+  (defhydra hydra-submenu-customize-face (:exit t :hint nil)
+    "
+^Font^                  ^Face^                 ^Buffer^
+^^^^^^^^----------------------------------------------------------------
+_ff_: font            _c_: describe face     _r_: hex colors
+_fs_: font size       _t_: theme             _w_: whitespace
+_f=_: font size +     ^ ^                    _l_: line-wrap
+_f-_: font size -
+"
+    ("ff" duc/ivy-font)
+    ("fs" duc/font-size)
+    ("f=" duc/font-size-increase)
+    ("f-" duc/font-size-decrease)
+    ("c" counsel-describe-face)
+    ("t" counsel-load-theme)
+    ("r" rainbow-mode)
+    ("w" whitespace-mode)
+    ("l" toggle-truncate-lines))
+  (defhydra hydra-submenu-package (:exit t)
     ("r" package-refresh-contents "package-refresh-contents")
     ("i" package-install "package-install")
     ("l" package-list-packages "package-list")
@@ -296,12 +332,13 @@ _k_: prev      _l_: lower
     ("c" org-ctrl-c-ctrl-c))
   (defhydra hydra-main-menu (:exit t :idle .2 :hint nil)
     "
-^Window^       ^Fuzzy^           ^Action^          ^Application
+^Window^       ^Seach^            ^Action^          ^Application
 ^^^^^^^^-----------------------------------------------------------------
 _h_: left      _o_: contents   _SPC_: M-x          _g_: magit
-_l_: right     _n_: buffers      _b_: buffers      _s_: system
-_k_: up        _m_: files        _e_: eval
-_j_: down      ^ ^               _w_: window
+_l_: right     _n_: buffers      _b_: buffers      _s_: shell
+_k_: up        _m_: files        _e_: eval         _u_: package
+_j_: down      _p_: projects     _w_: window
+_a_: jump      ^ ^               ^ ^
 _\\_: vsplit   ^ ^                _?_: help
 _-_: hsplit    ^ ^               _f_: file
 ^ ^            ^ ^               _c_: customize
@@ -310,11 +347,14 @@ _-_: hsplit    ^ ^               _f_: file
     ("l" evil-window-right)
     ("k" evil-window-up)
     ("j" evil-window-down)
+    ("a" ace-window)
     ("-" split-window-below)
     ("\\" split-window-right)
     ("o" counsel-rg)
     ("n" switch-to-buffer)
     ("m" counsel-fzf)
+    ("p" counsel-projectile-switch-project)
+    ("s" duc/ivy-eshell)
     ("SPC" execute-extended-command "M-x")
     ("b" hydra-submenu-buffer/body)
     ("c" hydra-submenu-customize-face/body)
@@ -324,12 +364,34 @@ _-_: hsplit    ^ ^               _f_: file
     ("f" hydra-submenu-file/body)
     ("g" hydra-submenu-git/body)
     ("1" hydra-submenu-org-mode/body)
-    ("s" hydra-submenu-system/body)))
+    ("u" hydra-submenu-package/body)))
 
-(use-package seoul256-theme
+(use-package ace-window
   :ensure t
   :init
-  (setq seoul256-background 256)
+  ; aw-keys are 0-9 by default, which is reasonable, but in the setup above,
+  ; the keys are on the home row.
+  (setq aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l)))
+
+(use-package default-black-theme
+  (load-theme 'default-black t))
+
+(use-package nofrils-acme-theme
+  :disabled
+  :ensure t)
+
+(use-package seoul257-theme
+  :disabled
+  :ensure t
+  :init
+  (setq seoul257-background 256)
+  (load-theme 'seoul257 t))
+
+(use-package seoul256-theme
+  :disabled
+  :ensure t
+  :init
+  (setq seoul256-background 234)
   (load-theme 'seoul256 t))
 
 (use-package habamax-theme
@@ -441,6 +503,12 @@ _-_: hsplit    ^ ^               _f_: file
   :config
   (setq projectile-enable-caching t)
   (projectile-mode))
+
+(use-package counsel-projectile
+  :ensure t
+  :after projectile
+  :init
+  (counsel-projectile-mode))
 
 (use-package rainbow-delimiters
   :ensure t
@@ -703,6 +771,19 @@ _-_: hsplit    ^ ^               _f_: file
   :init
   (setq evil-magit-want-horizontal-movement t))
 
+(use-package ibuffer-sidebar
+  :ensure t
+  :config
+  (setq ibuffer-sidebar-use-custom-font t)
+  (setq ibuffer-sidebar-face
+        (cond
+         ((eq system-type 'darwin)
+          '(:family "iA Writer Duospace" :height 130))
+         ((eq system-type 'windows-nt)
+          '(:family "iA Writer Duospace" :height 130))
+         (:default
+          '(:family "Arial" :height 130)))))
+
 (use-package dired-subtree
   :ensure t
   :commands (dired-subtree-toggle dired-subtree-cycle)
@@ -768,11 +849,12 @@ _-_: hsplit    ^ ^               _f_: file
  '(compilation-message-face (quote default))
  '(custom-safe-themes
    (quote
-    ("ef1e992ef341e86397b39ee6b41c1368e1b33d45b0848feac6a8e8d5753daa67" "0e0c37ee89f0213ce31205e9ae8bce1f93c9bcd81b1bcda0233061bb02c357a8" "086970da368bb95e42fd4ddac3149e84ce5f165e90dfc6ce6baceae30cf581ef" "444238426b59b360fb74f46b521933f126778777c68c67841c31e0a68b0cc920" "31992d4488dba5b28ddb0c16914bf5726dc41588c2b1c1a2fd16516ea92c1d8e" "39dffaee0e575731c909bb3e4b411f1c4759c3d7510bf02aa5aef322a596dd57" "6be42070d23e832a7493166f90e9bb08af348a818ec18389c1f21d33542771af" "3481e594ae6866d72c40ad77d86a1ffa338d01daa9eb0977e324f365cef4f47c" "d61fc0e6409f0c2a22e97162d7d151dee9e192a90fa623f8d6a071dbf49229c6" "718fb4e505b6134cc0eafb7dad709be5ec1ba7a7e8102617d87d3109f56d9615" "15348febfa2266c4def59a08ef2846f6032c0797f001d7b9148f30ace0d08bcf" "43c1a8090ed19ab3c0b1490ce412f78f157d69a29828aa977dae941b994b4147" "9a155066ec746201156bb39f7518c1828a73d67742e11271e4f24b7b178c4710" "d494af9adbd2c04bec4b5c414983fefe665cd5dadc5e5c79fd658a17165e435a" "70f5a47eb08fe7a4ccb88e2550d377ce085fedce81cf30c56e3077f95a2909f2" "0ee3fc6d2e0fc8715ff59aed2432510d98f7e76fe81d183a0eb96789f4d897ca" "c3e6b52caa77cb09c049d3c973798bc64b5c43cc437d449eacf35b3e776bf85c" "6fc0ae7cc2abd82d8add1140874ccf8773feaaae73a704981d52fdf357341038" "4b207752aa69c0b182c6c3b8e810bbf3afa429ff06f274c8ca52f8df7623eb60" "2a739405edf418b8581dcd176aaf695d319f99e3488224a3c495cb0f9fd814e3" "5cd0afd0ca01648e1fff95a7a7f8abec925bd654915153fb39ee8e72a8b56a1f" "d2c61aa11872e2977a07969f92630a49e30975220a079cd39bec361b773b4eb3" "10e3d04d524c42b71496e6c2e770c8e18b153fcfcc838947094dad8e5aa02cef" default)))
+    ("8aebf25556399b58091e533e455dd50a6a9cba958cc4ebb0aab175863c25b9a4" "ef1e992ef341e86397b39ee6b41c1368e1b33d45b0848feac6a8e8d5753daa67" "0e0c37ee89f0213ce31205e9ae8bce1f93c9bcd81b1bcda0233061bb02c357a8" "086970da368bb95e42fd4ddac3149e84ce5f165e90dfc6ce6baceae30cf581ef" "444238426b59b360fb74f46b521933f126778777c68c67841c31e0a68b0cc920" "31992d4488dba5b28ddb0c16914bf5726dc41588c2b1c1a2fd16516ea92c1d8e" "39dffaee0e575731c909bb3e4b411f1c4759c3d7510bf02aa5aef322a596dd57" "6be42070d23e832a7493166f90e9bb08af348a818ec18389c1f21d33542771af" "3481e594ae6866d72c40ad77d86a1ffa338d01daa9eb0977e324f365cef4f47c" "d61fc0e6409f0c2a22e97162d7d151dee9e192a90fa623f8d6a071dbf49229c6" "718fb4e505b6134cc0eafb7dad709be5ec1ba7a7e8102617d87d3109f56d9615" "15348febfa2266c4def59a08ef2846f6032c0797f001d7b9148f30ace0d08bcf" "43c1a8090ed19ab3c0b1490ce412f78f157d69a29828aa977dae941b994b4147" "9a155066ec746201156bb39f7518c1828a73d67742e11271e4f24b7b178c4710" "d494af9adbd2c04bec4b5c414983fefe665cd5dadc5e5c79fd658a17165e435a" "70f5a47eb08fe7a4ccb88e2550d377ce085fedce81cf30c56e3077f95a2909f2" "0ee3fc6d2e0fc8715ff59aed2432510d98f7e76fe81d183a0eb96789f4d897ca" "c3e6b52caa77cb09c049d3c973798bc64b5c43cc437d449eacf35b3e776bf85c" "6fc0ae7cc2abd82d8add1140874ccf8773feaaae73a704981d52fdf357341038" "4b207752aa69c0b182c6c3b8e810bbf3afa429ff06f274c8ca52f8df7623eb60" "2a739405edf418b8581dcd176aaf695d319f99e3488224a3c495cb0f9fd814e3" "5cd0afd0ca01648e1fff95a7a7f8abec925bd654915153fb39ee8e72a8b56a1f" "d2c61aa11872e2977a07969f92630a49e30975220a079cd39bec361b773b4eb3" "10e3d04d524c42b71496e6c2e770c8e18b153fcfcc838947094dad8e5aa02cef" default)))
  '(evil-emacs-state-cursor (quote ("#D50000" hbar)) t)
  '(evil-insert-state-cursor (quote ("#D50000" bar)) t)
  '(evil-normal-state-cursor (quote ("#F57F17" box)) t)
  '(evil-visual-state-cursor (quote ("#66BB6A" box)) t)
+ '(fci-rule-character-color "#d9d9d9")
  '(fci-rule-color "#383838")
  '(fringe-mode 6 nil (fringe))
  '(highlight-changes-colors (quote ("#ff8eff" "#ab7eff")))
@@ -797,10 +879,16 @@ _-_: hsplit    ^ ^               _f_: file
  '(org-fontify-whole-heading-line t)
  '(package-selected-packages
    (quote
-    (moom pkg one-themes ones-theme doneburn-theme plain-theme iodine-theme nofrils-acme-theme nofrils-acme groovy-mode gradle-mode rainbow-blocks rainbow-mode challenger-deep-theme kosmos-theme cosmos-theme habamax-theme kaolin-themes swift3-mode nimbus-theme hydandata-light-theme monotropic-theme darkokai-theme cyberpunk-theme objc-font-lock base16-themes base16 swift-mode darktooth-theme kotlin-mode csharp-mode doom hemisu-theme material-theme flatland-theme light-soap-theme yoshi-theme sexy-monochrome-theme paper-theme hc-zenburn-theme sourcerer-theme github-modern-theme green-is-the-new-black-theme greymatters-theme eclipse-theme distinguished-theme dark-mint-theme dakrone-light-theme cherry-blossom-theme atom-one-dark-theme atom-dark-theme ahungry-theme color-theme-approximate graphene-meta-theme spacemacs-theme elogcat which-key plan9-theme tao-theme eink-theme inverse-acme-theme gruber-darker-theme flatui-dark-theme flatui-theme leuven-theme creamsody-theme apropospriate-theme highlight-indent-guides evil-collection anti-zenburn zenburn markdown-mode sublimity-map sublimity diff-hl macrostep zenburn-theme anti-zenburn-theme minimap doom-themes dracula-theme projectile lispyville smartparens diminish evil-magit company multi-term magit all-the-icons-dired dired-sidebar dired-subtree tide web-mode exec-path-from-shell typescript-mode company-mode counsel ivy rainbow-delimiters hydra evil ht log4e dash)))
+    (counsel-projectile counsel-tramp doom-modeline jazz-theme jbeans-theme klere-theme kooten-theme lenlen-theme mbo70s-theme melancholy-theme mellow-theme metalheart-theme mustang-theme solarized-theme sunburn-theme blackboard-theme bliss-theme bubbleberry-theme danneskjold-theme firecode-theme farmhouse-theme eziam-theme ibuffer-sidebar seoul257-theme twilight-bright-theme labburn-theme moe-theme borland-blue-theme autumn-light-theme switch-window restclient moom pkg one-themes ones-theme doneburn-theme plain-theme iodine-theme nofrils-acme-theme nofrils-acme groovy-mode gradle-mode rainbow-blocks rainbow-mode challenger-deep-theme kosmos-theme cosmos-theme habamax-theme kaolin-themes swift3-mode nimbus-theme hydandata-light-theme monotropic-theme darkokai-theme cyberpunk-theme objc-font-lock base16-themes base16 swift-mode darktooth-theme kotlin-mode csharp-mode doom hemisu-theme material-theme flatland-theme light-soap-theme yoshi-theme sexy-monochrome-theme paper-theme hc-zenburn-theme sourcerer-theme github-modern-theme green-is-the-new-black-theme greymatters-theme eclipse-theme distinguished-theme dark-mint-theme dakrone-light-theme cherry-blossom-theme atom-one-dark-theme atom-dark-theme ahungry-theme color-theme-approximate graphene-meta-theme spacemacs-theme elogcat which-key plan9-theme tao-theme eink-theme inverse-acme-theme gruber-darker-theme flatui-dark-theme flatui-theme leuven-theme creamsody-theme apropospriate-theme highlight-indent-guides evil-collection anti-zenburn zenburn markdown-mode sublimity-map sublimity diff-hl macrostep zenburn-theme anti-zenburn-theme minimap doom-themes dracula-theme projectile lispyville smartparens diminish evil-magit company multi-term magit all-the-icons-dired dired-sidebar dired-subtree tide web-mode exec-path-from-shell typescript-mode company-mode counsel ivy rainbow-delimiters hydra evil ht log4e dash)))
  '(pdf-view-midnight-colors (quote ("#6a737d" . "#fffbdd")))
  '(pos-tip-background-color "#ffffffffffff")
  '(pos-tip-foreground-color "#78909C")
+ '(powerline-color1 "#3d3d68")
+ '(powerline-color2 "#292945")
+ '(rainbow-identifiers-choose-face-function (quote rainbow-identifiers-cie-l*a*b*-choose-face) t)
+ '(rainbow-identifiers-cie-l*a*b*-color-count 1024 t)
+ '(rainbow-identifiers-cie-l*a*b*-lightness 80 t)
+ '(rainbow-identifiers-cie-l*a*b*-saturation 25 t)
  '(red "#ffffff")
  '(sml/active-background-color "#98ece8")
  '(sml/active-foreground-color "#424242")
@@ -831,6 +919,14 @@ _-_: hsplit    ^ ^               _f_: file
  '(vc-annotate-very-old-color "#3C3C3C")
  '(weechat-color-list
    (unspecified "#242728" "#424748" "#F70057" "#ff0066" "#86C30D" "#63de5d" "#BEB244" "#E6DB74" "#40CAE4" "#06d8ff" "#FF61FF" "#ff8eff" "#00b2ac" "#53f2dc" "#f8fbfc" "#ffffff"))
+ '(when
+      (or
+       (not
+        (boundp
+         (quote ansi-term-color-vector)))
+       (not
+        (facep
+         (aref ansi-term-color-vector 0)))))
  '(window-divider-default-right-width 1)
  '(window-divider-mode t))
 (custom-set-faces
