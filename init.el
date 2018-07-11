@@ -145,6 +145,9 @@
 (setq mac-option-modifier 'super)
 (setq mac-command-modifier 'meta)
 
+;; package management
+;;
+
 ;; Disable in favor of `use-package'.
 (setq package-enable-at-startup nil)
 
