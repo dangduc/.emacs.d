@@ -333,6 +333,10 @@ _-_: hsplit    ^ ^                _?_: help
   (setq nord-region-highlight "snowstorm")
   (setq nord-comment-brightness 15))
 
+(use-package zerodark-theme
+  :init
+  (load-theme 'zerodark t))
+
 (use-package rainbow-delimiters
   :straight (:host github
              :repo "Fanael/rainbow-delimiters"))

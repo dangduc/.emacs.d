@@ -48,5 +48,6 @@
  ("use-package" . "3fb8f39f5901a4c0ef7887283e56e60b541675ea")
  ("web-mode" . "471e1235d976e209de5262e75ecf7cc3e1fec39f")
  ("with-editor" . "3e6424764ee06fb50c580283baea3851c6f9ea66")
+ ("zerodark-theme" . "876cafc58a54c567456c4823f8c16edce94ba3ac")
  ("zoutline" . "b3ee0f0e0b916838c2d2c249beba74ffdb8d5699"))
 :jupiter
