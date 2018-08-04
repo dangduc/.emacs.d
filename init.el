@@ -29,7 +29,7 @@
 
 ;; nil or dark, to switch to between black or white title text
 ;(duc/alist-replace-set default-frame-alist (ns-appearance . dark|nil))
-(duc/alist-replace-set default-frame-alist (ns-appearance . nil))
+(duc/alist-replace-set default-frame-alist (ns-appearance . dark))
 
 ;(duc/alist-replace-set default-frame-alist (ns-use-thin-smoothing . t))
 (duc/alist-replace-set default-frame-alist (ns-antialias-text . nil))
