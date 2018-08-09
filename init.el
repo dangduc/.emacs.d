@@ -194,9 +194,9 @@
     ("w" save-buffer "save buffer")
     ("k" kill-buffer "kill buffer"))
   (defhydra hydra-submenu-eval (:exit t)
-    ("e" eval-last-sexp "eval sexp")
-    ("p" eval-print-last-sexp "eval sexp & print")
-    ("f" eval-defun "eval defun"))
+    ("e" duc/eval-dwim "dwim")
+    ("b" duc/eval-buffer "buffer")
+    ("p" duc/eval-last "at point"))
   (defhydra hydra-submenu-window (:exit t :hint nil)
     "
 ^Frame^             ^Window^

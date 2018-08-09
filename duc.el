@@ -66,3 +66,23 @@
   (interactive)
   (dired-sidebar-toggle-sidebar)
   (ibuffer-sidebar-toggle-sidebar))
+
+(defun duc/eval-dwim (p)
+  (interactive "P")
+  (pcase major-mode
+    ('racket-mode (racket-run))
+    ('emacs-lisp-mode (eval-last-sexp p))
+    (_ (eval-last-sexp p))))
+
+(defun duc/eval-buffer ()
+  (interactive)
+  (pcase major-mode
+    ('racket-mode (racket-run))
+    ('emacs-lisp-mode (eval-buffer))
+    (_ (eval-buffer))))
+
+(defun duc/eval-last (p)
+  (interactive "P")
+  (pcase major-mode
+    ('emacs-lisp-mode (eval-last-sexp p))
+    (_ (eval-last-sexp p))))
