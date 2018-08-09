@@ -113,6 +113,11 @@
 ;; package management
 ;;
 
+(setq package-archives '(("gnu" . "https://elpa.gnu.org/packages/")
+                         ("marmalade" . "https://marmalade-repo.org/packages/")
+                         ("melpa" . "https://melpa.org/packages/")))
+http://elpa.gnu.org/
+
 ;; bootstrap straight.el
 (defvar bootstrap-version)
 (let ((bootstrap-file
