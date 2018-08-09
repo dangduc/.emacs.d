@@ -338,6 +338,7 @@ _-_: hsplit    ^ ^                _?_: help
   (setq nord-comment-brightness 15))
 
 (use-package zerodark-theme
+  :disabled
   :init
   (load-theme 'zerodark t))
 
@@ -346,7 +347,6 @@ _-_: hsplit    ^ ^                _?_: help
              :repo "Fanael/rainbow-delimiters"))
 
 (use-package seoul256-theme
-  :disabled
   :init
   (setq seoul256-background 254))
 
