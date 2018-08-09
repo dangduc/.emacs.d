@@ -257,7 +257,7 @@ _-_: font size -
     ("l" toggle-truncate-lines))
   (defhydra hydra-submenu-package (:exit t)
     ("r" package-refresh-contents "package-refresh-contents")
-    ("i" package-install "package-install")
+    ("i" straight-use-package "install")
     ("l" package-list-packages "package-list")
     ("d" package-delete "package-delete"))
   (defhydra hydra-submenu-git (:exit t :hint nil)
