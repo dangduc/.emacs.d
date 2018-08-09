@@ -338,7 +338,6 @@ _-_: hsplit    ^ ^                _?_: help
   (setq nord-comment-brightness 15))
 
 (use-package zerodark-theme
-  :disabled
   :init
   (load-theme 'zerodark t))
 
@@ -767,6 +766,8 @@ _-_: hsplit    ^ ^                _?_: help
 (use-package swift-mode)
 
 (use-package swift3-mode)
+
+(use-package racket-mode)
 
 (use-package rainbow-mode)
 
