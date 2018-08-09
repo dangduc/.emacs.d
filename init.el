@@ -771,6 +771,8 @@ _-_: hsplit    ^ ^                _?_: help
 
 (use-package rainbow-mode)
 
+(use-package vimrc-mode)
+
 ;; end use-package configuration
 
 (custom-set-variables
