@@ -236,15 +236,15 @@ _c_: face
     "
 ^Font^                  ^Face^                 ^Buffer^
 ^^^^^^^^----------------------------------------------------------------
-_ff_: font            _c_: describe face     _r_: hex colors
-_fs_: font size       _t_: theme             _w_: whitespace
-_f=_: font size +     ^ ^                    _l_: line-wrap
-_f-_: font size -
+_f_: font            _c_: describe face     _r_: hex colors
+_s_: font size       _t_: theme             _w_: whitespace
+_=_: font size +     ^ ^                    _l_: line-wrap
+_-_: font size -
 "
-    ("ff" duc/ivy-font)
-    ("fs" duc/font-size)
-    ("f=" duc/font-size-increase)
-    ("f-" duc/font-size-decrease)
+    ("f" duc/ivy-font)
+    ("s" duc/font-size)
+    ("=" duc/font-size-increase)
+    ("-" duc/font-size-decrease)
     ("c" counsel-describe-face)
     ("t" counsel-load-theme)
     ("r" rainbow-mode)
