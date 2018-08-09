@@ -338,10 +338,6 @@ _-_: hsplit    ^ ^                _?_: help
 (use-package zerodark-theme
   :no-require t)
 
-(use-package rainbow-delimiters
-  :straight (:host github
-             :repo "Fanael/rainbow-delimiters"))
-
 (use-package seoul256-theme
   :init
   (setq seoul256-background 254))
@@ -351,6 +347,10 @@ _-_: hsplit    ^ ^                _?_: help
 
 (use-package undo-tree
   :diminish undo-tree-mode)
+
+(use-package rainbow-delimiters
+  :straight (:host github
+             :repo "Fanael/rainbow-delimiters"))
 
 (use-package whitespace
   :diminish whitespace-mode
