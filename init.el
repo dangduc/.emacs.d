@@ -324,22 +324,19 @@ _-_: hsplit    ^ ^                _?_: help
   (setq aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l)))
 
 (use-package nofrils-acme-theme
-  :disabled)
+  :no-require t)
 
 (use-package tao-theme
-  :disabled
-  :init
-  (load-theme 'tao-yin t))
+  :no-require t)
 
 (use-package nord-theme
-  :disabled
+  :no-require t
   :config
   (setq nord-region-highlight "snowstorm")
   (setq nord-comment-brightness 15))
 
 (use-package zerodark-theme
-  :init
-  (load-theme 'zerodark t))
+  :no-require t)
 
 (use-package rainbow-delimiters
   :straight (:host github
@@ -350,7 +347,7 @@ _-_: hsplit    ^ ^                _?_: help
   (setq seoul256-background 254))
 
 (use-package habamax-theme
-  :disabled)
+  :no-require t)
 
 (use-package undo-tree
   :diminish undo-tree-mode)
