@@ -70,10 +70,10 @@
      sym nil
      :family "Triplicate T3p"
      :height (- duc/font-height 20)
-     :weight 'normal
-     :width 'normal
      :underline (face-attribute sym :background)
      :box `(:line-width 3 :color ,(face-attribute `,sym :background)))))
+;; set the mode-line face once on init.
+(+make-modeline-taller)
 
 (advice-add 'load-theme :after '+make-modeline-taller)
 
