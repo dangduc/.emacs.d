@@ -238,14 +238,33 @@ _-_: font size -
     ("f" straight-freeze-versions "freeze lockfile")
     ("s" straight-freeze-versions "freeze lockfile")
     ("l" package-list-packages "package-list"))
+  (defhydra hydra-submenu-project (:exit t)
+    ("n" (let ((counsel-projectile-switch-project-action
+                'counsel-projectile-switch-project-action-switch-to-buffer))
+           (counsel-projectile-switch-project)) "buffer")
+    ("m" (let ((counsel-projectile-switch-project-action
+                'counsel-projectile-switch-project-action-find-file-manually))
+           (counsel-projectile-switch-project)) "file")
+    ("," (let ((counsel-projectile-switch-project-action
+                'counsel-projectile-switch-project-action-rg))
+           (counsel-projectile-switch-project)) "contents")
+    ("p" (let ((counsel-projectile-switch-project-action
+                'counsel-projectile-switch-project-action-vc))
+           (counsel-projectile-switch-project)) "vc")
+    ("v" (let ((counsel-projectile-switch-project-action
+                'counsel-projectile-switch-project-action-vc))
+           (counsel-projectile-switch-project)) "vc")
+    ("g" (let ((counsel-projectile-switch-project-action
+                'counsel-projectile-switch-project-action-vc))
+           (counsel-projectile-switch-project)) "vc"))
   (defhydra hydra-submenu-git (:exit t :hint nil)
     "
               ^Git^
 ^^^^^^^^---------------------------------
 _g_: status    _L_: log       _b_: blame
 ^ ^            _f_: file log
-_j_: next      _u_: upper     _e_: ediff
-_k_: prev      _l_: lower
+_j_: next      _u_: upper     _e_: smerge
+_k_: prev      _l_: lower     _m_: smerge
 "
     ("g" magit-status)
     ("L" magit-log)
@@ -284,7 +303,7 @@ _-_: hsplit    ^ ^                _?_: help
     ("n" switch-to-buffer)
     ("m" counsel-fzf)
     ("o" hydra-submenu-org-mode/body)
-    ("p" counsel-projectile-switch-project)
+    ("p" hydra-submenu-project/body)
     ("s" duc/ivy-eshell)
     ("SPC" execute-extended-command)
     ("b" hydra-submenu-buffer/body)
