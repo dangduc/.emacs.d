@@ -19,7 +19,7 @@ my-org/
 org-files/
 semanticdb/
 edts/
-.flycheck_*.el
+.flycheck_init.el
 .recentf
 .recentf~
 projectile.cache
