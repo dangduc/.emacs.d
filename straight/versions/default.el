@@ -8,7 +8,7 @@
  ("default-black-theme" . "37f57cf731a8bffd0f7f1f596f2fa577e60fc2ed")
  ("diminish.el" . "565a983a39d2e2cffab5df13b34f3b6116723208")
  ("dired-hacks" . "3fd347a0823312e966872bd0d26d9a75b2898c9c")
- ("dired-sidebar" . "8a6e772a3fdf5c8108d236d1b0f1e7209a70de83")
+ ("dired-sidebar" . "db207a15383243a17087b2aecf24a371cfd1df53")
  ("elpa" . "7ba1bdad96db3252e5c2a0ddd88c52f5b075ca9e")
  ("emacs-async" . "d17c11e6082aa51f421bb037b828bdb15f405618")
  ("emacs-memoize" . "9a561268ffb550b257a08710489a95cd087998b6")
