@@ -1,3 +1,18 @@
+;; Personal Theming override for org-mode
+;; Keep org-mode headers from being scaled by themes.
+;; Plucked from [Disable enlarged Org mode header appearance]
+;;             (https://emacs.stackexchange.com/questions/22584/)
+(defun duc/org-mode-theme (&rest _)
+  (ignore-errors
+    (dolist (face '(org-level-1
+                    org-level-2
+                    org-level-3
+                    org-level-4
+                    org-level-5))
+      (set-face-attribute face nil
+                          :family "iA Writer Duospace"
+                          :height 1.0))))
+
 (defmacro duc/alist-replace (list-var element)
   `(let
        ((replaced-list-var
@@ -86,3 +101,15 @@
   (pcase major-mode
     ('emacs-lisp-mode (eval-last-sexp p))
     (_ (eval-last-sexp p))))
+
+(defvar-local duc/header-line-format nil)
+(defun duc/mode-line-in-header ()
+  "Toggle displaying modeline in header instead of footer
+https://emacs-doctor.com/emacs-strip-tease.html"
+  (interactive)
+  (if (not header-line-format)
+      (setq header-line-format mode-line-format
+            mode-line-format nil)
+    (setq mode-line-format header-line-format
+          header-line-format nil))
+  (set-window-buffer nil (current-buffer)))

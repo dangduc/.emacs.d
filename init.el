@@ -93,29 +93,15 @@
 (setq mac-option-modifier 'super)
 (setq mac-command-modifier 'meta)
 
-;; Personal Theming override for org-mode
-;; Keep org-mode headers from being scaled by themes.
-;; Plucked from [Disable enlarged Org mode header appearance]
-;;             (https://emacs.stackexchange.com/questions/22584/)
-(defun duc/org-mode-theme (&rest _)
-  (ignore-errors
-    (dolist (face '(org-level-1
-                    org-level-2
-                    org-level-3
-                    org-level-4
-                    org-level-5))
-      (set-face-attribute face nil
-                          :family "iA Writer Duospace"
-                          :height 1.0))))
-
-(advice-add 'load-theme :after 'duc/org-mode-theme)
-
 ;; package management
 ;;
 
 (setq package-archives '(("gnu" . "https://elpa.gnu.org/packages/")
                          ("marmalade" . "https://marmalade-repo.org/packages/")
                          ("melpa" . "https://melpa.org/packages/")))
+
+;; Disable in favor of `use-package'.
+(setq package-enable-at-startup nil)
 
 ;; bootstrap straight.el
 (defvar bootstrap-version)
@@ -137,14 +123,6 @@
 (straight-use-package 'use-package)
 
 ;; end bootstrap straight.el
-
-;; Disable in favor of `use-package'.
-(setq package-enable-at-startup nil)
-
-(let ((default-directory "~/.emacs.d/")))
-
-;; notes: counsel-fzf
-(what-cursor-position)
 
 ;; Package declarations
 ;;
@@ -323,6 +301,10 @@ _-_: hsplit    ^ ^                _?_: help
   ; the keys are on the home row.
   (setq aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l)))
 
+;; themes
+
+(advice-add 'load-theme :after 'duc/org-mode-theme)
+
 (use-package nofrils-acme-theme
   :no-require t)
 
@@ -339,11 +321,19 @@ _-_: hsplit    ^ ^                _?_: help
   :no-require t)
 
 (use-package seoul256-theme
+  :no-require t
   :init
   (setq seoul256-background 254))
 
 (use-package habamax-theme
   :no-require t)
+
+(use-package default-black-theme
+  :no-require t
+  :straight (:host github
+             :repo "dangduc/default-black-theme"))
+
+;; end themes
 
 (use-package undo-tree
   :diminish undo-tree-mode)
@@ -384,7 +374,7 @@ _-_: hsplit    ^ ^                _?_: help
     (diminish 'auto-revert-mode)))
 
 (use-package smartparens
-  :disabled
+  :no-require t
   :diminish smartparens-mode
   :init
   (dolist (hook '(lisp-mode-hook
@@ -401,7 +391,7 @@ _-_: hsplit    ^ ^                _?_: help
         sp-autoskip-closing-pair 'always-end
         sp-autoskip-opening-pair t)
 
-  (use-package smartparens-config)
+  ;(use-package smartparens-config)
   (smartparens-global-mode 1)
   (sp-pair "(" ")" :wrap "M-(")
   (sp-pair "(" ")" :wrap "M-)")
@@ -821,6 +811,8 @@ _-_: hsplit    ^ ^                _?_: help
  '(jdee-db-spec-breakpoint-face-colors (cons "#11171D" "#41505E"))
  '(linum-format (quote dynamic))
  '(magit-diff-use-overlays nil)
+ '(mouse-wheel-progressive-speed nil)
+ '(mouse-wheel-scroll-amount (quote (1 ((shift) . 5) ((control)))))
  '(nrepl-message-colors
    (quote
     ("#032f62" "#6a737d" "#d73a49" "#6a737d" "#005cc5" "#6f42c1" "#d73a49" "#6a737d")))
