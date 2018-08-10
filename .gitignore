@@ -19,7 +19,7 @@ my-org/
 org-files/
 semanticdb/
 edts/
-.flycheck_*
+.flycheck_*.el
 .recentf
 .recentf~
 projectile.cache
@@ -54,3 +54,4 @@ private/
 !private/snippets/README.md
 !private/local/README.md
 /games/
+/url/
