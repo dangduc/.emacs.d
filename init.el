@@ -235,8 +235,9 @@ _-_: font size -
   (defhydra hydra-submenu-package (:exit t)
     ("r" package-refresh-contents "package-refresh-contents")
     ("i" straight-use-package "install")
-    ("l" package-list-packages "package-list")
-    ("d" package-delete "package-delete"))
+    ("f" straight-freeze-versions "freeze lockfile")
+    ("s" straight-freeze-versions "freeze lockfile")
+    ("l" package-list-packages "package-list"))
   (defhydra hydra-submenu-git (:exit t :hint nil)
     "
               ^Git^
