@@ -10,7 +10,7 @@
                     org-level-4
                     org-level-5))
       (set-face-attribute face nil
-                          :family "iA Writer Duospace"
+                          :family "Charter"
                           :height 1.0))))
 
 (defmacro duc/alist-replace (list-var element)
@@ -25,17 +25,17 @@
   `(setq ,list-var (duc/alist-replace ,list-var ,element)))
 
 (defvar duc/font-height)
-(setq duc/font-height 140)
+(setq duc/font-height 150)
 (defvar duc/font-height-mode-line)
-(setq duc/font-height-mode-line 120)
+(setq duc/font-height-mode-line 150)
 
 (defun duc/font-size-increase ()
   (interactive)
-  (setq duc/font-height (+ duc/font-height 20))
+  (setq duc/font-height (+ duc/font-height 10))
   (set-face-attribute 'default nil
                       :height duc/font-height)
   (setq duc/font-height-mode-line
-        (+ duc/font-height-mode-line 20))
+        (+ duc/font-height-mode-line 10))
   (dolist (sym '(mode-line mode-line-inactive))
     (set-face-attribute sym nil
      :height duc/font-height-mode-line))
@@ -43,11 +43,11 @@
 
 (defun duc/font-size-decrease ()
   (interactive)
-  (setq duc/font-height (+ duc/font-height -20))
+  (setq duc/font-height (+ duc/font-height -10))
   (set-face-attribute 'default nil
                       :height duc/font-height)
   (setq duc/font-height-mode-line
-        (+ duc/font-height-mode-line -20))
+        (+ duc/font-height-mode-line -10))
   (dolist (sym '(mode-line mode-line-inactive))
     (set-face-attribute sym nil
      :height duc/font-height-mode-line))

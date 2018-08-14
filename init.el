@@ -69,7 +69,7 @@
     (set-face-attribute
      sym nil
      :family "Charter"
-     :height (- duc/font-height 0)
+     :height duc/font-height-mode-line
      :underline (face-attribute sym :background)
      :box `(:line-width 3 :color ,(face-attribute `,sym :background)))))
 ;; set the mode-line face once on init.
@@ -730,7 +730,7 @@ _-_: hsplit    ^ ^                _?_: help
 (use-package ibuffer-sidebar
   :config
   (setq ibuffer-sidebar-use-custom-font t)
-  (setq ibuffer-sidebar-face '(:family "Charter" :height 140)))
+  (setq ibuffer-sidebar-face '(:family "Charter" :height 150)))
 
 (use-package dired-subtree
   :commands (dired-subtree-toggle dired-subtree-cycle)
@@ -751,7 +751,7 @@ _-_: hsplit    ^ ^                _?_: help
   (setq dired-sidebar-use-custom-font t)
   (setq dired-sidebar-width 30)
   (setq dired-sidebar-theme 'vscode)
-  (setq dired-sidebar-face '(:family "Charter" :height 140)))
+  (setq dired-sidebar-face '(:family "Charter" :height 150)))
 
 (use-package all-the-icons-dired
   :after dired-sidebar
