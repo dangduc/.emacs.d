@@ -744,14 +744,20 @@ _-_: hsplit    ^ ^                _?_: help
   :config
   (setq dired-subtree-use-backgrounds nil))
 
+(use-package vscode-icon
+  :straight (:host github
+             :repo "jojojames/vscode-icon-emacs"
+             :files (:defaults "icons" "source")))
+
 (use-package dired-sidebar
+  :after vscode-icon
   :bind (("C-x C-n" . dired-sidebar-toggle-sidebar))
   :commands (dired-sidebar-toggle-sidebar)
   :config
   (setq dired-sidebar-use-term-integration t)
   (setq dired-sidebar-use-custom-font t)
   (setq dired-sidebar-width 30)
-  (setq dired-sidebar-theme 'ascii)
+  (setq dired-sidebar-theme 'vscode)
   (setq dired-sidebar-face
         (cond
          ((eq system-type 'darwin)
