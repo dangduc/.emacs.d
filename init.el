@@ -127,7 +127,20 @@
 ;; Package declarations
 ;;
 
+(use-package diminish
+  :config
+  (diminish 'subword-mode)
+  (diminish 'visual-line-mode)
+  (diminish 'abbrev-mode)
+  (with-eval-after-load 'eldoc
+    (diminish 'eldoc-mode))
+  (with-eval-after-load 'hideshow
+    (diminish 'hs-minor-mode))
+  (with-eval-after-load 'autorevert
+    (diminish 'auto-revert-mode)))
+
 (use-package which-key
+  :diminish which-key-mode
   :init
   (setq which-key-idle-delay 0.2)
   (which-key-setup-minibuffer)
@@ -381,18 +394,6 @@ _-_: hsplit    ^ ^                _?_: help
   (with-eval-after-load 'evil
     (define-key evil-normal-state-map (kbd "C-;") 'macrostep-collapse)
     (define-key evil-normal-state-map (kbd "C-'") 'macrostep-expand)))
-
-(use-package diminish
-  :config
-  (diminish 'subword-mode)
-  (diminish 'visual-line-mode)
-  (diminish 'abbrev-mode)
-  (with-eval-after-load 'eldoc
-    (diminish 'eldoc-mode))
-  (with-eval-after-load 'hideshow
-    (diminish 'hs-minor-mode))
-  (with-eval-after-load 'autorevert
-    (diminish 'auto-revert-mode)))
 
 (use-package smartparens
   :no-require t
