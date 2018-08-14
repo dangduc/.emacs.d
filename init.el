@@ -68,8 +68,8 @@
   (dolist (sym '(mode-line mode-line-inactive))
     (set-face-attribute
      sym nil
-     :family "Triplicate T3p"
-     :height (- duc/font-height 20)
+     :family "Charter"
+     :height (- duc/font-height 0)
      :underline (face-attribute sym :background)
      :box `(:line-width 3 :color ,(face-attribute `,sym :background)))))
 ;; set the mode-line face once on init.
@@ -730,14 +730,7 @@ _-_: hsplit    ^ ^                _?_: help
 (use-package ibuffer-sidebar
   :config
   (setq ibuffer-sidebar-use-custom-font t)
-  (setq ibuffer-sidebar-face
-        (cond
-         ((eq system-type 'darwin)
-          '(:family "Triplicate T3p" :height 130))
-         ((eq system-type 'windows-nt)
-          '(:family "Triplicate T3p" :height 130))
-         (:default
-          '(:family "Arial" :height 130)))))
+  (setq ibuffer-sidebar-face '(:family "Charter" :height 140)))
 
 (use-package dired-subtree
   :commands (dired-subtree-toggle dired-subtree-cycle)
@@ -758,14 +751,7 @@ _-_: hsplit    ^ ^                _?_: help
   (setq dired-sidebar-use-custom-font t)
   (setq dired-sidebar-width 30)
   (setq dired-sidebar-theme 'vscode)
-  (setq dired-sidebar-face
-        (cond
-         ((eq system-type 'darwin)
-          '(:family "Triplicate T3p" :height 130))
-         ((eq system-type 'windows-nt)
-          '(:family "Triplicate T3p" :height 130))
-         (:default
-          '(:family "Arial" :height 130)))))
+  (setq dired-sidebar-face '(:family "Charter" :height 140)))
 
 (use-package all-the-icons-dired
   :after dired-sidebar
