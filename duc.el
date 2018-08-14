@@ -72,9 +72,16 @@
                       :weight 'normal
                       :width 'normal))
 
-(defun duc/ivy-eshell ()
+(defun duc/ivy-shell ()
   (interactive)
-  (eshell (string-to-number (completing-read "eshell #: " ()))))
+  (let ((terminal-buffers (seq-filter (lambda (x)
+                                        (string-match-p
+                                         (regexp-quote "terminal-") x))
+                                      (mapcar (function buffer-name) (buffer-list)))))
+    (let ((buffer-name (completing-read "shell : " terminal-buffers)))
+     (if (member buffer-name terminal-buffers)
+         (switch-to-buffer buffer-name)
+       (ansi-term "/bin/zsh" (concat "terminal-" buffer-name))))))
 
 (defun duc/sidebar-toggle ()
   "Toggle both `dired-sidebar' and `ibuffer-sidebar'."

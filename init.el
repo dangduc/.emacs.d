@@ -305,7 +305,7 @@ _-_: hsplit    ^ ^                _?_: help
     ("m" counsel-fzf)
     ("o" hydra-submenu-org-mode/body)
     ("p" hydra-submenu-project/body)
-    ("s" duc/ivy-eshell)
+    ("s" duc/ivy-shell)
     ("SPC" execute-extended-command)
     ("b" hydra-submenu-buffer/body)
     ("c" hydra-submenu-customize-face/body)
