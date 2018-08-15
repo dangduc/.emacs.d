@@ -27,7 +27,7 @@
 (defvar duc/font-height)
 (setq duc/font-height 150)
 (defvar duc/font-height-mode-line)
-(setq duc/font-height-mode-line 150)
+(setq duc/font-height-mode-line 140)
 
 (defun duc/font-size-increase ()
   (interactive)
@@ -120,3 +120,46 @@ https://emacs-doctor.com/emacs-strip-tease.html"
     (setq mode-line-format header-line-format
           header-line-format nil))
   (set-window-buffer nil (current-buffer)))
+
+(defun duc/override-theme-colors-hook (theme-name &rest _)
+  (if (member theme-name '(habamax
+                           nofrils-acme
+                           default-black))
+      (duc/override-theme-colors)))
+
+(defun duc/override-theme-colors ()
+  (let ((faces '(font-lock-comment-face
+                 font-lock-comment-delimiter-face
+                 font-lock-constant-face
+                 font-lock-type-face
+                 font-lock-function-name-face
+                 font-lock-variable-name-face
+                 font-lock-keyword-face
+                 font-lock-string-face
+                 font-lock-builtin-face
+                 font-lock-preprocessor-face
+                 font-lock-warning-face
+                 font-lock-doc-face)))
+    (dolist (face faces)
+      (set-face-attribute face nil
+                          :foreground nil
+                          :weight 'normal
+                          :slant 'normal))
+
+    (set-face-attribute 'font-lock-comment-delimiter-face nil
+                        :slant 'italic)
+    (set-face-attribute 'font-lock-variable-name-face nil
+                        :slant 'normal)
+    (set-face-attribute 'font-lock-comment-face nil
+                        :slant 'italic
+                        :foreground "#808080")
+    (set-face-attribute 'font-lock-doc-face nil :slant 'italic)
+    (set-face-attribute 'font-lock-keyword-face nil
+                        :weight 'bold)
+    (set-face-attribute 'font-lock-string-face nil
+                        :foreground "#008000")
+    (set-face-attribute 'font-lock-builtin-face nil
+                        :foreground "black"
+                        :slant 'italic)
+    (set-face-attribute 'mode-line-buffer-id nil
+                        :weight 'normal)))

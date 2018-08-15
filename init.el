@@ -71,11 +71,15 @@
      :family "Charter"
      :height duc/font-height-mode-line
      :underline (face-attribute sym :background)
-     :box `(:line-width 3 :color ,(face-attribute `,sym :background)))))
+     :box `(:line-width 2 :color ,(face-attribute `,sym :background)))))
 ;; set the mode-line face once on init.
 (+make-modeline-taller)
 
 (advice-add 'load-theme :after '+make-modeline-taller)
+
+(advice-add 'load-theme :after #'duc/override-theme-colors-hook)
+
+(advice-add 'load-theme :after #'duc/org-mode-theme)
 
 ;; Save all tempfiles in $TMPDIR/emacs$UID/
 (defconst emacs-tmp-dir (expand-file-name (format "emacs%d" (user-uid))
@@ -355,12 +359,13 @@ _-_: hsplit    ^ ^                _?_: help
   :no-require t)
 
 (use-package seoul256-theme
+  :no-require t
   :init
-  (setq seoul256-background 254)
-  (load-theme 'seoul256 t))
+  (setq seoul256-background 254))
 
 (use-package habamax-theme
-  :no-require t)
+  :init
+  (load-theme 'habamax t))
 
 (use-package default-black-theme
   :no-require t
@@ -375,6 +380,11 @@ _-_: hsplit    ^ ^                _?_: help
 (use-package rainbow-delimiters
   :straight (:host github
              :repo "Fanael/rainbow-delimiters"))
+
+(use-package color-identifiers-mode
+  :diminish color-identifiers-mode
+  :config
+  (add-hook 'after-init-hook 'global-color-identifiers-mode))
 
 (use-package whitespace
   :diminish whitespace-mode
@@ -730,7 +740,7 @@ _-_: hsplit    ^ ^                _?_: help
 (use-package ibuffer-sidebar
   :config
   (setq ibuffer-sidebar-use-custom-font t)
-  (setq ibuffer-sidebar-face '(:family "Charter" :height 150)))
+  (setq ibuffer-sidebar-face '(:family "Triplicate T3c" :height 140)))
 
 (use-package dired-subtree
   :commands (dired-subtree-toggle dired-subtree-cycle)
@@ -750,8 +760,8 @@ _-_: hsplit    ^ ^                _?_: help
   (setq dired-sidebar-use-term-integration t)
   (setq dired-sidebar-use-custom-font t)
   (setq dired-sidebar-width 30)
-  (setq dired-sidebar-theme 'vscode)
-  (setq dired-sidebar-face '(:family "Charter" :height 150)))
+  (setq dired-sidebar-theme 'ascii)
+  (setq dired-sidebar-face '(:family "Triplicate T3c" :height 140)))
 
 (use-package all-the-icons-dired
   :after dired-sidebar
