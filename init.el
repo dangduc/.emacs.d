@@ -260,7 +260,7 @@ _-_: font size -
                 'counsel-projectile-switch-project-action-switch-to-buffer))
            (counsel-projectile-switch-project)) "buffer")
     ("m" (let ((counsel-projectile-switch-project-action
-                'counsel-projectile-switch-project-action-find-file-manually))
+                'counsel-projectile-switch-project-action-fzf))
            (counsel-projectile-switch-project)) "file")
     ("," (let ((counsel-projectile-switch-project-action
                 'counsel-projectile-switch-project-action-rg))
@@ -473,7 +473,14 @@ _-_: hsplit    ^ ^                _?_: help
 (use-package counsel-projectile
   :after projectile
   :init
-  (counsel-projectile-mode))
+  (counsel-projectile-mode)
+  (defun counsel-projectile-switch-project-action-fzf (project)
+    "Call `counsel-fzf' (ie fuzzy find-file)from PROJECT's root."
+    (let ((default-directory project)
+          (projectile-switch-project-action
+           (lambda ()
+             (counsel-fzf))))
+      (counsel-projectile-switch-project-by-name project))))
 
 (use-package ibuffer-projectile
   :commands (ibuffer-projectile-set-filter-groups
