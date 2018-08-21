@@ -804,6 +804,8 @@ _-_: hsplit    ^ ^                _?_: help
 
 (use-package vimrc-mode)
 
+(use-package restclient)
+
 ;; end use-package configuration
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
