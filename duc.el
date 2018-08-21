@@ -25,9 +25,9 @@
   `(setq ,list-var (duc/alist-replace ,list-var ,element)))
 
 (defvar duc/font-height)
-(setq duc/font-height 150)
+(setq duc/font-height 140)
 (defvar duc/font-height-mode-line)
-(setq duc/font-height-mode-line 140)
+(setq duc/font-height-mode-line 120)
 
 (defun duc/font-size-increase ()
   (interactive)

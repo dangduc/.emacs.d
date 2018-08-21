@@ -57,7 +57,7 @@
 
 ;; Set font
 (set-face-attribute 'default nil
-                    :family "Triplicate T4c"
+                    :family "InconsolateG for Powerline"
                     :height duc/font-height
                     :weight 'normal
                     :width 'normal)
@@ -68,18 +68,18 @@
   (dolist (sym '(mode-line mode-line-inactive))
     (set-face-attribute
      sym nil
-     :family "Charter"
-     :height duc/font-height-mode-line
      :underline (face-attribute sym :background)
-     :box `(:line-width 2 :color ,(face-attribute `,sym :background)))))
-;; set the mode-line face once on init.
-(+make-modeline-taller)
+     :box `(:line-width 3 :color ,(face-attribute `,sym :background)))))
 
 (advice-add 'load-theme :after '+make-modeline-taller)
 
 (advice-add 'load-theme :after #'duc/override-theme-colors-hook)
 
 (advice-add 'load-theme :after #'duc/org-mode-theme)
+
+;; Theme the default emacs light theme on init.
+(+make-modeline-taller)
+(duc/override-theme-colors)
 
 ;; Save all tempfiles in $TMPDIR/emacs$UID/
 (defconst emacs-tmp-dir (expand-file-name (format "emacs%d" (user-uid))
@@ -747,7 +747,7 @@ _-_: hsplit    ^ ^                _?_: help
 (use-package ibuffer-sidebar
   :config
   (setq ibuffer-sidebar-use-custom-font t)
-  (setq ibuffer-sidebar-face '(:family "Triplicate T3c" :height 140)))
+  (setq ibuffer-sidebar-face '(:family "InconsolateG for Powerline" :height 120)))
 
 (use-package dired-subtree
   :commands (dired-subtree-toggle dired-subtree-cycle)
@@ -767,8 +767,8 @@ _-_: hsplit    ^ ^                _?_: help
   (setq dired-sidebar-use-term-integration t)
   (setq dired-sidebar-use-custom-font t)
   (setq dired-sidebar-width 30)
-  (setq dired-sidebar-theme 'ascii)
-  (setq dired-sidebar-face '(:family "Triplicate T3c" :height 140)))
+  (setq dired-sidebar-theme 'vscode)
+  (setq dired-sidebar-face '(:family "InconsolateG for Powerline" :height 120)))
 
 (use-package all-the-icons-dired
   :after dired-sidebar
