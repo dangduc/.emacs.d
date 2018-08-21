@@ -160,6 +160,10 @@ https://emacs-doctor.com/emacs-strip-tease.html"
                         :foreground "#008000")
     (set-face-attribute 'font-lock-builtin-face nil
                         :foreground "black"
-                        :slant 'italic)
-    (set-face-attribute 'mode-line-buffer-id nil
-                        :weight 'normal)))
+                        :slant 'italic)))
+
+(defun duc/new-buffer ()
+  (interactive)
+  (let ((buffer (generate-new-buffer "untitled")))
+    (set-buffer-major-mode buffer)
+    (display-buffer buffer '(display-buffer-pop-up-window . nil))))

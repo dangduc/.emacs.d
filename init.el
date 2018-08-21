@@ -184,7 +184,9 @@
     ("p" previous-buffer "prev buffer")
     ("n" next-buffer "next buffer")
     ("l" list-buffers "list buffers")
-    ("o" switch-to-buffer "open/create buffer")
+    ("N" duc/new-buffer "new buffer")
+    ("c" duc/new-buffer "new buffer")
+    ("o" switch-to-buffer "switch buffer")
     ("r" revert-buffer "reload buffer")
     ("w" save-buffer "save buffer")
     ("k" kill-buffer "kill buffer"))
@@ -213,6 +215,7 @@ _f_/_w_: maximize
     ("f" find-file "find file")
     ("w" save-buffer "write file")
     ("i" (find-file "~/.emacs.d/init.el" ) "init.el")
+    ("d" (find-file "~/.emacs.d/duc.el" ) "duc.el")
     ("b" duc/sidebar-toggle "sidebar"))
   (defhydra hydra-submenu-help (:exit t :hint nil)
     "
@@ -343,6 +346,17 @@ _-_: hsplit    ^ ^                _?_: help
 
 (advice-add 'load-theme :after 'duc/org-mode-theme)
 
+(use-package zenburn-theme
+  :disabled
+  :init
+  (load-theme 'zenburn t)
+  (set-face-attribute 'fringe nil :background nil)
+  (set-face-attribute 'vertical-border nil :foreground (face-attribute 'mode-line :background)))
+
+(use-package doom-themes)
+
+(use-package solarized-theme)
+
 (use-package nofrils-acme-theme
   :no-require t)
 
@@ -360,12 +374,11 @@ _-_: hsplit    ^ ^                _?_: help
 
 (use-package seoul256-theme
   :no-require t
-  :init
-  (setq seoul256-background 254))
+  :config
+  (setq seoul256-background 253))
 
 (use-package habamax-theme
-  :init
-  (load-theme 'habamax t))
+  :no-require t)
 
 (use-package default-black-theme
   :no-require t
