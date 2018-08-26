@@ -89,10 +89,29 @@
   (dired-sidebar-toggle-sidebar)
   (ibuffer-sidebar-toggle-sidebar))
 
+(defun duc/racket-eval-last-sexp ()
+  "Eval the previous sexp asynchronously and `message' the result."
+  (interactive)
+  (racket--cmd/async
+   `(eval
+     ,(buffer-substring-no-properties (duc/racket--repl-last-sexp-start)
+                                      (+ (point) 1)))
+   (lambda (v)
+     (message "%s" v))))
+
+(defun duc/racket--repl-last-sexp-start ()
+  (save-excursion
+    (condition-case ()
+        (progn
+          (forward-char)
+          (backward-list)
+          (point))
+      (scan-error (user-error "There isn't a complete s-expression before point")))))
+
 (defun duc/eval-dwim (p)
   (interactive "P")
   (pcase major-mode
-    ('racket-mode (racket-run))
+    ('racket-mode (duc/racket-eval-last-sexp))
     ('emacs-lisp-mode (eval-last-sexp p))
     (_ (eval-last-sexp p))))
 
