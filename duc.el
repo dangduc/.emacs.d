@@ -185,4 +185,4 @@ https://emacs-doctor.com/emacs-strip-tease.html"
   (interactive)
   (let ((buffer (generate-new-buffer "untitled")))
     (set-buffer-major-mode buffer)
-    (display-buffer buffer '(display-buffer-pop-up-window . nil))))
+    (switch-to-buffer-other-window buffer)))
