@@ -281,10 +281,10 @@ _-_: font size -
     "
               ^Git^
 ^^^^^^^^---------------------------------
-_g_: status    _L_: log       _b_: blame
-^ ^            _f_: file log
-_j_: next      _u_: upper     _e_: smerge
-_k_: prev      _l_: lower     _m_: smerge
+_g_: status      _L_: log       _b_: blame
+^ ^              _f_: file log
+_j_: smerge next _u_: upper     _e_: smerge
+_k_: smerge prev _l_: lower     _m_: smerge
 "
     ("g" magit-status)
     ("L" magit-log)
