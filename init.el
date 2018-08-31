@@ -394,11 +394,6 @@ _-_: hsplit    ^ ^                _?_: help
   :straight (:host github
              :repo "Fanael/rainbow-delimiters"))
 
-(use-package color-identifiers-mode
-  :diminish color-identifiers-mode
-  :config
-  (add-hook 'after-init-hook 'global-color-identifiers-mode))
-
 (use-package whitespace
   :diminish whitespace-mode
   :config
