@@ -795,6 +795,19 @@ _-_: hsplit    ^ ^                _?_: help
 
 (use-package racket-mode)
 
+(use-package flymake-racket
+  :straight (:host github
+             :repo "jojojames/flymake-racket")
+  :commands (flymake-racket-add-hook)
+  :init
+  (add-hook 'scheme-mode-hook #'flymake-racket-add-hook)
+  (add-hook 'racket-mode-hook #'flymake-racket-add-hook)
+  (defun +scheme-mode-setup-linting ()
+    (flymake-mode)
+    (flycheck-mode -1))
+  (add-hook 'scheme-mode-hook #'+scheme-mode-setup-linting)
+  (add-hook 'racket-mode-hook #'+scheme-mode-setup-linting))
+
 (use-package rainbow-mode)
 
 (use-package vimrc-mode)
