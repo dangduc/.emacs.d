@@ -178,7 +178,7 @@ https://emacs-doctor.com/emacs-strip-tease.html"
     (set-face-attribute 'font-lock-string-face nil
                         :foreground "#008000")
     (set-face-attribute 'font-lock-builtin-face nil
-                        :foreground "black"
+                        :foreground nil
                         :slant 'italic)))
 
 (defun duc/new-buffer ()
