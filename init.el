@@ -572,7 +572,8 @@ _-_: hsplit    ^ ^                _?_: help
              counsel-rg
              counsel-git
              counsel-fzf
-             counsel-fzf-occur)
+             counsel-fzf-occur
+             counsel-describe-face)
   :init
   (setq projectile-switch-project-action 'counsel-fzf)
   :config
