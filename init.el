@@ -214,7 +214,8 @@
   (defhydra hydra-submenu-eval (:exit t)
     ("e" duc/eval-dwim "dwim")
     ("b" duc/eval-buffer "buffer")
-    ("p" duc/eval-last "at point"))
+    ("p" duc/eval-last "at point")
+    ("P" eval-print-last-sexp "print"))
   (defhydra hydra-submenu-window (:exit t :hint nil)
     "
 ^Frame^             ^Window^
