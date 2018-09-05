@@ -186,3 +186,6 @@ https://emacs-doctor.com/emacs-strip-tease.html"
   (let ((buffer (generate-new-buffer "untitled")))
     (set-buffer-major-mode buffer)
     (switch-to-buffer-other-window buffer)))
+
+;; Use this method to query init load duration
+;(emacs-init-time)
