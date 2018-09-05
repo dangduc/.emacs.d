@@ -143,6 +143,7 @@ https://emacs-doctor.com/emacs-strip-tease.html"
 (defun duc/override-theme-colors-hook (theme-name &rest _)
   (if (member theme-name '(habamax
                            nofrils-acme
+                           nofrils-light
                            default-black))
       (duc/override-theme-colors)))
 
