@@ -71,9 +71,9 @@
      :underline (face-attribute sym :background)
      :box `(:line-width 3 :color ,(face-attribute `,sym :background)))))
 
-(advice-add 'load-theme :after '+make-modeline-taller)
-
 (advice-add 'load-theme :after #'duc/override-theme-colors-hook)
+
+(advice-add 'load-theme :after #'+make-modeline-taller)
 
 (advice-add 'load-theme :after #'duc/org-mode-theme)
 
