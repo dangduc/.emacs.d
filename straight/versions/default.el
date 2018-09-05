@@ -24,6 +24,7 @@
  ("exec-path-from-shell" . "d8aa7765a138a0cee1a18ac380019fb3b33d07e6")
  ("faceup" . "6c92dad56a133e14e7b27831e1bcf9b3a71ff154")
  ("flycheck" . "f6f091949cdaf89f228af46f1562c1438e2b1890")
+ ("flymake-racket" . "8fe67dc7596e63663ac9d3449b884ea58f59d38a")
  ("general.el" . "6b8f7bc4b4e64328c48b6262c6fa2105578f9eab")
  ("ghub" . "d83ebaee75fd7f0d175b76d5f3d226853a9ba205")
  ("goto-chg" . "e5b38e4e1378f6ea48fa9e8439f49c2998654aa4")
