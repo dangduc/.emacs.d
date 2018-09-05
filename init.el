@@ -150,11 +150,32 @@
   (which-key-setup-minibuffer)
   (which-key-mode))
 
+(use-package async
+  :init
+  (add-hook 'dired-mode-hook
+            (lambda ()
+              (when (file-remote-p default-directory)
+                (dired-async-mode)))))
+
 (use-package exec-path-from-shell
+  :after async
   :if (memq window-system '(mac ns x))
-  :config
-  (setq exec-path-from-shell-check-startup-files nil)
-  (exec-path-from-shell-initialize))
+  :init
+  ;; Set the shell environment properly.
+  (defun exec-path-from-shell-copy-envs-async (names)
+    "Run `exec-path-from-shell-copy-envs' asynchronously."
+    (async-start
+     `(lambda ()
+        (load ,(locate-library "exec-path-from-shell"))
+        (require 'exec-path-from-shell)
+        (exec-path-from-shell-getenvs ',names))
+     (lambda (pairs)
+       (when pairs
+         (require 'exec-path-from-shell)
+         (mapc (lambda (pair)
+                 (exec-path-from-shell-setenv (car pair) (cdr pair)))
+               pairs)))))
+  (exec-path-from-shell-copy-envs-async '("PATH")))
 
 (use-package evil
   :config
