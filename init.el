@@ -400,7 +400,8 @@ _-_: hsplit    ^ ^                _?_: help
   (setq seoul256-background 253))
 
 (use-package habamax-theme
-  :no-require t)
+  :init
+  (load-theme 'habamax t))
 
 (use-package default-black-theme
   :no-require t
