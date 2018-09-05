@@ -145,7 +145,11 @@ https://emacs-doctor.com/emacs-strip-tease.html"
                            nofrils-acme
                            nofrils-light
                            default-black))
-      (duc/override-theme-colors)))
+      (duc/override-theme-colors))
+  (if (member theme-name '(habamax))
+      (let ()
+        (set-face-attribute 'mode-line nil :background "#fff2d0")
+        (set-face-attribute 'mode-line-inactive nil :background "#f5f5f5"))))
 
 (defun duc/override-theme-colors ()
   (let ((faces '(font-lock-comment-face
