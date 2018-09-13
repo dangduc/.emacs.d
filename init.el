@@ -259,13 +259,15 @@ _c_: face
 ^^^^^^^^----------------------------------------------------------------
 _f_: font            _c_: describe face     _r_: hex colors
 _s_: font size       _t_: theme             _w_: whitespace
-_=_: font size +     ^ ^                    _l_: line-wrap
-_-_: font size -
+_+_: text scale +    ^ ^                    _l_: line-wrap
+_-_: text scale -
+_=_: text scale =
 "
     ("f" duc/ivy-font)
     ("s" duc/font-size)
-    ("=" duc/font-size-increase)
-    ("-" duc/font-size-decrease)
+    ("+" text-scale-increase :color red)
+    ("-" text-scale-decrease :color red)
+    ("=" (text-scale-mode -1) :color red)
     ("c" counsel-describe-face)
     ("t" counsel-load-theme)
     ("r" rainbow-mode)
