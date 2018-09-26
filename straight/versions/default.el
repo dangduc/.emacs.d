@@ -2,6 +2,7 @@
  ("all-the-icons-dired" . "980b7747d6c4a7992a1ec56afad908956db0a519")
  ("all-the-icons.el" . "52d1f2d36468146c93aaf11399f581401a233306")
  ("avy" . "7c40f5e3811716b05d87a06096b190f7cf7bdc45")
+ ("commentary-theme" . "1e2a64719b9d52992c6cdb91911ab313bcd69a77")
  ("company-mode" . "1c768504eb0ed7c416be4f7844311b6c68f789fb")
  ("counsel-projectile" . "a091875789cd3dcf88164212103d7f783b6712c0")
  ("dash.el" . "453c775e64e9ca61964b785b6d58ec00e4fec6d0")
