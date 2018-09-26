@@ -12,7 +12,7 @@
  ("dired-sidebar" . "4657964873bab31ee0645e82f89d1ef9e75c3bb5")
  ("elpa" . "7ba1bdad96db3252e5c2a0ddd88c52f5b075ca9e")
  ("emacs-async" . "d17c11e6082aa51f421bb037b828bdb15f405618")
- ("emacs-doom-themes" . "d5dd49bef637ca9bde422d105144a7de136e4eef")
+ ("emacs-doom-themes" . "aaf04351c004d6dd311f3d7e9a48c3a0fff3d839")
  ("emacs-memoize" . "9a561268ffb550b257a08710489a95cd087998b6")
  ("emacs-which-key" . "013cdb7259c1ff1ce9fb7ffbc637fc368ebd8144")
  ("epkgs" . "2fbb0caedfc168000251238e6ce49f39ceae32ba")
