@@ -62,16 +62,7 @@
                     :weight 'normal
                     :width 'normal)
 
-;; make mode-line taller
-(defun +make-modeline-taller (&rest _)
-  "Make the mode line taller."
-  (dolist (sym '(mode-line mode-line-inactive))
-    (set-face-attribute
-     sym nil
-     :underline (face-attribute sym :background)
-     :box `(:line-width 3 :color ,(face-attribute `,sym :background)))))
-
-(advice-add 'load-theme :after #'+make-modeline-taller)
+(advice-add 'load-theme :after #'duc/theme-setup-modeline)
 
 (advice-add 'load-theme :after #'duc/org-mode-theme)
 
