@@ -66,9 +66,6 @@
 
 (advice-add 'load-theme :after #'duc/org-mode-theme)
 
-;; Theme the default emacs light theme on init.
-(+make-modeline-taller)
-
 ;; Save all tempfiles in $TMPDIR/emacs$UID/
 (defconst emacs-tmp-dir (expand-file-name (format "emacs%d" (user-uid))
                                           temporary-file-directory))
@@ -297,6 +294,8 @@ _g_: status      _L_: log       _b_: blame
 ^ ^              _f_: file log
 _j_: smerge next _u_: upper     _e_: smerge
 _k_: smerge prev _l_: lower     _m_: smerge
+
+_P_: 80-char sentences
 "
     ("g" magit-status)
     ("L" magit-log)
@@ -307,7 +306,8 @@ _k_: smerge prev _l_: lower     _m_: smerge
     ("u" smerge-keep-upper)
     ("l" smerge-keep-lower)
     ("e" smerge-ediff)
-    ("m" smerge-ediff))
+    ("m" smerge-ediff)
+    ("P" fill-paragraph))
   (defhydra hydra-submenu-org-mode (:exit t)
     ("c" org-ctrl-c-ctrl-c "ctrl-c-ctrl-c"))
   (defhydra hydra-main-menu (:exit t :idle .2 :hint nil)
