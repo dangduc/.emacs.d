@@ -146,45 +146,6 @@ https://emacs-doctor.com/emacs-strip-tease.html"
     (set-buffer-major-mode buffer)
     (switch-to-buffer-other-window buffer)))
 
-(defun duc/make-modeline (face width height)
-  "Create an XPM bitmap via FACE, WIDTH and HEIGHT.
-
-Inspired by `powerline''s `pl/make-xpm'."
-  (propertize
-   " " 'display
-   (let ((data (make-list height (make-list width 1)))
-         (color (or (face-background face nil t) "None")))
-     (ignore-errors
-       (create-image
-        (concat
-         (format
-          "/* XPM */\nstatic char * percent[] = {\n\"%i %i 2 1\",\n\". c %s\",\n\"  c %s\","
-          (length (car data))
-          (length data)
-          color
-          color)
-         (apply #'concat
-                (cl-loop
-                 with idx = 0
-                 with len = (length data)
-                 for dl in data
-                 do (cl-incf idx)
-                 collect
-                 (concat "\""
-                         (cl-loop for d in dl
-                                  if (= d 0) collect (string-to-char " ")
-                                  else collect (string-to-char "."))
-                         (if (eq idx len) "\"};" "\",\n")))))
-        'xpm t :ascent 'center)))))
-
-(defun duc/modeline-border-color ()
-  "Return the border color of modeline."
-  (let ((current-theme (car custom-enabled-themes)))
-    (cond
-     ((memq current-theme '(solarized-light)) nil)
-     (:default
-      (face-foreground 'vertical-border (selected-frame) t)))))
-
 (defun duc/modeline-fontsize ()
   "Return font size of modeline."
   duc/font-height-mode-line)
@@ -207,25 +168,50 @@ Inspired by `powerline''s `pl/make-xpm'."
            nil
            :height font-size))))))
 
-(defun duc/modeline-background ()
-  "Show either active or inactive modeline height bar."
-  (if (not (display-graphic-p))
-      ""
-    (if (eq (get-buffer-window) (selected-window))
-        duc/modeline-active
-      duc/modeline-inactive)))
+(defun duc/theme-fontsize ()
+  "Return font size of modeline."
+  duc/font-height)
 
-(defun duc/update-modeline-variables ()
-  "Set up modeline height bars."
-  (setq duc/modeline-active (duc/make-modeline 'mode-line 1 24))
-  (setq duc/modeline-inactive (duc/make-modeline 'mode-line-inactive 1 24)))
+(defun duc/modeline-fontsize ()
+  "Return font size of modeline."
+  duc/font-height-mode-line)
 
-(defun duc/prefix-modeline ()
-  "Add modeline height bar to `mode-line-format'."
-  (let ((F mode-line-format)
-        (modeline-segment '(:eval (duc/modeline-background))))
-    (unless (member modeline-segment mode-line-format)
-      (cons (car F) (push modeline-segment (cdr F))))))
+(defun duc/theme-get-variable-pitch-font ()
+  "iA Writer Duospace")
+
+(defun duc/theme-background-color (sym)
+  "Return background color of modeline."
+  ;; If `mode-line-inactive' doesn't specify a background, use
+  ;; `mode-line''s instead.
+  (let* ((frame (selected-frame))
+         (background (face-attribute sym :background frame)))
+    (if (and
+         (eq sym 'mode-line-inactive)
+         (eq background 'unspecified))
+        (face-attribute 'mode-line :background frame)
+      background)))
+
+(defun duc/theme-setup-modeline (&rest _)
+  "Theme modeline."
+  (interactive)
+  (setq underline-minimum-offset 999)
+  (set-frame-parameter (selected-frame) 'right-divider-width 1)
+  (unless (member '(right-divider-width . 1) default-frame-alist)
+    (push '(right-divider-width . 1) default-frame-alist))
+  (let* ((font (duc/theme-get-variable-pitch-font))
+         (font-size (duc/modeline-fontsize))
+         (border-color (face-foreground 'window-divider (selected-frame) t))
+         (underline `(:color ,border-color))
+         (overline border-color))
+    (dolist (sym '(mode-line mode-line-inactive))
+      (set-face-attribute
+       sym
+       nil
+       :family font
+       :height font-size
+       :box `(:line-width 5 :color ,(duc/theme-background-color sym))
+       :underline underline
+       :overline overline))))
 
 ;; Use this method to query init load duration
 ;(emacs-init-time)
