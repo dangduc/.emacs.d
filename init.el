@@ -329,7 +329,7 @@ _h_: left      _,_: contents    _SPC_: M-x          _g_: magit
 _l_: right     _n_: buffers       _b_: buffers      _o_: org-mode
 _k_: up        _m_: files         _e_: eval         _s_: shell
 _j_: down      _p_: projects      _w_: window/frame _u_: package
-_a_: jump      ^ ^                ^ ^
+_a_: jump      _<_: ls list       ^ ^
 _\\_: vsplit  ^ ^                 ^ ^
 _-_: hsplit    ^ ^                _?_: help
 ^^             ^ ^                _f_: file
@@ -344,6 +344,7 @@ _-_: hsplit    ^ ^                _?_: help
     ("-" split-window-below)
     ("\\" split-window-right)
     ("," counsel-rg)
+    ("<" projectile-ag)
     ("n" switch-to-buffer)
     ("m" counsel-fzf)
     ("o" hydra-submenu-org-mode/body)
