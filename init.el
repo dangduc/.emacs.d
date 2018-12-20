@@ -242,7 +242,7 @@ _f_/_w_: maximize
 _m_: mode            _p_: list packages
 _k_: key             _a_: apropos
 _f_: function
-_v_: variable
+_v_: variable        _d_: toggle error debugging
 _c_: face
 "
     ("m" describe-mode)
@@ -251,7 +251,8 @@ _c_: face
     ("k" describe-key)
     ("c" describe-face)
     ("p" package-list-packages)
-    ("a" counsel-apropos))
+    ("a" counsel-apropos)
+    ("d" toggle-debug-on-error))
   (defhydra hydra-submenu-customize-face (:exit t :hint nil)
     "
 ^Font^                  ^Face^                 ^Buffer^
