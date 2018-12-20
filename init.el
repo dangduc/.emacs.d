@@ -258,7 +258,7 @@ _c_: face
 ^^^^^^^^----------------------------------------------------------------
 _f_: font            _c_: describe face     _r_: hex colors
 _s_: font size       _t_: theme             _w_: whitespace
-_+_: text scale +    ^ ^                    _l_: line-wrap
+_+_: text scale +    ^ ^                    _l_: word-wrap
 _-_: text scale -
 _=_: text scale =
 "
@@ -271,7 +271,7 @@ _=_: text scale =
     ("t" counsel-load-theme)
     ("r" rainbow-mode)
     ("w" whitespace-mode)
-    ("l" toggle-truncate-lines))
+    ("l" visual-line-mode))
   (defhydra hydra-submenu-package (:exit t)
     ("r" package-refresh-contents "package-refresh-contents")
     ("i" straight-use-package "install")
