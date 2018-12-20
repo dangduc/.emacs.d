@@ -85,10 +85,6 @@
 ;; package management
 ;;
 
-(setq package-archives '(("gnu" . "https://elpa.gnu.org/packages/")
-                         ("marmalade" . "https://marmalade-repo.org/packages/")
-                         ("melpa" . "https://melpa.org/packages/")))
-
 ;; Disable in favor of `use-package'.
 (setq package-enable-at-startup nil)
 
@@ -274,11 +270,9 @@ _=_: text scale =
     ("w" whitespace-mode)
     ("l" visual-line-mode))
   (defhydra hydra-submenu-package (:exit t)
-    ("r" package-refresh-contents "package-refresh-contents")
     ("i" straight-use-package "install")
     ("f" straight-freeze-versions "freeze lockfile")
-    ("s" straight-freeze-versions "freeze lockfile")
-    ("l" package-list-packages "package-list"))
+    ("l" package-list-packages-no-fetch "package-list"))
   (defhydra hydra-submenu-project (:exit t)
     ("n" (let ((counsel-projectile-switch-project-action
                 'counsel-projectile-switch-project-action-switch-to-buffer))
