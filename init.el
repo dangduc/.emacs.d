@@ -805,7 +805,7 @@ _-_: hsplit    ^ ^                _?_: help
   (setq dired-sidebar-use-term-integration t)
   (setq dired-sidebar-use-custom-font t)
   (setq dired-sidebar-width 30)
-  (setq dired-sidebar-theme 'vscode)
+  (setq dired-sidebar-theme 'ascii)
   (setq dired-sidebar-face '(:family "InconsolateG for Powerline" :height 120)))
 
 (use-package all-the-icons-dired
