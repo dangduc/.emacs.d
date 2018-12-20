@@ -779,7 +779,6 @@ _-_: hsplit    ^ ^                _?_: help
   (add-hook 'ediff-after-quit-hook-internal 'winner-undo))
 
 (use-package evil-magit
-  :after magit
   :init
   (setq evil-magit-want-horizontal-movement t))
 
