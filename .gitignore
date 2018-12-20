@@ -6,6 +6,7 @@ ac-comphist.dat
 eproject.lst
 .smex-items
 \#*
+\.#*
 .places
 .cache
 /eww-bookmarks
@@ -20,6 +21,8 @@ org-files/
 semanticdb/
 edts/
 .flycheck_init.el
+flycheck_init.el
+forge-database.sqlite
 .recentf
 .recentf~
 projectile.cache
