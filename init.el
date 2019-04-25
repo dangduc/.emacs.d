@@ -396,6 +396,11 @@ _-_: hsplit    ^ ^                _?_: help
   :straight (:host github
                    :repo "pzel/commentary-theme"))
 
+(use-package parchment-theme
+  :no-require t
+  :straight (:host github
+                   :repo "ajgrf/parchment"))
+
 (use-package seoul256-theme
   :no-require t
   :config
@@ -822,6 +827,8 @@ _-_: hsplit    ^ ^                _?_: help
 (use-package swift-mode)
 
 (use-package swift3-mode)
+
+(use-package kotlin-mode)
 
 (use-package racket-mode)
 
