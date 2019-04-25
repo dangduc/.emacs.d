@@ -84,6 +84,13 @@
 (setq mac-option-modifier 'super)
 (setq mac-command-modifier 'meta)
 
+;; org-mode
+(setq org-default-notes-file "~/dev/notes/log.org")
+(setq org-capture-templates
+      (quote (("c" "(Quick) note" entry (file+datetree "") "* %<%H%M:%S.%z> %^{note}"
+               :immediate-finish t)
+              ("C" "Multi-line note" entry (file+datetree "") "* %<%H%M:%S.%z> %?\n  %l"))))
+
 ;; package management
 ;;
 
@@ -232,6 +239,10 @@ _f_/_w_: maximize
     ("w" save-buffer "write file")
     ("i" (find-file "~/.emacs.d/init.el" ) "init.el")
     ("d" (find-file "~/.emacs.d/duc.el" ) "duc.el")
+    ("1" (find-file "~/dev/notes/log.org" ) "log.org")
+    ("2" (find-file "~/dev/notes/how-to.org" ) "how-to.org")
+    ("c" (org-capture nil "c") "capture note")
+    ("C" (org-capture nil "C") "capture longer note")
     ("b" duc/sidebar-toggle "sidebar"))
   (defhydra hydra-submenu-help (:exit t :hint nil)
     "
