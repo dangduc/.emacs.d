@@ -62,6 +62,8 @@
                     :weight 'normal
                     :width 'normal)
 
+(duc/theme-setup-modeline)
+
 (advice-add 'load-theme :after #'duc/theme-setup-modeline)
 
 (advice-add 'load-theme :after #'duc/org-mode-theme)
