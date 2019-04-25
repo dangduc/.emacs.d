@@ -249,7 +249,8 @@ _f_/_w_: maximize
 ^Describe^           ^Info^
 ^^^^^^^^-------------------------------------
 _m_: mode            _p_: list packages
-_k_: key             _a_: apropos
+_k_: key-to-func     _a_: apropos
+_K_: func-to-key
 _f_: function
 _v_: variable        _d_: toggle error debugging
 _c_: face
@@ -258,6 +259,7 @@ _c_: face
     ("f" counsel-describe-function)
     ("v" counsel-describe-variable)
     ("k" describe-key)
+    ("K" where-is)
     ("c" describe-face)
     ("p" package-list-packages)
     ("a" counsel-apropos)
