@@ -87,9 +87,11 @@
 ;; org-mode
 (setq org-default-notes-file "~/dev/notes/log.org")
 (setq org-capture-templates
-      (quote (("c" "(Quick) note" entry (file+datetree "") "* %<%H%M:%S.%z> %^{note}"
+      (quote (("c" "(Quick) note" entry (file+datetree "") "* %<%H%M:%S.%z> %^{note} %^g"
                :immediate-finish t)
-              ("C" "Multi-line note" entry (file+datetree "") "* %<%H%M:%S.%z> %?\n  %l"))))
+              ("C" "Multi-line note" entry (file+datetree "") "* %<%H%M:%S.%z> %? %^g\n  %l")
+              ("t" "todo" entry (file+datetree "") "* TODO %<%H%M:%S.%z> %^{todo}"
+               :immediate-finish t))))
 
 ;; package management
 ;;
@@ -243,6 +245,7 @@ _f_/_w_: maximize
     ("2" (find-file "~/dev/notes/how-to.org" ) "how-to.org")
     ("c" (org-capture nil "c") "capture note")
     ("C" (org-capture nil "C") "capture longer note")
+    ("t" (org-capture nil "t") "capture todo")
     ("b" duc/sidebar-toggle "sidebar"))
   (defhydra hydra-submenu-help (:exit t :hint nil)
     "
