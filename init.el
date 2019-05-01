@@ -87,10 +87,10 @@
 ;; org-mode
 (setq org-default-notes-file "~/dev/notes/log.org")
 (setq org-capture-templates
-      (quote (("c" "(Quick) note" entry (file+datetree "") "* %<%H%M:%S.%z> %^{note} %^g"
+      (quote (("c" "(Quick) note" entry (file+datetree "") "* %<%H%M:%S> %^{note}"
                :immediate-finish t)
-              ("C" "Multi-line note" entry (file+datetree "") "* %<%H%M:%S.%z> %? %^g\n  %l")
-              ("t" "todo" entry (file+datetree "") "* TODO %<%H%M:%S.%z> %^{todo}"
+              ("C" "Multi-line note" entry (file+datetree "") "* %<%H%M:%S> %?\n  %l")
+              ("t" "TODO" entry (file+datetree "") "* TODO %<%H%M:%S> %^{todo}"
                :immediate-finish t))))
 
 ;; package management
