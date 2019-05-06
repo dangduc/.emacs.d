@@ -428,11 +428,6 @@ _-_: hsplit    ^ ^                _?_: help
 (use-package habamax-theme
   :no-require t)
 
-(use-package commentary-theme
-  :no-require t
-  :straight (:host github
-                   :repo "pzel/commentary-theme"))
-
 (use-package default-black-theme
   :no-require t
   :straight (:host github
