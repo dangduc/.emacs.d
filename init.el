@@ -87,7 +87,9 @@
 ;; org-mode
 (setq org-default-notes-file "~/dev/notes/log.org")
 (setq org-capture-templates
-      (quote (("c" "(Quick) note" entry (file+datetree "") "* %<%H%M:%S> %^{note}"
+      (quote (("d" "drill" entry (file+datetree "") "* %<%H%M:%S> %^{question} :drill:\n** Answer\n%^{answer}"
+               :immediate-finish t)
+              ("c" "(Quick) note" entry (file+datetree "") "* %<%H%M:%S> %^{note}"
                :immediate-finish t)
               ("C" "Multi-line note" entry (file+datetree "") "* %<%H%M:%S> %?\n  %l")
               ("t" "TODO" entry (file+datetree "") "* TODO %<%H%M:%S> %^{todo}"
@@ -243,6 +245,8 @@ _f_/_w_: maximize
     ("d" (find-file "~/.emacs.d/duc.el" ) "duc.el")
     ("1" (find-file "~/dev/notes/log.org" ) "log.org")
     ("2" (find-file "~/dev/notes/how-to.org" ) "how-to.org")
+    ("d" (org-capture nil "d") "capture drill")
+    ("d" (org-drill) "drill")
     ("c" (org-capture nil "c") "capture note")
     ("C" (org-capture nil "C") "capture longer note")
     ("t" (org-capture nil "t") "capture todo")
