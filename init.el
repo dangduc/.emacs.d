@@ -89,7 +89,7 @@
 (setq org-capture-templates
       (quote (("d" "drill" entry (file+datetree "") "* %<%H%M:%S> %^{question} :drill:\n** Answer\n%^{answer}"
                :immediate-finish t)
-              ("c" "(Quick) note" entry (file+datetree "") "* %<%H%M:%S> %^{note}"
+              ("c" "(Quick) note" entry (file+datetree "") "* %<%H%M:%S> %^{note}\n  %l"
                :immediate-finish t)
               ("C" "Multi-line note" entry (file+datetree "") "* %<%H%M:%S> %?\n  %l")
               ("t" "TODO" entry (file+datetree "") "* TODO %<%H%M:%S> %^{todo}"
@@ -174,6 +174,9 @@
 (use-package evil
   :config
   (setq evil-want-C-u-scroll t)
+  ; hideshow
+  (define-key evil-normal-state-map (kbd "<tab>") 'hs-toggle-hiding)
+  (define-key evil-normal-state-map (kbd "<S-tab>") 'hs-hide-all)
   (define-key evil-normal-state-map (kbd "M-.") nil)
   ; " make j, k move cursor screen-wise, not line-wise. Makes word-wrapped
   ; " paragraph navigation sane. (http://statico.github.com/vim.html)
@@ -187,8 +190,11 @@
   ; set scrolloff=3
   (setq scroll-margin 3)
   :init
+
   (setq evil-want-integration nil)
-  (evil-mode 1))
+  (evil-mode 1)
+  ; hideshow
+  (add-hook 'prog-mode-hook 'hs-minor-mode))
 
 (use-package evil-collection
     :after evil
@@ -347,9 +353,9 @@ _h_: left      _,_: contents    _SPC_: M-x          _g_: magit
 _l_: right     _n_: buffers       _b_: buffers      _o_: org-mode
 _k_: up        _m_: files         _e_: eval         _s_: shell
 _j_: down      _p_: projects      _w_: window/frame _u_: package
-_a_: jump      _<_: ls list       ^ ^
-_\\_: vsplit  ^ ^                 ^ ^
-_-_: hsplit    ^ ^                _?_: help
+_a_: jump      _<_: files         ^ ^
+_\\_: vsplit    _?_: file         ^ ^
+_-_: hsplit    ^ ^                _H_: help
 ^^             ^ ^                _f_: file
 ^^             ^ ^                ^ ^
 ^ ^            ^ ^                _c_: customize
@@ -363,6 +369,7 @@ _-_: hsplit    ^ ^                _?_: help
     ("\\" split-window-right)
     ("," counsel-rg)
     ("<" projectile-ag)
+    ("?" occur)
     ("n" switch-to-buffer)
     ("m" counsel-fzf)
     ("o" hydra-submenu-org-mode/body)
@@ -373,7 +380,7 @@ _-_: hsplit    ^ ^                _?_: help
     ("c" hydra-submenu-customize-face/body)
     ("e" hydra-submenu-eval/body)
     ("w" hydra-submenu-window/body)
-    ("?" hydra-submenu-help/body)
+    ("H" hydra-submenu-help/body)
     ("f" hydra-submenu-file/body)
     ("g" hydra-submenu-git/body)
     ("u" hydra-submenu-package/body)))
@@ -513,6 +520,8 @@ _-_: hsplit    ^ ^                _?_: help
      slurp/barf-cp
      additional
      escape)))
+
+(use-package ag)
 
 (use-package projectile
   :commands (projectile-project-p
