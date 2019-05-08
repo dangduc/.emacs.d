@@ -175,8 +175,9 @@
   :config
   (setq evil-want-C-u-scroll t)
   ; hideshow
-  (define-key evil-normal-state-map (kbd "<tab>") 'hs-toggle-hiding)
-  (define-key evil-normal-state-map (kbd "<S-tab>") 'hs-hide-all)
+  (evil-define-key 'normal hs-minor-mode-map (kbd "<tab>") 'hs-toggle-hiding)
+  (evil-define-key 'normal hs-minor-mode-map (kbd "<S-tab>") 'hs-hide-all)
+  (evil-define-key 'normal hs-minor-mode-map (kbd "<backtab>") 'hs-hide-all)
   (define-key evil-normal-state-map (kbd "M-.") nil)
   ; " make j, k move cursor screen-wise, not line-wise. Makes word-wrapped
   ; " paragraph navigation sane. (http://statico.github.com/vim.html)
@@ -194,7 +195,8 @@
   (setq evil-want-integration nil)
   (evil-mode 1)
   ; hideshow
-  (add-hook 'prog-mode-hook 'hs-minor-mode))
+  (add-hook 'emacs-lisp-mode-hook 'hs-minor-mode)
+  (add-hook 'typescript-mode-hook 'hs-minor-mode))
 
 (use-package evil-collection
     :after evil
