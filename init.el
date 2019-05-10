@@ -196,6 +196,7 @@
   (evil-mode 1)
   ; hideshow
   (add-hook 'emacs-lisp-mode-hook 'hs-minor-mode)
+  (add-hook 'tide-mode-hook 'hs-minor-mode)
   (add-hook 'typescript-mode-hook 'hs-minor-mode))
 
 (use-package evil-collection
