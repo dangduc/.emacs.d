@@ -171,6 +171,8 @@
                pairs)))))
   (exec-path-from-shell-copy-envs-async '("PATH")))
 
+(setq evil-want-keybinding nil)
+(setq evil-want-integration nil)
 (use-package evil
   :config
   (setq evil-want-C-u-scroll t)
@@ -192,7 +194,6 @@
   (setq scroll-margin 3)
   :init
 
-  (setq evil-want-integration nil)
   (evil-mode 1)
   ; hideshow
   (add-hook 'emacs-lisp-mode-hook 'hs-minor-mode)
@@ -748,11 +749,6 @@ _-_: hsplit    ^ ^                _H_: help
     (interactive)
     (magit-run-git-async "submodule" "update" "--init" "--recursive"))
 
-  (magit-define-popup-action
-   'magit-submodule-popup ?U
-   "Update Init Recursive"
-   #'+magit-git-submodule-update--init--recursive)
-
   (setq magit-bury-buffer-function 'magit-mode-quit-window)
 
   (setq magit-diff-refine-hunk 'all)
@@ -766,7 +762,6 @@ _-_: hsplit    ^ ^                _H_: help
 
   ;; Add rebase argument to pull
   ;; https://github.com/magit/magit/issues/2597
-  (magit-define-popup-switch 'magit-pull-popup ?R "Rebase" "--rebase")
   (defun +magit-submodule-remove (path &optional leave-in-work-tree)
     "Remove the submodule at PATH.
      https://stackoverflow.com/questions/1260748/how-do-i-remove-a-submodule"
@@ -794,8 +789,10 @@ _-_: hsplit    ^ ^                _H_: help
        (magit-run-git "rm" "--cached" path)
        (shell-command-to-string (format "mv %s_tmp %s" path path)))))
 
-  (magit-define-popup-action
-   'magit-submodule-popup ?x "Remove" #'+magit-submodule-remove))
+  ;; Bind esc
+  (define-key transient-map        (kbd "q") 'transient-quit-one)
+  (define-key transient-edit-map   (kbd "q") 'transient-quit-one)
+  (define-key transient-sticky-map (kbd "q") 'transient-quit-seq))
 
 (use-package evil-ediff
   :commands (evil-ediff-init)
@@ -879,6 +876,9 @@ _-_: hsplit    ^ ^                _H_: help
 (use-package vimrc-mode)
 
 (use-package restclient)
+
+(use-package vterm
+  :init (defvar vterm-install t))
 
 ;; end use-package configuration
 (custom-set-variables

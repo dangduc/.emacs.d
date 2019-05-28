@@ -58,3 +58,5 @@ private/
 !private/local/README.md
 /games/
 /url/
+/transient
+/request
