@@ -371,7 +371,7 @@ _-_: hsplit    ^ ^                _H_: help
     ("-" split-window-below)
     ("\\" split-window-right)
     ("," counsel-rg)
-    ("<" projectile-ag)
+    ("<" deadgrep)
     ("?" occur)
     ("n" switch-to-buffer)
     ("m" counsel-fzf)
@@ -525,6 +525,8 @@ _-_: hsplit    ^ ^                _H_: help
      escape)))
 
 (use-package ag)
+
+(use-package deadgrep)
 
 (use-package projectile
   :commands (projectile-project-p
