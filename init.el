@@ -225,6 +225,7 @@
     ("o" switch-to-buffer "switch buffer")
     ("r" revert-buffer "reload buffer")
     ("w" save-buffer "save buffer")
+    ("t" auto-revert-tail-mode "tail -f")
     ("k" kill-buffer "kill buffer"))
   (defhydra hydra-submenu-eval (:exit t)
     ("e" duc/eval-dwim "dwim")
