@@ -256,6 +256,7 @@ _f_/_w_: maximize
     ("d" (find-file "~/.emacs.d/duc.el" ) "duc.el")
     ("1" (find-file "~/dev/notes/log.org" ) "log.org")
     ("2" (find-file "~/dev/notes/how-to.org" ) "how-to.org")
+    ("3" shell-command-on-region "M-|") ;; e.g. "nc termbin.com 9999"
     ("D" (org-capture nil "D") "capture drill")
     ("c" (org-capture nil "c") "capture note")
     ("C" (org-capture nil "C") "capture longer note")
