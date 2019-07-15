@@ -881,6 +881,10 @@ _-_: hsplit    ^ ^                _H_: help
 
 (use-package restclient)
 
+; Remove .json from using major mode
+; Fixes issue where loading large json file freezes emacs.
+(setq auto-mode-alist (rassq-delete-all 'javascript-mode auto-mode-alist))
+
 (use-package vterm
   :init (defvar vterm-install t))
 
