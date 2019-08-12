@@ -359,7 +359,7 @@ _l_: right     _n_: buffers       _b_: buffers      _o_: org-mode
 _k_: up        _m_: files         _e_: eval         _s_: shell
 _j_: down      _p_: projects      _w_: window/frame _u_: package
 _a_: jump      _<_: files         ^ ^
-_\\_: vsplit    _?_: file         ^ ^
+_\\_: vsplit    _?_: help         ^ ^
 _-_: hsplit    ^ ^                _H_: help
 ^^             ^ ^                _f_: file
 ^^             ^ ^                ^ ^
@@ -374,7 +374,7 @@ _-_: hsplit    ^ ^                _H_: help
     ("\\" split-window-right)
     ("," counsel-rg)
     ("<" deadgrep)
-    ("?" occur)
+    ("?" hydra-submenu-help/body)
     ("n" switch-to-buffer)
     ("m" counsel-fzf)
     ("o" hydra-submenu-org-mode/body)
