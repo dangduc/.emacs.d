@@ -591,6 +591,7 @@ _-_: hsplit    ^ ^                _H_: help
           (swiper-multi . ivy--regex-plus)
           (projectile-completing-read . ivy--regex-fuzzy)
           (counsel-fzf . regexp-quote)
+          (counsel-rg . ivy--regex-plus)
           (t . ivy--regex-fuzzy)))
   (setq ivy-initial-inputs-alist nil)
 
