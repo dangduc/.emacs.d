@@ -861,6 +861,14 @@ _-_: hsplit    ^ ^                _H_: help
 
 (use-package kotlin-mode)
 
+(use-package lsp-python-ms
+  :hook (python-mode . (lambda ()
+                         (require 'lsp-python-ms)
+                         (lsp))))
+(use-package yasnippet
+  :init
+  (yas-global-mode 1))
+
 (use-package racket-mode)
 
 (use-package flymake-racket

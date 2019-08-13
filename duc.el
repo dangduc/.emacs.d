@@ -113,7 +113,10 @@
   (pcase major-mode
     ('racket-mode (duc/racket-eval-last-sexp))
     ('emacs-lisp-mode (eval-last-sexp p))
+    ('python-mode (shell-command (concat "python3" " " (buffer-name))))
     (_ (eval-last-sexp p))))
+
+(setq shell-command-dont-erase-buffer 'end-last-out)
 
 (defun duc/eval-buffer ()
   (interactive)
