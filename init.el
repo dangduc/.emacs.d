@@ -95,6 +95,18 @@
               ("t" "TODO" entry (file+datetree "") "* TODO %<%H%M:%S> %^{todo}"
                :immediate-finish t))))
 
+;; load path
+;;
+
+;; Stolen from [Aaron Bedra's Emacs 26 Configuration](http://aaronbedra.com/emacs.d/#vendor-directory)
+;; Setup up vendor directory.
+(defvar duc/vendor-dir (expand-file-name "vendor" user-emacs-directory))
+(add-to-list 'load-path duc/vendor-dir)
+
+(dolist (project (directory-files duc/vendor-dir t "\\w+"))
+  (when (file-directory-p project)
+    (add-to-list 'load-path project)))
+
 ;; package management
 ;;
 
@@ -897,7 +909,8 @@ _-_: hsplit    ^ ^                _H_: help
 (use-package vterm
   :init (defvar vterm-install t))
 
-;; end use-package configuration
+;; End package declarations
+
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
