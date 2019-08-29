@@ -116,6 +116,7 @@
     ('python-mode (shell-command (concat "python3" " " (buffer-name))))
     (_ (eval-last-sexp p))))
 
+(setq async-shell-command-display-buffer nil)
 (setq shell-command-dont-erase-buffer 'end-last-out)
 
 (defun duc/eval-buffer ()
