@@ -807,10 +807,13 @@ _-_: hsplit    ^ ^                _H_: help
        (magit-run-git "rm" "--cached" path)
        (shell-command-to-string (format "mv %s_tmp %s" path path)))))
 
+
+  (define-key magit-hunk-section-map (kbd "<return>") 'magit-diff-visit-file-other-window)
+
   ;; Bind esc
-  (define-key transient-map        (kbd "q") 'transient-quit-one)
-  (define-key transient-edit-map   (kbd "q") 'transient-quit-one)
-  (define-key transient-sticky-map (kbd "q") 'transient-quit-seq))
+  (define-key transient-map        (kbd "<escape>") 'transient-quit-one)
+  (define-key transient-edit-map   (kbd "<escape>") 'transient-quit-one)
+  (define-key transient-sticky-map (kbd "<escape>") 'transient-quit-seq))
 
 (use-package evil-ediff
   :commands (evil-ediff-init)
