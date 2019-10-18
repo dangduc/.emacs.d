@@ -482,6 +482,9 @@ _-_: hsplit    ^ ^                _H_: help
   :straight (:host github
              :repo "dangduc/default-black-theme"))
 
+(use-package flatland-black-theme
+  :no-require t)
+
 ;; end themes
 
 (use-package undo-tree
