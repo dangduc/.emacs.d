@@ -754,6 +754,8 @@ _-_: hsplit    ^ ^                _H_: help
 
 (use-package tide
   :commands (tide-setup)
+  :config
+  (setq tide-jump-to-definition-reuse-window nil)
   :init
   (defun +setup-tide-mode ()
     (interactive)
