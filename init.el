@@ -680,6 +680,11 @@ _-_: hsplit    ^ ^                _H_: help
   (setq flycheck-idle-change-delay 1.2)
   (setq-default flycheck-emacs-lisp-load-path 'inherit)
   (setq-default flycheck-disabled-checkers '(emacs-lisp-checkdoc))
+  ; https://stackoverflow.com/questions/37720869/emacs-how-do-i-set-flycheck-to-python-3
+  (custom-set-variables
+   '(flycheck-python-flake8-executable "python3")
+   '(flycheck-python-pycompile-executable "python3")
+   '(flycheck-python-pylint-executable "python3"))
   (global-flycheck-mode))
 
 (defun disable-company-mode-in-eshell-mode ()
