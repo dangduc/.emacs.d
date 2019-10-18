@@ -928,6 +928,14 @@ _-_: hsplit    ^ ^                _H_: help
 (use-package vterm
   :init (defvar vterm-install t))
 
+(use-package tex
+  :straight auctex
+  :defer t
+  :config
+  (setq TeX-engine "xelatex")
+  (setq TeX-auto-save t)
+  (setq TeX-parse-self t))
+
 (use-package leetcode
   :config
   (setq leetcode-prefer-language "python3")

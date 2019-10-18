@@ -114,6 +114,7 @@
     ('racket-mode (duc/racket-eval-last-sexp))
     ('emacs-lisp-mode (eval-last-sexp p))
     ('python-mode (shell-command (concat "python3" " " (buffer-name))))
+    ('latex-mode (preview-section))
     (_ (eval-last-sexp p))))
 
 (setq async-shell-command-display-buffer nil)
