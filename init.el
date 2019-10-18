@@ -229,6 +229,20 @@
 
 (use-package hydra
   :config
+  (defhydra hydra-submenu-leetcode (:exit t :hint nil)
+    "
+^LC^
+^^^^^^^^----------------------------
+  _l_: launch       _q_: quit
+  _s_: submit     _e_/_t_: test
+
+  _r_: reload "
+    ("l" leetcode)
+    ("q" leetcode-quit)
+    ("s" leetcode-submit)
+    ("e" leetcode-try)
+    ("t" leetcode-try)
+    ("r" leetcode-refresh))
   (defhydra hydra-submenu-buffer (:exit t)
     ("p" previous-buffer "prev buffer")
     ("n" next-buffer "next buffer")
@@ -371,7 +385,7 @@ _h_: left      _,_: contents    _SPC_: M-x          _g_: magit
 _l_: right     _n_: buffers       _b_: buffers      _o_: org-mode
 _k_: up        _m_: files         _e_: eval         _s_: shell
 _j_: down      _p_: projects      _w_: window/frame _u_: package
-_a_: jump      _<_: files         ^ ^
+_a_: jump      _<_: files         ^ ^               _L_: lc
 _\\_: vsplit    _?_: help         ^ ^
 _-_: hsplit    ^ ^                _H_: help
 ^^             ^ ^                _f_: file
@@ -401,7 +415,8 @@ _-_: hsplit    ^ ^                _H_: help
     ("H" hydra-submenu-help/body)
     ("f" hydra-submenu-file/body)
     ("g" hydra-submenu-git/body)
-    ("u" hydra-submenu-package/body)))
+    ("u" hydra-submenu-package/body)
+    ("L" hydra-submenu-leetcode/body)))
 
 (use-package ace-window
   :init
@@ -912,6 +927,11 @@ _-_: hsplit    ^ ^                _H_: help
 
 (use-package vterm
   :init (defvar vterm-install t))
+
+(use-package leetcode
+  :config
+  (setq leetcode-prefer-language "python3")
+  (evil-define-key 'normal tabulated-list-mode-map (kbd "RET") 'leetcode-show-current-problem))
 
 ;; End package declarations
 
