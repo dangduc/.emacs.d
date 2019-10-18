@@ -187,6 +187,11 @@
 (setq evil-want-integration nil)
 (use-package evil
   :config
+  ; This _somehow_ fixes emacs deterministically freezing while (`/`) searching
+  ; for certain strings.
+  ; https://github.com/syl20bnr/spacemacs/issues/3623
+  (setq-default search-invisible t)
+  ;
   (setq evil-want-C-u-scroll t)
   ; hideshow
   (evil-define-key 'normal hs-minor-mode-map (kbd "<tab>") 'hs-toggle-hiding)
