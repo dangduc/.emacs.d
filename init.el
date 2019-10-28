@@ -475,7 +475,7 @@ _-_: hsplit    ^ ^                _H_: help
 (use-package seoul256-theme
   :no-require t
   :config
-  (setq seoul256-background 253))
+  (setq seoul256-background 255))
 
 (use-package habamax-theme
   :no-require t)
