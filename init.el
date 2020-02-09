@@ -944,6 +944,7 @@ _-_: hsplit    ^ ^                _H_: help
 (setq auto-mode-alist (rassq-delete-all 'javascript-mode auto-mode-alist))
 
 (use-package vterm
+  :if (not (eq system-type 'windows-nt))
   :init (defvar vterm-install t))
 
 (use-package tex
