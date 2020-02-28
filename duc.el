@@ -218,5 +218,12 @@ https://emacs-doctor.com/emacs-strip-tease.html"
        :underline underline
        :overline overline))))
 
+;; POST region to pastebin-like service, ix.io.
+(defun duc/ixio ()
+  (interactive)
+  (print (string-trim (shell-command-to-string
+                       (format "echo %s | curl -sF 'f:1=<-' ix.io"
+                               (shell-quote-argument (buffer-substring (region-beginning) (region-end))))))))
+
 ;; Use this method to query init load duration
 ;(emacs-init-time)
