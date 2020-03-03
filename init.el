@@ -95,6 +95,14 @@
               ("t" "TODO" entry (file+datetree "") "* TODO %<%H%M:%S> %^{todo}"
                :immediate-finish t))))
 
+;; Misc
+;;
+
+;; Create buffer per occur.
+(add-hook 'occur-hook
+          (lambda ()
+            (occur-rename-buffer)))
+
 ;; load path
 ;;
 
@@ -393,9 +401,9 @@ _h_: left      _,_: contents    _SPC_: M-x          _g_: magit
 _l_: right     _n_: buffers       _b_: buffers      _o_: org-mode
 _k_: up        _m_: files         _e_: eval         _s_: shell
 _j_: down      _p_: projects      _w_: window/frame _u_: package
-_a_: jump      _<_: files         ^ ^               _L_: lc
-_\\_: vsplit    _?_: help         ^ ^
-_-_: hsplit    ^ ^                _H_: help
+_a_: jump      _<_: occur            ^ ^               _L_: lc
+_\\_: vsplit    _M_: all files    ^ ^
+_-_: hsplit    _?_: help          _H_: help
 ^^             ^ ^                _f_: file
 ^^             ^ ^                ^ ^
 ^ ^            ^ ^                _c_: customize
@@ -408,7 +416,8 @@ _-_: hsplit    ^ ^                _H_: help
     ("-" split-window-below)
     ("\\" split-window-right)
     ("," counsel-rg)
-    ("<" deadgrep)
+    ("<" occur)
+    ("M" deadgrep)
     ("?" hydra-submenu-help/body)
     ("n" switch-to-buffer)
     ("m" counsel-fzf)
