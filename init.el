@@ -652,6 +652,10 @@ _-_: hsplit    _?_: help          _H_: help
 
   (define-key ivy-minibuffer-map (kbd "<C-return>") 'ivy-immediate-done)
 
+  ;; Unbind ivy-restrict-to-matches to prevent clearing
+  ;; minibuffer when chording S-SPC unintentionally.
+  (define-key ivy-minibuffer-map (kbd "S-SPC") nil)
+
   ;; Escape quits.
   (with-eval-after-load 'evil
     (define-key ivy-minibuffer-map [escape] 'minibuffer-keyboard-quit))
