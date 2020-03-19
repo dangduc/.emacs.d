@@ -768,6 +768,10 @@ _-_: hsplit    _?_: help          _H_: help
     (evil-define-key 'normal web-mode-map
       (kbd "C-d") 'evil-scroll-down)))
 
+(use-package jq-mode
+  :mode
+  ("\\.jq\\'" . jq-mode))
+
 (use-package typescript-mode
   ;; npm install -g typescript
   :mode
