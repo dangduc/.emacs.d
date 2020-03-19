@@ -240,7 +240,9 @@
 (use-package evil-collection
     :after evil
     :init
-    (evil-collection-init))
+    (evil-collection-init)
+    ; Disable binding for blame when in a magit diff buffer.
+    (evil-define-key 'normal magit-blob-mode-map (kbd "b") nil))
 
 (use-package general
   :after evil
