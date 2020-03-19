@@ -232,7 +232,10 @@
   (add-hook 'java-mode-hook 'hs-minor-mode)
   (add-hook 'emacs-lisp-mode-hook 'hs-minor-mode)
   (add-hook 'tide-mode-hook 'hs-minor-mode)
-  (add-hook 'typescript-mode-hook 'hs-minor-mode))
+  (add-hook 'typescript-mode-hook 'hs-minor-mode)
+  (add-hook 'kotlin-mode-hook 'hs-minor-mode)
+  (add-hook 'swift-mode-hook 'hs-minor-mode)
+  (add-hook 'js-mode-hook 'hs-minor-mode))
 
 (use-package evil-collection
     :after evil
@@ -924,8 +927,6 @@ _-_: hsplit    _?_: help          _H_: help
   :init (setq markdown-command "multimarkdown"))
 
 (use-package swift-mode)
-
-(use-package swift3-mode)
 
 (use-package kotlin-mode)
 
