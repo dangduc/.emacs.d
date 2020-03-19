@@ -93,6 +93,8 @@
                :immediate-finish t)
               ("C" "Multi-line note" entry (file+datetree "") "* %<%H%M:%S> %?\n  %l")
               ("t" "TODO" entry (file+datetree "") "* TODO %<%H%M:%S> %^{todo}"
+               :immediate-finish t)
+              ("r" "Region" entry (file+datetree "") "* %<%H%M:%S> %^{title}\n  > %i\n  %a\n  %l"
                :immediate-finish t))))
 
 ;; Misc
@@ -307,6 +309,7 @@ _f_/_w_: maximize
     ("c" (org-capture nil "c") "capture note")
     ("C" (org-capture nil "C") "capture longer note")
     ("t" (org-capture nil "t") "capture todo")
+    ("r" (org-capture nil "r") "capture region")
     ("T" (multi-occur-in-matching-buffers "log.org" "\\*\\*\\*\\* TODO") "View TODOs")
     ("b" duc/sidebar-toggle "sidebar"))
   (defhydra hydra-submenu-help (:exit t :hint nil)
