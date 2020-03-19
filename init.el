@@ -326,7 +326,8 @@ _k_: key-to-func     _a_: apropos
 _K_: func-to-key
 _f_: function
 _v_: variable        _d_: toggle error debugging
-_c_: face
+_c_: face            _w_: watch function for step-debugging
+                     _W_: stop watching function for step-debugging
 "
     ("m" describe-mode)
     ("f" counsel-describe-function)
@@ -336,7 +337,9 @@ _c_: face
     ("c" describe-face)
     ("p" package-list-packages)
     ("a" counsel-apropos)
-    ("d" toggle-debug-on-error))
+    ("d" toggle-debug-on-error)
+    ("w" debug-on-entry)
+    ("W" cancel-debug-on-entry))
   (defhydra hydra-submenu-customize-face (:exit t :hint nil)
     "
 ^Font^                  ^Face^                 ^Buffer^
