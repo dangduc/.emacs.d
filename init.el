@@ -985,6 +985,13 @@ _-_: hsplit    _?_: help          _H_: help
   (setq leetcode-prefer-language "python3")
   (evil-define-key 'normal tabulated-list-mode-map (kbd "RET") 'leetcode-show-current-problem))
 
+(use-package ereader
+  :mode
+  ("\\.epub\\'" . ereader-mode)
+  :init
+  (evil-define-key 'normal ereader-mode-map (kbd "0") 'evil-digit-argument-or-evil-beginning-of-line))
+
+
 ;; End package declarations
 
 (custom-set-variables
