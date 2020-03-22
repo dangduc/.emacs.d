@@ -497,6 +497,8 @@ _-_: hsplit    _?_: help          _H_: help
 
 (use-package seoul256-theme
   :no-require t
+  :straight (:host github
+                   :repo "dangduc/seoul256-emacs")
   :config
   (setq seoul256-background 255))
 
