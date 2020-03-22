@@ -106,7 +106,7 @@
             (occur-rename-buffer)))
 ;; Don't confirm to follow links.
 ;; e.g. "Symbolic link to Git-controlled source file; follow link? (y or n)"
-(setq vc-follow-symlinks nil)
+(setq vc-follow-symlinks t)
 
 ;; load path
 ;;
