@@ -240,9 +240,7 @@
 (use-package evil-collection
     :after evil
     :init
-    (evil-collection-init)
-    ; Disable binding for blame when in a magit diff buffer.
-    (evil-define-key 'normal magit-blob-mode-map (kbd "b") nil))
+    (evil-collection-init))
 
 (use-package general
   :after evil
@@ -873,6 +871,8 @@ _-_: hsplit    _?_: help          _H_: help
        (magit-run-git "rm" "--cached" path)
        (shell-command-to-string (format "mv %s_tmp %s" path path)))))
 
+  ; Disable binding for blame when in a magit diff buffer.
+  (define-key magit-blob-mode-map (kbd "b") nil)
 
   (define-key magit-hunk-section-map (kbd "<return>") 'magit-diff-visit-file-other-window)
 
