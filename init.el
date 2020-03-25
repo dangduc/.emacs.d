@@ -97,6 +97,9 @@
               ("r" "Region" entry (file+datetree "") "* %<%H%M:%S> %^{title}\n  > %i\n  %a\n  %l"
                :immediate-finish t))))
 
+; Don't indent by level. (Region-= will remove indents.)
+(setq org-adapt-indentation nil)
+
 ;; Misc
 ;;
 
