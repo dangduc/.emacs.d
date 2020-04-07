@@ -322,13 +322,14 @@ _f_/_w_: maximize
     "
 ^Describe^           ^Info^
 ^^^^^^^^-------------------------------------
-_m_: mode            _p_: list packages
-_k_: key-to-func     _a_: apropos
+_m_: mode             _p_: list packages
+_k_: key-to-func      _a_: apropos
 _K_: func-to-key
 _f_: function
-_v_: variable        _d_: toggle error debugging
-_c_: face            _w_: watch function for step-debugging
-                     _W_: stop watching function for step-debugging
+_v_: variable         _d_: toggle error debugging
+_c_: face             _w_: watch function for step-debugging
+_b_: bindings (list)  _W_: stop watching function for step-debugging
+_B_: bindings
 "
     ("m" describe-mode)
     ("f" counsel-describe-function)
@@ -336,6 +337,8 @@ _c_: face            _w_: watch function for step-debugging
     ("k" describe-key)
     ("K" where-is)
     ("c" describe-face)
+    ("b" counsel-desbinds)
+    ("B" describe-bindings)
     ("p" package-list-packages)
     ("a" counsel-apropos)
     ("d" toggle-debug-on-error)
