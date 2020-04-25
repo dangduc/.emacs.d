@@ -199,8 +199,6 @@
                pairs)))))
   (exec-path-from-shell-copy-envs-async '("PATH")))
 
-(setq evil-want-keybinding nil)
-(setq evil-want-integration nil)
 (use-package evil
   :config
   ; This _somehow_ fixes emacs deterministically freezing while (`/`) searching
@@ -227,9 +225,11 @@
   ; " scroll by N lines instead of default 1 line.
   ; set scrolloff=3
   (setq scroll-margin 3)
-  :init
-
   (evil-mode 1)
+  :init
+  ; next two lines required for evil-collection.
+  (setq evil-want-keybinding nil)
+  (setq evil-want-integration t)
   ; hideshow
   (add-hook 'json-mode-hook 'hs-minor-mode)
   (add-hook 'java-mode-hook 'hs-minor-mode)
