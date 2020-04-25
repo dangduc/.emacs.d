@@ -50,8 +50,6 @@
  ("let-alist" . "33e71829e8814cf5f28b6e4291192aafef61b69e")
  ("lispy" . "73fd06518e6a023c9d58562f3d8016f8862bb161")
  ("lispyville" . "d28b937f0cabd8ce61e2020fe9a733ca80d82c74")
- ("lsp-mode" . "4a98a2f42bdf16d565bf1d58e4608fe6961f6a96")
- ("lsp-python-ms" . "8b18a98ad68373aa4d7ef24ec728a250ca570a2a")
  ("macrostep" . "424e3734a1ee526a1bd7b5c3cd1d3ef19d184267")
  ("magit" . "9e2df13e5338b7bde31dceca4e64494bc0fd68a8")
  ("markdown-mode" . "115f77df9755c6a453f3e5d9623ff885d207ea82")

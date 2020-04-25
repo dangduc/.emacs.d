@@ -4,6 +4,8 @@
 
 (setq gc-cons-threshold 100000000) ; 100 mb
 
+(setq read-process-output-max (* 1024 1024)) ;; 1mb
+
 ;; Get rid of extraneous UI
 (tool-bar-mode -1)
 (scroll-bar-mode -1)
