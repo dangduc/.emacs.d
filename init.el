@@ -954,6 +954,10 @@ _-_: hsplit    _?_: help          _H_: help
 
 (use-package kotlin-mode)
 
+(use-package lsp-mode
+  :config
+  (setq lsp-log-io t))
+
 (use-package lsp-python-ms
   :hook (python-mode . (lambda ()
                          (require 'lsp-python-ms)
