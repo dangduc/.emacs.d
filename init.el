@@ -709,6 +709,11 @@ _-_: hsplit    _?_: help          _H_: help
   (setq counsel-ag-base-command "ag -U --nocolor --nogroup %s -- ."))
 
 (use-package swiper
+  :config
+  ; Select input that happens to also match one of the candidates.
+  ; e.g. Selecting 'bar' when there is candidate 'barricade'.
+  ; Alternatively, c-M-j
+  (setq ivy-use-selectable-prompt t)
   :commands (swiper)
   :diminish ivy-mode)
 
