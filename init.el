@@ -717,22 +717,6 @@ _-_: hsplit    _?_: help          _H_: help
   :commands (swiper)
   :diminish ivy-mode)
 
-(use-package flycheck
-  :if (not (eq system-type 'windows-nt))
-  :defer 8
-  :diminish flycheck-mode
-  :commands (flycheck-mode)
-  :config
-  (setq flycheck-idle-change-delay 1.2)
-  (setq-default flycheck-emacs-lisp-load-path 'inherit)
-  (setq-default flycheck-disabled-checkers '(emacs-lisp-checkdoc))
-  ; https://stackoverflow.com/questions/37720869/emacs-how-do-i-set-flycheck-to-python-3
-  (custom-set-variables
-   '(flycheck-python-flake8-executable "python3")
-   '(flycheck-python-pycompile-executable "python3")
-   '(flycheck-python-pylint-executable "python3"))
-  (global-flycheck-mode))
-
 (defun disable-company-mode-in-eshell-mode ()
   (company-mode -1))
 
@@ -970,19 +954,6 @@ _-_: hsplit    _?_: help          _H_: help
   (yas-global-mode 1))
 
 (use-package racket-mode)
-
-(use-package flymake-racket
-  :straight (:host github
-             :repo "jojojames/flymake-racket")
-  :commands (flymake-racket-add-hook)
-  :init
-  (add-hook 'scheme-mode-hook #'flymake-racket-add-hook)
-  (add-hook 'racket-mode-hook #'flymake-racket-add-hook)
-  (defun +scheme-mode-setup-linting ()
-    (flymake-mode -1)
-    (flycheck-mode -1))
-  (add-hook 'scheme-mode-hook #'+scheme-mode-setup-linting)
-  (add-hook 'racket-mode-hook #'+scheme-mode-setup-linting))
 
 (use-package rainbow-mode)
 
