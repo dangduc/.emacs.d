@@ -87,13 +87,43 @@
 (setq mac-command-modifier 'meta)
 
 ;; org-mode
+(require 'org-crypt)
+(require 'epa-file)
+(epa-file-enable)
+(org-crypt-use-before-save-magic)
+(setq org-tags-exclude-from-inheritance (quote ("crypt")))
+(setq org-crypt-key "duc")
+(setq auto-save-default nil)
+
+(defun decision-note-template ()
+  "From Decision Checklist, Sam Kyle"
+  (replace-regexp-in-string "#" (org-id-new)
+                            "* %<%H%M:%S> Decision NO. #%?
+Decision:
+Mental/Physical State (C-c C-x C-b to toggle checkboxes):
+- [ ] Energized
+- [ ] Focused
+- [ ] Relaxed
+- [ ] Confident
+- [ ] Tired
+- [ ] Accepting
+- [ ] Accomodating
+- [ ] Anxious
+- [ ] Resigned
+- [ ] Frustrated
+- [ ] Angry
+The situation/context:
+The problem statement or frame:
+The variables that govern the situation include:"))
 (setq org-default-notes-file "~/dev/notes/log.org")
 (setq org-capture-templates
-      (quote (("d" "drill" entry (file+datetree "") "* %<%H%M:%S> %^{question} :drill:\n** Answer\n%^{answer}"
+      (quote (("D" "drill" entry (file+datetree "") "* %<%H%M:%S> %^{question} :drill:\n** Answer\n%^{answer}"
                :immediate-finish t)
               ("c" "(Quick) note" entry (file+datetree "") "* %<%H%M:%S> %^{note}\n  %l"
                :immediate-finish t)
               ("C" "Multi-line note" entry (file+datetree "") "* %<%H%M:%S> %?\n  %l")
+              ("d" "Decision Template" entry (file+datetree "")
+               (function decision-note-template))
               ("t" "TODO" entry (file+datetree "") "* TODO %<%H%M:%S> %^{todo}"
                :immediate-finish t)
               ("r" "Region" entry (file+datetree "") "* %<%H%M:%S> %^{title}\n  > %i\n  %a\n  %l"
@@ -309,10 +339,11 @@ _f_/_w_: maximize
     ("f" find-file "find file")
     ("w" save-buffer "write file")
     ("i" (find-file "~/.emacs.d/init.el" ) "init.el")
-    ("d" (find-file "~/.emacs.d/duc.el" ) "duc.el")
+    ("I" (find-file "~/.emacs.d/duc.el" ) "duc.el")
     ("1" (find-file "~/dev/notes/log.org" ) "log.org")
     ("2" (find-file "~/dev/notes/how-to.org" ) "how-to.org")
     ("3" shell-command-on-region "M-|") ;; e.g. "nc termbin.com 9999"
+    ("d" (org-capture nil "d") "capture decision")
     ("D" (org-capture nil "D") "capture drill")
     ("c" (org-capture nil "c") "capture note")
     ("C" (org-capture nil "C") "capture longer note")
@@ -414,7 +445,11 @@ _P_: 80-char sentences
     ("m" smerge-ediff)
     ("P" fill-paragraph))
   (defhydra hydra-submenu-org-mode (:exit t)
-    ("c" org-ctrl-c-ctrl-c "ctrl-c-ctrl-c"))
+    ("c" org-ctrl-c-ctrl-c "ctrl-c-ctrl-c")
+    ("e" org-encrypt-entry)
+    ("E" org-encrypt-entries)
+    ("d" org-decrypt-entry)
+    ("D" org-decrypt-entries))
   (defhydra hydra-main-menu (:exit t :idle .2 :hint nil)
     "
 ^Window^       ^Search^           ^Action^          ^Application
@@ -783,6 +818,8 @@ _-_: hsplit    _?_: help          _H_: help
                 (setq-local evil-shift-width typescript-indent-level))))
   :config
   (setq typescript-enabled-frameworks '(typescript)))
+
+(use-package flycheck)
 
 (use-package tide
   :commands (tide-setup)
