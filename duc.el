@@ -28,6 +28,24 @@
 (setq duc/font-height 140)
 (defvar duc/font-height-mode-line)
 (setq duc/font-height-mode-line 120)
+(defvar duc/font-weight)
+(setq duc/font-weight 'light)
+(defconst duc/font-weights (list 'ultra-bold
+                                 'extra-bold
+                                 'bold
+                                 'semi-bold
+                                 'normal
+                                 'semi-light
+                                 'light
+                                 'extra-light
+                                 'ultra-light))
+(defun duc/font-weight-cycle ()
+  (interactive)
+  (setq duc/font-weight (or (car (cdr (member duc/font-weight duc/font-weights)))
+                            'ultra-bold))
+  (set-face-attribute 'default nil
+                      :weight duc/font-weight)
+  (print duc/font-weight))
 
 (defun duc/font-size-increase ()
   (interactive)
@@ -59,7 +77,7 @@
                                          '("140"))))
   (set-face-attribute 'default nil
                       :height duc/font-height
-                      :weight 'normal
+                      :weight duc/font-weight
                       :width 'normal))
 
 ;; font chooser
@@ -69,7 +87,7 @@
                       :family (completing-read "font: "
                                                (font-family-list))
                       :height duc/font-height
-                      :weight 'normal
+                      :weight duc/font-weight
                       :width 'normal))
 
 (defun duc/ivy-shell ()

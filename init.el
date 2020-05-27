@@ -59,9 +59,9 @@
 
 ;; Set font
 (set-face-attribute 'default nil
-                    :family "InconsolateG for Powerline"
+                    :family "Input Mono"
                     :height duc/font-height
-                    :weight 'normal
+                    :weight duc/font-weight
                     :width 'normal)
 
 (duc/theme-setup-modeline)
@@ -352,15 +352,17 @@ _B_: bindings
 ^^^^^^^^----------------------------------------------------------------
 _f_: font            _c_: describe face     _r_: hex colors
 _s_: font size       _t_: theme             _w_: whitespace
-_+_: text scale +    ^ ^                    _l_: word-wrap
-_-_: text scale -
-_=_: text scale =
+_+_: font scale +    ^ ^                    _l_: word-wrap
+_-_: font scale -
+_=_: font scale =
+_W_: font weight cycle
 "
     ("f" duc/ivy-font)
     ("s" duc/font-size)
     ("+" text-scale-increase :color red)
     ("-" text-scale-decrease :color red)
     ("=" (text-scale-mode -1) :color red)
+    ("W" duc/font-weight-cycle :color red)
     ("c" counsel-describe-face)
     ("t" counsel-load-theme)
     ("r" rainbow-mode)
@@ -532,8 +534,7 @@ _-_: hsplit    _?_: help          _H_: help
   :diminish whitespace-mode
   :config
   (setq whitespace-line-column 80) ;; limit line length
-  (setq whitespace-style '(face lines-tail
-                                tabs
+  (setq whitespace-style '(face tabs
                                 trailing
                                 empty
                                 space-before-tab::tab
@@ -900,7 +901,7 @@ _-_: hsplit    _?_: help          _H_: help
 (use-package ibuffer-sidebar
   :config
   (setq ibuffer-sidebar-use-custom-font t)
-  (setq ibuffer-sidebar-face '(:family "InconsolateG for Powerline" :height 120)))
+  (setq ibuffer-sidebar-face '(:family "Triplicate T3c" :height 120)))
 
 (use-package dired-subtree
   :commands (dired-subtree-toggle dired-subtree-cycle)
@@ -921,7 +922,7 @@ _-_: hsplit    _?_: help          _H_: help
   (setq dired-sidebar-use-custom-font t)
   (setq dired-sidebar-width 30)
   (setq dired-sidebar-theme 'ascii)
-  (setq dired-sidebar-face '(:family "InconsolateG for Powerline" :height 120)))
+  (setq dired-sidebar-face '(:family "Triplicate T3c" :height 120)))
 
 (use-package all-the-icons-dired
   :after dired-sidebar
