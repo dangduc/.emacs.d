@@ -87,6 +87,7 @@
 (setq mac-command-modifier 'meta)
 
 ;; org-mode
+;; [[https://beorgapp.com/learning/emacs-encryption/][Getting started with encryption in Org mode on macOS]].
 (require 'org-crypt)
 (require 'epa-file)
 (epa-file-enable)
