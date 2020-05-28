@@ -275,14 +275,17 @@ The variables that govern the situation include:"))
 (use-package evil-collection
     :after evil
     :init
-    (evil-collection-init))
+    (evil-collection-init)
+    :config
+    (evil-define-key 'emacs org-agenda-mode-map (kbd "j") 'evil-next-line)
+    (evil-define-key 'emacs org-agenda-mode-map (kbd "k") 'evil-previous-line))
 
 (use-package general
   :after evil
   :config
   (general-override-mode)
   (general-define-key
-   :states '(normal motion visual)
+   :states '(normal motion visual emacs)
    :keymaps 'override
    "<SPC>" 'hydra-main-menu/body))
 
@@ -445,10 +448,11 @@ _P_: 80-char sentences
     ("m" smerge-ediff)
     ("P" fill-paragraph))
   (defhydra hydra-submenu-org-mode (:exit t)
-    ("c" org-ctrl-c-ctrl-c "ctrl-c-ctrl-c")
-    ("e" org-encrypt-entry)
-    ("E" org-encrypt-entries)
-    ("d" org-decrypt-entry)
+    ("a" org-agenda "agenda")
+    ("c" org-ctrl-c-ctrl-c "C-c C-c")
+    ("e" org-encrypt-entry "encrypt")
+    ("E" org-encrypt-entries "encrypt all")
+    ("d" org-decrypt-entry "decrypt")
     ("D" org-decrypt-entries))
   (defhydra hydra-main-menu (:exit t :idle .2 :hint nil)
     "
