@@ -99,8 +99,9 @@
   "From Decision Checklist, Sam Kyle"
   (replace-regexp-in-string "#" (org-id-new)
                             "* %<%H%M:%S> Decision NO. #%?
+(C-c i  to clock-in, C-c o  to clock-out.)
 Decision:
-Mental/Physical State (C-c C-x C-b to toggle checkboxes):
+Mental/Physical State (C-c C-x C-b  to toggle checkboxes):
 - [ ] Energized
 - [ ] Focused
 - [ ] Relaxed
@@ -277,8 +278,11 @@ The variables that govern the situation include:"))
     :init
     (evil-collection-init)
     :config
+    ;; org-mode
     (evil-define-key 'emacs org-agenda-mode-map (kbd "j") 'evil-next-line)
-    (evil-define-key 'emacs org-agenda-mode-map (kbd "k") 'evil-previous-line))
+    (evil-define-key 'emacs org-agenda-mode-map (kbd "k") 'evil-previous-line)
+    (evil-define-key '(normal insert) org-mode-map (kbd "C-c i") 'org-clock-in)
+    (evil-define-key '(normal insert) org-mode-map (kbd "C-c o") 'org-clock-out))
 
 (use-package general
   :after evil
@@ -454,7 +458,12 @@ _P_: 80-char sentences
     ("E" org-encrypt-entries "encrypt all")
     ("d" org-decrypt-entry "decrypt")
     ("D" org-decrypt-entries "decrypt all")
-    ("l" org-toggle-link-display "toggle descriptive links"))
+    ("l" org-toggle-link-display "toggle descriptive links")
+    ("n" org-narrow-to-subtree "narrow to subtree")
+    ("N" widen "widen (e.g. un-narrow from subtree)")
+    ("s" org-store-link "store a link at pointer")
+    ("S" org-insert-link "insert a stored link at pointer")
+    ("m" org-md-convert-region-to-md "region to markdown"))
   (defhydra hydra-main-menu (:exit t :idle .2 :hint nil)
     "
 ^Window^       ^Search^           ^Action^          ^Application
