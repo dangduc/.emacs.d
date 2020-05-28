@@ -453,7 +453,8 @@ _P_: 80-char sentences
     ("e" org-encrypt-entry "encrypt")
     ("E" org-encrypt-entries "encrypt all")
     ("d" org-decrypt-entry "decrypt")
-    ("D" org-decrypt-entries))
+    ("D" org-decrypt-entries "decrypt all")
+    ("l" org-toggle-link-display "toggle descriptive links"))
   (defhydra hydra-main-menu (:exit t :idle .2 :hint nil)
     "
 ^Window^       ^Search^           ^Action^          ^Application
