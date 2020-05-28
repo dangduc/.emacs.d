@@ -107,7 +107,7 @@ Mental/Physical State (C-c C-x C-b to toggle checkboxes):
 - [ ] Confident
 - [ ] Tired
 - [ ] Accepting
-- [ ] Accomodating
+- [ ] Accommodating
 - [ ] Anxious
 - [ ] Resigned
 - [ ] Frustrated
