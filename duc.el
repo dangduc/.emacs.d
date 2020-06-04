@@ -9,12 +9,14 @@
 (defmacro duc/alist-replace-set (list-var element)
   `(setq ,list-var (duc/alist-replace ,list-var ,element)))
 
+(defvar duc/font-family)
+(setq duc/font-family "Jetbrains Mono")
 (defvar duc/font-height)
 (setq duc/font-height 140)
 (defvar duc/font-height-mode-line)
 (setq duc/font-height-mode-line 120)
 (defvar duc/font-weight)
-(setq duc/font-weight 'light)
+(setq duc/font-weight 'normal)
 (defconst duc/font-weights (list 'ultra-bold
                                  'extra-bold
                                  'bold
@@ -24,6 +26,10 @@
                                  'light
                                  'extra-light
                                  'ultra-light))
+(defvar duc/font-line-spacing)
+(setq duc/font-line-spacing 1)
+(setq-default line-spacing duc/font-line-spacing)
+
 (defun duc/font-weight-cycle ()
   (interactive)
   (setq duc/font-weight (or (car (cdr (member duc/font-weight duc/font-weights)))
@@ -56,7 +62,7 @@
      :height duc/font-height-mode-line))
   (print duc/font-height))
 
-(defun duc/font-size ()
+(defun duc/set-font-size ()
   (interactive)
   (setq duc/font-height (string-to-number (completing-read "font size: "
                                          '("140"))))
@@ -68,12 +74,19 @@
 ;; font chooser
 (defun duc/ivy-font ()
   (interactive)
+  (setq duc/font-family (completing-read "font: "
+                                         (font-family-list)))
   (set-face-attribute 'default nil
-                      :family (completing-read "font: "
-                                               (font-family-list))
+                      :family duc/font-family
                       :height duc/font-height
                       :weight duc/font-weight
                       :width 'normal))
+
+(defun duc/set-font-line-spacing ()
+  (interactive)
+  (setq duc/font-line-spacing (string-to-number (completing-read "line spacing: "
+                                                                 '("0"))))
+  (setq-default line-spacing duc/font-line-spacing))
 
 (defun duc/ivy-shell ()
   (interactive)
