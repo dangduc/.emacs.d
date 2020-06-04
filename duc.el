@@ -1,18 +1,3 @@
-;; Personal Theming override for org-mode
-;; Keep org-mode headers from being scaled by themes.
-;; Plucked from [Disable enlarged Org mode header appearance]
-;;             (https://emacs.stackexchange.com/questions/22584/)
-(defun duc/org-mode-theme (&rest _)
-  (ignore-errors
-    (dolist (face '(org-level-1
-                    org-level-2
-                    org-level-3
-                    org-level-4
-                    org-level-5))
-      (set-face-attribute face nil
-                          :family "Charter"
-                          :height 1.0))))
-
 (defmacro duc/alist-replace (list-var element)
   `(let
        ((replaced-list-var

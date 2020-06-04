@@ -68,8 +68,6 @@
 
 (advice-add 'load-theme :after #'duc/theme-setup-modeline)
 
-(advice-add 'load-theme :after #'duc/org-mode-theme)
-
 ;; Save all tempfiles in $TMPDIR/emacs$UID/
 (defconst emacs-tmp-dir (expand-file-name (format "emacs%d" (user-uid))
                                           temporary-file-directory))
@@ -95,6 +93,13 @@
 (setq org-tags-exclude-from-inheritance (quote ("crypt")))
 (setq org-crypt-key "duc")
 (setq auto-save-default nil)
+
+;; word-wrap
+(add-hook 'org-mode-hook (lambda ()
+                           (visual-line-mode t)))
+
+;; Display full link syntax (e.g. [[https://orgmode.org][Org website]]).
+(setq org-descriptive-links nil)
 
 (defun decision-note-template ()
   "From Decision Checklist, Sam Kyle"
