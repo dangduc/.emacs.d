@@ -357,6 +357,7 @@ _f_/_w_: maximize
     ("C" (org-capture nil "C") "capture longer note")
     ("t" (org-capture nil "t") "capture todo")
     ("r" (org-capture nil "r") "capture region")
+    ("z" duc/create-linked-note "create linked note")
     ("T" (multi-occur-in-matching-buffers "log.org" "\\*\\*\\*\\* TODO") "View TODOs")
     ("b" duc/sidebar-toggle "sidebar"))
   (defhydra hydra-submenu-help (:exit t :hint nil)

@@ -246,5 +246,20 @@ https://emacs-doctor.com/emacs-strip-tease.html"
                                                               (print short))
           (t (print (format "Error calling ix.io: %s" short))))))
 
+(defun duc/create-linked-note ()
+  (interactive)
+  (let* ((fnum (string-to-number
+                (substring (or (car (last (seq-filter (lambda (f) (string-prefix-p (format-time-string "%y%2U%2u") f))
+                                                      (directory-files "~/dev/notes"))))
+                               "XXXXXX00.org")
+                           6 8)))
+         (fname (concat "~/dev/notes/"
+                        (format-time-string "%y%2U%2u")
+                        (format "%02d" (+ fnum 1))
+                        ".org")))
+    (append-to-file
+     "#+TAGS: \n\nLinks" nil fname)
+    (find-file fname)))
+
 ;; Use this method to query init load duration
 ;(emacs-init-time)
