@@ -474,7 +474,7 @@ _P_: 80-char sentences
     ("E" org-encrypt-entries "encrypt all")
     ("d" org-decrypt-entry "decrypt")
     ("D" org-decrypt-entries "decrypt all")
-    ("l" duc/counsel-ag-insert-linked-link "search and insert linked link")
+    ("l" (duc/counsel-ag-insert-linked-link nil nil "--org" nil) "search and insert linked link")
     ("L" org-toggle-link-display "toggle descriptive links")
     ("n" org-narrow-to-subtree "narrow to subtree")
     ("N" widen "widen (e.g. un-narrow from subtree)")
