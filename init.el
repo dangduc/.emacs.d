@@ -461,6 +461,7 @@ _P_: 80-char sentences
     ("d" org-decrypt-entry "decrypt")
     ("D" org-decrypt-entries "decrypt all")
     ("l" org-toggle-link-display "toggle descriptive links")
+    ("l" duc/counsel-ag-insert-linked-link "search and insert linked link")
     ("n" org-narrow-to-subtree "narrow to subtree")
     ("N" widen "widen (e.g. un-narrow from subtree)")
     ("s" org-store-link "store a link at pointer")
