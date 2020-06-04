@@ -250,10 +250,10 @@ https://emacs-doctor.com/emacs-strip-tease.html"
   (interactive)
   (let* ((fnum (string-to-number
                 (substring (or (car (last (seq-filter (lambda (f) (string-prefix-p (format-time-string "%y%2U%2u") f))
-                                                      (directory-files "~/dev/notes"))))
+                                                      (directory-files "~/dev/huhmann"))))
                                "XXXXXX00.org")
                            6 8)))
-         (fname (concat "~/dev/notes/"
+         (fname (concat "~/dev/huhmann/"
                         (format-time-string "%y%2U%2u")
                         (format "%02d" (+ fnum 1))
                         ".org")))
