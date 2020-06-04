@@ -107,6 +107,7 @@
                             "* %<%H%M:%S> Decision NO. #%?
 (C-c i  to clock-in, C-c o  to clock-out.)
 Decision:
+
 Mental/Physical State (C-c C-x C-b  to toggle checkboxes):
 - [ ] Energized
 - [ ] Focused
@@ -120,8 +121,14 @@ Mental/Physical State (C-c C-x C-b  to toggle checkboxes):
 - [ ] Frustrated
 - [ ] Angry
 The situation/context:
+
 The problem statement or frame:
-The variables that govern the situation include:"))
+
+The variables that govern the situation include:
+
+** TODO Review decision
+(C-c C-d to insert deadline)
+"))
 (setq org-default-notes-file "~/dev/notes/log.org")
 (setq org-capture-templates
       (quote (("D" "drill" entry (file+datetree "") "* %<%H%M:%S> %^{question} :drill:\n** Answer\n%^{answer}"
