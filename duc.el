@@ -246,17 +246,18 @@ https://emacs-doctor.com/emacs-strip-tease.html"
 
 (defun duc/create-linked-note ()
   (interactive)
-  (let* ((fnum (string-to-number
-                (substring (or (car (last (seq-filter (lambda (f) (string-prefix-p (format-time-string "%y%2U%2u") f))
-                                                      (directory-files "~/dev/huhmann"))))
-                               "XXXXXX00.org")
-                           6 8)))
+  (let* ((title (completing-read "Name: " nil))
          (fname (concat "~/dev/huhmann/"
                         (format-time-string "%y%2U%2u")
-                        (format "%02d" (+ fnum 1))
-                        ".org")))
+                        "-"
+                        (org-id-new)
+                        (let ((name (replace-regexp-in-string " " "-" (downcase title))))
+                          (if (not (string= "" name)) (concat "-" name)
+                            ""))
+                        ".org"
+                        )))
     (append-to-file
-     "#+TAGS: \n\nLinks" nil fname)
+     (concat "#+TAGS: \n\n" title "\n\nLinks") nil fname)
     (find-file fname)))
 
 (defun duc/counsel-insert-linked-link-action (x)
