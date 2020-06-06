@@ -101,6 +101,16 @@
 ;; Display full link syntax (e.g. [[https://orgmode.org][Org website]]).
 (setq org-descriptive-links nil)
 
+;; org-babel
+(custom-set-variables
+ '(org-babel-load-languages (quote ((emacs-lisp . t)
+                                    (R . t)
+                                    (ditaa . t)
+                                    (plantuml . t))))
+ '(org-confirm-babel-evaluate nil))
+(setq org-ditaa-jar-path "~/.emacs.d/vendor/not-elisp/ditaa0_9.jar")
+(setq org-plantuml-jar-path "~/.emacs.d/vendor/not-elisp/plantuml.jar")
+
 (defun decision-note-template ()
   "From Decision Checklist, Sam Kyle"
   (replace-regexp-in-string "#" (org-id-new)

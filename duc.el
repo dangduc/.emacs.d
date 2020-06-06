@@ -314,3 +314,49 @@ AG-PROMPT, if non-nil, is passed as `ivy-read' prompt argument. "
 
 ;; Use this method to query init load duration
 ;(emacs-init-time)
+
+;; WIP
+(defun sacha/fill-string (string new-fill-column &optional replace-char)
+  "Wrap STRING to NEW-FILL-COLUMN. Change newlines to REPLACE-CHAR."
+  (with-temp-buffer
+    (insert string)
+    (let ((fill-column new-fill-column))
+      (fill-region (point-min) (point-max))
+      (if replace-char
+          (progn
+            (goto-char (point-min))
+            (while (re-search-forward "\n" nil t)
+              (replace-match replace-char t t))))
+      (buffer-string))))
+(defun duc/map-to-graphviz-dot (map fill-column)
+  "Convert MAP to a graphviz representation. Wrap titles at FILL-COLUMN."
+  (concat
+   "digraph G {\n"
+   "node [shape=box,fontname=\"JetBrains Mono\",pad=1]\n"
+   "edge [color=\"#CCCCCC\"]\n"
+   (mapconcat
+    (lambda (x)
+      (format "\"%s\" -> \"%s\""
+              (sacha/fill-string (car x) fill-column "\\n")
+              (sacha/fill-string (cdr x) fill-column "\\n")))
+    (cdr (assoc 'edges map))
+    "\n")
+   "\n"
+   (mapconcat (lambda (x)
+                (format
+                 (if (null (elt x 2))
+                     (concat "\"%s\" [style=filled, URL=\"#%s\", tooltip=\"%s\"]")
+                   "\"%s\" [URL=\"#%s\", tooltip=\"%s\"]")
+                 (sacha/fill-string (elt x 4) fill-column "\\n")
+                 (replace-regexp-in-string "[^A-Za-z0-9]" "_" (elt x 4))
+                 (elt x 4)))
+              (cdr (assoc 'nodes map)) "\n")
+   "}\n"))
+(defun duc/map-to-graphviz-dot-execute ()
+  (duc/map-to-graphviz-dot
+   (list (cons 'nodes
+               '(("A0" "B0" "C0" "D0" "A") ("A0" "B1" "C1" "D1" "B") ("A2" "B2" "C2" "D2" "C")))
+         (cons 'edges
+               '(("A" . "C") ("A" . "B"))))
+   fill-column)
+  )
