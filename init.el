@@ -494,18 +494,18 @@ _P_: 80-char sentences
     ("o" org-open-at-point "open link (C-c C-o)"))
   (defhydra hydra-main-menu (:exit t :idle .2 :hint nil)
     "
-^Window^       ^Search^           ^Action^          ^Application
+^Navigate^       ^Search^           ^Action^          ^Application
 ^^^^^^^^-----------------------------------------------------------------
-_h_: left      _,_: contents    _SPC_: M-x          _g_: magit
-_l_: right     _n_: buffers       _b_: buffers      _o_: org-mode
-_k_: up        _m_: files         _e_: eval         _s_: shell
-_j_: down      _p_: projects      _w_: window/frame _u_: package
-_a_: jump      _<_: occur            ^ ^               _L_: lc
-_\\_: vsplit    _M_: all files    ^ ^
-_-_: hsplit    _?_: help          _H_: help
-^^             ^ ^                _f_: file
-^^             ^ ^                ^ ^
-^ ^            ^ ^                _c_: customize
+_h_: left     _,_: in files       _SPC_: M-x          _g_: magit
+_l_: right    _<_: occur in files _b_: buffers      _o_: org-mode
+_k_: up       ^ ^                 _e_: eval         _s_: shell
+_j_: down     _>_: occur in file  _w_: window/frame _u_: package
+_a_: jump     ^ ^                 _L_: lc
+_\\_: vsplit   ^ ^                 ^ ^
+_-_: hsplit   ^ ^                 _H_: help
+_n_: buffer   ^ ^                 _?_:help
+_m_: files    ^ ^                 _f_: file
+_p_: project  ^ ^                 _c_: customize
 "
     ("h" evil-window-left)
     ("l" evil-window-right)
@@ -515,8 +515,8 @@ _-_: hsplit    _?_: help          _H_: help
     ("-" split-window-below)
     ("\\" split-window-right)
     ("," counsel-rg)
-    ("<" occur)
-    ("M" deadgrep)
+    ("<" deadgrep)
+    (">" occur)
     ("?" hydra-submenu-help/body)
     ("n" switch-to-buffer)
     ("m" counsel-fzf)
