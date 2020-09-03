@@ -477,21 +477,31 @@ _P_: 80-char sentences
     ("e" smerge-ediff)
     ("m" smerge-ediff)
     ("P" fill-paragraph))
-  (defhydra hydra-submenu-org-mode (:exit t)
-    ("a" org-agenda "agenda")
-    ("c" org-ctrl-c-ctrl-c "C-c C-c")
-    ("e" org-encrypt-entry "encrypt")
-    ("E" org-encrypt-entries "encrypt all")
-    ("d" org-decrypt-entry "decrypt")
-    ("D" org-decrypt-entries "decrypt all")
-    ("l" (duc/counsel-ag-insert-linked-link nil nil "--org" nil) "search and insert linked link")
-    ("L" org-toggle-link-display "toggle descriptive links")
-    ("n" org-narrow-to-subtree "narrow to subtree")
-    ("N" widen "widen (e.g. un-narrow from subtree)")
-    ("s" org-store-link "store a link at pointer")
-    ("S" org-insert-link "insert a stored link at pointer")
-    ("m" org-md-convert-region-to-md "region to markdown")
-    ("o" org-open-at-point "open link (C-c C-o)"))
+  (defhydra hydra-submenu-org-mode (:exit t :hint nil)
+    "
+              ^org-mode^
+^^^^^^^^-----------------------------------------------------------------------
+_a_: agenda  _c_: C-c C-c  _e_: encrypt entry        _s_: store link at P
+^ ^          ^ ^           _E_: encrypt all entries  _S_: insert link at P
+_n_: narrow  ^ ^           _d_: decrypt entry        _o_: open link
+_N_: widen   ^ ^           _D_: decrypt all entries  _L_: toggle desc links
+^ ^
+_m_: region->md  ^ ^          ^ ^                    _l_: search & insert linked link
+"
+    ("a" org-agenda)
+    ("c" org-ctrl-c-ctrl-c)
+    ("e" org-encrypt-entry)
+    ("E" org-encrypt-entries)
+    ("d" org-decrypt-entry)
+    ("D" org-decrypt-entries)
+    ("l" (duc/counsel-ag-insert-linked-link nil nil "--org" nil))
+    ("L" org-toggle-link-display)
+    ("n" org-narrow-to-subtree)
+    ("N" widen)
+    ("s" org-store-link)
+    ("S" org-insert-link)
+    ("m" org-md-convert-region-to-md)
+    ("o" org-open-at-point))
   (defhydra hydra-main-menu (:exit t :idle .2 :hint nil)
     "
 ^Navigate^       ^Search^           ^Action^          ^Application
@@ -1045,9 +1055,9 @@ _p_: project  ^ ^                 _c_: customize
 ; Fixes issue where loading large json file freezes emacs.
 (setq auto-mode-alist (rassq-delete-all 'javascript-mode auto-mode-alist))
 
-(use-package vterm
-  :if (not (eq system-type 'windows-nt))
-  :init (defvar vterm-install t))
+;(use-package vterm
+;  :if (not (eq system-type 'windows-nt))
+;  :init (defvar vterm-install t))
 
 (use-package tex
   :straight auctex
