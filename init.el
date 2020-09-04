@@ -1055,9 +1055,9 @@ _p_: project  ^ ^                 _c_: customize
 ; Fixes issue where loading large json file freezes emacs.
 (setq auto-mode-alist (rassq-delete-all 'javascript-mode auto-mode-alist))
 
-;(use-package vterm
-;  :if (not (eq system-type 'windows-nt))
-;  :init (defvar vterm-install t))
+(use-package vterm
+  :if (not (eq system-type 'windows-nt))
+  :init (defvar vterm-install t))
 
 (use-package tex
   :straight auctex
