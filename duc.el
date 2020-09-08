@@ -244,6 +244,31 @@ https://emacs-doctor.com/emacs-strip-tease.html"
                                                               (print short))
           (t (print (format "Error calling ix.io: %s" short))))))
 
+(defun duc/git-clone ()
+  (interactive)
+  (let* ((lexical-binding t) ;; [Using Lexical Binding: Variable: lexical-binding]
+                             ;; (https://www.gnu.org/software/emacs/manual/html_node/elisp/Using-Lexical-Binding.html#Using-Lexical-Binding)
+         (repository-url (completing-read "Repository url: " nil))
+         (repository-directory (substring (car (last (split-string repository-url "/"))) 0 -4))
+         (parent-directory (read-file-name "Clone to parent directory: " "~/"))
+         (clone-directory (concat parent-directory repository-directory))
+         ;; [SO: Run elisp when `async-shell-command` is done](https://emacs.stackexchange.com/a/42174).
+         (output-buffer (generate-new-buffer "*git clone status*"))
+         (proc (progn
+                 (async-shell-command (format "git clone %s %s"
+                                              repository-url
+                                              clone-directory)
+                                      output-buffer)
+                 (get-buffer-process output-buffer))))
+    (if (process-live-p proc)
+        (set-process-sentinel proc
+                              #'(lambda (process signal)
+                                  (when (memq (process-status process) '(exit signal))
+                                    (message "git clone status: success")
+                                    (magit-status clone-directory)
+                                    (shell-command-sentinel process signal))))
+      (message "git clone status: no process"))))
+
 (defun duc/create-linked-note ()
   (interactive)
   (let* ((title (completing-read "Name: " nil))

@@ -460,13 +460,14 @@ _L_: font line spacing
               ^Git^
 ^^^^^^^^---------------------------------
 _g_: status      _L_: log       _b_: blame
-^ ^              _f_: file log
+_c_: clone       _f_: file log
 _j_: smerge next _u_: upper     _e_: smerge
 _k_: smerge prev _l_: lower     _m_: smerge
 
 _P_: 80-char sentences
 "
     ("g" magit-status)
+    ("c" duc/git-clone)
     ("L" magit-log)
     ("f" magit-log-buffer-file)
     ("b" magit-blame)
