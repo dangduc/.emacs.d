@@ -553,9 +553,6 @@ _p_: project  ^ ^                 _c_: customize
   (setq aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l)))
 
 ;; themes
-
-(advice-add 'load-theme :after 'duc/org-mode-theme)
-
 (use-package zenburn-theme
   :disabled
   :init
