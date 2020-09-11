@@ -355,7 +355,7 @@ The variables that govern the situation include:
 _f_/_w_: maximize
   _n_: next         _b_: balance
   _N_: new          _k_: delete
-  _c_: close
+  _c_: close        _p_: pin/unpin buffer
   _
 "
     ("f" toggle-frame-maximized)
@@ -364,7 +364,8 @@ _f_/_w_: maximize
     ("N" make-frame-command)
     ("c" close-frame)
     ("b" balance-windows)
-    ("k" delete-window))
+    ("k" delete-window)
+    ("p" duc/toggle-pin-buffer))
   (defhydra hydra-submenu-file (:exit t)
     ("f" find-file "find file")
     ("w" save-buffer "write file")

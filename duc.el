@@ -167,6 +167,15 @@ https://emacs-doctor.com/emacs-strip-tease.html"
     (set-buffer-major-mode buffer)
     (switch-to-buffer-other-window buffer)))
 
+;; Credit [Pin an buffer to a window in #emacs](https://gist.github.com/HeinrichHartmann/c4401ff0347cea975380e221c7e24f42).
+(defun duc/toggle-pin-buffer ()
+  "Pin buffer to current window."
+  (interactive)
+  (message
+   (if (let (window (get-buffer-window (current-buffer)))
+         (set-window-dedicated-p window (not (window-dedicated-p window))))
+       "pinned buffer" "un-pinned buffer")))
+
 (defun duc/modeline-fontsize ()
   "Return font size of modeline."
   duc/font-height-mode-line)
