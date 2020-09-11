@@ -560,7 +560,11 @@ _p_: project  ^ ^                 _c_: customize
   (set-face-attribute 'fringe nil :background nil)
   (set-face-attribute 'vertical-border nil :foreground (face-attribute 'mode-line :background)))
 
-(use-package doom-themes)
+(use-package doom-themes
+  :config
+  (setq doom-flatwhite-brighter-modeline t)
+  :init
+  (load-theme 'doom-flatwhite t))
 
 (use-package solarized-theme)
 

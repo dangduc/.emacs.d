@@ -10,9 +10,9 @@
   `(setq ,list-var (duc/alist-replace ,list-var ,element)))
 
 (defvar duc/font-family)
-(setq duc/font-family "Jetbrains Mono")
+(setq duc/font-family "InconsolateG for Powerline")
 (defvar duc/font-height)
-(setq duc/font-height 140)
+(setq duc/font-height 120)
 (defvar duc/font-height-mode-line)
 (setq duc/font-height-mode-line 120)
 (defvar duc/font-weight)
