@@ -1054,7 +1054,8 @@ _p_: project  ^ ^                 _c_: customize
 
 (use-package vterm
   :if (not (eq system-type 'windows-nt))
-  :init (defvar vterm-install t))
+  :init (defvar vterm-install t)
+        (setq vterm-module-cmake-args "-D USE_SYSTEM_LIBVTERM=no"))
 
 (use-package tex
   :straight auctex
