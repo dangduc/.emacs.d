@@ -97,7 +97,7 @@
     (let ((buffer-name (completing-read "shell : " terminal-buffers)))
      (if (member buffer-name terminal-buffers)
          (switch-to-buffer buffer-name)
-       (ansi-term "/bin/zsh" (concat "terminal-" buffer-name))))))
+       (vterm (concat "terminal-" buffer-name))))))
 
 (defun duc/sidebar-toggle ()
   "Toggle both `dired-sidebar' and `ibuffer-sidebar'."
