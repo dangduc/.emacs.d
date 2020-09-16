@@ -502,7 +502,7 @@ _m_: region->md  ^ ^          ^ ^                    _l_: search & insert linked
     "
 ^Navigate^       ^Search^           ^Action^          ^Application
 ^^^^^^^^-----------------------------------------------------------------
-_h_: left     _,_: in files       _SPC_: M-x          _g_: magit
+_h_: left     _,_: in files       _SPC_: M-x        _g_: magit
 _l_: right    _<_: occur in files _b_: buffers      _o_: org-mode
 _k_: up       ^ ^                 _e_: eval         _s_: shell
 _j_: down     _>_: occur in file  _w_: window/frame _u_: package
