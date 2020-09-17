@@ -1062,8 +1062,13 @@ _p_: project  ^ ^                 _c_: customize
 
 (use-package vterm
   :if (not (eq system-type 'windows-nt))
-  :init (defvar vterm-install t)
-        (setq vterm-module-cmake-args "-D USE_SYSTEM_LIBVTERM=no"))
+  :after general
+  :init
+  (defvar vterm-install t)
+  (setq vterm-module-cmake-args "-D USE_SYSTEM_LIBVTERM=no")
+  (general-define-key
+   :keymaps 'vterm-mode-map
+   "M-<escape>" 'evil-collection-vterm-toggle-send-escape))
 
 (use-package tex
   :straight auctex
