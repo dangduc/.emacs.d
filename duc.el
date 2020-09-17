@@ -99,6 +99,22 @@
          (switch-to-buffer buffer-name)
        (vterm (concat "terminal-" buffer-name))))))
 
+(defun duc/ivy-shell-send-string (string &optional terminal)
+  (let ((current-buffer-p (current-buffer))
+        (terminal-buffers (seq-filter (lambda (x)
+                                        (string-match-p
+                                         (regexp-quote "terminal-") x))
+                                      (mapcar (function buffer-name) (buffer-list)))))
+    (let ((buffer-name (if terminal
+                           terminal
+                         (completing-read "shell : " terminal-buffers))))
+     (if (member buffer-name terminal-buffers)
+         (pop-to-buffer buffer-name)
+       (vterm (concat "terminal-" buffer-name)))
+     (vterm-send-string string)
+     (vterm-send-return)
+     (pop-to-buffer current-buffer-p))))
+
 (defun duc/sidebar-toggle ()
   "Toggle both `dired-sidebar' and `ibuffer-sidebar'."
   (interactive)
