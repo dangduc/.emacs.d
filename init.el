@@ -1067,6 +1067,7 @@ _p_: project  ^ ^                 _c_: customize
   :init
   (defvar vterm-install t)
   (setq vterm-module-cmake-args "-D USE_SYSTEM_LIBVTERM=no")
+  (setq vterm-kill-buffer-on-exit nil)
   (setq vterm-max-scrollback 100000)
   (general-define-key
    :keymaps 'vterm-mode-map
