@@ -33,7 +33,7 @@ var/
 crown/
 *.stackdump
 bookmarks
-/.my-keybindings.el.swp
+*.swp
 .DS_Store
 tmp/
 /history
