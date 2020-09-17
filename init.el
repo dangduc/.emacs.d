@@ -932,6 +932,9 @@ _p_: project  ^ ^                 _c_: customize
   ;; Save buffers automatically instead of asking.
   (setq magit-save-repository-buffers 'dontask)
 
+  ;; Popup the magit-process buffer if a command takes longer than n seconds.
+  (setq magit-process-popup-time 5)
+
   (setq magit-repository-directories '("~/dev" "~/.emacs.d"))
   (setq magit-refresh-status-buffer nil)
 
