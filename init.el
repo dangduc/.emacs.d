@@ -84,6 +84,14 @@
 (setq mac-option-modifier 'super)
 (setq mac-command-modifier 'meta)
 
+;; Start emacs server
+;; e.g. ~/.zshrc
+;;   # (find-file) send to emacs server.
+;;   # ie, emacsclient -n file1 file2 ...
+;;   alias emacsff="emacsclient -n"
+(if (not (eq system-type 'windows-nt))
+    (and window-system (server-start)))
+
 ;; org-mode
 ;; [[https://beorgapp.com/learning/emacs-encryption/][Getting started with encryption in Org mode on macOS]].
 (require 'org-crypt)
