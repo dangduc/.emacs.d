@@ -753,10 +753,10 @@ _p_: project  ^ ^                 _c_: customize
         '((counsel-git-log . ivy--regex-plus)
           (swiper . ivy--regex-plus)
           (swiper-multi . ivy--regex-plus)
-          (projectile-completing-read . ivy--regex-fuzzy)
+          (projectile-completing-read . ivy--regex-plus)
           (counsel-fzf . regexp-quote)
           (counsel-rg . ivy--regex-plus)
-          (t . ivy--regex-fuzzy)))
+          (t . ivy--regex-plus)))
   (setq ivy-initial-inputs-alist nil)
 
   ;; swapping behavior
