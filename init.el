@@ -836,8 +836,12 @@ _p_: project  ^ ^                 _c_: customize
 
 (use-package ivy-prescient
   :after prescient
+  ;; Configures prescient for sorting ivy candidates.
   :config
   (setq ivy-prescient-retain-classic-highlighting t)
+  ;; AFAICT prescient does not affect ivy filtering configured by
+  ;; `ivy-re-builders-alist`, so toggling this var does nothing.
+  (setq ivy-prescient-enable-filtering nil)
   (ivy-prescient-mode))
 
 (use-package company-prescient
