@@ -399,12 +399,12 @@ _b_: bindings (list)  _W_: stop watching function for step-debugging
 _B_: bindings
 "
     ("m" describe-mode)
-    ("f" counsel-describe-function)
-    ("v" counsel-describe-variable)
+    ("f" describe-function)
+    ("v" describe-variable)
     ("k" describe-key)
     ("K" where-is)
     ("c" describe-face)
-    ("b" counsel-desbinds)
+    ("b" counsel-descbinds)
     ("B" describe-bindings)
     ("p" package-list-packages)
     ("a" counsel-apropos)
@@ -430,7 +430,7 @@ _L_: font line spacing
     ("=" (text-scale-mode -1) :color red)
     ("W" duc/font-weight-cycle :color red)
     ("L" duc/set-font-line-spacing)
-    ("c" counsel-describe-face)
+    ("c" describe-face)
     ("t" counsel-load-theme)
     ("r" rainbow-mode)
     ("w" whitespace-mode)
@@ -775,10 +775,8 @@ _p_: project  ^ ^                 _c_: customize
 
   (setq ivy-count-format "")
   (setq ivy-height 15)
-
-  (setq ivy-do-completion-in-region t) ; this is the default
-
-  (ivy-mode))
+  ;; this is the default
+  (setq ivy-do-completion-in-region t))
 
 (use-package counsel
   :bind (("M-x" . counsel-M-x))
@@ -810,6 +808,47 @@ _p_: project  ^ ^                 _c_: customize
   (setq ivy-use-selectable-prompt t)
   :commands (swiper)
   :diminish ivy-mode)
+
+(use-package selectrum
+  :config
+  (with-eval-after-load 'evil
+    (define-key minibuffer-inactive-mode-map (kbd "<escape>") 'minibuffer-keyboard-quit)
+    (define-key selectrum-minibuffer-map (kbd "<escape>") 'minibuffer-keyboard-quit))
+
+  (selectrum-mode))
+
+(use-package prescient
+  :after counsel
+  :config
+  ;; Order of filter methods does not affect candidate order, but may affect
+  ;; highlighting and query speed.
+  (setq prescient-filter-method '(prefix initialism literal regex))
+  ;; Prescient does limited sorting of candidates by:
+  ;; (1) How candidates are initially ordered as input.
+  ;; (2) Candidate selection history.
+  ;;   a. Last selected candidates.
+  ;;   b. Followed by most frequently selected.
+  ;; (3) Candidate string length.
+
+  ;; Disable sorting by candidate length.
+  (setq prescient-sort-length-enable nil)
+  (prescient-persist-mode))
+
+(use-package ivy-prescient
+  :after prescient
+  :config
+  (setq ivy-prescient-retain-classic-highlighting t)
+  (ivy-prescient-mode))
+
+(use-package company-prescient
+  :after company-prescient
+  :config
+  (company-prescient-mode))
+
+(use-package selectrum-prescient
+  :after selectrum
+  :config
+  (selectrum-prescient-mode))
 
 (defun disable-company-mode-in-eshell-mode ()
   (company-mode -1))
