@@ -102,6 +102,10 @@
 (setq org-crypt-key "duc")
 (setq auto-save-default nil)
 
+;; Point to emacs source directory. This is typically the `src` directory of
+;; the emacs repository [[https://github.com/emacs-mirror/emacs]].
+(setq source-directory "~/dev/emacs/src")
+
 ;; word-wrap
 (add-hook 'org-mode-hook (lambda ()
                            (visual-line-mode t)))
