@@ -423,7 +423,7 @@ _=_: font scale =
 _W_: font weight cycle
 _L_: font line spacing
 "
-    ("f" duc/ivy-font)
+    ("f" duc/set-font)
     ("s" duc/set-font-size)
     ("+" text-scale-increase :color red)
     ("-" text-scale-decrease :color red)

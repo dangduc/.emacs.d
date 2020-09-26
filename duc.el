@@ -72,7 +72,7 @@
                       :width 'normal))
 
 ;; font chooser
-(defun duc/ivy-font ()
+(defun duc/set-font ()
   (interactive)
   (setq duc/font-family (completing-read "font: "
                                          (font-family-list)))
