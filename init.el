@@ -435,7 +435,7 @@ _L_: font line spacing
     ("W" duc/font-weight-cycle :color red)
     ("L" duc/set-font-line-spacing)
     ("c" describe-face)
-    ("t" counsel-load-theme)
+    ("t" duc/selectrum-load-theme)
     ("r" rainbow-mode)
     ("w" whitespace-mode)
     ("l" visual-line-mode))

@@ -88,6 +88,15 @@
                                                                  '("0"))))
   (setq-default line-spacing duc/font-line-spacing))
 
+(defun duc/selectrum-load-theme ()
+  (interactive)
+  (load-theme (intern
+               (selectrum-read "Load custom theme: "
+                               (mapcar 'symbol-name
+                                       (custom-available-themes))
+                               :require-match t))
+              t))
+
 (defun duc/ivy-shell ()
   (interactive)
   (let ((terminal-buffers (seq-filter (lambda (x)
