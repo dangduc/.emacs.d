@@ -303,11 +303,13 @@ https://emacs-doctor.com/emacs-strip-tease.html"
        (message "git clone status: no process")))
    t))
 
+(defcustom duc/create-linked-note-default-dir "~/dev/huhmann/" nil)
 
-(defun duc/create-linked-note ()
+(defun duc/create-linked-note (&optional project)
   (interactive)
-  (let* ((title (completing-read "Name: " nil))
-         (fname (concat "~/dev/huhmann/"
+  (let* ((project (if project project duc/create-linked-note-default-dir))
+         (title (completing-read (concat "[" project "] " "Name: ") nil))
+         (fname (concat project
                         (format-time-string "%y%2U%2u")
                         "-"
                         (org-id-new)
