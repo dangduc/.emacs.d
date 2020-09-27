@@ -104,7 +104,8 @@
 
 ;; Point to emacs source directory. This is typically the `src` directory of
 ;; the emacs repository [[https://github.com/emacs-mirror/emacs]].
-(setq source-directory "~/dev/emacs/src")
+;; [[Re: on specifying the C source code directory][https://lists.gnu.org/archive/html/help-gnu-emacs/2016-02/msg00007.html]].
+(setq find-function-C-source-directory (concat "~/dev/emacs-" emacs-version "/src"))
 
 ;; word-wrap
 (add-hook 'org-mode-hook (lambda ()
