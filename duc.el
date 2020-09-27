@@ -319,7 +319,7 @@ https://emacs-doctor.com/emacs-strip-tease.html"
                         ".org"
                         )))
     (append-to-file
-     (concat "#+TAGS: \n\n" title "\n\nLinks") nil fname)
+     (concat "#+TAGS: \n\n* " title "\n\n* Links") nil fname)
     (find-file fname)))
 
 (defun duc/counsel-insert-linked-link-action (x)
