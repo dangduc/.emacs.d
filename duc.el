@@ -10,7 +10,7 @@
   `(setq ,list-var (duc/alist-replace ,list-var ,element)))
 
 (defvar duc/font-family)
-(setq duc/font-family "JetBrains Mono")
+(setq duc/font-family "Triplicate T4c")
 (defvar duc/font-height)
 (setq duc/font-height 140)
 (defvar duc/font-height-mode-line)
@@ -110,16 +110,13 @@
 
 (defun duc/ivy-shell-send-string (string &optional terminal)
   (let ((current-buffer-p (current-buffer))
-        (terminal-buffers (seq-filter (lambda (x)
-                                        (string-match-p
-                                         (regexp-quote "terminal-") x))
-                                      (mapcar (function buffer-name) (buffer-list)))))
+        (candidate-terminal-buffers (mapcar (function buffer-name) (buffer-list))))
     (let ((buffer-name (if terminal
                            terminal
-                         (completing-read "shell : " terminal-buffers))))
-     (if (member buffer-name terminal-buffers)
+                         (completing-read "shell : " candidate-terminal-buffers))))
+     (if (member buffer-name candidate-terminal-buffers)
          (pop-to-buffer buffer-name)
-       (vterm (concat "terminal-" buffer-name)))
+       (vterm buffer-name))
      (vterm-send-string string)
      (vterm-send-return)
      (pop-to-buffer current-buffer-p))))
