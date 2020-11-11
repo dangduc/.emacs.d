@@ -1185,14 +1185,12 @@ _p_: project  ^ ^                 _c_: customize
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
-
- ;; Hex values from iTerm Dracula theme.
- '(vterm-color-default ((t (:inherit default :foreground "#eaeaea" :background "#272936"))))
  '(vterm-color-black ((t (:inherit default :foreground "#000000" :background "#676767"))))
- '(vterm-color-red ((t (:inherit default :foreground "#ff6d67" :background "#ff6d67"))))
- '(vterm-color-green ((t (:inherit default :foreground "#59f68d" :background "#59f68d"))))
- '(vterm-color-yellow ((t (:inherit default :foreground "#f3f89d" :background "#f3f89d"))))
  '(vterm-color-blue ((t (:inherit default :foreground "#c9a8fa" :background "#c9a8fa"))))
- '(vterm-color-magenta ((t (:inherit default :foreground "#ff92d0" :background "#ff92d0"))))
  '(vterm-color-cyan ((t (:inherit default :foreground "#99ecfd" :background "#99ecfd"))))
- '(vterm-color-white ((t (:inherit default :foreground "#c7c7c7" :background "#feffff")))))
+ '(vterm-color-default ((t (:inherit default :foreground "#eaeaea" :background "#272936"))))
+ '(vterm-color-green ((t (:inherit default :foreground "#59f68d" :background "#59f68d"))))
+ '(vterm-color-magenta ((t (:inherit default :foreground "#ff92d0" :background "#ff92d0"))))
+ '(vterm-color-red ((t (:inherit default :foreground "#ff6d67" :background "#ff6d67"))))
+ '(vterm-color-white ((t (:inherit default :foreground "#c7c7c7" :background "#feffff"))))
+ '(vterm-color-yellow ((t (:inherit default :foreground "#f3f89d" :background "#f3f89d")))))
