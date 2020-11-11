@@ -567,55 +567,6 @@ _p_: project  ^ ^                 _c_: customize
   (setq aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l)))
 
 ;; themes
-(use-package zenburn-theme
-  :disabled
-  :init
-  (load-theme 'zenburn t)
-  (set-face-attribute 'fringe nil :background nil)
-  (set-face-attribute 'vertical-border nil :foreground (face-attribute 'mode-line :background)))
-
-(use-package doom-themes
-  :config
-  (setq doom-flatwhite-brighter-modeline t)
-  :init
-  (load-theme 'doom-flatwhite t))
-
-(use-package solarized-theme)
-
-(use-package nofrils-acme-theme
-  :no-require t)
-
-(use-package tao-theme
-  :no-require t)
-
-(use-package nord-theme
-  :no-require t
-  :config
-  (setq nord-region-highlight "snowstorm")
-  (setq nord-comment-brightness 15))
-
-(use-package zerodark-theme
-  :no-require t)
-
-(use-package commentary-theme
-  :no-require t
-  :straight (:host github
-                   :repo "pzel/commentary-theme"))
-
-(use-package parchment-theme
-  :no-require t
-  :straight (:host github
-                   :repo "ajgrf/parchment"))
-
-(use-package seoul256-theme
-  :no-require t
-  :straight (:host github
-                   :repo "dangduc/seoul256-emacs")
-  :config
-  (setq seoul256-background 255))
-
-(use-package habamax-theme
-  :no-require t)
 
 (use-package default-black-theme
   :no-require t
