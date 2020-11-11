@@ -127,6 +127,17 @@
   (dired-sidebar-toggle-sidebar)
   (ibuffer-sidebar-toggle-sidebar))
 
+;; e.g. [[file:~/tb/tableau-auth-android/tableauauth/src/main/java/com/tableau/tableauauth/webauth/WebAuthActivity.kt::250]]
+(defun duc/org-link-create-filename-line-number ()
+  (interactive)
+  (concat "[[" "file:" buffer-file-truename "::" (number-to-string (line-number-at-pos)) "]]"))
+
+(defun duc/org-capture-region-with-code-block ()
+  (interactive)
+  (let ((link (duc/org-link-create-filename-line-number))
+        (language (replace-regexp-in-string "-mode$" "" (symbol-name major-mode))))
+    (org-capture nil "r")))
+
 (defun duc/racket-eval-last-sexp ()
   "Eval the previous sexp asynchronously and `message' the result."
   (interactive)

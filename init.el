@@ -157,7 +157,7 @@ The variables that govern the situation include:
                (function decision-note-template))
               ("t" "TODO" entry (file+datetree "") "* TODO %<%H%M:%S> %^{todo}"
                :immediate-finish t)
-              ("r" "Region" entry (file+datetree "") "* %<%H%M:%S> %^{title}\n  > %i\n  %a\n  %l"
+              ("r" "Region" entry (file+datetree "") "* %<%H%M:%S> \n#+begin_src %(concat language)\n%i\n#+end_src\n%(concat link)"
                :immediate-finish t))))
 
 ; Don't indent by level. (Region-= will remove indents.)
@@ -391,7 +391,7 @@ _f_/_w_: maximize
     ("c" (org-capture nil "c") "capture note")
     ("C" (org-capture nil "C") "capture longer note")
     ("t" (org-capture nil "t") "capture todo")
-    ("r" (org-capture nil "r") "capture region")
+    ("r" (duc/org-capture-region-with-code-block) "capture region")
     ("z" duc/create-linked-note "create linked note")
     ("Z" (duc/create-linked-note "~/dev/chrestoturing/") "create chrestoturing note")
     ("T" (multi-occur-in-matching-buffers "log.org" "\\*\\*\\*\\* TODO") "View TODOs")
