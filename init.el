@@ -186,6 +186,11 @@ The variables that govern the situation include:
   (when (file-directory-p project)
     (add-to-list 'load-path project)))
 
+;; Vendor management
+;;
+
+; n/a
+
 ;; package management
 ;;
 
