@@ -221,6 +221,10 @@ The variables that govern the situation include:
 ;; Package declarations
 ;;
 
+(with-eval-after-load 'evil
+  (define-key minibuffer-local-map [escape] 'minibuffer-keyboard-quit)
+  (define-key minibuffer-inactive-mode-map [escape] 'minibuffer-keyboard-quit))
+
 (use-package diminish
   :config
   (diminish 'subword-mode)
@@ -774,8 +778,7 @@ _p_: project  ^ ^                 _c_: customize
 (use-package selectrum
   :config
   (with-eval-after-load 'evil
-    (define-key minibuffer-inactive-mode-map (kbd "<escape>") 'minibuffer-keyboard-quit)
-    (define-key selectrum-minibuffer-map (kbd "<escape>") 'minibuffer-keyboard-quit))
+    (define-key selectrum-minibuffer-map [escape] 'minibuffer-keyboard-quit))
 
   (selectrum-mode))
 
