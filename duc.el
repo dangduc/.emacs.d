@@ -127,6 +127,15 @@
   (dired-sidebar-toggle-sidebar)
   (ibuffer-sidebar-toggle-sidebar))
 
+;; https://blog.00null.net/post/145106940296/use-the-unix-generating-a-random-password
+(defun duc/generate-password ()
+  (interactive)
+  (let ((password (string-trim (shell-command-to-string "head -c 16 /dev/random | base64 | tr -d '=' | tr '+/' '-_'"))))
+    (message password)
+    password))
+
+
+
 ;; e.g. [[file:~/tb/tableau-auth-android/tableauauth/src/main/java/com/tableau/tableauauth/webauth/WebAuthActivity.kt::250]]
 (defun duc/org-link-create-filename-line-number ()
   (interactive)
