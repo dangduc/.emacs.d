@@ -130,7 +130,10 @@
 ;; e.g. [[file:~/tb/tableau-auth-android/tableauauth/src/main/java/com/tableau/tableauauth/webauth/WebAuthActivity.kt::250]]
 (defun duc/org-link-create-filename-line-number ()
   (interactive)
-  (concat "[[" "file:" buffer-file-truename "::" (number-to-string (line-number-at-pos)) "]]"))
+  (concat "["
+          "[" "file:" buffer-file-truename "::" (number-to-string (line-number-at-pos)) "]"
+          "[" (string-trim (shell-command-to-string "git rev-parse --short HEAD")) "]"
+          "]"))
 
 (defun duc/org-capture-region-with-code-block ()
   (interactive)
