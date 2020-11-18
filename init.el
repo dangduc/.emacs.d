@@ -1180,17 +1180,3 @@ _p_: project  ^ ^                 _c_: customize
    ["#073642" "#dc322f" "#859900" "#b58900" "#268bd2" "#d33682" "#2aa198" "#eee8d5"])
  '(xterm-color-names-bright
    ["#002b36" "#cb4b16" "#586e75" "#657b83" "#839496" "#6c71c4" "#93a1a1" "#fdf6e3"]))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(vterm-color-black ((t (:inherit default :foreground "#000000" :background "#676767"))))
- '(vterm-color-blue ((t (:inherit default :foreground "#c9a8fa" :background "#c9a8fa"))))
- '(vterm-color-cyan ((t (:inherit default :foreground "#99ecfd" :background "#99ecfd"))))
- '(vterm-color-default ((t (:inherit default :foreground "#eaeaea" :background "#272936"))))
- '(vterm-color-green ((t (:inherit default :foreground "#59f68d" :background "#59f68d"))))
- '(vterm-color-magenta ((t (:inherit default :foreground "#ff92d0" :background "#ff92d0"))))
- '(vterm-color-red ((t (:inherit default :foreground "#ff6d67" :background "#ff6d67"))))
- '(vterm-color-white ((t (:inherit default :foreground "#c7c7c7" :background "#feffff"))))
- '(vterm-color-yellow ((t (:inherit default :foreground "#f3f89d" :background "#f3f89d")))))
