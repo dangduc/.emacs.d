@@ -445,15 +445,18 @@ AG-PROMPT, if non-nil, is passed as `ivy-read' prompt argument. "
     (when err (error "Error with server %s" err))
     (or reply (error "empty reply"))))
 
-;(duc/sot-sound-status--get "6129d2a0-816d-11e9-8130-0582ccfcede9")
-
 ;; e.g. url "https://soundoftext.nyc3.digitaloceanspaces.com/ce916bf0-c882-11e7-9df0-2f554923557b.mp3"
-(defun duc/sot-download-mp3 (url)
+;; e.g. url "https://apifree.forvo.com/audio/3m3k1p2d1g3i1o2n2h3f1o26322l1i3p1o1g232p2h..."
+(defun duc/download-mp3 (url &optional name)
   (let* ((directory "~/dev/notes/ttv")
-         (name (car (last (split-string url "/"))))
+         (name (or name (car (last (split-string url "/")))))
          (filename (concat directory "/" name)))
-    (url-copy-file url
-                   filename)
+    (condition-case nil
+        (url-copy-file url
+                       filename)
+      (file-already-exists
+       (message (format "Warning: file already exists %s" filename))
+       (kill-new filename)))
     (kill-new filename)))
 
 (defun duc/sot-text-to-sound-at-region ()
@@ -470,10 +473,45 @@ AG-PROMPT, if non-nil, is passed as `ivy-read' prompt argument. "
                              (cons (current-kill 0 t) kill-ring))))
     (let ((result (duc/sot-sound-status--get id)))
       (cond ((string= "Done" (cdr (assoc 'status result)))
-             (duc/sot-download-mp3 (cdr (assoc 'location result))))
+             (duc/download-mp3 (cdr (assoc 'location result))))
             ((string= "Error" (cdr (assoc 'status result)))
              (message (format "error occurred for download %s" (cdr (assoc 'message result)))))
             (message "not ready for download")))))
+
+;; forvo.com
+;; https://api.forvo.com/documentation/word-pronunciations/
+
+(defun duc/forvo-query-for-mp3--get (word)
+  (let ((apikey local/forvo-api-key)
+        (request-backend 'curl)
+        (json-array-type 'list)
+        reply
+        err)
+                               ; e.g. https://apifree.forvo.com/action/word-pronunciations/format/json/word/forvo/id_lang_speak/39/order/rate-desc/limit/1/key/XXXX/
+    (let ((response (request (format "https://apifree.forvo.com/action/word-pronunciations/format/json/word/%s/id_lang_speak/39/order/rate-desc/limit/1/key/%s/"
+                                     word
+                                     apikey)
+                      :type "GET"
+                      :parser 'json-read
+                      :headers '(("Content-Type" . "application/json"))
+                      :success (cl-function (lambda (&key data &allow-other-keys)
+                                              (setq reply data)))
+                      :error (cl-function (lambda (&key _ &key error-thrown &allow-other-keys)
+                                            (setq err (string-trim (cdr error-thrown)))))
+                      :sync t)))
+      (unless (request-response-done-p response)
+        (request--curl-callback (get-buffer-process (request-response--buffer response)) "finished\n")))
+    (when err (error "Error with server %s" err))
+    (or reply (error "empty reply"))))
+
+(defun duc/forvo-text-to-sound-at-region ()
+  (interactive)
+  (let ((text (buffer-substring (region-beginning) (region-end))))
+    (let ((result (duc/forvo-query-for-mp3--get text)))
+      (let* ((item (car (cdr (assoc 'items result))))
+             (pathmp3 (cdr (assoc 'pathmp3 item))))
+        (message (format "<%s> copied to kill-ring %s" text pathmp3))
+        (kill-new  (duc/download-mp3 pathmp3 (format "forvo.com-%s.mp3" text)))))))
 
 ;; Use this method to query init load duration
 ;(emacs-init-time)

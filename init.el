@@ -1,3 +1,6 @@
+(load "~/.emacs.d/local-declarations.el")
+(load "~/.emacs.d/local.el")
+
 (setq ring-bell-function #'ignore)
 
 (setq gc-cons-threshold 100000000) ; 100 mb
@@ -519,8 +522,7 @@ _P_: 80-char sentences
 _aa_: enable anki mode   _ap_: push anki notes     _ar_: retry push anki notes
 _ad_: dictionary-at-p    _as_: insert screenshot   _au_: insert image url
 
-_aT_: text-to-speech region
-_at_: text-to-speech download file if ready
+_at_: dl text-to-speech mp3
 "
     ("A" org-agenda)
     ("c" org-ctrl-c-ctrl-c)
@@ -538,13 +540,16 @@ _at_: text-to-speech download file if ready
     ("t" org-insert-structure-template)
     ("o" org-open-at-point)
     ("aa" anki-editor-mode)
-    ("ap" anki-editor-push-notes)
+    ("ap" (let ()
+            ;; enable anki-editor-mode if it isn't. Enabling the mode will enable uploading local media to anki.
+            (if (not (bound-and-true-p anki-editor-mode))
+                (anki-editor-mode))
+            (anki-editor-push-notes)))
     ("ar" anki-editor-retry-failure-notes)
     ("ad" osx-dictionary-search-word-at-point)
     ("as" org-download-screenshot)
     ("au" org-download-image)
-    ("aT" duc/sot-text-to-sound-at-region)
-    ("at" duc/sot-text-to-sound-download-if-ready))
+    ("at" duc/forvo-text-to-sound-at-region))
   (defhydra hydra-main-menu (:exit t :idle .2 :hint nil)
     "
 ^Navigate^       ^Search^           ^Action^          ^Application
