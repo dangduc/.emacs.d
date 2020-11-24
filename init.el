@@ -411,7 +411,7 @@ _f_/_w_: maximize
 ^^^^^^^^-------------------------------------
 _m_: mode             _p_: list packages
 _k_: key-to-func      _a_: apropos
-_K_: func-to-key
+_K_: func-to-key      _M_: search emacs manual
 _f_: function
 _v_: variable         _d_: toggle error debugging
 _c_: face             _w_: watch function for step-debugging
@@ -428,6 +428,7 @@ _B_: bindings
     ("B" describe-bindings)
     ("p" package-list-packages)
     ("a" counsel-apropos)
+    ("M" info-apropos)
     ("d" toggle-debug-on-error)
     ("w" debug-on-entry)
     ("W" cancel-debug-on-entry))
@@ -538,7 +539,7 @@ _j_: down     _>_: occur in file  _w_: window/frame _u_: package
 _a_: jump     ^ ^                 _L_: lc
 _\\_: vsplit   ^ ^                 ^ ^
 _-_: hsplit   ^ ^                 _H_: help
-_n_: buffer   ^ ^                 _?_:help
+_n_: buffer   ^ ^                 _?_: help
 _m_: files    ^ ^                 _f_: file
 _p_: project  ^ ^                 _c_: customize
 "
