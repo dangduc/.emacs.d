@@ -397,6 +397,7 @@ AG-PROMPT, if non-nil, is passed as `ivy-read' prompt argument. "
               :caller 'counsel-ag)))
 
 (defun duc/anki-connect-push ()
+  (interactive)
   (let ()
     ;; enable anki-editor-mode if it isn't. Enabling the mode will enable uploading local media to anki.
     (if (not (bound-and-true-p anki-editor-mode))
