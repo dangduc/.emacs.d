@@ -1,5 +1,3 @@
-(load "~/.emacs.d/duc.el")
-
 (setq ring-bell-function #'ignore)
 
 (setq gc-cons-threshold 100000000) ; 100 mb
@@ -26,16 +24,6 @@
 ;; display columns position in modeline
 (column-number-mode t)
 
-;; enable transparent osx titlebar (a la Chrome)
-(duc/alist-replace-set default-frame-alist (ns-transparent-titlebar . t))
-
-;; nil or dark, to switch to between black or white title text
-;(duc/alist-replace-set default-frame-alist (ns-appearance . dark|nil))
-(duc/alist-replace-set default-frame-alist (ns-appearance . nil))
-
-;(duc/alist-replace-set default-frame-alist (ns-use-thin-smoothing . t))
-(duc/alist-replace-set default-frame-alist (ns-antialias-text . nil))
-
 ; line numbers (emacs 26 and above)
 (when (fboundp 'display-line-numbers-mode)
   (dolist (hook '(prog-mode-hook
@@ -56,17 +44,6 @@
 
 ;; use spaces instead of tabs
 (setq-default indent-tabs-mode nil)
-
-;; Set font
-(set-face-attribute 'default nil
-                    :family duc/font-family
-                    :height duc/font-height
-                    :weight duc/font-weight
-                    :width 'normal)
-
-(duc/theme-setup-modeline)
-
-(advice-add 'load-theme :after #'duc/theme-setup-modeline)
 
 ;; Save all tempfiles in $TMPDIR/emacs$UID/
 (defconst emacs-tmp-dir (expand-file-name (format "emacs%d" (user-uid))
@@ -220,6 +197,34 @@ The variables that govern the situation include:
 
 ;; Package declarations
 ;;
+
+(use-package duc
+  :straight nil
+  :init
+  (defvar duc/duc-dir (expand-file-name "duc" user-emacs-directory))
+  (add-to-list 'load-path duc/duc-dir)
+  :config
+
+  (car '(ns-transparent-titlebar . t))
+  ;; enable transparent osx titlebar (a la Chrome)
+  (duc/alist-replace-set default-frame-alist (ns-transparent-titlebar . t))
+
+  ;; nil or dark, to switch to between black or white title text
+  ;; e.g. (duc/alist-replace-set default-frame-alist (ns-appearance . dark|nil))
+  (duc/alist-replace-set default-frame-alist (ns-appearance . nil))
+
+  (duc/alist-replace-set default-frame-alist (ns-use-thin-smoothing . t))
+  (duc/alist-replace-set default-frame-alist (ns-antialias-text . nil))
+
+  ;; Set font
+  (set-face-attribute 'default nil
+                      :family duc/font-family
+                      :height duc/font-height
+                      :weight duc/font-weight
+                      :width 'normal)
+  (duc/theme-setup-modeline)
+
+  (advice-add 'load-theme :after #'duc/theme-setup-modeline))
 
 (with-eval-after-load 'evil
   (define-key minibuffer-local-map [escape] 'minibuffer-keyboard-quit)
@@ -386,7 +391,7 @@ _f_/_w_: maximize
     ("f" find-file "find file")
     ("w" save-buffer "write file")
     ("i" (find-file "~/.emacs.d/init.el" ) "init.el")
-    ("I" (find-file "~/.emacs.d/duc.el" ) "duc.el")
+    ("I" (find-file "~/.emacs.d/duc/duc.el" ) "duc.el")
     ("1" (find-file "~/dev/notes/log.org" ) "log.org")
     ("2" (find-file "~/dev/notes/how-to.org" ) "how-to.org")
     ("3" shell-command-on-region "M-|") ;; e.g. "nc termbin.com 9999"

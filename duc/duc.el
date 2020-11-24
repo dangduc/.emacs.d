@@ -1,3 +1,5 @@
+;;;; -*- lexical-binding: t; -*-
+
 (defmacro duc/alist-replace (list-var element)
   `(let
        ((replaced-list-var
@@ -394,6 +396,85 @@ AG-PROMPT, if non-nil, is passed as `ivy-read' prompt argument. "
                         (swiper--cleanup))
               :caller 'counsel-ag)))
 
+;; soundoftext.com
+
+(defun duc/sot-generate-sound--action (text voice)
+  (let (a)
+    (push `(engine . ,"Google") a)
+    (push `(data . ,(let (data)
+                      (push `(text . ,text) data)
+                      (push `(voice . ,voice) data))) a)))
+
+(defun duc/sot-generate-sound--post (text)
+  (let ((request-body (json-encode (duc/sot-generate-sound--action text "en-US")))
+        (request-backend 'curl)
+        (json-array-type 'list)
+        reply
+        err)
+    (let ((response (request (format "https://api.soundoftext.com/sounds")
+                      :type "POST"
+                      :parser 'json-read
+                      :data request-body
+                      :headers '(("Content-Type" . "application/json"))
+                      :success (cl-function (lambda (&key data &allow-other-keys)
+                                              (setq reply data)))
+                      :error (cl-function (lambda (&key _ &key error-thrown &allow-other-keys)
+                                            (setq err (string-trim (cdr error-thrown)))))
+                      :sync t)))
+      (unless (request-response-done-p response)
+        (request--curl-callback (get-buffer-process (request-response--buffer response)) "finished\n")))
+    (when err (error "Error with server %s" err))
+    (or reply (error "empty reply"))))
+
+(defun duc/sot-sound-status--get (id)
+  (let ((request-backend 'curl)
+        (json-array-type 'list)
+        reply
+        err)
+    (let ((response (request (format "https://api.soundoftext.com/sounds/%s" id)
+                      :type "GET"
+                      :parser 'json-read
+                      :headers '(("Content-Type" . "application/json"))
+                      :success (cl-function (lambda (&key data &allow-other-keys)
+                                              (setq reply data)))
+                      :error (cl-function (lambda (&key _ &key error-thrown &allow-other-keys)
+                                            (setq err (string-trim (cdr error-thrown)))))
+                      :sync t)))
+      (unless (request-response-done-p response)
+        (request--curl-callback (get-buffer-process (request-response--buffer response)) "finished\n")))
+    (when err (error "Error with server %s" err))
+    (or reply (error "empty reply"))))
+
+;(duc/sot-sound-status--get "6129d2a0-816d-11e9-8130-0582ccfcede9")
+
+;; e.g. url "https://soundoftext.nyc3.digitaloceanspaces.com/ce916bf0-c882-11e7-9df0-2f554923557b.mp3"
+(defun duc/sot-download-mp3 (url)
+  (let* ((directory "~/dev/notes/ttv")
+         (name (car (last (split-string url "/"))))
+         (filename (concat directory "/" name)))
+    (url-copy-file url
+                   filename)
+    (kill-new filename)))
+
+(defun duc/sot-text-to-sound-at-region ()
+  (interactive)
+  (let ((text (buffer-substring (region-beginning) (region-end))))
+    (let ((result (duc/sot-generate-sound--post text)))
+      (let ((id (cdr (assoc 'id result))))
+        (message (format "<%s> copied to kill-ring %s" text id))
+        (kill-new id)))))
+
+(defun duc/sot-text-to-sound-download-if-ready ()
+  (interactive)
+  (let ((id (completing-read "[Sound of Text] status for: "
+                             (cons (current-kill 0 t) kill-ring))))
+    (let ((result (duc/sot-sound-status--get id)))
+      (cond ((string= "Done" (cdr (assoc 'status result)))
+             (duc/sot-download-mp3 (cdr (assoc 'location result))))
+            ((string= "Error" (cdr (assoc 'status result)))
+             (message (format "error occurred for download %s" (cdr (assoc 'message result)))))
+            (message "not ready for download")))))
+
 ;; Use this method to query init load duration
 ;(emacs-init-time)
 
@@ -442,3 +523,5 @@ AG-PROMPT, if non-nil, is passed as `ivy-read' prompt argument. "
                '(("A" . "C") ("A" . "B"))))
    fill-column)
   )
+
+(provide 'duc)
