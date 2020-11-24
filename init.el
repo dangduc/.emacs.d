@@ -70,6 +70,9 @@
     (and window-system (server-start)))
 
 ;; org-mode
+
+(setq org-image-actual-width 400) ; Set inline display width of images.
+
 ;; [[https://beorgapp.com/learning/emacs-encryption/][Getting started with encryption in Org mode on macOS]].
 (require 'org-crypt)
 (require 'epa-file)
@@ -135,7 +138,8 @@ The variables that govern the situation include:
               ("t" "TODO" entry (file+datetree "") "* TODO %<%H%M:%S> %^{todo}"
                :immediate-finish t)
               ("r" "Region" entry (file+datetree "") "* %<%H%M:%S> \n#+begin_src %(concat language)\n%i\n#+end_src\n%(concat link)"
-               :immediate-finish t))))
+               :immediate-finish t)
+              ("1" "Anki - English Pronunciation" entry (file+datetree "") "* %<%H%M:%S> English Pronunciation :anki:\n:PROPERTIES:\n:ANKI_DECK: Default\n:ANKI_NOTE_TYPE: Basic\n:ANKI_TAGS: english pronunciation\n:END:\n** Front\n** Back"))))
 
 ; Don't indent by level. (Region-= will remove indents.)
 (setq org-adapt-indentation nil)
@@ -506,14 +510,19 @@ _P_: 80-char sentences
     "
               ^org-mode^
 ^^^^^^^^-----------------------------------------------------------------------
-_a_: agenda  _c_: C-c C-c  _e_: encrypt entry        _s_: store link at P
-^ ^          ^ ^           _E_: encrypt all entries  _S_: insert link at P
-_n_: narrow  ^ ^           _d_: decrypt entry        _o_: open link
-_N_: widen   ^ ^           _D_: decrypt all entries  _L_: toggle desc links
+ _A_: agenda  _c_: C-c C-c  _e_: encrypt entry        _s_: store link at P
+ ^ ^          ^ ^           _E_: encrypt all entries  _S_: insert link at P
+ _n_: narrow  ^ ^           _d_: decrypt entry        _o_: open link
+ _N_: widen   ^ ^           _D_: decrypt all entries  _L_: toggle desc links
 ^ ^
-_m_: region->md  ^ ^       _t_: insert template      _l_: search & insert linked link
+ _m_: region->md  ^ ^       _t_: insert template      _l_: search & insert linked link
+_aa_: enable anki mode   _ap_: push anki notes     _ar_: retry push anki notes
+_ad_: dictionary-at-p    _as_: insert screenshot   _au_: insert image url
+
+_aT_: text-to-speech region
+_at_: text-to-speech download file if ready
 "
-    ("a" org-agenda)
+    ("A" org-agenda)
     ("c" org-ctrl-c-ctrl-c)
     ("e" org-encrypt-entry)
     ("E" org-encrypt-entries)
@@ -527,7 +536,15 @@ _m_: region->md  ^ ^       _t_: insert template      _l_: search & insert linked
     ("S" org-insert-link)
     ("m" org-md-convert-region-to-md)
     ("t" org-insert-structure-template)
-    ("o" org-open-at-point))
+    ("o" org-open-at-point)
+    ("aa" anki-editor-mode)
+    ("ap" anki-editor-push-notes)
+    ("ar" anki-editor-retry-failure-notes)
+    ("ad" osx-dictionary-search-word-at-point)
+    ("as" org-download-screenshot)
+    ("au" org-download-image)
+    ("aT" duc/sot-text-to-sound-at-region)
+    ("at" duc/sot-text-to-sound-download-if-ready))
   (defhydra hydra-main-menu (:exit t :idle .2 :hint nil)
     "
 ^Navigate^       ^Search^           ^Action^          ^Application
@@ -1108,6 +1125,18 @@ _p_: project  ^ ^                 _c_: customize
   ("\\.epub\\'" . ereader-mode)
   :init
   (evil-define-key 'normal ereader-mode-map (kbd "0") 'evil-digit-argument-or-evil-beginning-of-line))
+
+(use-package org-download
+  :config
+  (setq-default org-download-image-dir "~/dev/notes/img")
+  (setq-default org-download-screenshot-method "screencapture -i %s"))
+
+(use-package anki-editor
+  :config
+  (setq anki-editor-org-tags-as-anki-tags nil)
+  (setq request-log-level 'debug))
+
+(use-package osx-dictionary)
 
 
 ;; End package declarations
