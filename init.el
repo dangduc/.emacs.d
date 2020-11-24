@@ -952,6 +952,8 @@ _p_: project  ^ ^                 _c_: customize
     (lambda ()
       (flycheck-add-mode 'typescript-tslint 'web-mode))))
 
+(use-package restclient)
+
 (use-package magit
   :commands (magit-toplevel
              magit-status
