@@ -519,10 +519,6 @@ _P_: 80-char sentences
  _N_: widen   ^ ^           _D_: decrypt all entries  _L_: toggle desc links
 ^ ^
  _m_: region->md  ^ ^       _t_: insert template      _l_: search & insert linked link
-_aa_: enable anki mode   _ap_: push anki notes     _ar_: retry push anki notes
-_ad_: dictionary-at-p    _as_: insert screenshot   _au_: insert image url
-
-_at_: dl text-to-speech mp3
 "
     ("A" org-agenda)
     ("c" org-ctrl-c-ctrl-c)
@@ -538,18 +534,26 @@ _at_: dl text-to-speech mp3
     ("S" org-insert-link)
     ("m" org-md-convert-region-to-md)
     ("t" org-insert-structure-template)
-    ("o" org-open-at-point)
-    ("aa" anki-editor-mode)
-    ("ap" (let ()
-            ;; enable anki-editor-mode if it isn't. Enabling the mode will enable uploading local media to anki.
-            (if (not (bound-and-true-p anki-editor-mode))
-                (anki-editor-mode))
-            (anki-editor-push-notes)))
-    ("ar" anki-editor-retry-failure-notes)
-    ("ad" osx-dictionary-search-word-at-point)
-    ("as" org-download-screenshot)
-    ("au" org-download-image)
-    ("at" duc/forvo-text-to-sound-at-region))
+    ("o" org-open-at-point))
+  (defhydra hydra-submenu-anki (:exit t :hint nil)
+    "
+^anki-connect^            ^Media^
+^^^^^^^^-------------------------------------------
+_p_/_a_: push notes         _i_: screenshot
+  _r_: retry push         _I_: url image
+                        _c_: corpus (gutenberg)
+  _n_: new note           _d_: dictionary
+                        _s_: text-to-speech
+"
+    ("p" duc/anki-connect-push)
+    ("a" duc/anki-connect-push)
+    ("r" anki-editor-retry-failure-notes)
+    ("n" (org-capture nil "1"))
+    ("c" (counsel-rg nil "~/dev/notes/corpus"))
+    ("d" osx-dictionary-search-word-at-point)
+    ("i" org-download-screenshot)
+    ("I" org-download-image)
+    ("s" duc/forvo-text-to-sound-at-region-or-word))
   (defhydra hydra-main-menu (:exit t :idle .2 :hint nil)
     "
 ^Navigate^       ^Search^           ^Action^          ^Application
@@ -558,7 +562,7 @@ _h_: left     _,_: in files       _SPC_: M-x        _g_: magit
 _l_: right    _<_: occur in files _b_: buffers      _o_: org-mode
 _k_: up       ^ ^                 _e_: eval         _s_: shell
 _j_: down     _>_: occur in file  _w_: window/frame _u_: package
-_a_: jump     ^ ^                 _L_: lc
+_J_: jump     ^ ^                 _L_: lc           _a_: anki
 _\\_: vsplit   ^ ^                 ^ ^
 _-_: hsplit   ^ ^                 _H_: help
 _n_: buffer   ^ ^                 _?_: help
@@ -569,7 +573,7 @@ _p_: project  ^ ^                 _c_: customize
     ("l" evil-window-right)
     ("k" evil-window-up)
     ("j" evil-window-down)
-    ("a" ace-window)
+    ("J" ace-window)
     ("-" split-window-below)
     ("\\" split-window-right)
     ("," counsel-rg)
@@ -590,7 +594,8 @@ _p_: project  ^ ^                 _c_: customize
     ("f" hydra-submenu-file/body)
     ("g" hydra-submenu-git/body)
     ("u" hydra-submenu-package/body)
-    ("L" hydra-submenu-leetcode/body)))
+    ("L" hydra-submenu-leetcode/body)
+    ("a" hydra-submenu-anki/body)))
 
 (use-package ace-window
   :init

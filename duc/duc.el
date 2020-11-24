@@ -396,6 +396,18 @@ AG-PROMPT, if non-nil, is passed as `ivy-read' prompt argument. "
                         (swiper--cleanup))
               :caller 'counsel-ag)))
 
+(defun duc/anki-connect-push ()
+  (let ()
+    ;; enable anki-editor-mode if it isn't. Enabling the mode will enable uploading local media to anki.
+    (if (not (bound-and-true-p anki-editor-mode))
+        (anki-editor-mode))
+    (anki-editor-push-notes)))
+
+(defun duc/play-sound (&optional filepath)
+  (interactive)
+  (let ((filepath (or filepath (completing-read "sound file to play: "))))
+    (shell-command-to-string (format "afplay %s" filepath))))
+
 ;; soundoftext.com
 
 (defun duc/sot-generate-sound--action (text voice)
@@ -447,17 +459,12 @@ AG-PROMPT, if non-nil, is passed as `ivy-read' prompt argument. "
 
 ;; e.g. url "https://soundoftext.nyc3.digitaloceanspaces.com/ce916bf0-c882-11e7-9df0-2f554923557b.mp3"
 ;; e.g. url "https://apifree.forvo.com/audio/3m3k1p2d1g3i1o2n2h3f1o26322l1i3p1o1g232p2h..."
-(defun duc/download-mp3 (url &optional name)
-  (let* ((directory "~/dev/notes/ttv")
-         (name (or name (car (last (split-string url "/")))))
-         (filename (concat directory "/" name)))
-    (condition-case nil
-        (url-copy-file url
-                       filename)
-      (file-already-exists
-       (message (format "Warning: file already exists %s" filename))
-       (kill-new filename)))
-    (kill-new filename)))
+(defun duc/download-mp3 (url filepath)
+  (condition-case nil
+      (url-copy-file url filepath)
+    (file-already-exists
+     (message (format "file already exists %s" filepath))))
+  (kill-new filepath))
 
 (defun duc/sot-text-to-sound-at-region ()
   (interactive)
@@ -473,7 +480,7 @@ AG-PROMPT, if non-nil, is passed as `ivy-read' prompt argument. "
                              (cons (current-kill 0 t) kill-ring))))
     (let ((result (duc/sot-sound-status--get id)))
       (cond ((string= "Done" (cdr (assoc 'status result)))
-             (duc/download-mp3 (cdr (assoc 'location result))))
+             (duc/download-mp3 (cdr (assoc 'location result)) (concat "~/dev/notes/ttv/" id ".mp3")))
             ((string= "Error" (cdr (assoc 'status result)))
              (message (format "error occurred for download %s" (cdr (assoc 'message result)))))
             (message "not ready for download")))))
@@ -504,14 +511,21 @@ AG-PROMPT, if non-nil, is passed as `ivy-read' prompt argument. "
     (when err (error "Error with server %s" err))
     (or reply (error "empty reply"))))
 
-(defun duc/forvo-text-to-sound-at-region ()
+(defun duc/forvo-text-to-sound-at-region-or-word ()
   (interactive)
-  (let ((text (buffer-substring (region-beginning) (region-end))))
-    (let ((result (duc/forvo-query-for-mp3--get text)))
-      (let* ((item (car (cdr (assoc 'items result))))
-             (pathmp3 (cdr (assoc 'pathmp3 item))))
-        (message (format "<%s> copied to kill-ring %s" text pathmp3))
-        (kill-new  (duc/download-mp3 pathmp3 (format "forvo.com-%s.mp3" text)))))))
+  (let* ((text (if (use-region-p)
+                   (buffer-substring-no-properties (region-beginning)
+                                                   (region-end))
+                 (thing-at-point 'word)))
+         (filepath (concat "~/dev/notes/ttv/" (format "forvo.com-%s.mp3" text))))
+
+    (let* ((result (duc/forvo-query-for-mp3--get text))
+           (item (car (cdr (assoc 'items result))))
+           (pathmp3 (cdr (assoc 'pathmp3 item))))
+      (message (format "<%s> copied to kill-ring %s" text pathmp3))
+      (duc/download-mp3 pathmp3 filepath)
+      (duc/play-sound filepath)
+      (kill-new filepath))))
 
 ;; Use this method to query init load duration
 ;(emacs-init-time)
