@@ -19,6 +19,9 @@
                      (abbreviate-file-name (buffer-file-name))
                    "%b"))))
 
+;; No need to type out full 'yes' / 'no' on confirmation prompts
+(defalias 'yes-or-no-p 'y-or-n-p)
+
 ;; don't recenter when scrolling
 (setq scroll-step 1)
 (setq scroll-conservatively 10000)
