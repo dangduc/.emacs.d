@@ -142,7 +142,8 @@ The variables that govern the situation include:
                :immediate-finish t)
               ("r" "Region" entry (file+datetree "") "* %<%H%M:%S> \n#+begin_src %(concat language)\n%i\n#+end_src\n%(concat link)"
                :immediate-finish t)
-              ("1" "Anki - English Pronunciation" entry (file+datetree "") "* %<%H%M:%S> English Pronunciation :anki:\n:PROPERTIES:\n:ANKI_DECK: Default\n:ANKI_NOTE_TYPE: Basic\n:ANKI_TAGS: english pronunciation\n:END:\n** Front\n** Back"))))
+              ("2" "Anki - Basic" entry (file+datetree "") "* %<%H%M:%S> English Definition :anki:\n:PROPERTIES:\n:ANKI_DECK: Default\n:ANKI_NOTE_TYPE: Basic\n:ANKI_TAGS: english definition\n:END:\n** Front\n** Back")
+              ("1" "Anki - Word Pronunciation" entry (file+datetree "") "* %<%H%M:%S> English Pronunciation - %^{word} :anki:\n:PROPERTIES:\n:ANKI_DECK: Default\n:ANKI_NOTE_TYPE: Word-Pronunciation\n:ANKI_TAGS: english pronunciation\n:END:\n** Word\n%\\1\n** Picture\n** Sound\n** Pronunciation"))))
 
 ; Don't indent by level. (Region-= will remove indents.)
 (setq org-adapt-indentation nil)

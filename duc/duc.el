@@ -406,7 +406,13 @@ AG-PROMPT, if non-nil, is passed as `ivy-read' prompt argument. "
 
 (defun duc/play-sound (&optional filepath)
   (interactive)
-  (let ((filepath (or filepath (completing-read "sound file to play: "))))
+  (let ((filepath (shell-quote-argument ; Escape special characters to be
+                                        ; compatible with words like
+                                        ; 'Raison d’être'.
+                   (expand-file-name    ; Resolve path so that tilde char
+                                        ; won't be escaped and make the
+                                        ; path invalid.
+                    (or filepath (completing-read "sound file to play: "))))))
     (shell-command-to-string (format "afplay %s" filepath))))
 
 ;; soundoftext.com
@@ -514,12 +520,11 @@ AG-PROMPT, if non-nil, is passed as `ivy-read' prompt argument. "
 
 (defun duc/forvo-text-to-sound-at-region-or-word ()
   (interactive)
-  (let* ((text (if (use-region-p)
-                   (buffer-substring-no-properties (region-beginning)
-                                                   (region-end))
-                 (thing-at-point 'word)))
+  (let* ((text (downcase (if (use-region-p)
+                             (buffer-substring-no-properties (region-beginning)
+                                                             (region-end))
+                           (thing-at-point 'word))))
          (filepath (concat "~/dev/notes/ttv/" (format "forvo.com-%s.mp3" text))))
-
     (let* ((result (duc/forvo-query-for-mp3--get text))
            (item (car (cdr (assoc 'items result))))
            (pathmp3 (cdr (assoc 'pathmp3 item))))
