@@ -107,7 +107,7 @@
          (switch-to-buffer buffer-name)
        (vterm (concat "terminal-" buffer-name))))))
 
-(defun duc/ivy-shell-send-string (string &optional terminal)
+(defun duc/ivy-shell-send-string (string &optional terminal working-directory clear)
   (let ((current-buffer-p (current-buffer))
         (candidate-terminal-buffers (mapcar (function buffer-name) (buffer-list))))
     (let ((buffer-name (if terminal
@@ -116,6 +116,11 @@
      (if (member buffer-name candidate-terminal-buffers)
          (pop-to-buffer buffer-name)
        (vterm buffer-name))
+     (when working-directory
+       (vterm-send-string (concat "cd " working-directory))
+       (vterm-send-return))
+     (when clear
+       (vterm-clear))
      (vterm-send-string string)
      (vterm-send-return)
      (pop-to-buffer current-buffer-p))))
