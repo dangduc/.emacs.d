@@ -27,7 +27,7 @@
 (setq scroll-conservatively 10000)
 (setq auto-window-vscroll nil)
 
-;; display columns position in modeline
+;; display columns position in mode-line
 (column-number-mode t)
 
 ; line numbers (emacs 26 and above)
@@ -215,14 +215,13 @@ The variables that govern the situation include:
   (defvar duc/duc-dir (expand-file-name "duc" user-emacs-directory))
   (add-to-list 'load-path duc/duc-dir)
   :config
-
   (car '(ns-transparent-titlebar . t))
   ;; enable transparent osx titlebar (a la Chrome)
   (duc/alist-replace-set default-frame-alist (ns-transparent-titlebar . t))
 
   ;; nil or dark, to switch to between black or white title text
   ;; e.g. (duc/alist-replace-set default-frame-alist (ns-appearance . dark|nil))
-  (duc/alist-replace-set default-frame-alist (ns-appearance . nil))
+  (duc/alist-replace-set default-frame-alist (ns-appearance . dark))
 
   (duc/alist-replace-set default-frame-alist (ns-use-thin-smoothing . t))
   (duc/alist-replace-set default-frame-alist (ns-antialias-text . nil))
@@ -233,9 +232,21 @@ The variables that govern the situation include:
                       :height duc/font-height
                       :weight duc/font-weight
                       :width 'normal)
-  (duc/theme-setup-modeline)
 
-  (advice-add 'load-theme :after #'duc/theme-setup-modeline))
+  (defun duc/theme-setup-mode-line-font (&rest _)
+    (dolist (sym '(mode-line mode-line-inactive))
+      (set-face-attribute sym nil
+                          :family duc/font-family-mode-line
+                          :height duc/font-height-mode-line
+                          :weight duc/font-weight
+                          :width 'normal)))
+
+  (advice-add 'load-theme :after #'duc/theme-setup-mode-line-font)
+
+  (let ((enable-mode-line-setup nil))
+    (when enable-mode-line-setup
+      (duc/theme-setup-mode-line)
+      (advice-add 'load-theme :after #'duc/theme-setup-mode-line))))
 
 (with-eval-after-load 'evil
   (define-key minibuffer-local-map [escape] 'minibuffer-keyboard-quit)
@@ -609,6 +620,11 @@ _p_: project  ^ ^                 _c_: customize
 
 ;; themes
 
+(use-package doom-modeline
+  :ensure t
+  :after all-the-icons
+  :hook (after-init . doom-modeline-mode))
+
 (use-package default-black-theme
   :no-require t
   :straight (:host github
@@ -616,6 +632,12 @@ _p_: project  ^ ^                 _c_: customize
 
 (use-package flatland-black-theme
   :no-require t)
+
+(use-package doom-themes
+  :config
+  (load-theme 'doom-spacegrey t))
+
+(use-package solarized-theme)
 
 ;; end themes
 
@@ -625,6 +647,8 @@ _p_: project  ^ ^                 _c_: customize
 (use-package rainbow-delimiters
   :straight (:host github
              :repo "Fanael/rainbow-delimiters"))
+
+(use-package habamax-theme)
 
 (use-package whitespace
   :diminish whitespace-mode
@@ -1068,6 +1092,11 @@ _p_: project  ^ ^                 _c_: customize
   (setq dired-sidebar-width 30)
   (setq dired-sidebar-theme 'ascii)
   (setq dired-sidebar-face '(:family duc/font-family :height 120)))
+
+(use-package all-the-icons
+  :init
+  (when (not local/all-the-icons-installed)
+    (all-the-icons-install-fonts t)))
 
 (use-package all-the-icons-dired
   :after dired-sidebar

@@ -11,14 +11,14 @@
 (defmacro duc/alist-replace-set (list-var element)
   `(setq ,list-var (duc/alist-replace ,list-var ,element)))
 
-(defvar duc/font-family)
-(setq duc/font-family "Triplicate T4c")
-(defvar duc/font-height)
-(setq duc/font-height 140)
-(defvar duc/font-height-mode-line)
-(setq duc/font-height-mode-line 120)
-(defvar duc/font-weight)
-(setq duc/font-weight 'normal)
+(defvar duc/font-family "Iosevka Term")
+(defvar duc/font-height 160)
+
+(defvar duc/font-family-mode-line "Concourse T3 Tab")
+(defvar duc/font-height-mode-line 160)
+
+(defvar duc/font-weight 'normal)
+
 (defconst duc/font-weights (list 'ultra-bold
                                  'extra-bold
                                  'bold
@@ -28,9 +28,6 @@
                                  'light
                                  'extra-light
                                  'ultra-light))
-(defvar duc/font-line-spacing)
-(setq duc/font-line-spacing 1)
-(setq-default line-spacing duc/font-line-spacing)
 
 (defun duc/font-weight-cycle ()
   (interactive)
@@ -198,7 +195,7 @@
 
 (defvar-local duc/header-line-format nil)
 (defun duc/mode-line-in-header ()
-  "Toggle displaying modeline in header instead of footer
+  "Toggle displaying mode-line in header instead of footer
 https://emacs-doctor.com/emacs-strip-tease.html"
   (interactive)
   (if (not header-line-format)
@@ -223,41 +220,8 @@ https://emacs-doctor.com/emacs-strip-tease.html"
          (set-window-dedicated-p window (not (window-dedicated-p window))))
        "pinned buffer" "un-pinned buffer")))
 
-(defun duc/modeline-fontsize ()
-  "Return font size of modeline."
-  duc/font-height-mode-line)
-
-(defun duc/theme-setup-modeline  (&rest _)
-  "Theme modeline."
-  (duc/update-modeline-variables)
-  (duc/prefix-modeline)
-  (let ((font-size duc/font-height))
-    (dolist (sym '(mode-line mode-line-inactive))
-      (let ((border-color (duc/modeline-border-color)))
-        (if border-color
-            (set-face-attribute
-             sym
-             nil
-             :height font-size
-             :box `(:line-width 1 :color ,border-color))
-          (set-face-attribute
-           sym
-           nil
-           :height font-size))))))
-
-(defun duc/theme-fontsize ()
-  "Return font size of modeline."
-  duc/font-height)
-
-(defun duc/modeline-fontsize ()
-  "Return font size of modeline."
-  duc/font-height-mode-line)
-
-(defun duc/theme-get-variable-pitch-font ()
-  "iA Writer Duospace")
-
 (defun duc/theme-background-color (sym)
-  "Return background color of modeline."
+  "Return background color of mode-line."
   ;; If `mode-line-inactive' doesn't specify a background, use
   ;; `mode-line''s instead.
   (let* ((frame (selected-frame))
@@ -268,15 +232,15 @@ https://emacs-doctor.com/emacs-strip-tease.html"
         (face-attribute 'mode-line :background frame)
       background)))
 
-(defun duc/theme-setup-modeline (&rest _)
-  "Theme modeline."
+(defun duc/theme-setup-mode-line (&rest _)
+  "Theme mode-line."
   (interactive)
   (setq underline-minimum-offset 999)
   (set-frame-parameter (selected-frame) 'right-divider-width 1)
   (unless (member '(right-divider-width . 1) default-frame-alist)
     (push '(right-divider-width . 1) default-frame-alist))
-  (let* ((font (duc/theme-get-variable-pitch-font))
-         (font-size (duc/modeline-fontsize))
+  (let* ((font duc/font-family-mode-line)
+         (font-size duc/font-height-mode-line)
          (border-color (face-foreground 'window-divider (selected-frame) t))
          (underline `(:color ,border-color))
          (overline border-color))
