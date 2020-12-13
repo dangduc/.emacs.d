@@ -268,6 +268,7 @@ The variables that govern the situation include:
   :diminish which-key-mode
   :init
   (setq which-key-idle-delay 0.2)
+  :config
   (which-key-setup-minibuffer)
   (which-key-mode))
 
@@ -299,6 +300,19 @@ The variables that govern the situation include:
   (exec-path-from-shell-copy-envs-async '("PATH")))
 
 (use-package evil
+  :init
+  ; next two lines required for evil-collection.
+  (setq evil-want-keybinding nil)
+  (setq evil-want-integration t)
+  ; hideshow
+  (add-hook 'json-mode-hook 'hs-minor-mode)
+  (add-hook 'java-mode-hook 'hs-minor-mode)
+  (add-hook 'emacs-lisp-mode-hook 'hs-minor-mode)
+  (add-hook 'tide-mode-hook 'hs-minor-mode)
+  (add-hook 'typescript-mode-hook 'hs-minor-mode)
+  (add-hook 'kotlin-mode-hook 'hs-minor-mode)
+  (add-hook 'swift-mode-hook 'hs-minor-mode)
+  (add-hook 'js-mode-hook 'hs-minor-mode)
   :config
   ; This _somehow_ fixes emacs deterministically freezing while (`/`) searching
   ; for certain strings.
@@ -324,31 +338,17 @@ The variables that govern the situation include:
   ; " scroll by N lines instead of default 1 line.
   ; set scrolloff=3
   (setq scroll-margin 3)
-  (evil-mode 1)
-  :init
-  ; next two lines required for evil-collection.
-  (setq evil-want-keybinding nil)
-  (setq evil-want-integration t)
-  ; hideshow
-  (add-hook 'json-mode-hook 'hs-minor-mode)
-  (add-hook 'java-mode-hook 'hs-minor-mode)
-  (add-hook 'emacs-lisp-mode-hook 'hs-minor-mode)
-  (add-hook 'tide-mode-hook 'hs-minor-mode)
-  (add-hook 'typescript-mode-hook 'hs-minor-mode)
-  (add-hook 'kotlin-mode-hook 'hs-minor-mode)
-  (add-hook 'swift-mode-hook 'hs-minor-mode)
-  (add-hook 'js-mode-hook 'hs-minor-mode))
+  (evil-mode 1))
 
 (use-package evil-collection
     :after evil
-    :init
-    (evil-collection-init)
     :config
     ;; org-mode
     (evil-define-key 'emacs org-agenda-mode-map (kbd "j") 'evil-next-line)
     (evil-define-key 'emacs org-agenda-mode-map (kbd "k") 'evil-previous-line)
     (evil-define-key '(normal insert) org-mode-map (kbd "C-c i") 'org-clock-in)
-    (evil-define-key '(normal insert) org-mode-map (kbd "C-c o") 'org-clock-out))
+    (evil-define-key '(normal insert) org-mode-map (kbd "C-c o") 'org-clock-out)
+    (evil-collection-init))
 
 (use-package general
   :after evil
@@ -613,7 +613,7 @@ _p_: project  ^ ^                 _c_: customize
     ("a" hydra-submenu-anki/body)))
 
 (use-package ace-window
-  :init
+  :config
   ; aw-keys are 0-9 by default, which is reasonable, but in the setup above,
   ; the keys are on the home row.
   (setq aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l)))
@@ -652,14 +652,13 @@ _p_: project  ^ ^                 _c_: customize
 
 (use-package whitespace
   :diminish whitespace-mode
-  :config
+  :init
   (setq whitespace-line-column 80) ;; limit line length
   (setq whitespace-style '(face tabs
                                 trailing
                                 empty
                                 space-before-tab::tab
                                 space-before-tab::space))
-  :init
   (add-hook 'prog-mode-hook 'whitespace-mode))
 
 (use-package macrostep
@@ -675,10 +674,9 @@ _p_: project  ^ ^                 _c_: customize
   (dolist (hook '(lisp-mode-hook
                   scheme-mode-hook
                   clojure-mode-hook
-                  emacs-lisp-mode-hook)))
-    ;(add-hook hook #'smartparens-strict-mode)
-  :config
-  ;; Disable highlights.
+                  emacs-lisp-mode-hook))
+    (add-hook hook #'smartparens-strict-mode))
+
   (setq sp-highlight-pair-overlay nil
         sp-highlight-wrap-overlay nil
         sp-highlight-wrap-tag-overlay nil)
@@ -686,6 +684,8 @@ _p_: project  ^ ^                 _c_: customize
         sp-autoskip-closing-pair 'always-end
         sp-autoskip-opening-pair t)
 
+  :config
+  ;; Disable highlights.
   ;(use-package smartparens-config)
   (smartparens-global-mode 1)
   (sp-pair "(" ")" :wrap "M-(")
@@ -698,8 +698,6 @@ _p_: project  ^ ^                 _c_: customize
 
 (use-package lispyville
   :diminish (lispyville-mode)
-  :commands
-  (lispyville-mode)
   :init
   (dolist (hook '(lisp-mode-hook
                   scheme-mode-hook
@@ -712,10 +710,10 @@ _p_: project  ^ ^                 _c_: customize
   (lispyville-set-key-theme
    '(operators
      s-operators
-     ;(additional-movement normal)
      slurp/barf-cp
      additional
-     escape)))
+     escape))
+  (lispyville-mode))
 
 (use-package ag)
 
@@ -734,26 +732,28 @@ _p_: project  ^ ^                 _c_: customize
   (when (eq system-type 'windows-nt)
     (setq projectile-indexing-method 'alien)
     (setq projectile-enable-caching t))
-  :config
   (setq projectile-enable-caching t)
+  :config
   (projectile-mode))
 
 (use-package counsel-projectile
   :after projectile
   :init
-  (counsel-projectile-mode)
   (defun counsel-projectile-switch-project-action-fzf (project)
     "Call `counsel-fzf' (ie fuzzy find-file)from PROJECT's root."
     (let ((default-directory project)
           (projectile-switch-project-action
            (lambda ()
              (counsel-fzf))))
-      (counsel-projectile-switch-project-by-name project))))
+      (counsel-projectile-switch-project-by-name project)))
+  :config
+  (counsel-projectile-mode))
 
 (use-package ibuffer-projectile
   :commands (ibuffer-projectile-set-filter-groups
              ibuffer-projectile-generate-filter-groups)
   :init
+  (setq ibuffer-projectile-prefix "Project: ")
   (defun +ibuffer-projectile-run ()
     "Set up `ibuffer-projectile'."
     (ibuffer-projectile-set-filter-groups)
@@ -761,19 +761,19 @@ _p_: project  ^ ^                 _c_: customize
       (ibuffer-do-sort-by-alphabetic)))
 
   (add-hook 'ibuffer-sidebar-mode-hook #'+ibuffer-projectile-run)
-  (add-hook 'ibuffer-hook #'+ibuffer-projectile-run)
-  :config
-  (setq ibuffer-projectile-prefix "Project: "))
+  (add-hook 'ibuffer-hook #'+ibuffer-projectile-run))
 
 (use-package rainbow-delimiters
-  :config (setq show-paren-delay 0)
-  (show-paren-mode 1)
-  :init (add-hook 'prog-mode-hook #'rainbow-delimiters-mode))
+  :init
+  (setq show-paren-delay 0)
+  (add-hook 'prog-mode-hook #'rainbow-delimiters-mode)
+  :config
+  (show-paren-mode 1))
 
 (use-package ivy
-  :bind (:map ivy-minibuffer-map
-              ("M-x" . ivy-dispatching-done))
-  :config
+  :after evil
+  :bind (:map ivy-minibuffer-map ("M-x" . ivy-dispatching-done))
+  :init
   (setq ivy-use-virtual-buffers nil)
   (setq ivy-flx-limit 100)
   (setq ivy-re-builders-alist
@@ -786,6 +786,11 @@ _p_: project  ^ ^                 _c_: customize
           (t . ivy--regex-plus)))
   (setq ivy-initial-inputs-alist nil)
 
+  (setq ivy-count-format "")
+  (setq ivy-height 15)
+  ;; this is the default
+  (setq ivy-do-completion-in-region t)
+  :config
   ;; swapping behavior
   (define-key ivy-minibuffer-map (kbd "RET") 'ivy-alt-done)
   (define-key ivy-minibuffer-map (kbd "C-j") 'ivy-done)
@@ -798,12 +803,7 @@ _p_: project  ^ ^                 _c_: customize
 
   ;; Escape quits.
   (with-eval-after-load 'evil
-    (define-key ivy-minibuffer-map [escape] 'minibuffer-keyboard-quit))
-
-  (setq ivy-count-format "")
-  (setq ivy-height 15)
-  ;; this is the default
-  (setq ivy-do-completion-in-region t))
+    (define-key ivy-minibuffer-map [escape] 'minibuffer-keyboard-quit)))
 
 (use-package counsel
   :bind (("M-x" . counsel-M-x))
@@ -815,37 +815,38 @@ _p_: project  ^ ^                 _c_: customize
              counsel-fzf-occur
              counsel-describe-face)
   :init
-  (setq projectile-switch-project-action 'counsel-fzf)
+  (with-eval-after-load 'projectile
+    (setq projectile-switch-project-action 'counsel-fzf))
+  (setq counsel-async-filter-update-time 100000)
+
+  (setq counsel-git-cmd "git ls-files --exclude-standard --full-name --others --cached --")
+  (setq counsel-rg-base-command "rg -i --no-heading --line-number --color never %s .")
+  (setq counsel-ag-base-command "ag -U --nocolor --nogroup %s -- .")
   :config
   (ivy-set-prompt 'counsel-fzf (lambda () "> "))
   (setenv "FZF_DEFAULT_COMMAND"
           "(git ls-files --exclude-standard --others --cached ||
         ind . -maxdepth 9 -path \"*/\\.*\" -prune -o -print -o -type l -print |
-           sed s/^..//) 2> /dev/null")
-  (setq counsel-async-filter-update-time 100000)
-  (setq counsel-git-cmd "git ls-files --exclude-standard --full-name --others --cached --")
-  (setq counsel-rg-base-command "rg -i --no-heading --line-number --color never %s .")
-  (setq counsel-ag-base-command "ag -U --nocolor --nogroup %s -- ."))
+           sed s/^..//) 2> /dev/null"))
 
 (use-package swiper
+  :commands (swiper)
+  :diminish ivy-mode
   :config
   ; Select input that happens to also match one of the candidates.
   ; e.g. Selecting 'bar' when there is candidate 'barricade'.
   ; Alternatively, c-M-j
-  (setq ivy-use-selectable-prompt t)
-  :commands (swiper)
-  :diminish ivy-mode)
+  (setq ivy-use-selectable-prompt t))
 
 (use-package selectrum
   :config
   (with-eval-after-load 'evil
     (define-key selectrum-minibuffer-map [escape] 'minibuffer-keyboard-quit))
-
   (selectrum-mode))
 
 (use-package prescient
   :after counsel
-  :config
+  :init
   ;; Order of filter methods does not affect candidate order, but may affect
   ;; highlighting and query speed.
   (setq prescient-filter-method '(prefix initialism literal regex))
@@ -858,20 +859,22 @@ _p_: project  ^ ^                 _c_: customize
 
   ;; Disable sorting by candidate length.
   (setq prescient-sort-length-enable nil)
+  :config
   (prescient-persist-mode))
 
 (use-package ivy-prescient
   :after prescient
   ;; Configures prescient for sorting ivy candidates.
-  :config
+  :init
   (setq ivy-prescient-retain-classic-highlighting t)
   ;; AFAICT prescient does not affect ivy filtering configured by
   ;; `ivy-re-builders-alist`, so toggling this var does nothing.
   (setq ivy-prescient-enable-filtering nil)
+  :config
   (ivy-prescient-mode))
 
 (use-package company-prescient
-  :after company-prescient
+  :after company
   :config
   (company-prescient-mode))
 
@@ -885,12 +888,12 @@ _p_: project  ^ ^                 _c_: customize
 
 (use-package company
   :diminish company-mode
-  :config
-  (company-tng-configure-default)
+  :init
   (setq company-idle-delay .01)
   (setq company-minimum-prefix-length 1)
+  :config
+  (company-tng-configure-default)
   (global-company-mode))
-  ;:hook (eshell-mode . disable-company-mode-in-eshell-mode))
 
 (use-package esh-autosuggest
   :hook (eshell-mode . esh-autosuggest-mode))
@@ -909,7 +912,7 @@ _p_: project  ^ ^                 _c_: customize
   ("\\.jsp\\'" . web-mode)
   ("\\.eex\\'" . web-mode)
   ("\\.tsx\\'" . web-mode)
-  :init
+  :config
   (add-hook 'web-mode-hook
             (lambda ()
               ;; Set up indentation.
@@ -919,7 +922,6 @@ _p_: project  ^ ^                 _c_: customize
                 (setq-local web-mode-code-indent-offset n)
                 (with-eval-after-load 'evil
                   (setq-local evil-shift-width n)))))
-  :config
   ;; Use `company-dabbrev-code' with `web-mode'.
   (when (boundp 'company-dabbrev-code-modes)
     (push 'web-mode company-dabbrev-code-modes))
@@ -937,13 +939,12 @@ _p_: project  ^ ^                 _c_: customize
   :mode
   ("\\.ts\\'" . typescript-mode)
   ("\\.ts$\\'" . typescript-mode)
-  :init
+  :config
   (add-hook 'typescript-mode-hook
             (lambda ()
               (setq-local typescript-indent-level 2)
               (with-eval-after-load 'evil
                 (setq-local evil-shift-width typescript-indent-level))))
-  :config
   (setq typescript-enabled-frameworks '(typescript)))
 
 (use-package flycheck)
@@ -952,7 +953,11 @@ _p_: project  ^ ^                 _c_: customize
   :commands (tide-setup)
   :config
   (setq tide-jump-to-definition-reuse-window nil)
-  :init
+  ;; Set up Typescript linting with `web-mode'.
+  ;; https://github.com/ananthakumaran/tide/pull/161
+  (eval-after-load 'flycheck
+    (lambda ()
+      (flycheck-add-mode 'typescript-tslint 'web-mode)))
   (defun +setup-tide-mode ()
     (interactive)
     (when (locate-dominating-file default-directory "tsfmt.json")
@@ -972,13 +977,7 @@ _p_: project  ^ ^                 _c_: customize
                 (setq-local web-mode-enable-auto-quoting nil)
                 (when (fboundp 'yas-activate-extra-mode)
                   (yas-activate-extra-mode 'typescript-mode))
-                (+setup-tide-mode))))
-  :config
-  ;; Set up Typescript linting with `web-mode'.
-  ;; https://github.com/ananthakumaran/tide/pull/161
-  (eval-after-load 'flycheck
-    (lambda ()
-      (flycheck-add-mode 'typescript-tslint 'web-mode))))
+                (+setup-tide-mode)))))
 
 (use-package restclient)
 
@@ -989,7 +988,7 @@ _p_: project  ^ ^                 _c_: customize
              magit-log
              magit-find-file
              magit-find-file-other-window)
-  :config
+  :init
   (defun +magit-git-submodule-update--init--recursive ()
     "Run $ git submodule update --init --recursive."
     (interactive)
@@ -1037,7 +1036,7 @@ _p_: project  ^ ^                 _c_: customize
        ;; 3b. mv a/submodule_tmp a/submodule
        (magit-run-git "rm" "--cached" path)
        (shell-command-to-string (format "mv %s_tmp %s" path path)))))
-
+  :config
   ; Disable binding for blame when in a magit diff buffer.
   (define-key magit-blob-mode-map (kbd "b") nil)
 
@@ -1051,30 +1050,29 @@ _p_: project  ^ ^                 _c_: customize
 (use-package evil-ediff
   :commands (evil-ediff-init)
   :init
-  (defun +evil-ediff-init ()
-    "Initialize with `evil-ediff-init' and remove the hook."
-    (evil-ediff-init)
-    (remove-hook 'ediff-mode-hook #'evil-ediff-init))
-  (add-hook 'ediff-mode-hook #'+evil-ediff-init)
-  :config
   (setq magit-ediff-dwim-show-on-hunks t)
   (setq ediff-window-setup-function 'ediff-setup-windows-plain)
   (setq ediff-split-window-function 'split-window-horizontally)
   (setq ediff-diff-options "-w")
-  (add-hook 'ediff-after-quit-hook-internal 'winner-undo))
+  (add-hook 'ediff-after-quit-hook-internal 'winner-undo)
+  (defun +evil-ediff-init ()
+    "Initialize with `evil-ediff-init' and remove the hook."
+    (evil-ediff-init)
+    (remove-hook 'ediff-mode-hook #'evil-ediff-init))
+  (add-hook 'ediff-mode-hook #'+evil-ediff-init))
 
 (use-package evil-magit
   :init
   (setq evil-magit-want-horizontal-movement t))
 
 (use-package ibuffer-sidebar
-  :config
+  :init
   (setq ibuffer-sidebar-use-custom-font t)
   (setq ibuffer-sidebar-face '(:family duc/font-family :height 120)))
 
 (use-package dired-subtree
   :commands (dired-subtree-toggle dired-subtree-cycle)
-  :config
+  :init
   (setq dired-subtree-use-backgrounds nil))
 
 (use-package vscode-icon
@@ -1086,7 +1084,7 @@ _p_: project  ^ ^                 _c_: customize
   :after vscode-icon
   :bind (("C-x C-n" . dired-sidebar-toggle-sidebar))
   :commands (dired-sidebar-toggle-sidebar)
-  :config
+  :init
   (setq dired-sidebar-use-term-integration t)
   (setq dired-sidebar-use-custom-font t)
   (setq dired-sidebar-width 30)
@@ -1103,18 +1101,21 @@ _p_: project  ^ ^                 _c_: customize
   :commands (all-the-icons-dired-mode))
 
 (use-package markdown-mode
-  :commands (markdown-mode gfm-mode)
-  :mode (("README\\.md\\'" . gfm-mode)
+  :commands
+  (markdown-mode gfm-mode)
+  :mode
+  (("README\\.md\\'" . gfm-mode)
          ("\\.md\\'" . markdown-mode)
          ("\\.markdown\\'" . markdown-mode))
-  :init (setq markdown-command "multimarkdown"))
+  :init
+  (setq markdown-command "multimarkdown"))
 
 (use-package swift-mode)
 
 (use-package kotlin-mode)
 
 (use-package lsp-mode
-  :config
+  :init
   (setq lsp-log-io t))
 
 ; Python projects should initialize the python lsp themselves.
@@ -1125,7 +1126,7 @@ _p_: project  ^ ^                 _c_: customize
                          (require 'lsp-python-ms))))
 
 (use-package yasnippet
-  :init
+  :config
   (yas-global-mode 1))
 
 (use-package racket-mode)
@@ -1148,36 +1149,42 @@ _p_: project  ^ ^                 _c_: customize
   (setq vterm-module-cmake-args "-D USE_SYSTEM_LIBVTERM=no")
   (setq vterm-kill-buffer-on-exit nil)
   (setq vterm-max-scrollback 100000)
+  (setq vterm-clear-scrollback-when-clearing t)
+  :config
   (general-define-key
    :keymaps 'vterm-mode-map
-   "M-<escape>" 'evil-collection-vterm-toggle-send-escape))
+   "M-<escape>" 'evil-collection-vterm-toggle-send-escape)
+  (general-define-key
+   :keymaps 'vterm-mode-map
+   "M-k" 'vterm-clear))
 
 (use-package tex
   :straight auctex
   :defer t
-  :config
+  :init
   (setq TeX-engine "xelatex")
   (setq TeX-auto-save t)
   (setq TeX-parse-self t))
 
 (use-package leetcode
-  :config
+  :init
   (setq leetcode-prefer-language "python3")
+  :config
   (evil-define-key 'normal tabulated-list-mode-map (kbd "RET") 'leetcode-show-current-problem))
 
 (use-package ereader
   :mode
   ("\\.epub\\'" . ereader-mode)
-  :init
+  :config
   (evil-define-key 'normal ereader-mode-map (kbd "0") 'evil-digit-argument-or-evil-beginning-of-line))
 
 (use-package org-download
-  :config
-  (setq-default org-download-image-dir "~/dev/notes/img")
-  (setq-default org-download-screenshot-method "screencapture -i %s"))
+  :init
+  (setq org-download-image-dir "~/dev/notes/img")
+  (setq org-download-screenshot-method "screencapture -i %s"))
 
 (use-package anki-editor
-  :config
+  :init
   (setq anki-editor-org-tags-as-anki-tags nil)
   (setq request-log-level 'debug))
 
@@ -1233,8 +1240,6 @@ _p_: project  ^ ^                 _c_: customize
             (projectile-project-root)
             ".venv/bin/python"))))
  '(smartrep-mode-line-active-bg (solarized-color-blend "#859900" "#073642" 0.2))
- '(term-default-bg-color "#002b36")
- '(term-default-fg-color "#839496")
  '(vc-annotate-background "#0E0E0E")
  '(vc-annotate-background-mode nil)
  '(vc-annotate-color-map
@@ -1258,8 +1263,4 @@ _p_: project  ^ ^                 _c_: customize
      (360 . "#FAFAFA")))
  '(vc-annotate-very-old-color "#DADADA")
  '(weechat-color-list
-   '(unspecified "#002b36" "#073642" "#a7020a" "#dc322f" "#5b7300" "#859900" "#866300" "#b58900" "#0061a8" "#268bd2" "#a00559" "#d33682" "#007d76" "#2aa198" "#839496" "#657b83"))
- '(xterm-color-names
-   ["#073642" "#dc322f" "#859900" "#b58900" "#268bd2" "#d33682" "#2aa198" "#eee8d5"])
- '(xterm-color-names-bright
-   ["#002b36" "#cb4b16" "#586e75" "#657b83" "#839496" "#6c71c4" "#93a1a1" "#fdf6e3"]))
+   '(unspecified "#002b36" "#073642" "#a7020a" "#dc322f" "#5b7300" "#859900" "#866300" "#b58900" "#0061a8" "#268bd2" "#a00559" "#d33682" "#007d76" "#2aa198" "#839496" "#657b83")))
