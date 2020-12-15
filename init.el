@@ -241,6 +241,8 @@ The variables that govern the situation include:
                           :weight duc/font-weight
                           :width 'normal)))
 
+  (duc/theme-setup-mode-line-font)
+
   (advice-add 'load-theme :after #'duc/theme-setup-mode-line-font)
 
   (let ((enable-mode-line-setup nil))
