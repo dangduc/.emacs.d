@@ -698,7 +698,14 @@ _p_: project  ^ ^                 _c_: customize
   (sp-pair "[" "]" :wrap "M-]")
   (sp-pair "{" "}" :wrap "M-{")
   (sp-pair "{" "}" :wrap "M-}")
-  (sp-pair "\"" "\"" :wrap "M-\""))
+  (sp-pair "\"" "\"" :wrap "M-\"")
+  ; Remove global policies.
+  (sp-pair "`" nil :actions :rem)
+  (sp-pair "'" nil :actions :rem)
+  ; Add major-mode policies.
+  (dolist (c '("'" "`"))
+    (sp-local-pair '(typescript-mode
+                     javascript-mode) c c)))
 
 (use-package lispyville
   :diminish (lispyville-mode)
