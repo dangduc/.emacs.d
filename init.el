@@ -221,7 +221,7 @@ The variables that govern the situation include:
 
   ;; nil or dark, to switch to between black or white title text
   ;; e.g. (duc/alist-replace-set default-frame-alist (ns-appearance . dark|nil))
-  (duc/alist-replace-set default-frame-alist (ns-appearance . dark))
+  (duc/alist-replace-set default-frame-alist (ns-appearance . nil))
 
   (duc/alist-replace-set default-frame-alist (ns-use-thin-smoothing . t))
   (duc/alist-replace-set default-frame-alist (ns-antialias-text . nil))
@@ -625,6 +625,8 @@ _p_: project  ^ ^                 _c_: customize
 (use-package doom-modeline
   :ensure t
   :after all-the-icons
+  :init
+  (setq doom-modeline-icon nil)
   :hook (after-init . doom-modeline-mode))
 
 (use-package default-black-theme
@@ -637,7 +639,7 @@ _p_: project  ^ ^                 _c_: customize
 
 (use-package doom-themes
   :config
-  (load-theme 'doom-spacegrey t))
+  (load-theme 'doom-flatwhite t))
 
 (use-package solarized-theme)
 
