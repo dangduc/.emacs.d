@@ -638,7 +638,19 @@ _p_: project  ^ ^                 _c_: customize
   :no-require t)
 
 (use-package doom-themes
+  :after vterm
   :config
+  (defun duc/theme-setup-doom-flatwhite-theme (&rest _)
+    "Tweak vterm display colors for doom-flatwhite"
+    (let ((current-theme (car custom-enabled-themes)))
+      (when (eq current-theme 'doom-flatwhite)
+        (set-face-attribute 'vterm-color-black nil
+                            ;; "Normal" ansi color for foreground black (maybe).
+                            :foreground "#7a7a7a"
+                            ;; "Bright" ANSI color for foreground black (maybe).
+                            :background "#a1a1a1"))))
+  (advice-add 'load-theme :after #'duc/theme-setup-doom-flatwhite-theme)
+
   (load-theme 'doom-flatwhite t))
 
 (use-package solarized-theme)
