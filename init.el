@@ -460,7 +460,7 @@ _B_: bindings
     "
 ^Font^                  ^Face^                 ^Buffer^
 ^^^^^^^^----------------------------------------------------------------
-_f_: font            _c_: describe face     _r_: hex colors
+_f_: font            _c_: describe face     _h_: hex colors
 _s_: font size       _t_: theme             _w_: whitespace
 _+_: font scale +    ^ ^                    _l_: word-wrap
 _-_: font scale -
@@ -477,7 +477,7 @@ _L_: font line spacing
     ("L" duc/set-font-line-spacing)
     ("c" describe-face)
     ("t" duc/selectrum-load-theme)
-    ("r" rainbow-mode)
+    ("h" rainbow-mode)
     ("w" whitespace-mode)
     ("l" visual-line-mode))
   (defhydra hydra-submenu-package (:exit t)
