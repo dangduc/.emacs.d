@@ -143,7 +143,7 @@ The variables that govern the situation include:
                (function decision-note-template))
               ("t" "TODO" entry (file+datetree "") "* TODO %<%H%M:%S> %^{todo}"
                :immediate-finish t)
-              ("r" "Region" entry (file+datetree "") "* %<%H%M:%S> \n#+begin_src %(concat language)\n%i\n#+end_src\n%(concat link)"
+              ("r" "Region" entry (file+datetree "") "* %<%H%M:%S> %(concat filename)\n#+begin_src %(concat language)\n%i\n#+end_src\n%(concat link)"
                :immediate-finish t)
               ("2" "Anki - Basic" entry (file+datetree "") "* %<%H%M:%S> English Definition :anki:\n:PROPERTIES:\n:ANKI_DECK: Default\n:ANKI_NOTE_TYPE: Basic\n:ANKI_TAGS: english definition\n:END:\n** Front\n** Back")
               ("1" "Anki - Word Pronunciation" entry (file+datetree "") "* %<%H%M:%S> English Pronunciation - %^{word} :anki:\n:PROPERTIES:\n:ANKI_DECK: Default\n:ANKI_NOTE_TYPE: Word-Pronunciation\n:ANKI_TAGS: english pronunciation\n:END:\n** Word\n%\\1\n** Picture\n** Sound\n** Pronunciation"))))
