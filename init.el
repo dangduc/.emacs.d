@@ -629,6 +629,7 @@ _p_: project  ^ ^                 _c_: customize
 ;; themes
 
 (use-package doom-modeline
+  :disabled t
   :ensure t
   :after all-the-icons
   :init
@@ -643,6 +644,12 @@ _p_: project  ^ ^                 _c_: customize
 (use-package flatland-black-theme
   :no-require t)
 
+(use-package seoul256-theme
+  :straight (:host github
+                   :repo "dangduc/seoul256-emacs")
+  :config
+  (setq seoul256-background 253))
+
 (use-package doom-themes
   :after vterm
   :config
@@ -655,9 +662,7 @@ _p_: project  ^ ^                 _c_: customize
                             :foreground "#7a7a7a"
                             ;; "Bright" ANSI color for foreground black (maybe).
                             :background "#a1a1a1"))))
-  (advice-add 'load-theme :after #'duc/theme-setup-doom-flatwhite-theme)
-
-  (load-theme 'doom-flatwhite t))
+  (advice-add 'load-theme :after #'duc/theme-setup-doom-flatwhite-theme))
 
 (use-package solarized-theme)
 
