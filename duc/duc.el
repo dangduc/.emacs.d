@@ -148,12 +148,6 @@
           "[" (string-trim (shell-command-to-string "git rev-parse --short HEAD")) "]"
           "]"))
 
-(defun duc/org-capture-region-with-code-block ()
-  (interactive)
-  (let ((link (duc/org-link-create-filename-line-number))
-        (language (replace-regexp-in-string "-mode$" "" (symbol-name major-mode))))
-    (org-capture nil "r")))
-
 (defun duc/racket-eval-last-sexp ()
   "Eval the previous sexp asynchronously and `message' the result."
   (interactive)

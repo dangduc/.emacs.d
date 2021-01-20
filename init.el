@@ -248,7 +248,14 @@ The variables that govern the situation include:
   (let ((enable-mode-line-setup nil))
     (when enable-mode-line-setup
       (duc/theme-setup-mode-line)
-      (advice-add 'load-theme :after #'duc/theme-setup-mode-line))))
+      (advice-add 'load-theme :after #'duc/theme-setup-mode-line)))
+
+  (defun duc/org-capture-region-with-code-block ()
+    (interactive)
+    (let ((filename (format "%s::%d" (buffer-name) (line-number-at-pos)))
+          (link (duc/org-link-create-filename-line-number))
+          (language (replace-regexp-in-string "-mode$" "" (symbol-name major-mode))))
+      (org-capture nil "r"))))
 
 (with-eval-after-load 'evil
   (define-key minibuffer-local-map [escape] 'minibuffer-keyboard-quit)
