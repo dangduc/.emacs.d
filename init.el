@@ -1042,6 +1042,9 @@ _p_: project  ^ ^                 _c_: customize
   (setq magit-repository-directories '("~/dev" "~/.emacs.d"))
   (setq magit-refresh-status-buffer nil)
 
+  (setq magit-log-margin '(t "%b %d, %Y " magit-log-margin-width t 18))
+  (setq magit-log-show-refname-after-summary t)
+
   ;; Add rebase argument to pull
   ;; https://github.com/magit/magit/issues/2597
   (defun +magit-submodule-remove (path &optional leave-in-work-tree)
