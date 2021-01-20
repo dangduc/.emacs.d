@@ -215,7 +215,6 @@ The variables that govern the situation include:
   (defvar duc/duc-dir (expand-file-name "duc" user-emacs-directory))
   (add-to-list 'load-path duc/duc-dir)
   :config
-  (car '(ns-transparent-titlebar . t))
   ;; enable transparent osx titlebar (a la Chrome)
   (duc/alist-replace-set default-frame-alist (ns-transparent-titlebar . t))
 
