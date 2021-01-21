@@ -387,7 +387,11 @@ The variables that govern the situation include:
     (general-define-key
      :states '(normal insert motion visual emacs)
      :keymaps 'override
-     "s-N" #'(lambda () (interactive) (duc/add-bnote-with-char "-")))))
+     "s-N" #'(lambda () (interactive) (duc/add-bnote-with-char "-")))
+    (general-define-key
+     :states '(normal insert motion visual emacs)
+     :keymaps 'override
+     "s-L" #'(lambda () (interactive) (duc/insert-bnote-lozenge-empty-link)))))
 
 (use-package hydra
   :config

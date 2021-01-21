@@ -379,29 +379,33 @@ AG-PROMPT, if non-nil, is passed as `ivy-read' prompt argument. "
             (copy-file last-entry
                        new-entry)
           (append-to-file "#+STARTUP: showeverything
+#+LINK: ◊ file:bnote-%s.org
 
 * Daily Log
 
 * Reference
   • *Tasks*: things you have to do. s-T.
-    x Task complete.
-    > Task migrated into (a) collection.
-    < Task scheduled into future log.
+x • Task complete.
   - *Notes*: Things you don't want to forgot. s-N.
   ◦ *Events*: Noteworth moments in time. s-E.
  +• Task irrelevant.+
-^ • Priority note.
-! • Inspiration note.
-  - Bnotes are adapted from [[https://bulletjournal.com]]."
+^ - Priority note.
+! - Inspiration note.
+  - [[◊:210101]]. To refer to other notes. s-L.
+  - Format is adapted from [[https://bulletjournal.com]]."
                           nil new-entry))))
     (find-file new-entry)
     (unless new-entry-exists-p
       (search-forward "* Daily Log"))))
 
+(defun duc/insert-bnote-lozenge-empty-link ()
+    (interactive)
+  (insert (concat "[[◊:" (format-time-string "%y%2m%2d") "]]")))
+
 (defun duc/add-bnote-with-char (bullet)
   (interactive)
   (let ((indent-level
-         (or (string-match-p "[•◦x<>-]"
+         (or (string-match-p "[•◦<>-]"
                              (buffer-substring (line-beginning-position)
                                                (line-end-position)))
              2)))
