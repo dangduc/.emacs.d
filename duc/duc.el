@@ -382,7 +382,6 @@ AG-PROMPT, if non-nil, is passed as `ivy-read' prompt argument. "
 
 * Daily Log
 
-
 * Reference
   • *Tasks*: things you have to do. s-T.
     x Task complete.
@@ -397,8 +396,7 @@ AG-PROMPT, if non-nil, is passed as `ivy-read' prompt argument. "
                           nil new-entry))))
     (find-file new-entry)
     (unless new-entry-exists-p
-      (search-forward "* Daily Log
-"))))
+      (search-forward "* Daily Log"))))
 
 (defun duc/add-bnote-with-char (bullet)
   (interactive)
