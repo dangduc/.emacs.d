@@ -289,6 +289,7 @@ https://emacs-doctor.com/emacs-strip-tease.html"
    t))
 
 (defcustom duc/create-linked-note-default-dir "~/dev/huhmann/" nil)
+(defcustom duc/create-bnote-default-dir "~/dev/notes/" nil)
 
 (defun duc/create-linked-note (&optional project)
   (interactive)
@@ -358,6 +359,62 @@ AG-PROMPT, if non-nil, is passed as `ivy-read' prompt argument. "
                         (counsel-delete-process)
                         (swiper--cleanup))
               :caller 'counsel-ag)))
+
+(defun duc/create-or-open-bnote ()
+  (interactive)
+  (let* ((new-entry (concat duc/create-bnote-default-dir
+                           "bnote"
+                           "-"
+                           (format-time-string "%y%2m%2d")
+                           ".org"
+                           ))
+         (new-entry-exists-p (or (get-buffer new-entry)
+                                 (file-exists-p new-entry))))
+    (unless new-entry-exists-p
+      ; Entry not found, so we'll create a new entry.
+      (let ((last-entry (car (last (directory-files duc/create-bnote-default-dir
+                                                    t
+                                                    "^bnote-")))))
+        (if (and last-entry (file-exists-p last-entry))
+            (copy-file last-entry
+                       new-entry)
+          (append-to-file "#+STARTUP: showeverything
+
+* Daily Log
+
+
+* Reference
+  • *Tasks*: things you have to do. s-T.
+    x Task complete.
+    > Task migrated into (a) collection.
+    < Task scheduled into future log.
+  - *Notes*: Things you don't want to forgot. s-N.
+  ◦ *Events*: Noteworth moments in time. s-E.
+ +• Task irrelevant.+
+^ • Priority note.
+! • Inspiration note.
+  - Bnotes are adapted from [[https://bulletjournal.com]]."
+                          nil new-entry))))
+    (find-file new-entry)
+    (unless new-entry-exists-p
+      (search-forward "* Daily Log
+"))))
+
+(defun duc/add-bnote-with-char (bullet)
+  (interactive)
+  (let ((indent-level
+         (or (string-match-p "[•◦x<>-]"
+                             (buffer-substring (line-beginning-position)
+                                               (line-end-position)))
+             2)))
+    (move-end-of-line nil)
+    (open-line 1)
+    (next-line)
+    (insert
+     (concat (make-string indent-level ? )
+             bullet
+             " "))
+    (move-end-of-line nil)))
 
 (defun duc/anki-connect-push ()
   (interactive)

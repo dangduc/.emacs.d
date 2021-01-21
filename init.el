@@ -365,7 +365,29 @@ The variables that govern the situation include:
   (general-define-key
    :states '(normal motion visual emacs)
    :keymaps 'override
-   "<SPC>" 'hydra-main-menu/body))
+   "<SPC>" 'hydra-main-menu/body)
+  (with-eval-after-load 'duc
+    ; https://en.wikipedia.org/wiki/Interpunct#In_mathematics_and_science
+    (general-define-key
+     :states '(insert emacs)
+     :keymaps 'override
+     "s-(" #'(lambda () (interactive) (insert "•")))
+    (general-define-key
+     :states '(insert emacs)
+     :keymaps 'override
+     "s-)" #'(lambda () (interactive) (insert "◦")))
+    (general-define-key
+     :states '(normal insert motion visual emacs)
+     :keymaps 'override
+     "s-T" #'(lambda () (interactive) (duc/add-bnote-with-char "•")))
+    (general-define-key
+     :states '(normal insert motion visual emacs)
+     :keymaps 'override
+     "s-E" #'(lambda () (interactive) (duc/add-bnote-with-char "◦")))
+    (general-define-key
+     :states '(normal insert motion visual emacs)
+     :keymaps 'override
+     "s-N" #'(lambda () (interactive) (duc/add-bnote-with-char "-")))))
 
 (use-package hydra
   :config
@@ -422,6 +444,7 @@ _f_/_w_: maximize
     ("w" save-buffer "write file")
     ("i" (find-file "~/.emacs.d/init.el" ) "init.el")
     ("I" (find-file "~/.emacs.d/duc/duc.el" ) "duc.el")
+    ("b" duc/create-or-open-bnote "bnote")
     ("1" (find-file "~/dev/notes/log.org" ) "log.org")
     ("2" (find-file "~/dev/notes/how-to.org" ) "how-to.org")
     ("3" shell-command-on-region "M-|") ;; e.g. "nc termbin.com 9999"
@@ -434,7 +457,7 @@ _f_/_w_: maximize
     ("z" duc/create-linked-note "create linked note")
     ("Z" (duc/create-linked-note "~/dev/chrestoturing/") "create chrestoturing note")
     ("T" (multi-occur-in-matching-buffers "log.org" "\\*\\*\\*\\* TODO") "View TODOs")
-    ("b" duc/sidebar-toggle "sidebar"))
+    ("s" duc/sidebar-toggle "sidebar"))
   (defhydra hydra-submenu-help (:exit t :hint nil)
     "
 ^Describe^           ^Info^
@@ -537,13 +560,14 @@ _P_: 80-char sentences
               ^org-mode^
 ^^^^^^^^-----------------------------------------------------------------------
  _A_: agenda  _c_: C-c C-c  _e_: encrypt entry        _s_: store link at P
- ^ ^          ^ ^           _E_: encrypt all entries  _S_: insert link at P
+ _b_: bnote   ^ ^           _E_: encrypt all entries  _S_: insert link at P
  _n_: narrow  ^ ^           _d_: decrypt entry        _o_: open link
  _N_: widen   ^ ^           _D_: decrypt all entries  _L_: toggle desc links
 ^ ^
  _m_: region->md  ^ ^       _t_: insert template      _l_: search & insert linked link
 "
     ("A" org-agenda)
+    ("b" duc/create-or-open-bnote)
     ("c" org-ctrl-c-ctrl-c)
     ("e" org-encrypt-entry)
     ("E" org-encrypt-entries)
