@@ -172,12 +172,23 @@
   (pcase major-mode
     ('racket-mode (duc/racket-eval-last-sexp))
     ('emacs-lisp-mode (eval-last-sexp p))
-    ('python-mode (shell-command (concat "python3" " " (buffer-name))))
+    ('python-mode
+     (unless (get-buffer (format "*Python[%s]*" (buffer-name)))
+       (let ((buffer (buffer-name)))
+         (run-python nil t t)
+         (pop-to-buffer buffer)))
+     (cond ((use-region-p) (python-shell-send-string
+                            (buffer-substring (region-beginning)
+                                              (region-end))))
+           (t (python-shell-send-buffer))))
     ('latex-mode (preview-section))
     (_ (eval-last-sexp p))))
 
 (setq async-shell-command-display-buffer nil)
 (setq shell-command-dont-erase-buffer 'end-last-out)
+
+(setq python-shell-interpreter "python3")
+(setq python-shell-completion-native-enable nil)
 
 (defun duc/eval-buffer ()
   (interactive)
