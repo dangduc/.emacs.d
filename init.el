@@ -616,16 +616,16 @@ _p_/_a_: push notes         _i_: screenshot
     "
 ^Navigate^       ^Search^           ^Action^          ^Application
 ^^^^^^^^-----------------------------------------------------------------
-_h_: left     _,_: in files       _SPC_: M-x        _g_: magit
-_l_: right    _<_: occur in files _b_: buffers      _o_: org-mode
-_k_: up       ^ ^                 _e_: eval         _s_: shell
-_j_: down     _>_: occur in file  _w_: window/frame _u_: package
-_J_: jump     ^ ^                 _L_: lc           _a_: anki
-_\\_: vsplit   ^ ^                 ^ ^
-_-_: hsplit   ^ ^                 _H_: help
-_n_: buffer   ^ ^                 _?_: help
-_m_: files    ^ ^                 _f_: file
-_p_: project  ^ ^                 _c_: customize
+_h_: left     _,_: in files       _SPC_: M-x          _g_: magit
+_l_: right    _<_: occur in files   _b_: buffers      _o_: org-mode
+_k_: up       ^ ^                   _e_: eval         _E_: eval-expression
+_j_: down     _>_: occur in file    _w_: window/frame _s_: shell
+_J_: jump     ^ ^                   _L_: lc           _u_: package
+_\\_: vsplit   ^ ^                   ^ ^               _a_: anki
+_-_: hsplit   ^ ^                   _H_: help
+_n_: buffer   ^ ^                   _?_: help
+_m_: files    ^ ^                   _f_: file
+_p_: project  ^ ^                   _c_: customize
 "
     ("h" evil-window-left)
     ("l" evil-window-right)
@@ -647,6 +647,7 @@ _p_: project  ^ ^                 _c_: customize
     ("b" hydra-submenu-buffer/body)
     ("c" hydra-submenu-customize-face/body)
     ("e" hydra-submenu-eval/body)
+    ("E" eval-expression)
     ("w" hydra-submenu-window/body)
     ("H" hydra-submenu-help/body)
     ("f" hydra-submenu-file/body)
