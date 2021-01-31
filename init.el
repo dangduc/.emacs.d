@@ -254,7 +254,14 @@ The variables that govern the situation include:
     (let ((filename (format "%s::%d" (buffer-name) (line-number-at-pos)))
           (link (duc/org-link-create-filename-line-number))
           (language (replace-regexp-in-string "-mode$" "" (symbol-name major-mode))))
-      (org-capture nil "r"))))
+      (org-capture nil "r")))
+
+  (add-hook 'org-mode-hook
+            (lambda ()
+              (cond ((string-prefix-p "bnote-" (buffer-name))
+                     (setq-local normal-auto-fill-function 'bnote-auto-fill-function)
+                     (auto-fill-mode t)
+                     (visual-line-mode nil))))))
 
 (with-eval-after-load 'evil
   (define-key minibuffer-local-map [escape] 'minibuffer-keyboard-quit)

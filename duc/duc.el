@@ -418,6 +418,25 @@ x • Task complete.
              " "))
     (move-end-of-line nil)))
 
+(defun bnote-auto-fill-function ()
+  ;; Replaces org-auto-fill-function as fn for normal-auto-fill-function
+  ;; under auto-fill-mode.
+  ;; Set this function within org file local variables:
+  ;; # Local Variables:
+  ;; # normal-auto-fill-function: bnote-auto-fill-function
+  ;; # End:
+  ;;
+  ;; Check if auto-filling is meaningful.
+  (let ((fc (current-fill-column)))
+    (when (and fc (> (current-column) fc))
+      (let* ((fill-prefix (replace-regexp-in-string "[•◦<>-]"
+                                                    " "
+                                                    (org-adaptive-fill-function)))
+             ;; Enforce empty fill prefix, if required.  Otherwise, it
+             ;; will be computed again.
+             (adaptive-fill-mode (not (equal fill-prefix ""))))
+        (when fill-prefix (do-auto-fill))))))
+
 (defun duc/anki-connect-push ()
   (interactive)
   (let ()
