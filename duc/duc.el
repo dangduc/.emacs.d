@@ -11,7 +11,7 @@
 (defmacro duc/alist-replace-set (list-var element)
   `(setq ,list-var (duc/alist-replace ,list-var ,element)))
 
-(defvar duc/font-family "Iosevka Term")
+(defvar duc/font-family "Iosevka")
 (defvar duc/font-height 160)
 
 (defvar duc/font-family-mode-line "Concourse T3 Tab")
