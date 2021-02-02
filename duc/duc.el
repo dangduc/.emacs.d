@@ -440,9 +440,15 @@ x • Task complete.
   ;; Check if auto-filling is meaningful.
   (let ((fc (current-fill-column)))
     (when (and fc (> (current-column) fc))
-      (let* ((fill-prefix (replace-regexp-in-string "[•◦<>-]"
-                                                    " "
-                                                    (org-adaptive-fill-function)))
+      (let* ((fill-prefix
+              (replace-regexp-in-string "[•◦<>-]"
+                                        " "
+                                        (let ((line-sans-bnote-prefixes (replace-regexp-in-string "^[\\^x!]"
+                                                                                                  " "
+                                                                                                  (thing-at-point 'line t))))
+                                          (if (string-match adaptive-fill-regexp
+                                                            line-sans-bnote-prefixes)
+                                              (match-string 0 line-sans-bnote-prefixes)))))
              ;; Enforce empty fill prefix, if required.  Otherwise, it
              ;; will be computed again.
              (adaptive-fill-mode (not (equal fill-prefix ""))))
