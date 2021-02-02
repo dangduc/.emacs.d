@@ -254,10 +254,9 @@ The variables that govern the situation include:
 
   (add-hook 'org-mode-hook
             (lambda ()
-              (cond ((string-prefix-p "bnote-" (buffer-name))
-                     (setq-local normal-auto-fill-function 'bnote-auto-fill-function)
-                     (auto-fill-mode t)
-                     (setq-local truncate-lines t))))))
+              (setq-local normal-auto-fill-function 'bnote-auto-fill-function)
+              (auto-fill-mode t)
+              (setq-local truncate-lines t))))
 
 (with-eval-after-load 'evil
   (define-key minibuffer-local-map [escape] 'minibuffer-keyboard-quit)
