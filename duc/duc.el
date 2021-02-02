@@ -395,14 +395,17 @@ AG-PROMPT, if non-nil, is passed as `ivy-read' prompt argument. "
 * Daily Log
 
 * Reference
+  :PROPERTIES:
+  :VISIBILITY: folded
+  :END:
   • *Tasks*: things you have to do. s-T.
 x • Task complete.
   - *Notes*: Things you don't want to forgot. s-N.
   ◦ *Events*: Noteworth moments in time. s-E.
- +• Task irrelevant.+
 ^ - Priority note.
 ! - Inspiration note.
-  - [[◊:210101]]. To refer to other notes. s-L.
+  - [[◊:210101]] to refer to other notes. s-L.
+  - Highlight paragraphs and M-q to redo newlines.
   - Format is adapted from [[https://bulletjournal.com]]."
                           nil new-entry))))
     (find-file new-entry)
