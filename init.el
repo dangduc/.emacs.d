@@ -93,10 +93,6 @@
 ;; [[Re: on specifying the C source code directory][https://lists.gnu.org/archive/html/help-gnu-emacs/2016-02/msg00007.html]].
 (setq find-function-C-source-directory (concat "~/dev/emacs-" emacs-version "/src"))
 
-;; word-wrap
-(add-hook 'org-mode-hook (lambda ()
-                           (visual-line-mode t)))
-
 ;; Display full link syntax (e.g. [[https://orgmode.org][Org website]]).
 (setq org-descriptive-links nil)
 
@@ -261,7 +257,7 @@ The variables that govern the situation include:
               (cond ((string-prefix-p "bnote-" (buffer-name))
                      (setq-local normal-auto-fill-function 'bnote-auto-fill-function)
                      (auto-fill-mode t)
-                     (visual-line-mode nil))))))
+                     (setq-local truncate-lines t))))))
 
 (with-eval-after-load 'evil
   (define-key minibuffer-local-map [escape] 'minibuffer-keyboard-quit)
@@ -519,7 +515,7 @@ _L_: font line spacing
     ("t" duc/selectrum-load-theme)
     ("h" rainbow-mode)
     ("w" whitespace-mode)
-    ("l" visual-line-mode))
+    ("l" toggle-truncate-lines))
   (defhydra hydra-submenu-package (:exit t)
     ("i" straight-use-package "install")
     ("f" straight-freeze-versions "freeze lockfile")
