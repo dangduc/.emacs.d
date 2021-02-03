@@ -1258,6 +1258,10 @@ _p_: project  ^ ^                   _c_: customize
 
 (use-package osx-dictionary)
 
+(use-package elfeed
+  :config
+  (setq elfeed-feeds local/elfeed-feeds))
+
 
 ;; End package declarations
 
