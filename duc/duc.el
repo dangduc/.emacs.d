@@ -406,6 +406,7 @@ x • Task complete.
 ! - Inspiration note.
   - [[◊:210101]] to refer to other notes. s-L.
   - Highlight paragraphs and M-q to redo newlines.
+  - C-c C-c with point to refresh in-buffer settings.
   - Format is adapted from [[https://bulletjournal.com]]."
                           nil new-entry))))
     (find-file new-entry)
