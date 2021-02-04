@@ -373,19 +373,19 @@ The variables that govern the situation include:
     (general-define-key
      :states '(insert emacs)
      :keymaps 'override
-     "s-(" #'(lambda () (interactive) (insert "•")))
+     "s-(" #'(lambda () (interactive) (insert "◼")))
     (general-define-key
      :states '(insert emacs)
      :keymaps 'override
-     "s-)" #'(lambda () (interactive) (insert "◦")))
+     "s-)" #'(lambda () (interactive) (insert "◻")))
     (general-define-key
      :states '(normal insert motion visual emacs)
      :keymaps 'override
-     "s-T" #'(lambda () (interactive) (duc/add-bnote-with-char "•")))
+     "s-T" #'(lambda () (interactive) (duc/add-bnote-with-char "◼")))
     (general-define-key
      :states '(normal insert motion visual emacs)
      :keymaps 'override
-     "s-E" #'(lambda () (interactive) (duc/add-bnote-with-char "◦")))
+     "s-E" #'(lambda () (interactive) (duc/add-bnote-with-char "◻")))
     (general-define-key
      :states '(normal insert motion visual emacs)
      :keymaps 'override

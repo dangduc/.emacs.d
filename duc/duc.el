@@ -398,12 +398,12 @@ AG-PROMPT, if non-nil, is passed as `ivy-read' prompt argument. "
   :PROPERTIES:
   :VISIBILITY: folded
   :END:
-  • *Tasks*: things you have to do. s-T.
-x • Task complete.
+  ◼ *Tasks*: things you have to do. s-T.
+x ◼ Task complete.
   - *Notes*: Things you don't want to forgot. s-N.
-  ◦ *Events*: Noteworth moments in time. s-E.
-^ - Priority note.
-! - Inspiration note.
+  ◻ *Events*: Noteworth moments in time. s-E.
+^ - Priority entry.
+! - Inspiration entry.
   - [[◊:210101]] to refer to other notes. s-L.
   - Highlight paragraphs and M-q to redo newlines.
   - C-c C-c with point to refresh in-buffer settings.
@@ -420,7 +420,7 @@ x • Task complete.
 (defun duc/add-bnote-with-char (bullet)
   (interactive)
   (let ((indent-level
-         (or (string-match-p "[•◦<>-]"
+         (or (string-match-p "[•◦◼◻<>-]"
                              (buffer-substring (line-beginning-position)
                                                (line-end-position)))
              2)))
@@ -442,10 +442,11 @@ x • Task complete.
   ;; # End:
   ;;
   ;; Check if auto-filling is meaningful.
-  (let ((fc (current-fill-column)))
+  (let ((adaptive-fill-regexp (purecopy "[ \t]*\\([-–!|#%;>*·•◼‣⁃◦◻]+[ \t]*\\)*"))
+        (fc (current-fill-column)))
     (when (and fc (> (current-column) fc))
       (let* ((fill-prefix
-              (replace-regexp-in-string "[•◦<>-]"
+              (replace-regexp-in-string "[•◦◼◻<>-]"
                                         " "
                                         (let ((line-sans-bnote-prefixes (replace-regexp-in-string "^[\\^x!]"
                                                                                                   " "
