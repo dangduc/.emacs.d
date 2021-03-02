@@ -1,9 +1,32 @@
+(defvar before-user-init-time (current-time)
+  "Value of `current-time' when Emacs begins loading `user-init-file'.")
+(message "Loading Emacs...done (%.3fs)"
+         (float-time (time-subtract before-user-init-time
+                                    before-init-time)))
+
 (load "~/.emacs.d/local-declarations.el")
 (load "~/.emacs.d/local.el")
 
 (setq ring-bell-function #'ignore)
 
-(setq gc-cons-threshold 100000000) ; 100 mb
+;; A big contributor to startup times is garbage collection. We up the gc
+;; threshold to temporarily prevent it from running, then reset it later.
+(setq gc-cons-threshold most-positive-fixnum
+      gc-cons-percentage 0.6)
+
+(setq message-log-max 16384
+      auto-window-vscroll nil)
+
+(add-hook 'after-init-hook
+          `(lambda ()
+             (setq gc-cons-threshold 402653184
+                   gc-cons-percentage .3)
+             (add-hook
+              'focus-out-hook
+              (lambda ()
+                "Lower `gc-cons-threshold' and then run `garbage-collect'."
+                (let ((gc-cons-threshold 800000))
+                  (garbage-collect))))) t)
 
 (setq read-process-output-max (* 1024 1024)) ;; 1mb
 
@@ -94,7 +117,7 @@
 (setq find-function-C-source-directory (concat "~/dev/emacs-" emacs-version "/src"))
 
 ;; Display full link syntax (e.g. [[https://orgmode.org][Org website]]).
-(setq org-descriptive-links nil)
+(setq org-link-descriptive nil)
 
 ;; org-babel
 (setq org-ditaa-jar-path "~/.emacs.d/vendor/not-elisp/ditaa0_9.jar")
@@ -178,35 +201,22 @@ The variables that govern the situation include:
 ;; package management
 ;;
 
-;; Disable in favor of `use-package'.
-(setq package-enable-at-startup nil)
+(when (< emacs-major-version 27)
+  (setq package-enable-at-startup nil)
+  ;; (package-initialize)
+  (load-file (expand-file-name "early-init.el" user-emacs-directory)))
 
-;; bootstrap straight.el
-(defvar bootstrap-version)
-(let ((bootstrap-file
-       (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
-      (bootstrap-version 5))
-  (unless (file-exists-p bootstrap-file)
-    (with-current-buffer
-        (url-retrieve-synchronously
-         "https://raw.githubusercontent.com/raxod502/straight.el/develop/install.el"
-         'silent 'inhibit-cookies)
-      (goto-char (point-max))
-      (eval-print-last-sexp)))
-  (load bootstrap-file nil 'nomessage))
+(add-to-list 'load-path (expand-file-name "lib/borg" user-emacs-directory))
+(require 'borg)
+(borg-initialize)
 
-;; Specifying :straight t is unnecessary if you set straight-use-package-by-default to a non-nil value.
-(setq straight-use-package-by-default t)
-
-(straight-use-package 'use-package)
-
-;; end bootstrap straight.el
+(require  'use-package)
+(setq use-package-verbose nil)
 
 ;; Package declarations
 ;;
 
 (use-package duc
-  :straight nil
   :init
   (defvar duc/duc-dir (expand-file-name "duc" user-emacs-directory))
   (add-to-list 'load-path duc/duc-dir)
@@ -403,7 +413,6 @@ The variables that govern the situation include:
 ^^^^^^^^----------------------------
   _l_: launch       _q_: quit
   _s_: submit     _e_/_t_: test
-
   _r_: reload "
     ("l" leetcode)
     ("q" leetcode-quit)
@@ -434,14 +443,13 @@ The variables that govern the situation include:
 _f_/_w_: maximize
   _n_: next         _b_: balance
   _N_: new          _k_: delete
-  _c_: close        _p_: pin/unpin buffer
+                    _p_: pin/unpin buffer
   _
 "
     ("f" toggle-frame-maximized)
     ("w" toggle-frame-maximized)
     ("n" other-frame)
     ("N" make-frame-command)
-    ("c" close-frame)
     ("b" balance-windows)
     ("k" delete-window)
     ("p" duc/toggle-pin-buffer))
@@ -516,8 +524,7 @@ _L_: font line spacing
     ("w" whitespace-mode)
     ("l" toggle-truncate-lines))
   (defhydra hydra-submenu-package (:exit t)
-    ("i" straight-use-package "install")
-    ("f" straight-freeze-versions "freeze lockfile")
+    ("i" borg-assimilate "install")
     ("l" package-list-packages-no-fetch "package-list"))
   (defhydra hydra-submenu-project (:exit t)
     ("n" (let ((counsel-projectile-switch-project-action
@@ -546,7 +553,6 @@ _g_: status      _L_: log       _b_: blame
 _c_: clone       _f_: file log
 _j_: smerge next _u_: upper     _e_: smerge
 _k_: smerge prev _l_: lower     _m_: smerge
-
 _P_: 80-char sentences
 "
     ("g" magit-status)
@@ -667,17 +673,10 @@ _p_: project  ^ ^                   _c_: customize
   (setq doom-modeline-icon nil)
   :hook (after-init . doom-modeline-mode))
 
-(use-package default-black-theme
-  :no-require t
-  :straight (:host github
-             :repo "dangduc/default-black-theme"))
-
 (use-package flatland-black-theme
   :no-require t)
 
 (use-package seoul256-theme
-  :straight (:host github
-                   :repo "dangduc/seoul256-emacs")
   :config
   (setq seoul256-background 253))
 
@@ -702,9 +701,7 @@ _p_: project  ^ ^                   _c_: customize
 (use-package undo-tree
   :diminish undo-tree-mode)
 
-(use-package rainbow-delimiters
-  :straight (:host github
-             :repo "Fanael/rainbow-delimiters"))
+(use-package rainbow-delimiters)
 
 (use-package habamax-theme)
 
@@ -957,7 +954,7 @@ _p_: project  ^ ^                   _c_: customize
   (setq company-idle-delay .01)
   (setq company-minimum-prefix-length 1)
   :config
-  (company-tng-configure-default)
+  (company-tng-mode)
   (global-company-mode))
 
 (use-package esh-autosuggest
@@ -1076,34 +1073,6 @@ _p_: project  ^ ^                   _c_: customize
   (setq magit-log-margin '(t "%b %d, %Y " magit-log-margin-width t 18))
   (setq magit-log-show-refname-after-summary t)
 
-  ;; Add rebase argument to pull
-  ;; https://github.com/magit/magit/issues/2597
-  (defun +magit-submodule-remove (path &optional leave-in-work-tree)
-    "Remove the submodule at PATH.
-     https://stackoverflow.com/questions/1260748/how-do-i-remove-a-submodule"
-    (interactive
-     (list (magit-completing-read "Remove module" (magit-get-submodules)
-                                  nil t nil nil (magit-section-when module))))
-    (magit-with-toplevel
-     ;; 0. mv a/submodule a/submodule_tmp
-     (shell-command (format "mv %s %s_tmp" path path))
-
-     ;; 1. git submodule deinit -f -- a/submodule
-     (magit-run-git "submodule" "deinit" "-f" "--" path)
-
-     ;; (magit-run-git-async "submodule" "deinit" path)
-
-     ;; 2. rm -rf .git/modules/a/submodule
-     (shell-command (format "rm -rf .git/modules/%s" path))
-
-     (if (not leave-in-work-tree)
-         ;; 3. git rm -f a/submodule
-         (magit-run-git "rm" "-f" path)
-       ;; # If you want to leave it in your working tree and have done step 0.
-       ;; 3b. git rm --cached a/submodule
-       ;; 3b. mv a/submodule_tmp a/submodule
-       (magit-run-git "rm" "--cached" path)
-       (shell-command-to-string (format "mv %s_tmp %s" path path)))))
   :config
   ; Disable binding for blame when in a magit diff buffer.
   (define-key magit-blob-mode-map (kbd "b") nil)
@@ -1129,10 +1098,6 @@ _p_: project  ^ ^                   _c_: customize
     (remove-hook 'ediff-mode-hook #'evil-ediff-init))
   (add-hook 'ediff-mode-hook #'+evil-ediff-init))
 
-(use-package evil-magit
-  :init
-  (setq evil-magit-want-horizontal-movement t))
-
 (use-package ibuffer-sidebar
   :init
   (setq ibuffer-sidebar-use-custom-font t)
@@ -1143,10 +1108,7 @@ _p_: project  ^ ^                   _c_: customize
   :init
   (setq dired-subtree-use-backgrounds nil))
 
-(use-package vscode-icon
-  :straight (:host github
-             :repo "jojojames/vscode-icon-emacs"
-             :files (:defaults "icons" "source")))
+(use-package vscode-icon)
 
 (use-package dired-sidebar
   :after vscode-icon
@@ -1227,7 +1189,6 @@ _p_: project  ^ ^                   _c_: customize
    "M-k" 'vterm-clear))
 
 (use-package tex
-  :straight auctex
   :defer t
   :init
   (setq TeX-engine "xelatex")

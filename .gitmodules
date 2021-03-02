@@ -1,9 +1,262 @@
-[submodule "vendor/use-package"]
-	path = vendor/use-package
-	url = https://github.com/jwiegley/use-package.git
-[submodule "vendor/req-package"]
-	path = vendor/req-package
-	url = https://github.com/edvorg/req-package.git
+[submodule "ace-window"]
+	path = lib/ace-window
+	url = git@github.com:abo-abo/ace-window.git
+[submodule "ag"]
+	path = lib/ag
+	url = git@github.com:Wilfred/ag.el.git
+[submodule "aio"]
+	path = lib/aio
+	url = git@github.com:skeeto/emacs-aio.git
+[submodule "all-the-icons"]
+	path = lib/all-the-icons
+	url = git@github.com:domtronn/all-the-icons.el.git
+[submodule "all-the-icons-dired"]
+	path = lib/all-the-icons-dired
+	url = git@github.com:wyuenho/all-the-icons-dired.git
+[submodule "anki-editor"]
+	path = lib/anki-editor
+	url = git@github.com:louietan/anki-editor.git
+[submodule "annalist"]
+	path = lib/annalist
+	url = git@github.com:noctuid/annalist.el.git
+[submodule "async"]
+	path = lib/async
+	url = git@github.com:jwiegley/emacs-async.git
+[submodule "auctex"]
+	path = lib/auctex
+	url = git@github.com:emacsmirror/auctex.git
+[submodule "auto-compile"]
+	path = lib/auto-compile
+	url = git@github.com:emacscollective/auto-compile.git
+[submodule "avy"]
+	path = lib/avy
+	url = git@github.com:abo-abo/avy.git
+[submodule "borg"]
+	path = lib/borg
+	url = git@github.com:emacscollective/borg.git
+[submodule "closql"]
+	path = lib/closql
+	url = git@github.com:emacscollective/closql.git
+[submodule "company"]
+	path = lib/company
+	url = git@github.com:company-mode/company-mode.git
+[submodule "counsel-projectile"]
+	path = lib/counsel-projectile
+	url = git@github.com:ericdanan/counsel-projectile.git
+[submodule "dash"]
+	path = lib/dash
+	url = git@github.com:magnars/dash.el.git
+[submodule "deadgrep"]
+	path = lib/deadgrep
+	url = git@github.com:Wilfred/deadgrep.git
+[submodule "diminish"]
+	path = lib/diminish
+	url = git@github.com:myrjola/diminish.el.git
+[submodule "dired-sidebar"]
+	path = lib/dired-sidebar
+	url = git@github.com:jojojames/dired-sidebar.git
+[submodule "doom-modeline"]
+	path = lib/doom-modeline
+	url = git@github.com:seagle0128/doom-modeline.git
+[submodule "doom-themes"]
+	path = lib/doom-themes
+	url = git@github.com:hlissner/emacs-doom-themes.git
+[submodule "elfeed"]
+	path = lib/elfeed
+	url = git@github.com:skeeto/elfeed.git
+[submodule "emacsql"]
+	path = lib/emacsql
+	url = git@github.com:skeeto/emacsql.git
+	no-byte-compile = emacsql-pg.el
+[submodule "epkg"]
+	path = lib/epkg
+	url = git@github.com:emacscollective/epkg.git
+[submodule "ereader"]
+	path = lib/ereader
+	url = git@github.com:bddean/emacs-ereader.git
+[submodule "esh-autosuggest"]
+	path = lib/esh-autosuggest
+	url = git@github.com:dieggsy/esh-autosuggest.git
+[submodule "evil"]
+	path = lib/evil
+	url = git@github.com:emacs-evil/evil.git
+[submodule "evil-collection"]
+	path = lib/evil-collection
+	url = git@github.com:emacs-evil/evil-collection.git
+[submodule "evil-ediff"]
+	path = lib/evil-ediff
+	url = git@github.com:emacs-evil/evil-ediff.git
+[submodule "exec-path-from-shell"]
+	path = lib/exec-path-from-shell
+	url = git@github.com:purcell/exec-path-from-shell.git
+[submodule "f"]
+	path = lib/f
+	url = git@github.com:rejeep/f.el.git
+[submodule "flycheck"]
+	path = lib/flycheck
+	url = git@github.com:flycheck/flycheck.git
+[submodule "general"]
+	path = lib/general
+	url = git@github.com:noctuid/general.el.git
+[submodule "goto-chg"]
+	path = lib/goto-chg
+	url = https://github.com/emacs-evil/goto-chg.git
+[submodule "graphql"]
+	path = lib/graphql
+	url = git@github.com:vermiculus/graphql.el.git
+[submodule "habamax-theme"]
+	path = lib/habamax-theme
+	url = git@github.com:habamax/habamax-theme.git
+[submodule "ht"]
+	path = lib/ht
+	url = git@github.com:Wilfred/ht.el.git
+[submodule "hydra"]
+	path = lib/hydra
+	url = git@github.com:abo-abo/hydra.git
+[submodule "ibuffer-projectile"]
+	path = lib/ibuffer-projectile
+	url = git@github.com:purcell/ibuffer-projectile.git
+[submodule "ibuffer-sidebar"]
+	path = lib/ibuffer-sidebar
+	url = git@github.com:jojojames/ibuffer-sidebar.git
+[submodule "iedit"]
+	path = lib/iedit
+	url = git@github.com:victorhge/iedit.git
+[submodule "ivy"]
+	path = lib/ivy
+	url = git@github.com:abo-abo/swiper.git
+[submodule "jq-mode"]
+	path = lib/jq-mode
+	url = git@github.com:ljos/jq-mode.git
+[submodule "kotlin-mode"]
+	path = lib/kotlin-mode
+	url = git@github.com:Emacs-Kotlin-Mode-Maintainers/kotlin-mode.git
+[submodule "leetcode"]
+	path = lib/leetcode
+	url = git@github.com:kaiwk/leetcode.el.git
+[submodule "lispy"]
+	path = lib/lispy
+	url = git@github.com:abo-abo/lispy.git
+[submodule "lispyville"]
+	path = lib/lispyville
+	url = git@github.com:noctuid/lispyville.git
+[submodule "log4e"]
+	path = lib/log4e
+	url = git@github.com:aki2o/log4e.git
+[submodule "lsp-mode"]
+	path = lib/lsp-mode
+	url = git@github.com:emacs-lsp/lsp-mode.git
+[submodule "lsp-python-ms"]
+	path = lib/lsp-python-ms
+	url = git@github.com:emacs-lsp/lsp-python-ms.git
+[submodule "macrostep"]
+	path = lib/macrostep
+	url = git@github.com:joddie/macrostep.git
+[submodule "magit"]
+	path = lib/magit
+	url = git@github.com:magit/magit.git
+[submodule "markdown-mode"]
+	path = lib/markdown-mode
+	url = git@github.com:jrblevin/markdown-mode.git
+[submodule "org-download"]
+	path = lib/org-download
+	url = git@github.com:abo-abo/org-download.git
+[submodule "osx-dictionary"]
+	path = lib/osx-dictionary
+	url = git@github.com:xuchunyang/osx-dictionary.el.git
+[submodule "packed"]
+	path = lib/packed
+	url = git@github.com:emacscollective/packed.git
+[submodule "pos-tip"]
+	path = lib/pos-tip
+	url = git@github.com:pitkali/pos-tip.git
+[submodule "prescient"]
+	path = lib/prescient
+	url = git@github.com:raxod502/prescient.el.git
+[submodule "projectile"]
+	path = lib/projectile
+	url = git@github.com:bbatsov/projectile.git
+[submodule "queue"]
+	path = lib/queue
+	url = git@github.com:emacsmirror/queue.git
+[submodule "racket-mode"]
+	path = lib/racket-mode
+	url = git@github.com:greghendershott/racket-mode.git
+[submodule "rainbow-delimiters"]
+	path = lib/rainbow-delimiters
+	url = git@github.com:Fanael/rainbow-delimiters.git
+[submodule "rainbow-mode"]
+	path = lib/rainbow-mode
+	url = git@github.com:emacsmirror/rainbow-mode.git
+[submodule "request"]
+	path = lib/request
+	url = git@github.com:tkf/emacs-request.git
+[submodule "restclient"]
+	path = lib/restclient
+	url = git@github.com:pashky/restclient.el.git
+[submodule "s"]
+	path = lib/s
+	url = git@github.com:magnars/s.el.git
+[submodule "selectrum"]
+	path = lib/selectrum
+	url = git@github.com:raxod502/selectrum.git
+[submodule "seoul256-theme"]
+	path = lib/seoul256-theme
+	url = https://github.com/dangduc/seoul256-emacs.git
+[submodule "smartparens"]
+	path = lib/smartparens
+	url = git@github.com:Fuco1/smartparens.git
+[submodule "solarized-theme"]
+	path = lib/solarized-theme
+	url = git@github.com:bbatsov/solarized-emacs.git
+[submodule "spinner"]
+	path = lib/spinner
+	url = git@github.com:Malabarba/spinner.el.git
+[submodule "swift-mode"]
+	path = lib/swift-mode
+	url = git@github.com:swift-emacs/swift-mode.git
+[submodule "tide"]
+	path = lib/tide
+	url = git@github.com:ananthakumaran/tide.git
+[submodule "transient"]
+	path = lib/transient
+	url = git@github.com:magit/transient.git
+[submodule "typescript-mode"]
+	path = lib/typescript-mode
+	url = git@github.com:emacs-typescript/typescript.el.git
+[submodule "undo-tree"]
+	path = lib/undo-tree
+	url = git@gitlab.com:tsc25/undo-tree.git
+[submodule "use-package"]
+	path = lib/use-package
+	url = git@github.com:jwiegley/use-package.git
 [submodule "vendor/company-mode"]
 	path = vendor/company-mode
 	url = https://github.com/company-mode/company-mode.git
+[submodule "vendor/req-package"]
+	path = vendor/req-package
+	url = https://github.com/edvorg/req-package.git
+[submodule "vendor/use-package"]
+	path = vendor/use-package
+	url = https://github.com/jwiegley/use-package.git
+[submodule "vimrc-mode"]
+	path = lib/vimrc-mode
+	url = git@github.com:mcandre/vimrc-mode.git
+[submodule "vscode-icon"]
+	path = lib/vscode-icon
+	url = git@github.com:jojojames/vscode-icon-emacs.git
+[submodule "vterm"]
+	path = lib/vterm
+	url = git@github.com:akermu/emacs-libvterm.git
+[submodule "web-mode"]
+	path = lib/web-mode
+	url = git@github.com:fxbois/web-mode.git
+[submodule "which-key"]
+	path = lib/which-key
+	url = git@github.com:justbur/emacs-which-key.git
+[submodule "with-editor"]
+	path = lib/with-editor
+	url = git@github.com:magit/with-editor.git
+[submodule "yasnippet"]
+	path = lib/yasnippet
+	url = git@github.com:joaotavora/yasnippet.git
