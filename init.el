@@ -4,9 +4,6 @@
          (float-time (time-subtract before-user-init-time
                                     before-init-time)))
 
-(load "~/.emacs.d/local-declarations.el")
-(load "~/.emacs.d/local.el")
-
 (setq ring-bell-function #'ignore)
 
 ;; A big contributor to startup times is garbage collection. We up the gc
@@ -183,6 +180,9 @@ The variables that govern the situation include:
 
 ;; load path
 ;;
+
+(load "~/.emacs.d/local-declarations.el")
+(load "~/.emacs.d/local.el")
 
 ;; Stolen from [Aaron Bedra's Emacs 26 Configuration](http://aaronbedra.com/emacs.d/#vendor-directory)
 ;; Setup up vendor directory.
