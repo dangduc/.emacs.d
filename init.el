@@ -678,7 +678,7 @@ _p_: project  ^ ^                   _c_: customize
 
 (use-package seoul256-theme
   :config
-  (setq seoul256-background 253))
+  (setq seoul256-background 256))
 
 (use-package doom-themes
   :after vterm
