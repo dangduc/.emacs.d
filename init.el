@@ -911,7 +911,7 @@ _p_: project  ^ ^                   _c_: customize
   :init
   ;; Order of filter methods does not affect candidate order, but may affect
   ;; highlighting and query speed.
-  (setq prescient-filter-method '(prefix initialism literal regex))
+  (setq prescient-filter-method '(prefix initialism literal regexp))
   ;; Prescient does limited sorting of candidates by:
   ;; (1) How candidates are initially ordered as input.
   ;; (2) Candidate selection history.
