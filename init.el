@@ -459,7 +459,7 @@ _f_/_w_: maximize
     ("i" (find-file "~/.emacs.d/init.el" ) "init.el")
     ("I" (find-file "~/.emacs.d/duc/duc.el" ) "duc.el")
     ("b" duc/create-or-open-bnote "bnote")
-    ("1" (find-file "~/dev/notes/log.org" ) "log.org")
+    ("1" (find-file "~/dev/notes/index.org" ) "index.org")
     ("2" (find-file "~/dev/notes/how-to.org" ) "how-to.org")
     ("3" shell-command-on-region "M-|") ;; e.g. "nc termbin.com 9999"
     ("d" (org-capture nil "d") "capture decision")
