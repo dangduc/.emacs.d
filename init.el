@@ -211,7 +211,7 @@ The variables that govern the situation include:
 (borg-initialize)
 
 (require  'use-package)
-(setq use-package-verbose nil)
+(setq use-package-verbose t)
 
 ;; Package declarations
 ;;
