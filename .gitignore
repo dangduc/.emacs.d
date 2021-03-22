@@ -63,3 +63,4 @@ private/
 /request
 local.el
 /epkgs/
+.org-id-locations
