@@ -52,6 +52,9 @@
 [submodule "diminish"]
 	path = lib/diminish
 	url = git@github.com:myrjola/diminish.el.git
+[submodule "dired-hacks"]
+	path = lib/dired-hacks
+	url = git@github.com:Fuco1/dired-hacks.git
 [submodule "dired-sidebar"]
 	path = lib/dired-sidebar
 	url = git@github.com:jojojames/dired-sidebar.git

@@ -1072,6 +1072,7 @@ _p_: project  ^ ^                   _c_: customize
   (setq ibuffer-sidebar-face '(:family duc/font-family :height 120)))
 
 (use-package dired-subtree
+  ; provided by dired-hacks.
   :commands (dired-subtree-toggle dired-subtree-cycle)
   :init
   (setq dired-subtree-use-backgrounds nil))
