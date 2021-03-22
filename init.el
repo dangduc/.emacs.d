@@ -120,34 +120,6 @@
 (setq org-ditaa-jar-path "~/.emacs.d/vendor/not-elisp/ditaa0_9.jar")
 (setq org-plantuml-jar-path "~/.emacs.d/vendor/not-elisp/plantuml.jar")
 
-(defun decision-note-template ()
-  "From Decision Checklist, Sam Kyle"
-  (replace-regexp-in-string "#" (org-id-new)
-                            "* %<%H%M:%S> Decision NO. #%?
-(C-c i  to clock-in, C-c o  to clock-out.)
-Decision:
-
-Mental/Physical State (C-c C-x C-b  to toggle checkboxes):
-- [ ] Energized
-- [ ] Focused
-- [ ] Relaxed
-- [ ] Confident
-- [ ] Tired
-- [ ] Accepting
-- [ ] Accommodating
-- [ ] Anxious
-- [ ] Resigned
-- [ ] Frustrated
-- [ ] Angry
-The situation/context:
-
-The problem statement or frame:
-
-The variables that govern the situation include:
-
-** TODO Review decision
-(C-c C-d to insert deadline)
-"))
 (setq org-default-notes-file "~/dev/notes/log.org")
 (setq org-capture-templates
       (quote (("D" "drill" entry (file+datetree "") "* %<%H%M:%S> %^{question} :drill:\n** Answer\n%^{answer}"
@@ -155,8 +127,6 @@ The variables that govern the situation include:
               ("c" "(Quick) note" entry (file+datetree "") "* %<%H%M:%S> %^{note}\n  %l"
                :immediate-finish t)
               ("C" "Multi-line note" entry (file+datetree "") "* %<%H%M:%S> %?\n  %l")
-              ("d" "Decision Template" entry (file+datetree "")
-               (function decision-note-template))
               ("t" "TODO" entry (file+datetree "") "* TODO %<%H%M:%S> %^{todo}"
                :immediate-finish t)
               ("r" "Region" entry (file+datetree "") "* %<%H%M:%S> %(concat filename)\n#+begin_src %(concat language)\n%i\n#+end_src\n%(concat link)"
@@ -462,8 +432,7 @@ _f_/_w_: maximize
     ("1" (find-file "~/dev/notes/index.org" ) "index.org")
     ("2" (find-file "~/dev/notes/how-to.org" ) "how-to.org")
     ("3" shell-command-on-region "M-|") ;; e.g. "nc termbin.com 9999"
-    ("d" (org-capture nil "d") "capture decision")
-    ("D" (org-capture nil "D") "capture drill")
+    ("D" (org-capture nil "d") "capture drill")
     ("c" (org-capture nil "c") "capture note")
     ("C" (org-capture nil "C") "capture longer note")
     ("t" (org-capture nil "t") "capture todo")
