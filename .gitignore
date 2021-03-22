@@ -59,7 +59,7 @@ private/
 !private/local/README.md
 /games/
 /url/
-/transient
+/transient/history.el
 /request
 local.el
 /epkgs/
