@@ -1012,7 +1012,6 @@ _p_: project  ^ ^                   _c_: customize
 (use-package flycheck)
 
 (use-package tide
-  :commands (tide-setup)
   :config
   (setq tide-jump-to-definition-reuse-window nil)
   ;; Set up Typescript linting with `web-mode'.
