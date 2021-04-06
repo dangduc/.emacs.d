@@ -171,6 +171,7 @@
   (interactive "P")
   (pcase major-mode
     ('racket-mode (duc/racket-eval-last-sexp))
+    ('scheme-mode (scheme-send-last-sexp))
     ('emacs-lisp-mode (eval-last-sexp p))
     ('python-mode
      (unless (get-buffer (format "*Python[%s]*" (buffer-name)))
