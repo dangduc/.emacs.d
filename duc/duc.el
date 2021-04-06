@@ -167,11 +167,22 @@
           (point))
       (scan-error (user-error "There isn't a complete s-expression before point")))))
 
+(defun duc/scheme-send-last-sexp ()
+  (interactive)
+  (scheme-send-region (duc/scheme--repl-last-sexp-start)
+                      (+ (point) 1)))
+
+(defun duc/scheme--repl-last-sexp-start ()
+  (save-excursion
+    (forward-char)
+    (backward-list)
+    (point)))
+
 (defun duc/eval-dwim (p)
   (interactive "P")
   (pcase major-mode
     ('racket-mode (duc/racket-eval-last-sexp))
-    ('scheme-mode (scheme-send-last-sexp))
+    ('scheme-mode (duc/scheme-send-last-sexp))
     ('emacs-lisp-mode (eval-last-sexp p))
     ('python-mode
      (unless (get-buffer (format "*Python[%s]*" (buffer-name)))
