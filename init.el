@@ -396,6 +396,7 @@
     ("l" list-buffers "list buffers")
     ("N" duc/new-buffer "new buffer")
     ("c" duc/new-buffer "new buffer")
+    ("m" (duc/rename-file (buffer-name)) "move buffer & file (ie, rename)")
     ("o" switch-to-buffer "switch buffer")
     ("r" revert-buffer "reload buffer")
     ("w" save-buffer "save buffer")

@@ -608,6 +608,37 @@ x ◼ Task complete.
       (duc/play-sound filepath)
       (kill-new filepath))))
 
+;; Taken from spacemacs/rename-file.
+(defun duc/rename-file (filename &optional new-filename)
+  "Rename FILENAME to NEW-FILENAME.
+When NEW-FILENAME is not specified, asks user for a new name.
+Also renames associated buffer (if any exists), invalidates
+projectile cache when it's possible and update recentf list."
+  (interactive "f")
+  (when (and filename (file-exists-p filename))
+    (let* ((buffer (find-buffer-visiting filename))
+           (short-name (file-name-nondirectory filename))
+           (new-name (if new-filename new-filename
+                       (read-file-name
+                        (format "Rename %s to: " short-name)))))
+      (cond ((get-buffer new-name)
+             (error "A buffer named '%s' already exists!" new-name))
+            (t
+             (let ((dir (file-name-directory new-name)))
+               (when (and (not (file-exists-p dir)) (yes-or-no-p (format "Create directory '%s'?" dir)))
+                 (make-directory dir t)))
+             (rename-file filename new-name 1)
+             (when buffer
+               (kill-buffer buffer)
+               (find-file new-name))
+             (when (fboundp 'recentf-add-file)
+               (recentf-add-file new-name)
+               (recentf-remove-if-non-kept filename))
+             (when (and (featurep 'projectile)
+                        (projectile-project-p))
+               (call-interactively #'projectile-invalidate-cache))
+             (message "File '%s' successfully renamed to '%s'" short-name (file-name-nondirectory new-name)))))))
+
 ;; Use this method to query init load duration
 ;(emacs-init-time)
 
