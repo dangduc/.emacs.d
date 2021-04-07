@@ -405,8 +405,7 @@
   (defhydra hydra-submenu-eval (:exit t)
     ("e" duc/eval-dwim "dwim")
     ("b" duc/eval-buffer "buffer")
-    ("p" duc/eval-last "at point")
-    ("P" eval-print-last-sexp "print"))
+    ("p" duc/eval-print-dwim "print"))
   (defhydra hydra-submenu-window (:exit t :hint nil)
     "
 ^Frame^             ^Window^
@@ -1192,6 +1191,27 @@ _p_: project  ^ ^                   _c_: customize
 (use-package elfeed
   :config
   (setq elfeed-feeds local/elfeed-feeds))
+
+(use-package geiser
+  :config
+  (setq geiser-mode-company-p nil)
+  :init
+  ; Have evil's normal mode handle last-sexp ending at point, as
+  ; you would expect it to.
+  ; e.g.   (list 'one 'two 'three)
+  ;                              ^ point is here.
+  ; With advice, will evaluate: (one two three)
+  ;                 instead of: three
+  ;
+  ; See evil-collection-geiser-setup.
+  (with-eval-after-load 'evil
+    (with-eval-after-load 'duc
+      (unless evil-move-beyond-eol
+        (advice-add 'duc/geiser-eval-last-sexp :around 'evil-collection-geiser-last-sexp)))))
+
+
+(use-package geiser-mit
+  :after geiser)
 
 
 ;; End package declarations

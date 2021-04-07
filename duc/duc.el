@@ -178,11 +178,52 @@
     (backward-list)
     (point)))
 
+"""
+This function can be used instead of geiser-eval-last-sexp.
+The difference is that this function will also display
+last-sexp in the inferior process.
+e.g.
+1 (user) => (define (compose f g)
+              (lambda args
+                (f (apply g args))))
+
+;Value: compose
+"""
+(defun duc/geiser-eval-last-sexp ()
+  (interactive "P")
+  (let* ((default-indent-level 9)
+         (repl-prompt "> ")
+         bosexp
+         (eosexp (save-excursion (backward-sexp)
+                                 (setq bosexp (point))
+                                 (forward-sexp)
+                                 (point)))
+         (expression (buffer-substring bosexp eosexp))
+         ; Figure out the indent-level to use for the input expr
+         (indent-level (+ (string-width repl-prompt)
+                          (or (with-current-buffer "* Mit REPL *"
+                                (save-excursion
+                                  (goto-char (point-max))
+                                  (if (eq (point-at-bol) (point-at-eol))
+                                      (goto-char (- (point-max) 1)))
+                                  (string-match-p (concat repl-prompt "$") (buffer-substring-no-properties (point-at-bol) (point-at-eol)))))
+                              default-indent-level))))
+    (with-temp-buffer
+      (let ((new-expression (replace-regexp-in-string "\n" (concat "\n" (make-string indent-level ? )) expression)))
+        (insert new-expression)
+        (message (concat ">" new-expression)))
+      (message (buffer-substring (point-min) (point-max)))
+      (append-to-buffer "* Mit REPL *" (point-min) (point-max))))
+  (with-current-buffer "* Mit REPL *"
+    (geiser-repl--maybe-send)))
+
 (defun duc/eval-dwim (p)
   (interactive "P")
   (pcase major-mode
     ('racket-mode (duc/racket-eval-last-sexp))
-    ('scheme-mode (duc/scheme-send-last-sexp))
+    ('scheme-mode (if (bound-and-true-p geiser-mode)
+                      (duc/geiser-eval-last-sexp)
+                    (duc/scheme-send-last-sexp)))
     ('emacs-lisp-mode (eval-last-sexp p))
     ('python-mode
      (unless (get-buffer (format "*Python[%s]*" (buffer-name)))
@@ -196,6 +237,17 @@
     ('latex-mode (preview-section))
     (_ (eval-last-sexp p))))
 
+(defun duc/eval-print-dwim (p)
+  (interactive "P")
+  (pcase major-mode
+    ('scheme-mode (if (bound-and-true-p geiser-mode)
+                      (let ((geiser-mode-eval-last-sexp-to-buffer t)
+                            (geiser-mode-eval-to-buffer-prefix "\n;; "))
+                        (geiser-eval-last-sexp p))
+                    (duc/scheme-send-last-sexp)))
+    ('emacs-lisp-mode (eval-print-last-sexp p))
+    (_ (eval-print-last-sexp p))))
+
 (setq async-shell-command-display-buffer nil)
 (setq shell-command-dont-erase-buffer 'end-last-out)
 
@@ -208,12 +260,6 @@
     ('racket-mode (racket-run))
     ('emacs-lisp-mode (eval-buffer))
     (_ (eval-buffer))))
-
-(defun duc/eval-last (p)
-  (interactive "P")
-  (pcase major-mode
-    ('emacs-lisp-mode (eval-last-sexp p))
-    (_ (eval-last-sexp p))))
 
 (defvar-local duc/header-line-format nil)
 (defun duc/mode-line-in-header ()
