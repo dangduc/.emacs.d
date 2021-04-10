@@ -646,6 +646,7 @@ _p_: project  ^ ^                   _c_: customize
   :no-require t)
 
 (use-package seoul256-theme
+  :no-require t
   :config
   (setq seoul256-background 256))
 
@@ -672,7 +673,8 @@ _p_: project  ^ ^                   _c_: customize
 
 (use-package rainbow-delimiters)
 
-(use-package habamax-theme)
+(use-package habamax-theme
+  :no-require t)
 
 (use-package whitespace
   :diminish whitespace-mode

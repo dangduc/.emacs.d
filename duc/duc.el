@@ -12,10 +12,18 @@
   `(setq ,list-var (duc/alist-replace ,list-var ,element)))
 
 (defvar duc/font-family "Iosevka")
-(defvar duc/font-height 160)
+(defvar duc/font-height (if (eq system-type 'windows-nt)
+                            120
+                          160))
 
-(defvar duc/font-family-mode-line "Concourse T3 Tab")
-(defvar duc/font-height-mode-line 160)
+
+(defvar duc/font-family-mode-line (if (eq system-type 'windows-nt)
+                                      "Calibri"
+                                    "Concourse T3 Tab"))
+
+(defvar duc/font-height-mode-line (if (eq system-type 'windows-nt)
+                                      120
+                                    160))
 
 (defvar duc/font-weight 'normal)
 
