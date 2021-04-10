@@ -151,8 +151,8 @@
 ;; load path
 ;;
 
-(load "~/.emacs.d/local-declarations.el")
-(load "~/.emacs.d/local.el")
+(load-file (expand-file-name "local-declarations.el" user-emacs-directory))
+(load-file (expand-file-name "local.el" user-emacs-directory))
 
 ;; Stolen from [Aaron Bedra's Emacs 26 Configuration](http://aaronbedra.com/emacs.d/#vendor-directory)
 ;; Setup up vendor directory.
