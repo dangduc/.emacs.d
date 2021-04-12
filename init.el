@@ -980,7 +980,9 @@ _p_: project  ^ ^                   _c_: customize
                 (setq-local evil-shift-width typescript-indent-level))))
   (setq typescript-enabled-frameworks '(typescript)))
 
-(use-package flycheck)
+(use-package flycheck
+  :init
+  (add-hook 'sh-mode-hook (lambda () (flycheck-mode 1))))
 
 (use-package tide
   :config
