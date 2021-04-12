@@ -25,6 +25,8 @@
                                       120
                                     160))
 
+(defvar duc/margin-height-mode-line 5)
+
 (defvar duc/font-weight 'normal)
 
 (defconst duc/font-weights (list 'ultra-bold
@@ -326,7 +328,7 @@ https://emacs-doctor.com/emacs-strip-tease.html"
        nil
        :family font
        :height font-size
-       :box `(:line-width 5 :color ,(duc/theme-background-color sym))
+       :box `(:line-width ,duc/margin-height-mode-line :color ,(duc/theme-background-color sym))
        :underline underline
        :overline overline))))
 
