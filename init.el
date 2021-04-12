@@ -1004,6 +1004,9 @@ _p_: project  ^ ^                   _c_: customize
     (tide-hl-identifier-mode +1))
   (add-hook 'typescript-mode-hook #'+setup-tide-mode)
 
+  (with-eval-after-load 'evil
+    (evil-define-key '(normal insert) tide-mode-map (kbd "M-?") 'tide-references))
+
   (add-hook 'web-mode-hook
             (lambda ()
               ;; Set up Tide mode if Typescript.
