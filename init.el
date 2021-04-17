@@ -347,7 +347,7 @@
   (general-define-key
    :states '(normal motion visual emacs)
    :keymaps 'override
-   "<SPC>" 'hydra-main-menu/body)
+   "<SPC>" 'leader-main-menu)
   (with-eval-after-load 'duc
     ; https://en.wikipedia.org/wiki/Interpunct#In_mathematics_and_science
     (general-define-key
@@ -376,6 +376,7 @@
      "s-L" #'(lambda () (interactive) (duc/insert-bnote-lozenge-empty-link)))))
 
 (use-package hydra
+  :after transient
   :config
   (defhydra hydra-submenu-leetcode (:exit t :hint nil)
     "
@@ -582,49 +583,44 @@ _p_/_a_: push notes         _i_: screenshot
     ("i" org-download-screenshot)
     ("I" org-download-image)
     ("s" duc/forvo-text-to-sound-at-region-or-word))
-  (defhydra hydra-main-menu (:exit t :idle .2 :hint nil)
-    "
-^Navigate^       ^Search^           ^Action^          ^Application
-^^^^^^^^-----------------------------------------------------------------
-_h_: left     _,_: in files       _SPC_: M-x          _g_: magit
-_l_: right    _<_: occur in files   _b_: buffers      _o_: org-mode
-_k_: up       ^ ^                   _e_: eval         _E_: eval-expression
-_j_: down     _>_: occur in file    _w_: window/frame _s_: shell
-_J_: jump     ^ ^                   _L_: lc           _u_: package
-_\\_: vsplit   ^ ^                   ^ ^               _a_: anki
-_-_: hsplit   ^ ^                   _H_: help
-_n_: buffer   ^ ^                   _?_: help
-_m_: files    ^ ^                   _f_: file
-_p_: project  ^ ^                   _c_: customize
-"
-    ("h" evil-window-left)
-    ("l" evil-window-right)
-    ("k" evil-window-up)
-    ("j" evil-window-down)
-    ("J" ace-window)
-    ("-" split-window-below)
-    ("\\" split-window-right)
-    ("," counsel-rg)
-    ("<" deadgrep)
-    (">" occur)
-    ("?" hydra-submenu-help/body)
-    ("n" switch-to-buffer)
-    ("m" counsel-fzf)
-    ("o" hydra-submenu-org-mode/body)
-    ("p" hydra-submenu-project/body)
-    ("s" duc/ivy-shell)
-    ("SPC" execute-extended-command)
-    ("b" hydra-submenu-buffer/body)
-    ("c" hydra-submenu-customize-face/body)
-    ("e" hydra-submenu-eval/body)
-    ("E" eval-expression)
-    ("w" hydra-submenu-window/body)
-    ("H" hydra-submenu-help/body)
-    ("f" hydra-submenu-file/body)
-    ("g" hydra-submenu-git/body)
-    ("u" hydra-submenu-package/body)
-    ("L" hydra-submenu-leetcode/body)
-    ("a" hydra-submenu-anki/body)))
+  (transient-define-prefix leader-main-menu ()
+    "Main"
+    [["Navigate"
+      ("h" "left" evil-window-left)
+      ("l" "right" evil-window-right)
+      ("k" "up" evil-window-up)
+      ("j" "down" evil-window-down)
+      ("-" "vsplit" split-window-below)
+      ("\\" "hsplit" split-window-right)]
+     ["Search"
+      ("," "in files" counsel-rg)
+      ("<" "occur in files" deadgrep)
+      (">" "occur in file "occur)]
+     ["Action"
+      ("SPC" "M-x" execute-extended-command)
+      ("b" "buffers" hydra-submenu-buffer/body)
+      ("e" "eval" hydra-submenu-eval/body)
+      ("w" "window/frame" hydra-submenu-window/body)
+      ("L" "lc" hydra-submenu-leetcode/body)]
+     ["Application"
+      ("g" "magit" hydra-submenu-git/body)
+      ("o" "org-mode" hydra-submenu-org-mode/body)
+      ("E" "eval-expresssion" eval-expression)
+      ("s" "shell" duc/ivy-shell)
+      ("u" "package" hydra-submenu-package/body)
+      ("a" "anki" hydra-submenu-anki/body)]]
+    [["More Navigation"
+      ("n" "buffer" switch-to-buffer)
+      ("m" "files" counsel-fzf)
+      ("p" "project" hydra-submenu-project/body)]
+     ["Other"
+      ("H" "help" hydra-submenu-help/body)
+      ("?" "help" hydra-submenu-help/body)
+      ("f" "file" hydra-submenu-file/body)
+      ("c" "customize" hydra-submenu-customize-face/body)]]
+    (interactive)
+    (let ((transient-show-popup -.2))
+      (transient-setup 'leader-main-menu))))
 
 (use-package ace-window
   :config
@@ -1018,7 +1014,18 @@ _p_: project  ^ ^                   _c_: customize
 
 (use-package restclient)
 
+(use-package transient
+  :config
+  ;; Bind esc
+  (define-key transient-map        (kbd "<escape>") 'transient-quit-one)
+  (define-key transient-edit-map   (kbd "<escape>") 'transient-quit-one)
+  (define-key transient-sticky-map (kbd "<escape>") 'transient-quit-seq)
+  (define-key transient-map        (kbd "q") 'transient-quit-one)
+  (define-key transient-edit-map   (kbd "q") 'transient-quit-one)
+  (define-key transient-sticky-map (kbd "q") 'transient-quit-seq))
+
 (use-package magit
+  :after transient
   :commands (magit-toplevel
              magit-status
              magit-blame
@@ -1052,12 +1059,7 @@ _p_: project  ^ ^                   _c_: customize
   ; Disable binding for blame when in a magit diff buffer.
   (define-key magit-blob-mode-map (kbd "b") nil)
 
-  (define-key magit-hunk-section-map (kbd "<return>") 'magit-diff-visit-file-other-window)
-
-  ;; Bind esc
-  (define-key transient-map        (kbd "<escape>") 'transient-quit-one)
-  (define-key transient-edit-map   (kbd "<escape>") 'transient-quit-one)
-  (define-key transient-sticky-map (kbd "<escape>") 'transient-quit-seq))
+  (define-key magit-hunk-section-map (kbd "<return>") 'magit-diff-visit-file-other-window))
 
 (use-package evil-ediff
   :commands (evil-ediff-init)

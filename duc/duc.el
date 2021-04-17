@@ -11,9 +11,9 @@
 (defmacro duc/alist-replace-set (list-var element)
   `(setq ,list-var (duc/alist-replace ,list-var ,element)))
 
-(defvar duc/font-family "Iosevka")
+(defvar duc/font-family "JetBrains Mono")
 (defvar duc/font-height (if (eq system-type 'windows-nt)
-                            120
+                            100
                           160))
 
 
