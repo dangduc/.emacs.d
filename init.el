@@ -176,17 +176,32 @@
   ;; (package-initialize)
   (load-file (expand-file-name "early-init.el" user-emacs-directory)))
 
-(add-to-list 'load-path (expand-file-name "lib/borg" user-emacs-directory))
-(require 'borg)
-(borg-initialize)
+;; bootstrap straight.el
+(defvar bootstrap-version)
+(let ((bootstrap-file
+       (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
+      (bootstrap-version 5))
+  (unless (file-exists-p bootstrap-file)
+    (with-current-buffer
+        (url-retrieve-synchronously
+         "https://raw.githubusercontent.com/raxod502/straight.el/develop/install.el"
+         'silent 'inhibit-cookies)
+      (goto-char (point-max))
+      (eval-print-last-sexp)))
+  (load bootstrap-file nil 'nomessage))
 
-(require  'use-package)
-(setq use-package-verbose t)
+;; Specifying :straight t is unnecessary if you set straight-use-package-by-default to a non-nil value.
+(setq straight-use-package-by-default t)
+
+(straight-use-package 'use-package)
+
+;; end bootstrap straight.el
 
 ;; Package declarations
 ;;
 
 (use-package duc
+  :straight nil
   :init
   (defvar duc/duc-dir (expand-file-name "duc" user-emacs-directory))
   (add-to-list 'load-path duc/duc-dir)
@@ -642,6 +657,8 @@ _p_/_a_: push notes         _i_: screenshot
   :no-require t)
 
 (use-package seoul256-theme
+  :straight (:host github
+                   :repo "dangduc/seoul256-emacs")
   :no-require t
   :config
   (setq seoul256-background 256))
@@ -667,7 +684,9 @@ _p_/_a_: push notes         _i_: screenshot
 (use-package undo-tree
   :diminish undo-tree-mode)
 
-(use-package rainbow-delimiters)
+(use-package rainbow-delimiters
+  :straight (:host github
+             :repo "Fanael/rainbow-delimiters"))
 
 (use-package habamax-theme
   :no-require t)
@@ -1086,7 +1105,10 @@ _p_/_a_: push notes         _i_: screenshot
   :init
   (setq dired-subtree-use-backgrounds nil))
 
-(use-package vscode-icon)
+(use-package vscode-icon
+  :straight (:host github
+             :repo "jojojames/vscode-icon-emacs"
+             :files (:defaults "icons" "source")))
 
 (use-package dired-sidebar
   :after vscode-icon
@@ -1167,6 +1189,7 @@ _p_/_a_: push notes         _i_: screenshot
    "M-k" 'vterm-clear))
 
 (use-package tex
+  :straight auctex
   :defer t
   :init
   (setq TeX-engine "xelatex")
