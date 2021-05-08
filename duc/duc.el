@@ -1,16 +1,5 @@
 ;;;; -*- lexical-binding: t; -*-
 
-(defmacro duc/alist-replace (list-var element)
-  `(let
-       ((replaced-list-var
-         (assq-delete-all
-          (car ',element) ,list-var)))
-     (setq ,list-var
-           (add-to-list 'replaced-list-var ',element))))
-
-(defmacro duc/alist-replace-set (list-var element)
-  `(setq ,list-var (duc/alist-replace ,list-var ,element)))
-
 (defvar duc/font-family "JetBrains Mono")
 (defvar duc/font-height (if (eq system-type 'windows-nt)
                             100

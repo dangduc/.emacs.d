@@ -33,6 +33,16 @@
 (setq inhibit-startup-message t
       inhibit-startup-echo-area-message t)
 
+;; enable transparent osx titlebar (a la Chrome)
+(push '(ns-transparent-titlebar . t) default-frame-alist)
+
+;; nil or dark, to switch to between black or white title text
+;; e.g. (ns-appearance . dark|nil)
+(push '(ns-appearance . nil) default-frame-alist)
+
+(push '(ns-use-thin-smoothing . t) default-frame-alist)
+(push '(ns-antialias-text . nil) default-frame-alist)
+
 ;; Set title of window to current file or buffer name if not a file.
 (setq frame-title-format
       '(""(:eval (if (buffer-file-name)
@@ -206,15 +216,6 @@
   (defvar duc/duc-dir (expand-file-name "duc" user-emacs-directory))
   (add-to-list 'load-path duc/duc-dir)
   :config
-  ;; enable transparent osx titlebar (a la Chrome)
-  (duc/alist-replace-set default-frame-alist (ns-transparent-titlebar . t))
-
-  ;; nil or dark, to switch to between black or white title text
-  ;; e.g. (duc/alist-replace-set default-frame-alist (ns-appearance . dark|nil))
-  (duc/alist-replace-set default-frame-alist (ns-appearance . nil))
-
-  (duc/alist-replace-set default-frame-alist (ns-use-thin-smoothing . t))
-  (duc/alist-replace-set default-frame-alist (ns-antialias-text . nil))
 
   ;; Set font
   (set-face-attribute 'default nil
