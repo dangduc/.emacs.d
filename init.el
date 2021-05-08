@@ -1,3 +1,5 @@
+;;;; -*- lexical-binding: t; -*-
+
 (defvar before-user-init-time (current-time)
   "Value of `current-time' when Emacs begins loading `user-init-file'.")
 (message "Loading Emacs...done (%.3fs)"
