@@ -895,6 +895,8 @@ _p_/_a_: push notes         _i_: screenshot
 
 (use-package selectrum
   :config
+  (setq completion-styles '(orderless))
+
   (with-eval-after-load 'evil
     (define-key selectrum-minibuffer-map [escape] 'minibuffer-keyboard-quit))
   (selectrum-mode))
