@@ -1155,7 +1155,10 @@ _p_/_a_: push notes         _i_: screenshot
 
 (use-package lsp-mode
   :init
-  (setq lsp-log-io t))
+  (setq lsp-log-io t)
+  :hook ((clojure-mode . lsp)
+         (clojurec-mode . lsp)
+         (clojurescript-mode . lsp)))
 
 ; Python projects should initialize the python lsp themselves.
 ; using
@@ -1250,6 +1253,7 @@ _p_/_a_: push notes         _i_: screenshot
       (unless evil-move-beyond-eol
         (advice-add 'duc/geiser-eval-last-sexp :around 'evil-collection-geiser-last-sexp)))))
 
+(use-package clojure-mode)
 
 (use-package geiser-mit
   :after geiser)
