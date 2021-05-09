@@ -107,6 +107,9 @@
 (if (not (eq system-type 'windows-nt))
     (and window-system (server-start)))
 
+;; Don't open buffer for native compilation warnings.
+(setq warning-suppress-types '((comp)))
+
 ;; org-mode
 
 (setq org-image-actual-width 400) ; Set inline display width of images.
