@@ -733,4 +733,32 @@ projectile cache when it's possible and update recentf list."
    fill-column)
   )
 
+(defun duc/incremental-search-filenames-in-directory ()
+  (interactive)
+  (let ((currentenv (getenv "FZF_DEFAULT_COMMAND")))
+    (ignore-errors
+      (setenv "FZF_DEFAULT_COMMAND"
+              "")
+      (counsel-fzf))
+    setenv "FZF_DEFAULT_COMMAND" (if (currentenv) currentenv "")))
+
+(defun duc/incremental-search-filenames-in-version-control ()
+  (interactive)
+  (let ((currentenv (getenv "FZF_DEFAULT_COMMAND")))
+    (ignore-errors
+      (setenv "FZF_DEFAULT_COMMAND"
+              "(git ls-files --exclude-standard --others --cached ||
+               ind . -maxdepth 9 -path \"*/\\.*\" -prune -o -print -o -type l -print |
+               sed s/^..//) 2> /dev/null")
+      (counsel-fzf))
+    setenv "FZF_DEFAULT_COMMAND" (if (currentenv) currentenv "")))
+
+(defun duc/incremental-search-filenames-dwim ()
+  (interactive)
+  (let* ((project-root (projectile-acquire-root))
+         (active-git-project-p (projectile-file-exists-p (expand-file-name ".git" project-root))))
+    (if active-git-project-p
+        (duc/incremental-search-filenames-in-version-control)
+      (duc/incremental-search-filenames-in-directory))))
+
 (provide 'duc)

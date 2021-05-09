@@ -632,7 +632,8 @@ _p_/_a_: push notes         _i_: screenshot
       ("a" "anki" hydra-submenu-anki/body)]]
     [["More Navigation"
       ("n" "buffer" switch-to-buffer)
-      ("m" "files" counsel-fzf)
+      ("m" "files" duc/incremental-search-filenames-dwim)
+      ("M" "files (all)" duc/incremental-search-filenames-in-directory)
       ("p" "project" hydra-submenu-project/body)]
      ["Other"
       ("H" "help" hydra-submenu-help/body)
