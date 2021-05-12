@@ -450,7 +450,8 @@ _f_/_w_: maximize
     ("w" save-buffer "write file")
     ("i" (find-file "~/.emacs.d/init.el" ) "init.el")
     ("I" (find-file "~/.emacs.d/duc/duc.el" ) "duc.el")
-    ("b" duc/create-or-open-bnote "bnote")
+    ("n" duc/create-or-open-bnote "bnote")
+    ("l" duc/create-or-open-bnote "bnote")
     ("1" (find-file "~/dev/notes/index.org" ) "index.org")
     ("2" (find-file "~/dev/notes/how-to.org" ) "how-to.org")
     ("3" shell-command-on-region "M-|") ;; e.g. "nc termbin.com 9999"
@@ -462,6 +463,7 @@ _f_/_w_: maximize
     ("z" duc/create-linked-note "create linked note")
     ("Z" (duc/create-linked-note "~/dev/chrestoturing/") "create chrestoturing note")
     ("T" (multi-occur-in-matching-buffers "log.org" "\\*\\*\\*\\* TODO") "View TODOs")
+    ("b" duc/sidebar-toggle "sidebar")
     ("s" duc/sidebar-toggle "sidebar"))
   (defhydra hydra-submenu-help (:exit t :hint nil)
     "
