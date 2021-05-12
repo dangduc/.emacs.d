@@ -740,7 +740,7 @@ projectile cache when it's possible and update recentf list."
       (setenv "FZF_DEFAULT_COMMAND"
               "")
       (counsel-fzf))
-    setenv "FZF_DEFAULT_COMMAND" (if (currentenv) currentenv "")))
+    (setenv "FZF_DEFAULT_COMMAND" (if (currentenv) currentenv ""))))
 
 (defun duc/incremental-search-filenames-in-version-control ()
   (interactive)
