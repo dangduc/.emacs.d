@@ -888,7 +888,10 @@ _p_/_a_: push notes         _i_: screenshot
   ; Alternatively, c-M-j
   (setq ivy-use-selectable-prompt t))
 
+(use-package orderless)
+
 (use-package selectrum
+  :after orderless
   :config
   (setq completion-styles '(orderless))
 
