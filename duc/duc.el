@@ -761,4 +761,18 @@ projectile cache when it's possible and update recentf list."
         (duc/incremental-search-filenames-in-version-control)
       (duc/incremental-search-filenames-in-directory))))
 
+; Force dynamic binding on the following variables, so they get picked up by
+; org-capture template.
+; See [Manual: Defining Global Variables](https://www.gnu.org/software/emacs/manual/html_node/elisp/Defining-Variables.html).
+(defvar duc/org-code-block-filename)
+(defvar duc/org-code-block-link)
+(defvar duc/org-code-block-language)
+
+(defun duc/org-capture-region-with-code-block ()
+  (interactive)
+  (let ((duc/org-code-block-filename (format "%s::%d" (buffer-name) (line-number-at-pos)))
+        (duc/org-code-block-link (duc/org-link-create-filename-line-number))
+        (duc/org-code-block-language (replace-regexp-in-string "-mode$" "" (symbol-name major-mode))))
+    (org-capture nil "r")))
+
 (provide 'duc)

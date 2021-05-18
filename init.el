@@ -144,7 +144,7 @@
               ("C" "Multi-line note" entry (file+datetree "") "* %<%H%M:%S> %?\n  %l")
               ("t" "TODO" entry (file+datetree "") "* TODO %<%H%M:%S> %^{todo}"
                :immediate-finish t)
-              ("r" "Region" entry (file+datetree "") "* %<%H%M:%S> %(concat filename)\n#+begin_src %(concat language)\n%i\n#+end_src\n%(concat link)"
+              ("r" "Region" entry (file+datetree "") "* %<%H%M:%S> %(concat duc/org-code-block-filename)\n#+begin_src %(concat duc/org-code-block-language)\n%i\n#+end_src\n%(concat duc/org-code-block-link)"
                :immediate-finish t)
               ("2" "Anki - Basic" entry (file+datetree "") "* %<%H%M:%S> English Definition :anki:\n:PROPERTIES:\n:ANKI_DECK: Default\n:ANKI_NOTE_TYPE: Basic\n:ANKI_TAGS: english definition\n:END:\n** Front\n** Back")
               ("1" "Anki - Word Pronunciation" entry (file+datetree "") "* %<%H%M:%S> English Pronunciation - %^{word} :anki:\n:PROPERTIES:\n:ANKI_DECK: Default\n:ANKI_NOTE_TYPE: Word-Pronunciation\n:ANKI_TAGS: english pronunciation\n:END:\n** Word\n%\\1\n** Picture\n** Sound\n** Pronunciation"))))
@@ -245,13 +245,6 @@
     (when enable-mode-line-setup
       (duc/theme-setup-mode-line)
       (advice-add 'load-theme :after #'duc/theme-setup-mode-line)))
-
-  (defun duc/org-capture-region-with-code-block ()
-    (interactive)
-    (let ((filename (format "%s::%d" (buffer-name) (line-number-at-pos)))
-          (link (duc/org-link-create-filename-line-number))
-          (language (replace-regexp-in-string "-mode$" "" (symbol-name major-mode))))
-      (org-capture nil "r")))
 
   (add-hook 'org-mode-hook
             (lambda ()
