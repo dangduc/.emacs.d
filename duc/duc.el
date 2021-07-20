@@ -89,10 +89,11 @@
 (defun duc/selectrum-load-theme ()
   (interactive)
   (load-theme (intern
-               (selectrum-read "Load custom theme: "
-                               (mapcar 'symbol-name
-                                       (custom-available-themes))
-                               :require-match t))
+               (completing-read "Load custom theme: "
+                                (mapcar 'symbol-name
+                                        (custom-available-themes))
+                                nil
+                                t))
               t))
 
 (defun duc/ivy-shell ()
