@@ -456,16 +456,11 @@ AG-PROMPT, if non-nil, is passed as `ivy-read' prompt argument. "
   :PROPERTIES:
   :VISIBILITY: folded
   :END:
-  ◼ *Tasks*: things you have to do. s-T.
-x ◼ Task complete.
-  - *Notes*: Things you don't want to forgot. s-N.
-  ◻ *Events*: Noteworth moments in time. s-E.
-^ - Priority entry.
-! - Inspiration entry.
-  - [[◊:210101]] to refer to other notes. s-L.
-  - Highlight paragraphs and M-q to redo newlines.
-  - C-c C-c with point to refresh in-buffer settings.
-  - Format is adapted from [[https://bulletjournal.com]]."
+** [ ] *Task*.
+** [X] Task complete.
+** [/] Task partial.
+** *Note*.
+  - Adapted from [[https://bulletjournal.com]]."
                           nil new-entry))))
     (find-file new-entry)
     (unless new-entry-exists-p

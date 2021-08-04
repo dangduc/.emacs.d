@@ -112,6 +112,9 @@
 
 ;; org-mode
 
+(setq org-todo-keywords '((sequence "[ ]" "[X]")
+                          (sequence "[/]" "|")))
+
 (setq org-image-actual-width 400) ; Set inline display width of images.
 
 ;; [[https://beorgapp.com/learning/emacs-encryption/][Getting started with encryption in Org mode on macOS]].
