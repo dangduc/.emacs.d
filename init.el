@@ -248,7 +248,6 @@
 
   (add-hook 'org-mode-hook
             (lambda ()
-              (setq-local normal-auto-fill-function 'bnote-auto-fill-function)
               (auto-fill-mode t)
               (setq-local truncate-lines t))))
 
@@ -510,7 +509,6 @@ _L_: font line spacing
     ("w" whitespace-mode)
     ("l" toggle-truncate-lines))
   (defhydra hydra-submenu-package (:exit t)
-    ("i" borg-assimilate "install")
     ("l" package-list-packages-no-fetch "package-list"))
   (defhydra hydra-submenu-project (:exit t)
     ("n" (let ((counsel-projectile-switch-project-action
@@ -646,14 +644,6 @@ _p_/_a_: push notes         _i_: screenshot
   (setq aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l)))
 
 ;; themes
-
-(use-package doom-modeline
-  :disabled t
-  :ensure t
-  :after all-the-icons
-  :init
-  (setq doom-modeline-icon nil)
-  :hook (after-init . doom-modeline-mode))
 
 (use-package flatland-black-theme
   :no-require t)
@@ -1059,11 +1049,6 @@ _p_/_a_: push notes         _i_: screenshot
              magit-find-file
              magit-find-file-other-window)
   :init
-  (defun +magit-git-submodule-update--init--recursive ()
-    "Run $ git submodule update --init --recursive."
-    (interactive)
-    (magit-run-git-async "submodule" "update" "--init" "--recursive"))
-
   (setq magit-bury-buffer-function 'magit-mode-quit-window)
 
   (setq magit-diff-refine-hunk 'all)
