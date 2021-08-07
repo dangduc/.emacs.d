@@ -112,9 +112,6 @@
 
 ;; org-mode
 
-(setq org-todo-keywords '((sequence "[ ]" "[X]")
-                          (sequence "[/]" "|")))
-
 (setq org-image-actual-width 400) ; Set inline display width of images.
 
 ;; [[https://beorgapp.com/learning/emacs-encryption/][Getting started with encryption in Org mode on macOS]].
@@ -581,16 +578,6 @@ _P_: 80-char sentences
     ("m" org-md-convert-region-to-md)
     ("t" org-insert-structure-template)
     ("o" org-open-at-point))
-  (transient-define-prefix transient-submenu-org-roam ()
-    "Main"
-    [["Node"
-      ("c" "capture" org-roam-capture)
-      ("i" "insert" org-roam-node-insert)
-      ("f" "find" org-roam-node-find)]
-     ["Etc"
-      ("j" "dailies capture" org-roam-dailies-capture-today)
-      ("l" "buffer toggle" org-roam-buffer-toggle)
-      ("g" "graph" org-roam-graph)]])
   (defhydra hydra-submenu-anki (:exit t :hint nil)
     "
 ^anki-connect^            ^Media^
@@ -632,7 +619,6 @@ _p_/_a_: push notes         _i_: screenshot
      ["Application"
       ("g" "magit" hydra-submenu-git/body)
       ("o" "org-mode" hydra-submenu-org-mode/body)
-      ("r" "org-roam" transient-submenu-org-roam)
       ("E" "eval-expresssion" eval-expression)
       ("s" "shell" duc/ivy-shell)
       ("u" "package" hydra-submenu-package/body)
@@ -1222,23 +1208,11 @@ _p_/_a_: push notes         _i_: screenshot
   (setq org-download-image-dir "~/dev/notes/img")
   (setq org-download-screenshot-method "screencapture -i %s"))
 
-(use-package org-roam
-  :init
-  (setq org-roam-v2-ack t)
-  (let ((d "~/dev/org-roam-files/"))
-    (if (not (file-exists-p d))
-        (make-directory d))
-    (if (file-accessible-directory-p d)
-        (setq org-roam-directory (file-truename d))
-      (error "Cannot access directory for org-roam")))
-  (let ((d "~/dev/org-roam-dailies/"))
-    (if (not (file-exists-p d))
-        (make-directory d))
-    (if (file-accessible-directory-p d)
-        (setq org-roam-dailies-directory (file-truename d))
-      (error "Cannot access directory for org-roam")))
-  :config
-  (org-roam-setup))
+(use-package org-ql)
+
+(use-package org-super-links
+  :straight (:host github
+             :repo "toshism/org-super-links"))
 
 (use-package anki-editor
   :init

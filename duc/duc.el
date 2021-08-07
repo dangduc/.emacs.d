@@ -447,20 +447,24 @@ AG-PROMPT, if non-nil, is passed as `ivy-read' prompt argument. "
         (if (and last-entry (file-exists-p last-entry))
             (copy-file last-entry
                        new-entry)
-          (append-to-file "#+STARTUP: showeverything
+          (append-to-file "#+STARTUP: showeverything indent
 #+LINK: ◊ file:bnote-%s.org
+#+TODO: [_] | [X]
+#+TODO: [/] |
 
 * Daily Log
+
 
 * Reference
   :PROPERTIES:
   :VISIBILITY: folded
   :END:
-** [ ] *Task*.
+** [_] *Task*.
 ** [X] Task complete.
 ** [/] Task partial.
 ** *Note*.
-  - Adapted from [[https://bulletjournal.com]]."
+
+* Backlinks"
                           nil new-entry))))
     (find-file new-entry)
     (unless new-entry-exists-p
@@ -511,6 +515,45 @@ AG-PROMPT, if non-nil, is passed as `ivy-read' prompt argument. "
              ;; will be computed again.
              (adaptive-fill-mode (not (equal fill-prefix ""))))
         (when fill-prefix (do-auto-fill))))))
+
+(defun duc/bnote-update-backlinks-for-note ()
+  (interactive)
+  (let ((back-buffer-name (current-buffer))
+        (back-buffer (current-buffer))
+        (back-buffer-filename (buffer-file-name (current-buffer)))
+        (files-to-update
+         (org-element-map (org-element-parse-buffer) 'link
+           (lambda (link)
+             (when (and (string= (org-element-property :type link) "file")
+                        (not (and (org-element-property :parent link)
+                                  (org-element-property :parent (org-element-property :parent link))
+                                  (string= (org-element-property :raw-value
+                                                                 (org-element-property :parent (org-element-property :parent link)))
+                                           "Backlinks"))))
+               (s-starts-with-p "bnote-" (org-element-property :path link))
+               (org-element-property :path link))))))
+    (mapcar (lambda (file-to-update)
+              (let* ((forward-buffer (find-file-noselect file-to-update))
+                     (existing-backlinks-in-file
+                      (org-element-map (with-current-buffer forward-buffer
+                                         (org-element-parse-buffer)) 'link
+                        (lambda (link)
+                          (when (and (string= (org-element-property :type link) "file")
+                                     (and (org-element-property :parent link)
+                                          (org-element-property :parent (org-element-property :parent link))
+                                          (string= (org-element-property :raw-value
+                                                                         (org-element-property :parent (org-element-property :parent link)))
+                                                   "Backlinks")))
+                            (s-starts-with-p "bnote-" (org-element-property :path link))
+                            (org-element-property :path link))))))
+                (when (not (member (file-name-nondirectory back-buffer-filename) existing-backlinks-in-file))
+                  (with-current-buffer forward-buffer
+                    (goto-char (point-max))
+                    (with-temp-buffer
+                      (insert (format "** [[-:%s]]." (file-name-base back-buffer-filename)))
+                      (append-to-buffer forward-buffer (point-min) (point-max))
+                      (with-current-buffer forward-buffer))))))
+            files-to-update)))
 
 (defun duc/anki-connect-push ()
   (interactive)
