@@ -455,15 +455,6 @@ AG-PROMPT, if non-nil, is passed as `ivy-read' prompt argument. "
 * Daily Log
 
 
-* Reference
-  :PROPERTIES:
-  :VISIBILITY: folded
-  :END:
-** [_] *Task*.
-** [X] Task complete.
-** [/] Task partial.
-** *Note*.
-
 * Backlinks"
                           nil new-entry))))
     (find-file new-entry)
@@ -518,8 +509,7 @@ AG-PROMPT, if non-nil, is passed as `ivy-read' prompt argument. "
 
 (defun duc/bnote-update-backlinks-for-note ()
   (interactive)
-  (let ((back-buffer-name (current-buffer))
-        (back-buffer (current-buffer))
+  (let ((back-buffer (current-buffer))
         (back-buffer-filename (buffer-file-name (current-buffer)))
         (files-to-update
          (org-element-map (org-element-parse-buffer) 'link
@@ -529,8 +519,8 @@ AG-PROMPT, if non-nil, is passed as `ivy-read' prompt argument. "
                                   (org-element-property :parent (org-element-property :parent link))
                                   (string= (org-element-property :raw-value
                                                                  (org-element-property :parent (org-element-property :parent link)))
-                                           "Backlinks"))))
-               (s-starts-with-p "bnote-" (org-element-property :path link))
+                                           "Backlinks")))
+                        (s-starts-with-p "bnote-" (org-element-property :path link)))
                (org-element-property :path link))))))
     (mapcar (lambda (file-to-update)
               (let* ((forward-buffer (find-file-noselect file-to-update))

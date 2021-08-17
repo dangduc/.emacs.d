@@ -249,7 +249,13 @@
   (add-hook 'org-mode-hook
             (lambda ()
               (auto-fill-mode t)
-              (setq-local truncate-lines t))))
+              (setq-local truncate-lines t)))
+
+  (add-hook 'before-save-hook
+            (lambda ()
+              (pcase major-mode
+                ('org-mode (if (s-starts-with-p "bnote-" (buffer-name))
+                               (duc/bnote-update-backlinks-for-note)))))))
 
 (with-eval-after-load 'evil
   (define-key minibuffer-local-map [escape] 'minibuffer-keyboard-quit)
@@ -619,7 +625,8 @@ _p_/_a_: push notes         _i_: screenshot
      ["Application"
       ("g" "magit" hydra-submenu-git/body)
       ("o" "org-mode" hydra-submenu-org-mode/body)
-      ("E" "eval-expresssion" eval-expression)
+      ("E" "eval-expresssion (M-:)" eval-expression)
+      (":" "eval-expresssion (M-:)" eval-expression)
       ("s" "shell" duc/ivy-shell)
       ("u" "package" hydra-submenu-package/body)
       ("a" "anki" hydra-submenu-anki/body)]]
@@ -1246,6 +1253,8 @@ _p_/_a_: push notes         _i_: screenshot
 
 (use-package geiser-mit
   :after geiser)
+
+(use-package lua-mode)
 
 
 ;; End package declarations
