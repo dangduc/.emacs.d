@@ -1,18 +1,21 @@
 ;;;; -*- lexical-binding: t; -*-
 
-(defvar duc/font-family "JetBrains Mono")
-(defvar duc/font-height (if (eq system-type 'windows-nt)
-                            100
-                          160))
+(defvar duc/font-family "InconsolateG for Powerline")
+(defvar duc/font-height (pcase system-type
+                          ('windows-nt 100)
+                          ('gnu/linux 100)
+                          (_ 160)))
 
 
-(defvar duc/font-family-mode-line (if (eq system-type 'windows-nt)
-                                      "Calibri"
-                                    "Concourse T3 Tab"))
+(defvar duc/font-family-mode-line (pcase system-type
+                                    ('windows-nt "Calibri")
+                                    ('gnu/linux "iA Writer Duospace")
+                                    (_ "Concourse T3 Tab")))
 
-(defvar duc/font-height-mode-line (if (eq system-type 'windows-nt)
-                                      120
-                                    160))
+(defvar duc/font-height-mode-line (pcase system-type
+                          ('windows-nt 120)
+                          ('gnu/linux 100)
+                          (_ 160)))
 
 (defvar duc/margin-height-mode-line 5)
 
