@@ -629,7 +629,8 @@ _p_/_a_: push notes         _i_: screenshot
       (":" "eval-expresssion (M-:)" eval-expression)
       ("s" "shell" duc/ivy-shell)
       ("u" "package" hydra-submenu-package/body)
-      ("a" "anki" hydra-submenu-anki/body)]]
+      ("a" "anki" hydra-submenu-anki/body)
+      ("f" "org-fc" org-fc-hydra/body)]]
     [["More Navigation"
       ("n" "buffer" switch-to-buffer)
       ("m" "files" duc/incremental-search-filenames-dwim)
@@ -1217,9 +1218,19 @@ _p_/_a_: push notes         _i_: screenshot
 
 (use-package org-ql)
 
-(use-package org-super-links
-  :straight (:host github
-             :repo "toshism/org-super-links"))
+(use-package org-fc
+  :straight
+  (org-fc :type git
+          :repo "https://git.sr.ht/~l3kn/org-fc"
+          :files (:defaults "awk" "demo.org"))
+  :init
+  (let ((dir "~/dev/org-fc"))
+    (unless (file-exists-p dir)
+      (make-directory dir))
+    (setq org-fc-directories `(,dir))
+    (setq org-fc-review-history-file (expand-file-name "org-fc-reviews.tsv" dir)))
+  :config
+  (require 'org-fc-hydra))
 
 (use-package anki-editor
   :init
