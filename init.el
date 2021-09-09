@@ -112,7 +112,7 @@
 
 ;; org-mode
 
-(setq org-image-actual-width 400) ; Set inline display width of images.
+(setq org-image-actual-width nil) ; Set inline display width of images.
 
 ;; [[https://beorgapp.com/learning/emacs-encryption/][Getting started with encryption in Org mode on macOS]].
 (require 'org-crypt)
@@ -1213,8 +1213,10 @@ _p_/_a_: push notes         _i_: screenshot
 
 (use-package org-download
   :init
+  (setq org-download-annotate-function (lambda (link) ""))
   (setq org-download-image-dir "~/dev/notes/img")
-  (setq org-download-screenshot-method "screencapture -i %s"))
+  (setq org-download-screenshot-method "screencapture -i %s")
+  (setq org-download-image-org-width 400))
 
 (use-package org-ql)
 
