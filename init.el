@@ -146,6 +146,8 @@
                :immediate-finish t)
               ("r" "Region" entry (file+datetree "") "* %<%H%M:%S> %(concat duc/org-code-block-filename)\n#+begin_src %(concat duc/org-code-block-language)\n%i\n#+end_src\n%(concat duc/org-code-block-link)"
                :immediate-finish t)
+              ("n" "org-fc Normal" entry (file "~/dev/org-fc/unsorted.org") "* Normal Card\n%^{Front}\n** Back\n%^{Back}\n** Extra"
+               :immediate-finish t)
               ("2" "Anki - Basic" entry (file+datetree "") "* %<%H%M:%S> English Definition :anki:\n:PROPERTIES:\n:ANKI_DECK: Default\n:ANKI_NOTE_TYPE: Basic\n:ANKI_TAGS: english definition\n:END:\n** Front\n** Back")
               ("1" "Anki - Word Pronunciation" entry (file+datetree "") "* %<%H%M:%S> English Pronunciation - %^{word} :anki:\n:PROPERTIES:\n:ANKI_DECK: Default\n:ANKI_NOTE_TYPE: Word-Pronunciation\n:ANKI_TAGS: english pronunciation\n:END:\n** Word\n%\\1\n** Picture\n** Sound\n** Pronunciation"))))
 
@@ -603,6 +605,24 @@ _p_/_a_: push notes         _i_: screenshot
     ("i" org-download-screenshot)
     ("I" org-download-image)
     ("s" duc/forvo-text-to-sound-at-region-or-word))
+  (transient-define-prefix transient-org-fc ()
+    "org-fc"
+    [["Review"
+      ("r" "review buffer" org-fc-review-buffer)
+      ("R" "review all" org-fc-review-all)
+      ("m" "dashboard" org-fc-dashboard)]
+     ["Capture"
+      ("N" "normal" (lambda () (interactive) (org-capture nil "n")))]
+     ["Card"
+      ("1" "normal" org-fc-type-normal-init)
+      ("n" "normal" org-fc-type-normal-init)
+      ("2" "cloze" (lambda () (interactive) (org-fc-type-cloze-init 'deletion)))
+      ("c" "cloze" (lambda () (interactive) (org-fc-type-cloze-init 'deletion)))]
+     ["Other"
+      ("i" "screenshot" (lambda () (interactive)
+                          (let ((org-download-image-dir "~/dev/org-fc/img"))
+                            (org-download-screenshot))))
+      ("h" "hydra" org-fc-hydra/body)]])
   (transient-define-prefix leader-main-menu ()
     "Main"
     [["Navigate"
@@ -630,7 +650,7 @@ _p_/_a_: push notes         _i_: screenshot
       ("s" "shell" duc/ivy-shell)
       ("u" "package" hydra-submenu-package/body)
       ("a" "anki" hydra-submenu-anki/body)
-      ("f" "org-fc" org-fc-hydra/body)]]
+      ("r" "org-fc" transient-org-fc)]]
     [["More Navigation"
       ("n" "buffer" switch-to-buffer)
       ("m" "files" duc/incremental-search-filenames-dwim)
@@ -1232,6 +1252,8 @@ _p_/_a_: push notes         _i_: screenshot
     (setq org-fc-directories `(,dir))
     (setq org-fc-review-history-file (expand-file-name "org-fc-reviews.tsv" dir)))
   :config
+  (set-face-attribute 'org-fc-type-cloze-hole-face nil :foreground "blue"
+                                                       :weight 'unspecified)
   (require 'org-fc-hydra))
 
 (use-package anki-editor
