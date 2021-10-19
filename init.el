@@ -153,6 +153,8 @@
 
 ; Don't indent by level. (Region-= will remove indents.)
 (setq org-adapt-indentation nil)
+; Also don't intent src blocks.
+(setq org-edit-src-content-indentation 0)
 
 ;; Misc
 ;;
@@ -289,6 +291,11 @@
             (lambda ()
               (when (file-remote-p default-directory)
                 (dired-async-mode)))))
+
+(use-package ob-async
+  :init
+;(setq org-confirm-babel-evaluate nil)
+  )
 
 (use-package exec-path-from-shell
   :after async
@@ -1178,6 +1185,8 @@ _p_/_a_: push notes         _i_: screenshot
   :hook (python-mode . (lambda ()
                          (require 'lsp-python-ms))))
 
+(setq python-indent-offset 2)
+
 (use-package yasnippet
   :config
   (yas-global-mode 1))
@@ -1327,7 +1336,7 @@ _p_/_a_: push notes         _i_: screenshot
  '(nrepl-message-colors
    '("#dc322f" "#cb4b16" "#b58900" "#5b7300" "#b3c34d" "#0061a8" "#2aa198" "#d33682" "#6c71c4"))
  '(org-agenda-files '("~/dev/notes/log.org"))
- '(org-babel-load-languages '((emacs-lisp . t) (R . t) (ditaa . t) (plantuml . t)))
+ '(org-babel-load-languages '((emacs-lisp . t) (python . t) (R . t) (ditaa . t) (plantuml . t)))
  '(org-confirm-babel-evaluate nil)
  '(package-selected-packages
    '(spacegray-theme darkmine-theme oceanic-theme soft-morning-theme grandshell-theme zweilight-theme punpun-theme badger-theme omtose-phellack-theme busybee-theme phoenix-dark-pink-theme phoenix-dark-mono-theme inkpot-theme panda-theme ujelly-theme night-owl-theme gruvbox-theme underwater-theme madhat2r-theme darkburn-theme northcode-theme zerodark-theme nord nord-theme fold-dwim-org origami outshine esh-autosuggest go-mode ibuffer-vc ibuffer-projectile counsel-projectile counsel-tramp doom-modeline jazz-theme jbeans-theme klere-theme kooten-theme lenlen-theme mbo70s-theme melancholy-theme mellow-theme metalheart-theme mustang-theme solarized-theme sunburn-theme blackboard-theme bliss-theme bubbleberry-theme danneskjold-theme firecode-theme farmhouse-theme eziam-theme ibuffer-sidebar seoul257-theme twilight-bright-theme labburn-theme moe-theme borland-blue-theme autumn-light-theme switch-window restclient moom pkg one-themes ones-theme doneburn-theme plain-theme iodine-theme nofrils-acme-theme nofrils-acme groovy-mode gradle-mode rainbow-blocks rainbow-mode challenger-deep-theme kosmos-theme cosmos-theme habamax-theme kaolin-themes swift3-mode nimbus-theme hydandata-light-theme monotropic-theme darkokai-theme cyberpunk-theme objc-font-lock base16-themes base16 swift-mode darktooth-theme kotlin-mode csharp-mode doom hemisu-theme material-theme flatland-theme light-soap-theme yoshi-theme sexy-monochrome-theme paper-theme hc-zenburn-theme sourcerer-theme github-modern-theme green-is-the-new-black-theme greymatters-theme eclipse-theme distinguished-theme dark-mint-theme dakrone-light-theme cherry-blossom-theme atom-one-dark-theme atom-dark-theme ahungry-theme color-theme-approximate graphene-meta-theme spacemacs-theme elogcat which-key plan9-theme tao-theme eink-theme inverse-acme-theme gruber-darker-theme flatui-dark-theme flatui-theme leuven-theme creamsody-theme apropospriate-theme highlight-indent-guides evil-collection anti-zenburn zenburn markdown-mode sublimity-map sublimity diff-hl macrostep zenburn-theme anti-zenburn-theme minimap doom-themes dracula-theme projectile lispyville smartparens diminish evil-magit company multi-term magit all-the-icons-dired dired-sidebar dired-subtree tide web-mode exec-path-from-shell typescript-mode company-mode counsel ivy rainbow-delimiters hydra evil ht log4e dash))
