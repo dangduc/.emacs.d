@@ -292,11 +292,6 @@
               (when (file-remote-p default-directory)
                 (dired-async-mode)))))
 
-(use-package ob-async
-  :init
-;(setq org-confirm-babel-evaluate nil)
-  )
-
 (use-package exec-path-from-shell
   :after async
   :if (memq window-system '(mac ns x))
