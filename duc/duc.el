@@ -229,14 +229,18 @@ e.g.
                     (duc/scheme-send-last-sexp)))
     ('emacs-lisp-mode (eval-last-sexp p))
     ('python-mode
-     (unless (get-buffer (format "*Python[%s]*" (buffer-name)))
-       (let ((buffer (buffer-name)))
-         (run-python nil t t)
-         (pop-to-buffer buffer)))
-     (cond ((use-region-p) (python-shell-send-string
-                            (buffer-substring (region-beginning)
-                                              (region-end))))
-           (t (python-shell-send-buffer))))
+     (cond  ((string-match ".*\\/EPIJudge\\/.*"
+                           (file-name-directory (buffer-file-name)))
+             (duc/ivy-shell-send-string (concat "python " (buffer-name))
+                                        (file-name-directory (buffer-file-name))))
+            (_ (unless (get-buffer (format "*Python[%s]*" (buffer-name)))
+                 (let ((buffer (buffer-name)))
+                   (run-python nil t t)
+                   (pop-to-buffer buffer)))
+               (cond ((use-region-p) (python-shell-send-string
+                                      (buffer-substring (region-beginning)
+                                                        (region-end))))
+                     (t (python-shell-send-buffer))))))
     ('latex-mode (preview-section))
     (_ (eval-last-sexp p))))
 
@@ -806,5 +810,16 @@ projectile cache when it's possible and update recentf list."
         (duc/org-code-block-link (duc/org-link-create-filename-line-number))
         (duc/org-code-block-language (replace-regexp-in-string "-mode$" "" (symbol-name major-mode))))
     (org-capture nil "r")))
+
+; https://caiorss.github.io/Emacs-Elisp-Programming/Elisp_Snippets.html
+(defun duc/yank-string (s)
+  "Copy a string to clipboard"
+   (with-temp-buffer
+    (insert s)
+    (clipboard-kill-region (point-min) (point-max))))
+
+(defun duc/yank-buffer-name ()
+  (interactive)
+  (duc/yank-string (buffer-name)))
 
 (provide 'duc)
