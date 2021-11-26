@@ -233,18 +233,18 @@ e.g.
                     (duc/scheme-send-last-sexp)))
     ('emacs-lisp-mode (eval-last-sexp p))
     ('python-mode
-     (cond  ((string-match ".*\\/EPIJudge\\/.*"
-                           (file-name-directory (buffer-file-name)))
+     (cond  ((string-match-p ".*\\/EPIJudge\\/.*" (or (buffer-file-name) ""))
              (duc/ivy-shell-send-string (concat "python " (buffer-name))
                                         (file-name-directory (buffer-file-name))))
-            (_ (unless (get-buffer (format "*Python[%s]*" (buffer-name)))
-                 (let ((buffer (buffer-name)))
-                   (run-python nil t t)
-                   (pop-to-buffer buffer)))
-               (cond ((use-region-p) (python-shell-send-string
-                                      (buffer-substring (region-beginning)
-                                                        (region-end))))
-                     (t (python-shell-send-buffer))))))
+            (t
+             (unless (get-buffer (format "*Python[%s]*" (buffer-name)))
+               (let ((buffer (buffer-name)))
+                 (run-python nil t t)
+                 (pop-to-buffer buffer)))
+             (cond ((use-region-p) (python-shell-send-string
+                                    (buffer-substring (region-beginning)
+                                                      (region-end))))
+                   (t (python-shell-send-buffer))))))
     ('latex-mode (preview-section))
     (_ (eval-last-sexp p))))
 
