@@ -81,7 +81,11 @@
                       :family duc/font-family
                       :height duc/font-height
                       :weight duc/font-weight
-                      :width 'normal))
+                      :width 'normal)
+  (set-face-attribute 'org-block nil
+                      :inherit '(fixed-pitch shadow)
+                      :extend t
+                      :family duc/font-family))
 
 (defun duc/set-font-line-spacing ()
   (interactive)
