@@ -361,6 +361,8 @@
     (evil-define-key 'emacs org-agenda-mode-map (kbd "k") 'evil-previous-line)
     (evil-define-key '(normal insert) org-mode-map (kbd "C-c i") 'org-clock-in)
     (evil-define-key '(normal insert) org-mode-map (kbd "C-c o") 'org-clock-out)
+    ; Binding not working in WSL. Not sure why.
+    (evil-define-key '(normal) org-mode-map (kbd "<tab>") 'org-cycle)
     (evil-collection-init))
 
 (use-package general
