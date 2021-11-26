@@ -233,6 +233,12 @@
                       :weight duc/font-weight
                       :width 'normal)
 
+  (with-eval-after-load 'org-faces
+    (set-face-attribute 'org-block nil
+                        :inherit '(fixed-pitch shadow)
+                        :extend t
+                        :family duc/font-family))
+
   (defun duc/theme-setup-mode-line-font (&rest _)
     (dolist (sym '(mode-line mode-line-inactive))
       (set-face-attribute sym nil
