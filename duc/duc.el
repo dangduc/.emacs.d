@@ -340,7 +340,7 @@ https://emacs-doctor.com/emacs-strip-tease.html"
                              (format "echo %s | curl -sF 'f:1=<-' ix.io"
                                      (shell-quote-argument (buffer-substring (region-beginning) (region-end))))))))
     (cond ((string-match "^http://ix.io/[a-zA-Z0-9]+$" short) (kill-new short)
-           (print short))
+                                                              (print short))
           (t (print (format "Error calling ix.io: %s" short))))))
 
 (defun duc/git-clone ()
