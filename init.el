@@ -171,7 +171,9 @@
 ;;
 
 (load-file (expand-file-name "local-declarations.el" user-emacs-directory))
-(load-file (expand-file-name "local.el" user-emacs-directory))
+(let ((local-properties (expand-file-name "local.el" user-emacs-directory)))
+  (when (file-exists-p local-properties) (load-file local-properties)))
+
 
 ;; Stolen from [Aaron Bedra's Emacs 26 Configuration](http://aaronbedra.com/emacs.d/#vendor-directory)
 ;; Setup up vendor directory.
