@@ -62,6 +62,10 @@
 ;; display columns position in mode-line
 (column-number-mode t)
 
+;; highlight cursor's current line
+(global-hl-line-mode t)
+(setq global-hl-line-sticky-flag t)
+
 ; line numbers (emacs 26 and above)
 (when (fboundp 'display-line-numbers-mode)
   (dolist (hook '(prog-mode-hook
