@@ -286,9 +286,15 @@ https://emacs-doctor.com/emacs-strip-tease.html"
 
 (defun duc/new-buffer ()
   (interactive)
-  (let ((buffer (generate-new-buffer "untitled")))
+  (let ((buffer
+         (generate-new-buffer
+          (completing-read "New buffer name: "
+                           nil
+                           nil
+                           nil
+                           "untitled"))))
     (set-buffer-major-mode buffer)
-    (switch-to-buffer-other-window buffer)))
+    (switch-to-buffer buffer)))
 
 ;; Credit [Pin an buffer to a window in #emacs](https://gist.github.com/HeinrichHartmann/c4401ff0347cea975380e221c7e24f42).
 (defun duc/toggle-pin-buffer ()

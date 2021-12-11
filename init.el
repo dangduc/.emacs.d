@@ -583,7 +583,7 @@ _P_: 80-char sentences
  _A_: agenda  _c_: C-c C-c  _e_: encrypt entry        _s_: store link at P
  _b_: bnote   ^ ^           _E_: encrypt all entries  _S_: insert link at P
  _n_: narrow  ^ ^           _d_: decrypt entry        _o_: open link
- _N_: widen   ^ ^           _D_: decrypt all entries  _L_: toggle desc links
+ _N_/_w_: widen   ^ ^         _D_: decrypt all entries  _L_: toggle desc links
 ^ ^
  _m_: region->md  ^ ^       _t_: insert template      _l_: search & insert linked link
 "
@@ -598,6 +598,7 @@ _P_: 80-char sentences
     ("L" org-toggle-link-display)
     ("n" org-narrow-to-subtree)
     ("N" widen)
+    ("w" widen)
     ("s" org-store-link)
     ("S" org-insert-link)
     ("m" org-md-convert-region-to-md)
