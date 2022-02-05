@@ -66,6 +66,10 @@
 (global-hl-line-mode t)
 (setq global-hl-line-sticky-flag t)
 
+;; fix some systems not properly highlighting text selection.
+(if (string-equal (face-attribute 'default :foreground) "#000000")
+    (set-face-attribute 'region nil :background "#dedede"))
+
 ; line numbers (emacs 26 and above)
 (when (fboundp 'display-line-numbers-mode)
   (dolist (hook '(prog-mode-hook

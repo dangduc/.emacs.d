@@ -1,20 +1,22 @@
 ;;;; -*- lexical-binding: t; -*-
 
-(defvar duc/font-family "InconsolateG for Powerline")
+(defvar duc/font-family (pcase system-type
+                          ('gnu/linux "DejaVu Sans Mono")
+                          (_ "InconsolateG for Powerline")))
 (defvar duc/font-height (pcase system-type
                           ('windows-nt 100)
-                          ('gnu/linux 100)
+                          ('gnu/linux 140)
                           (_ 160)))
 
 
 (defvar duc/font-family-mode-line (pcase system-type
                                     ('windows-nt "Calibri")
-                                    ('gnu/linux "iA Writer Duospace")
+                                    ('gnu/linux "DejaVu Sans Mono")
                                     (_ "Concourse T3 Tab")))
 
 (defvar duc/font-height-mode-line (pcase system-type
                           ('windows-nt 120)
-                          ('gnu/linux 100)
+                          ('gnu/linux 140)
                           (_ 160)))
 
 (defvar duc/margin-height-mode-line 5)
