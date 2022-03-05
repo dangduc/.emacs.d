@@ -580,34 +580,30 @@ _P_: 80-char sentences
     ("e" smerge-ediff)
     ("m" smerge-ediff)
     ("P" fill-paragraph))
-  (defhydra hydra-submenu-org-mode (:exit t :hint nil)
-    "
-              ^org-mode^
-^^^^^^^^-----------------------------------------------------------------------
- _A_: agenda  _c_: C-c C-c  _e_: encrypt entry        _s_: store link at P
- _b_: bnote   ^ ^           _E_: encrypt all entries  _S_: insert link at P
- _n_: narrow  ^ ^           _d_: decrypt entry        _o_: open link
- _N_/_w_: widen   ^ ^         _D_: decrypt all entries  _L_: toggle desc links
-^ ^
- _m_: region->md  ^ ^       _t_: insert template      _l_: search & insert linked link
-"
-    ("A" org-agenda)
-    ("b" duc/create-or-open-bnote)
-    ("c" org-ctrl-c-ctrl-c)
-    ("e" org-encrypt-entry)
-    ("E" org-encrypt-entries)
-    ("d" org-decrypt-entry)
-    ("D" org-decrypt-entries)
-    ("l" (duc/counsel-ag-insert-linked-link nil nil "--org" nil))
-    ("L" org-toggle-link-display)
-    ("n" org-narrow-to-subtree)
-    ("N" widen)
-    ("w" widen)
-    ("s" org-store-link)
-    ("S" org-insert-link)
-    ("m" org-md-convert-region-to-md)
-    ("t" org-insert-structure-template)
-    ("o" org-open-at-point))
+  (transient-define-prefix transient-org-mode ()
+    "org-mode"
+    [["edit"
+      ("c" "C-c C-c" org-ctrl-c-ctrl-c)
+      ("m" "region->md" org-md-convert-region-to-md)
+      ("t" "insert template" org-insert-structure-template)
+      ("e" "encrypt entry" org-encrypt-entry)
+      ("E" "encrypt all" org-encrypt-entries)
+      ("d" "decrypt entry" org-decrypt-entry)
+      ("D" "decrypy all" org-decrypt-entries)]
+     ["bnote"
+      ("b" "bnote" duc/create-or-open-bnote)
+      ("l" "search & insert link" (lambda () (interactive)
+                                    (duc/counsel-ag-insert-linked-link nil nil "--org" nil)))
+      ("s" "store link at P" org-store-link)
+      ("S" "insert link at P" org-insert-link)]
+     ["view"
+      ("A" "agenda" org-agenda)
+      ("L" "toggle descriptive links" org-toggle-link-display)
+      ("i" "toggle inline images" org-toggle-inline-images)
+      ("n" "narrow" org-narrow-to-subtree)
+      ("N" "widen" widen)
+      ("w" "widen" widen)
+      ("o" "open link" org-open-at-point)]])
   (defhydra hydra-submenu-anki (:exit t :hint nil)
     "
 ^anki-connect^            ^Media^
@@ -666,7 +662,7 @@ _p_/_a_: push notes         _i_: screenshot
       ("L" "lc" hydra-submenu-leetcode/body)]
      ["Application"
       ("g" "magit" hydra-submenu-git/body)
-      ("o" "org-mode" hydra-submenu-org-mode/body)
+      ("o" "org-mode" transient-org-mode)
       ("E" "eval-expresssion (M-:)" eval-expression)
       (":" "eval-expresssion (M-:)" eval-expression)
       ("s" "shell" duc/ivy-shell)
