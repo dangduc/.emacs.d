@@ -992,6 +992,7 @@ _p_/_a_: push notes         _i_: screenshot
 (defun disable-company-mode-in-eshell-mode ()
   (company-mode -1))
 
+;; inline / in-buffer completion
 (use-package company
   :diminish company-mode
   :init
