@@ -432,19 +432,24 @@
     ("e" leetcode-try)
     ("t" leetcode-try)
     ("r" leetcode-refresh))
-  (defhydra hydra-submenu-buffer (:exit t)
-    ("p" previous-buffer "prev buffer")
-    ("n" next-buffer "next buffer")
-    ("l" list-buffers "list buffers")
-    ("N" duc/new-buffer "new buffer")
-    ("c" duc/new-buffer "new buffer")
-    ("m" (duc/rename-file (buffer-name)) "move buffer & file (ie, rename)")
-    ("o" switch-to-buffer "switch buffer")
-    ("r" revert-buffer "reload buffer")
-    ("w" save-buffer "save buffer")
-    ("t" auto-revert-tail-mode "tail -f")
-    ("k" kill-buffer "kill buffer")
-    ("y" duc/yank-buffer-name "yank buffer-name"))
+  (transient-define-prefix transient-buffer ()
+    "buffer"
+    [["edit"
+      ("N" "new buffer" duc/new-buffer)
+      ("c" "new buffer" duc/new-buffer)
+      ("m" "move buffer & file (ie, rename)" (lambda () (interactive) (duc/rename-file (buffer-name))))
+      ("w" "save buffer" save-buffer)
+      ("r" "reload buffer" revert-buffer)
+      ("k" "kill buffer" kill-buffer)]
+     ["navigation"
+      ("p" "prev buffer" previous-buffer)
+      ("n" "next buffer" next-buffer)
+      ("l" "list buffers" list-buffers)
+      ("o" "switch buffer" switch-to-buffer)]
+     ["other"
+      ("i" "create indirect buffer" clone-indirect-buffer)
+      ("t" "tail -f" auto-revert-tail-mode)
+      ("y" "yank buffer-name" duc/yank-buffer-name)]])
   (defhydra hydra-submenu-eval (:exit t)
     ("e" duc/eval-dwim "dwim")
     ("b" duc/eval-buffer "buffer")
@@ -656,7 +661,7 @@ _p_/_a_: push notes         _i_: screenshot
       (">" "occur in file "occur)]
      ["Action"
       ("SPC" "M-x" execute-extended-command)
-      ("b" "buffers" hydra-submenu-buffer/body)
+      ("b" "buffers" transient-buffer)
       ("e" "eval" hydra-submenu-eval/body)
       ("w" "window/frame" hydra-submenu-window/body)
       ("L" "lc" hydra-submenu-leetcode/body)]
