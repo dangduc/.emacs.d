@@ -631,18 +631,28 @@ _p_/_a_: push notes         _i_: screenshot
   (transient-define-prefix transient-org-fc ()
     "org-fc"
     [["Review"
-      ("r" "review buffer" org-fc-review-buffer)
-      ("R" "review all" org-fc-review-all)
-      ("m" "dashboard" org-fc-dashboard)]
+      ("RET" "flip" org-fc-review-flip)
+      ("p" "edit" org-fc-review-edit)
+      ("i" "edit" org-fc-review-edit)
+      ("q" "quit" org-fc-review-quit)
+      ("s" "suspend" org-fc-review-suspend-card)]
+     ["Rate"
+      ("a" "again" org-fc-review-rate-again)
+      ("e" "easy" org-fc-review-rate-easy)
+      ("g" "good" org-fc-review-rate-good)
+      ("h" "hard" org-fc-review-rate-hard)
+      ("1" "easy" org-fc-review-rate-easy)
+      ("2" "good" org-fc-review-rate-good)
+      ("3" "hard" org-fc-review-rate-hard)]
      ["Capture"
-      ("N" "normal" (lambda () (interactive) (org-capture nil "n")))]
-     ["Card"
-      ("1" "normal" org-fc-type-normal-init)
+      ("N" "normal" (lambda () (interactive) (org-capture nil "n")))
       ("n" "normal" org-fc-type-normal-init)
-      ("2" "cloze" (lambda () (interactive) (org-fc-type-cloze-init 'deletion)))
       ("c" "cloze" (lambda () (interactive) (org-fc-type-cloze-init 'deletion)))]
      ["Other"
-      ("i" "screenshot" (lambda () (interactive)
+      ("r" "review buffer" org-fc-review-buffer)
+      ("R" "review all" org-fc-review-all)
+      ("m" "dashboard" org-fc-dashboard)
+      ("S" "screenshot" (lambda () (interactive)
                           (let ((org-download-image-dir "~/dev/org-fc/img"))
                             (org-download-screenshot))))
       ("h" "hydra" org-fc-hydra/body)]])
