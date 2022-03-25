@@ -4,3 +4,9 @@
 [submodule "vendor/packed"]
 	path = vendor/packed
 	url = git@github.com:emacscollective/packed.git
+[submodule "vendor/lin"]
+	path = vendor/lin
+	url = https://gitlab.com/protesilaos/lin.git
+[submodule "vendor/pulsar"]
+	path = vendor/pulsar
+	url = https://gitlab.com/protesilaos/pulsar.git

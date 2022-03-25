@@ -62,10 +62,6 @@
 ;; display columns position in mode-line
 (column-number-mode t)
 
-;; highlight cursor's current line
-(global-hl-line-mode t)
-(setq global-hl-line-sticky-flag t)
-
 ;; fix some systems not properly highlighting text selection.
 (if (string-equal (face-attribute 'default :foreground) "#000000")
     (set-face-attribute 'region nil :background "#dedede"))
@@ -280,6 +276,32 @@
 (with-eval-after-load 'evil
   (define-key minibuffer-local-map [escape] 'minibuffer-keyboard-quit)
   (define-key minibuffer-inactive-mode-map [escape] 'minibuffer-keyboard-quit))
+
+(require 'lin)
+(with-eval-after-load 'lin
+  (lin-setup)
+  (customize-set-variable 'lin-mode-hooks
+                          '(tide-mode-hook
+                            elisp-mode)))
+
+(require 'pulsar)
+(with-eval-after-load 'lin
+  (setq pulsar-pulse-functions '(evil-window-down
+                                 evil-window-up
+                                 evil-window-left
+                                 evil-window-right
+                                 duc/eval-dwim
+                                 xref-find-definitions
+                                 xref-find-references
+                                 tide-jump-to-filespan
+                                 tide-references))
+  (setq pulsar-pulse t)
+  (setq pulsar-delay 0.055)
+  (setq pulsar-iterations 10)
+  (setq pulsar-face 'pulsar-magenta)
+  (setq pulsar-highlight-face 'pulsar-yellow)
+
+  (pulsar-global-mode 1))
 
 (use-package diminish
   :config
@@ -732,6 +754,8 @@ _p_/_a_: push notes         _i_: screenshot
 
 (use-package solarized-theme)
 
+(use-package modus-themes)
+
 ;; end themes
 
 (use-package undo-tree
@@ -1131,6 +1155,7 @@ _p_/_a_: push notes         _i_: screenshot
   :config
   ; Disable binding for blame when in a magit diff buffer.
   (define-key magit-blob-mode-map (kbd "b") nil)
+  (define-key magit-diff-section-base-map (kbd "C-<return>") 'magit-diff-visit-worktree-file-other-window)
 
   (define-key magit-hunk-section-map (kbd "<return>") 'magit-diff-visit-file-other-window))
 
