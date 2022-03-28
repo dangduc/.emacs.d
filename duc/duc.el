@@ -16,10 +16,10 @@
 
 (defvar duc/font-height-mode-line (pcase system-type
                           ('windows-nt 120)
-                          ('gnu/linux 140)
+                          ('gnu/linux 120)
                           (_ 160)))
 
-(defvar duc/margin-height-mode-line 5)
+(defvar duc/margin-height-mode-line 1)
 
 (defvar duc/font-weight 'normal)
 
@@ -237,6 +237,7 @@ e.g.
     ('python-mode
      (cond  ((string-match-p ".*\\/EPIJudge\\/.*" (or (buffer-file-name) ""))
              (duc/ivy-shell-send-string (concat "python " (buffer-name))
+                                        "epi-judge-terminal"
                                         (file-name-directory (buffer-file-name))))
             (t
              (unless (get-buffer (format "*Python[%s]*" (buffer-name)))
@@ -350,6 +351,20 @@ https://emacs-doctor.com/emacs-strip-tease.html"
     (cond ((string-match "^http://ix.io/[a-zA-Z0-9]+$" short) (kill-new short)
                                                               (print short))
           (t (print (format "Error calling ix.io: %s" short))))))
+
+(defun duc/delete-this-file ()
+  """
+Delete file for current file buffer. Does not prompt.
+
+Author: @syegge.
+"""
+  (interactive)
+  (let ((filename (buffer-file-name)))
+    (if (file-exists-p filename)
+        (progn
+          (delete-file filename)
+          (message "Deleted %s" filename))
+      (message "This buffer is not visiting an existeing file."))))
 
 (defun duc/git-clone ()
   (interactive)
