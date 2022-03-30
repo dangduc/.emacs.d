@@ -760,7 +760,14 @@ _p_/_a_: push notes         _i_: screenshot
 
 (use-package modus-themes
   :init
-  (setq modus-themes-deuteranopia t))
+  (setq modus-themes-deuteranopia t)
+
+  (defun duc/theme-setup-modus-operandi-theme (&rest _)
+    "Tweak vterm display colors for doom-flatwhite"
+    (let ((current-theme (car custom-enabled-themes)))
+      (when (eq current-theme 'modus-operandi)
+        (set-face-attribute 'modus-themes-hl-line nil :background "darkseagreen2"))))
+  (advice-add 'load-theme :after #'duc/theme-setup-modus-operandi-theme))
 
 ;; end themes
 
@@ -1086,7 +1093,8 @@ _p_/_a_: push notes         _i_: screenshot
 
 (use-package flycheck
   :init
-  (add-hook 'sh-mode-hook (lambda () (flycheck-mode 1))))
+  (add-hook 'sh-mode-hook (lambda () (flycheck-mode 1)))
+  (add-hook 'tide-mode-hook (lambda () (flycheck-mode 1))))
 
 (use-package tide
   :config
