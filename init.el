@@ -762,6 +762,13 @@ _p_/_a_: push notes         _i_: screenshot
   :init
   (setq modus-themes-deuteranopia t)
 
+  (defun duc/theme-setup-modus-vivendi-theme (&rest _)
+    "Tweak vterm display colors for doom-flatwhite"
+    (let ((current-theme (car custom-enabled-themes)))
+      (when (eq current-theme 'modus-vivendi)
+        set-face-attribute 'modus-themes-hl-line nil :background "#dedede")))
+  (advice-add 'load-theme :after #'duc/theme-setup-modus-vivendi-theme)
+
   (defun duc/theme-setup-modus-operandi-theme (&rest _)
     "Tweak vterm display colors for doom-flatwhite"
     (let ((current-theme (car custom-enabled-themes)))
