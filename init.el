@@ -698,7 +698,7 @@ _p_/_a_: push notes         _i_: screenshot
       ("o" "org-mode" transient-org-mode)
       ("E" "eval-expresssion (M-:)" eval-expression)
       (":" "eval-expresssion (M-:)" eval-expression)
-      ("s" "shell" duc/ivy-shell)
+      ("t" "terminal" duc/ivy-terminal)
       ("u" "package" hydra-submenu-package/body)
       ("a" "anki" hydra-submenu-anki/body)
       ("r" "org-fc" transient-org-fc)]]

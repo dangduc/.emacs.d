@@ -1,5 +1,7 @@
 ;;;; -*- lexical-binding: t; -*-
 
+(require 'five-letter-words)
+
 (defvar duc/font-family (pcase system-type
                           ('gnu/linux "DejaVu Sans Mono")
                           (_ "InconsolateG for Powerline")))
@@ -105,16 +107,21 @@
                                 t))
               t))
 
-(defun duc/ivy-shell ()
+(defun duc/ivy-terminal ()
   (interactive)
   (let ((terminal-buffers (seq-filter (lambda (x)
                                         (string-match-p
                                          (regexp-quote "terminal-") x))
                                       (mapcar (function buffer-name) (buffer-list)))))
-    (let ((buffer-name (completing-read "shell : " terminal-buffers)))
-     (if (member buffer-name terminal-buffers)
-         (switch-to-buffer buffer-name)
-       (vterm (concat "terminal-" buffer-name))))))
+    (let* ((initial-buffer-name
+            (concat "terminal-"
+                    (nth (random (length duc/five-letter-verbs)) duc/five-letter-verbs)
+                    "-"
+                    (nth (random (length duc/five-letter-nouns)) duc/five-letter-nouns)))
+           (buffer-name (completing-read "shell : " terminal-buffers nil nil initial-buffer-name)))
+      (if (member buffer-name terminal-buffers)
+          (switch-to-buffer buffer-name)
+        (vterm (concat "terminal-" buffer-name))))))
 
 (defun duc/ivy-shell-send-string (string &optional terminal working-directory clear)
   (let ((current-buffer-p (current-buffer))
@@ -289,13 +296,18 @@ https://emacs-doctor.com/emacs-strip-tease.html"
 
 (defun duc/new-buffer ()
   (interactive)
-  (let ((buffer
+  (let* ((initial-buffer-name
+          (concat
+           (nth (random (length duc/five-letter-verbs)) duc/five-letter-verbs)
+           "-"
+           (nth (random (length duc/five-letter-nouns)) duc/five-letter-nouns)))
+         (buffer
          (generate-new-buffer
           (completing-read "New buffer name: "
                            nil
                            nil
                            nil
-                           "untitled"))))
+                           initial-buffer-name))))
     (set-buffer-major-mode buffer)
     (switch-to-buffer buffer)))
 
