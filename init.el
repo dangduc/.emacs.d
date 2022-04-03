@@ -287,11 +287,7 @@
 
 (require 'pulsar)
 (with-eval-after-load 'pulsar
-  (setq pulsar-pulse-functions '(evil-window-down
-                                 evil-window-up
-                                 evil-window-left
-                                 evil-window-right
-                                 duc/eval-dwim
+  (setq pulsar-pulse-functions '(duc/eval-dwim
                                  xref-find-definitions
                                  xref-find-references
                                  tide-jump-to-filespan
@@ -687,7 +683,7 @@ _p_/_a_: push notes         _i_: screenshot
       ("j" "down" evil-window-down)
       ("-" "vsplit" split-window-below)
       ("\\" "hsplit" split-window-right)
-      ("s" "split" (lambda () (interactive) (split-window)))
+      ("s" "split" (lambda () (interactive) (split-window) (balance-windows)))
       ("a" "ace" ace-window)]
      ["Search"
       ("," "in files" counsel-rg)
@@ -779,7 +775,7 @@ _p_/_a_: push notes         _i_: screenshot
     "Tweak vterm display colors for doom-flatwhite"
     (let ((current-theme (car custom-enabled-themes)))
       (when (eq current-theme 'modus-operandi)
-        (set-face-attribute 'modus-themes-hl-line nil :background "darkseagreen2"))))
+        (set-face-attribute 'modus-themes-hl-line nil :background "#DEECF4"))))
   (advice-add 'load-theme :after #'duc/theme-setup-modus-operandi-theme))
 
 ;; end themes
