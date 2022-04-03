@@ -453,7 +453,6 @@
     "buffer"
     [["edit"
       ("N" "new buffer" duc/new-buffer)
-      ("c" "new buffer" duc/new-buffer)
       ("m" "move buffer & file (ie, rename)" (lambda () (interactive) (duc/rename-file (buffer-name))))
       ("w" "save buffer" save-buffer)
       ("r" "reload buffer" revert-buffer)
@@ -682,7 +681,9 @@ _p_/_a_: push notes         _i_: screenshot
       ("k" "up" evil-window-up)
       ("j" "down" evil-window-down)
       ("-" "vsplit" split-window-below)
-      ("\\" "hsplit" split-window-right)]
+      ("\\" "hsplit" split-window-right)
+      ("s" "split" (lambda () (interactive) (split-window)))
+      ("a" "ace" ace-window)]
      ["Search"
       ("," "in files" counsel-rg)
       ("<" "occur in files" deadgrep)
@@ -700,7 +701,7 @@ _p_/_a_: push notes         _i_: screenshot
       (":" "eval-expresssion (M-:)" eval-expression)
       ("t" "terminal" duc/ivy-terminal)
       ("u" "package" hydra-submenu-package/body)
-      ("a" "anki" hydra-submenu-anki/body)
+      ("A" "anki" hydra-submenu-anki/body)
       ("r" "org-fc" transient-org-fc)]]
     [["More Navigation"
       ("n" "buffer" switch-to-buffer)

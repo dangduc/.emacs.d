@@ -245,7 +245,8 @@ e.g.
      (cond  ((string-match-p ".*\\/EPIJudge\\/.*" (or (buffer-file-name) ""))
              (duc/ivy-shell-send-string (concat "python " (buffer-name))
                                         "epi-judge-terminal"
-                                        (file-name-directory (buffer-file-name))))
+                                        (file-name-directory (buffer-file-name)))
+             (display-buffer-pop-up-window "epi-judge-terminal"))
             (t
              (unless (get-buffer (format "*Python[%s]*" (buffer-name)))
                (let ((buffer (buffer-name)))
@@ -309,6 +310,7 @@ https://emacs-doctor.com/emacs-strip-tease.html"
                            nil
                            initial-buffer-name))))
     (set-buffer-major-mode buffer)
+    (split-window)
     (switch-to-buffer buffer)))
 
 ;; Credit [Pin an buffer to a window in #emacs](https://gist.github.com/HeinrichHartmann/c4401ff0347cea975380e221c7e24f42).
