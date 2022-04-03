@@ -233,6 +233,11 @@
   :init
   (defvar duc/duc-dir (expand-file-name "duc" user-emacs-directory))
   (add-to-list 'load-path duc/duc-dir)
+  (setq display-buffer-alist
+        '(("terminal-epijudge"
+           (display-buffer-below-selected display-buffer-at-bottom)
+           (inhibit-same-window . t)
+           (window-height . 15))))
   :config
 
   ;; Set font

@@ -243,10 +243,11 @@ e.g.
     ('emacs-lisp-mode (eval-last-sexp p))
     ('python-mode
      (cond  ((string-match-p ".*\\/EPIJudge\\/.*" (or (buffer-file-name) ""))
-             (duc/ivy-shell-send-string (concat "python " (buffer-name))
-                                        "epi-judge-terminal"
-                                        (file-name-directory (buffer-file-name)))
-             (display-buffer-pop-up-window "epi-judge-terminal"))
+             (let ((terminal "terminal-epijudge"))
+               (duc/ivy-shell-send-string (concat "python " (buffer-name))
+                                          terminal
+                                          (file-name-directory (buffer-file-name)))
+               (display-buffer terminal)))
             (t
              (unless (get-buffer (format "*Python[%s]*" (buffer-name)))
                (let ((buffer (buffer-name)))
