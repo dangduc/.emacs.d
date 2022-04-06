@@ -63,7 +63,7 @@
 (column-number-mode t)
 
 (global-hl-line-mode t)
-(setq global-hl-line-sticky-flag t)
+(setq global-hl-line-sticky-flag nil)
 
 ;; fix some systems not properly highlighting text selection.
 (if (string-equal (face-attribute 'default :foreground) "#000000")
@@ -466,49 +466,52 @@
      ["other"
       ("i" "create indirect buffer" clone-indirect-buffer)
       ("t" "tail -f" auto-revert-tail-mode)
-      ("y" "yank buffer-name" duc/yank-buffer-name)]])
+      ("y" "yank buffer name" duc/yank-buffer-name)]])
   (defhydra hydra-submenu-eval (:exit t)
     ("e" duc/eval-dwim "dwim")
     ("b" duc/eval-buffer "buffer")
     ("p" duc/eval-print-dwim "print"))
-  (defhydra hydra-submenu-window (:exit t :hint nil)
-    "
-^Frame^             ^Window^
-^^^^^^^^----------------------------
-_f_/_w_: maximize
-  _n_: next         _b_: balance
-  _N_: new          _k_: delete
-                    _p_: pin/unpin buffer
-  _
-"
-    ("f" toggle-frame-maximized)
-    ("w" toggle-frame-maximized)
-    ("n" other-frame)
-    ("N" make-frame-command)
-    ("b" balance-windows)
-    ("k" delete-window)
-    ("p" duc/toggle-pin-buffer))
-  (defhydra hydra-submenu-file (:exit t)
-    ("f" find-file "find file")
-    ("w" save-buffer "write file")
-    ("K" duc/delete-this-file "delete file")
-    ("i" (find-file "~/.emacs.d/init.el" ) "init.el")
-    ("I" (find-file "~/.emacs.d/duc/duc.el" ) "duc.el")
-    ("n" duc/create-or-open-bnote "bnote")
-    ("l" duc/create-or-open-bnote "bnote")
-    ("1" (find-file "~/dev/notes/index.org" ) "index.org")
-    ("2" (find-file "~/dev/notes/how-to.org" ) "how-to.org")
-    ("3" shell-command-on-region "M-|") ;; e.g. "nc termbin.com 9999"
-    ("D" (org-capture nil "d") "capture drill")
-    ("c" (org-capture nil "c") "capture note")
-    ("C" (org-capture nil "C") "capture longer note")
-    ("t" (org-capture nil "t") "capture todo")
-    ("r" (duc/org-capture-region-with-code-block) "capture region")
-    ("z" duc/create-linked-note "create linked note")
-    ("Z" (duc/create-linked-note "~/dev/chrestoturing/") "create chrestoturing note")
-    ("T" (multi-occur-in-matching-buffers "log.org" "\\*\\*\\*\\* TODO") "View TODOs")
-    ("b" duc/sidebar-toggle "sidebar")
-    ("s" duc/sidebar-toggle "sidebar"))
+  (transient-define-prefix transient-window ()
+    "window"
+    [["Frame"
+      ("w" "toggle maximize" toggle-frame-maximized)
+      ("n" "next" other-frame)
+      ("N" "new" make-frame-command)]
+     ["Window"
+      ("b" "balance" balance-windows)
+      ("k" "kill" delete-window)
+      ("p" "toggle pin" duc/toggle-pin-buffer)]
+     ["Other"
+      ("o" "next buffer command in OTHER window" other-window-prefix)
+      ("O" "next buffer command in SAME window" same-window-prefix)]])
+  (transient-define-prefix transient-file ()
+    "file"
+    [["navigate"
+      ("f" "find file" find-file)
+      ("i" "init.el" (lambda () (interactive) (find-file "~/.emacs.d/init.el")))
+      ("I" "duc.el" (lambda () (interactive) (find-file "~/.emacs.d/duc/duc.el")))
+      ("1" "index.org" (lambda () (interactive) (find-file "~/dev/notes/index.org")))
+      ("2" "how-to.org" (lambda () (interactive) (find-file "~/dev/notes/how-to.org")))
+      ("z" "create linked note" duc/create-linked-note)
+      ("Z" "create chrestoturing note" (lambda () (interactive) (duc/create-linked-note "~/dev/chrestoturing/")))
+      ("T" "View TODOs" (lambda () (interactive) (multi-occur-in-matching-buffers "log.org" "\\*\\*\\*\\* TODO")))
+      ("b" "sidebar" duc/sidebar-toggle)
+      ("s" "sidebar" duc/sidebar-toggle)]
+     ["edit"
+      ("w" "write file" save-buffer)
+      ("K" "delete file" duc/delete-this-file)]
+     ["note"
+      ("l" "bnote" duc/create-or-open-bnote)
+      ("n" "bnote" duc/create-or-open-bnote)
+      ("D" "capture drill" (lambda () (interactive) (org-capture nil "d")))
+      ("c" "capture note" (lambda () (interactive) (org-capture nil "c")))
+      ("C" "capture longer note" (lambda () (interactive) (org-capture nil "C")))
+      ("t" "capture todo" (lambda () (interactive) (org-capture nil "t")))
+      ("r" "capture region" duc/org-capture-region-with-code-block)]
+     ["other"
+      ("y" "yank filename (relative to project)" duc/yank-file-path-relative-to-project)
+      ;; e.g. "nc termbin.com 9999"
+      ("3" "M-|" shell-command-on-region)]])
   (defhydra hydra-submenu-help (:exit t :hint nil)
     "
 ^Describe^           ^Info^
@@ -693,7 +696,7 @@ _p_/_a_: push notes         _i_: screenshot
       ("SPC" "M-x" execute-extended-command)
       ("b" "buffers" transient-buffer)
       ("e" "eval" hydra-submenu-eval/body)
-      ("w" "window/frame" hydra-submenu-window/body)
+      ("w" "window/frame" transient-window)
       ("L" "lc" hydra-submenu-leetcode/body)]
      ["Application"
       ("g" "magit" hydra-submenu-git/body)
@@ -712,7 +715,7 @@ _p_/_a_: push notes         _i_: screenshot
      ["Other"
       ("H" "help" hydra-submenu-help/body)
       ("?" "help" hydra-submenu-help/body)
-      ("f" "file" hydra-submenu-file/body)
+      ("f" "file" transient-file)
       ("c" "customize" hydra-submenu-customize-face/body)]]
     (interactive)
     (let ((transient-show-popup -.2))
@@ -859,6 +862,8 @@ _p_/_a_: push notes         _i_: screenshot
      s-operators
      slurp/barf-cp
      additional
+     atom-movement
+     prettify
      escape))
   (lispyville-mode))
 

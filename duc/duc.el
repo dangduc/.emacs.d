@@ -864,4 +864,9 @@ projectile cache when it's possible and update recentf list."
   (interactive)
   (duc/yank-string (buffer-name)))
 
+(defun duc/yank-file-path-relative-to-project ()
+  (interactive)
+  (duc/yank-string
+   (file-relative-name buffer-file-name (projectile-project-root))))
+
 (provide 'duc)
