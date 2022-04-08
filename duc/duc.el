@@ -233,6 +233,20 @@ e.g.
   (with-current-buffer "* Mit REPL *"
     (geiser-repl--maybe-send)))
 
+(defun duc/eval-dwim-org-latex-fragment ()
+  (interactive)
+  (if (org-inside-LaTeX-fragment-p)
+      (if (use-region-p)
+          (org--latex-preview-region (region-beginning) (region-end))
+        (org-latex-preview))
+    (if (use-region-p)
+        (org-clear-latex-preview (region-beginning) (region-end))
+      (org-clear-latex-preview
+       (if (org-before-first-heading-p) (point-min)
+         (save-excursion
+           (org-with-limited-levels (org-back-to-heading t) (point))))
+       (org-with-limited-levels (org-entry-end-position))))))
+
 (defun duc/eval-dwim (p)
   (interactive "P")
   (pcase major-mode
@@ -258,6 +272,7 @@ e.g.
                                                       (region-end))))
                    (t (python-shell-send-buffer))))))
     ('latex-mode (preview-section))
+    ('org-mode (duc/eval-dwim-org-latex-fragment))
     (_ (eval-last-sexp p))))
 
 (defun duc/eval-print-dwim (p)

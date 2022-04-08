@@ -236,8 +236,7 @@
   (setq display-buffer-alist
         '(("terminal-epijudge"
            (display-buffer-below-selected display-buffer-at-bottom)
-           (inhibit-same-window . t)
-           (window-height . 15))))
+           (inhibit-same-window . t))))
   :config
 
   ;; Set font
@@ -1304,6 +1303,10 @@ _p_/_a_: push notes         _i_: screenshot
   :straight auctex
   :defer t
   :init
+  (setq org-format-latex-options
+        '(:foreground default :background default :scale 1.7
+                      :html-foreground "Black" :html-background "Transparent"
+                      :html-scale 1.0 :matchers ("begin" "$1" "$" "$$" "\\(" "\\[")))
   (setq TeX-engine "xelatex")
   (setq TeX-auto-save t)
   (setq TeX-parse-self t))

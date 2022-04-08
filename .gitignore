@@ -26,6 +26,7 @@ flycheck_init.el
 forge-database.sqlite
 .recentf
 .recentf~
+projects
 projectile.cache
 projectile-bookmarks.eld
 tramp
