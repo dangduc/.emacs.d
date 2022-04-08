@@ -256,21 +256,21 @@ e.g.
                     (duc/scheme-send-last-sexp)))
     ('emacs-lisp-mode (eval-last-sexp p))
     ('python-mode
-     (cond  ((string-match-p ".*\\/EPIJudge\\/.*" (or (buffer-file-name) ""))
-             (let ((terminal "terminal-epijudge"))
-               (duc/ivy-shell-send-string (concat "python " (buffer-name))
-                                          terminal
-                                          (file-name-directory (buffer-file-name)))
-               (display-buffer terminal)))
-            (t
-             (unless (get-buffer (format "*Python[%s]*" (buffer-name)))
-               (let ((buffer (buffer-name)))
-                 (run-python nil t t)
-                 (pop-to-buffer buffer)))
-             (cond ((use-region-p) (python-shell-send-string
-                                    (buffer-substring (region-beginning)
-                                                      (region-end))))
-                   (t (python-shell-send-buffer))))))
+     (cond ((string-match-p ".*\\/EPIJudge\\/.*" (or (buffer-file-name) ""))
+            (let ((terminal "terminal-epijudge"))
+              (duc/ivy-shell-send-string (concat "python " (buffer-name))
+                                         terminal
+                                         (file-name-directory (buffer-file-name)))
+              (display-buffer terminal)))
+           (t
+            (unless (get-buffer (format "*Python[%s]*" (buffer-name)))
+              (let ((buffer (buffer-name)))
+                (run-python nil t t)
+                (pop-to-buffer buffer)))
+            (cond ((use-region-p) (python-shell-send-string
+                                   (buffer-substring (region-beginning)
+                                                     (region-end))))
+                  (t (python-shell-send-buffer))))))
     ('latex-mode (preview-section))
     ('org-mode (duc/eval-dwim-org-latex-fragment))
     (_ (eval-last-sexp p))))
