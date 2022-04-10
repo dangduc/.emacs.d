@@ -106,6 +106,9 @@
 (setq mac-option-modifier 'super)
 (setq mac-command-modifier 'meta)
 
+
+(when (< emacs-major-version 28)
+  (pixel-scroll-precision-mode 1))
 ;; Start emacs server
 ;; e.g. ~/.zshrc
 ;;   # (find-file) send to emacs server.
@@ -283,6 +286,11 @@
 (with-eval-after-load 'evil
   (define-key minibuffer-local-map [escape] 'minibuffer-keyboard-quit)
   (define-key minibuffer-inactive-mode-map [escape] 'minibuffer-keyboard-quit))
+
+(with-eval-after-load 'calc
+  (org-babel-do-load-languages
+   'org-babel-load-languages
+   '((calc . t))))
 
 (require 'pulsar)
 (with-eval-after-load 'pulsar
@@ -1322,6 +1330,22 @@ _p_/_a_: push notes         _i_: screenshot
   ("\\.epub\\'" . ereader-mode)
   :config
   (evil-define-key 'normal ereader-mode-map (kbd "0") 'evil-digit-argument-or-evil-beginning-of-line))
+
+(use-package ob-asymptote
+  :after org
+  :straight (:type git
+                   :repo "https://git.sr.ht/~bzg/org-contrib"
+                   :files ("lisp/ob-asymptote.el"))
+  :config
+  (org-babel-do-load-languages
+   'org-babel-load-languages
+   '((asymptote . t))))
+
+(use-package asy-mode
+  :after org-contrib
+  :straight (:host github
+                   :repo "vectorgraphics/asymptote"
+                   :files (:defaults "base/asy-mode.el")))
 
 (use-package org-download
   :init

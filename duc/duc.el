@@ -236,9 +236,7 @@ e.g.
 (defun duc/eval-dwim-org-latex-fragment ()
   (interactive)
   (if (org-inside-LaTeX-fragment-p)
-      (if (use-region-p)
-          (org--latex-preview-region (region-beginning) (region-end))
-        (org-latex-preview))
+      (org--latex-preview-region (point-min) (point-max))
     (if (use-region-p)
         (org-clear-latex-preview (region-beginning) (region-end))
       (org-clear-latex-preview
