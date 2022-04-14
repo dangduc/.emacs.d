@@ -997,16 +997,69 @@ _p_/_a_: push notes         _i_: screenshot
   ; Alternatively, c-M-j
   (setq ivy-use-selectable-prompt t))
 
-(use-package orderless)
+(use-package vertico
+  :straight (vertico
+             :includes
+             (
+              ;; vertico-buffer
+              vertico-directory
+              ;; vertico-flat
+              ;; vertico-grid
+              ;; vertico-indexed
+              ;; vertico-mouse
+              ;; vertico-multiform
+              ;; vertico-quick
+              ;; vertico-repeat
+              ;; vertico-reverse
+              ;; vertico-unobtrusive
+              )
+             :files (:defaults "extensions/*"))
+  ;; More convenient directory navigation commands
+  :bind (:map vertico-map
+              ("RET" . vertico-directory-enter)
+              ("DEL" . vertico-directory-delete-char)
+              ("M-DEL" . vertico-directory-delete-word))
+  ;; Tidy shadowed file names
+  :hook (rfn-eshadow-update-overlay . vertico-directory-tidy)
+  :ensure t
+  :init
+  (vertico-mode))
 
-(use-package selectrum
-  :after orderless
+(use-package marginalia
+  ;; Either bind `marginalia-cycle` globally or only in the minibuffer
+  :ensure t
+  :init
+  ;; Must be in the :init section of use-package such that the mode gets
+  ;; enabled right away. Note that this forces loading the package.
+  (marginalia-mode))
+
+(use-package orderless
   :config
-  (setq completion-styles '(orderless))
-
-  (with-eval-after-load 'evil
-    (define-key selectrum-minibuffer-map [escape] 'minibuffer-keyboard-quit))
-  (selectrum-mode))
+  ;; The basic completion style is specified as fallback in addition to
+  ;; orderless in order to ensure that completion commands which rely on
+  ;; dynamic completion tables, e.g., completion-table-dynamic or
+  ;; completion-table-in-turn, work correctly. Furthermore the basic
+  ;; completion style needs to be tried first (not as a fallback) for
+  ;; TRAMP hostname completion to work. In order to achieve that, we add an
+  ;; entry for the file completion category in the
+  ;; completion-category-overrides variable. In addition, the
+  ;; partial-completion style allows you to use wildcards for file
+  ;; completion and partial paths, e.g., /u/s/l for /usr/share/local.
+  (setq completion-styles '(orderless basic)
+        completion-category-defaults nil
+        completion-category-overrides '((file (styles basic partial-completion))))
+  ;; Don't set this. Instead, make `ivy' use `orderless'.
+  ;; If we set this, `complany' completion becomes slow because it leverages
+  ;; `completion-styles' which uses flex matching.
+  ;; In the future, if we're not using `ivy' and want to use `orderless' with
+  ;; something else, we can look into customizing
+  ;; completion-styles, completion-category-overrides, completion-category-defaults.
+  ;; (setq completion-styles '(orderless))
+  (setq orderless-matching-styles
+        '(orderless-literal
+          orderless-flex
+          orderless-regexp
+          orderless-initialism)))
 
 (use-package prescient
   :after counsel
@@ -1041,11 +1094,6 @@ _p_/_a_: push notes         _i_: screenshot
   :after company
   :config
   (company-prescient-mode))
-
-(use-package selectrum-prescient
-  :after selectrum
-  :config
-  (selectrum-prescient-mode))
 
 (defun disable-company-mode-in-eshell-mode ()
   (company-mode -1))
