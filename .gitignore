@@ -19,6 +19,7 @@ eshell/lastdir
 /url/cookies
 my-org/
 org-files/
+org-persist/
 semanticdb/
 edts/
 .flycheck_init.el
