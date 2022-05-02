@@ -1213,7 +1213,10 @@ _p_/_a_: push notes         _i_: screenshot
 
 (use-package org-roam
   :init
-  (setq org-roam-directory (file-truename "~/dev/rotes"))
+  (let ((d "~/dev/rotes"))
+    (unless (file-exists-p d)
+      (make-directory d))
+    (setq org-roam-directory (file-truename d)))
   :config
   (org-roam-db-autosync-mode))
 
