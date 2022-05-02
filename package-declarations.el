@@ -1,3 +1,4 @@
+;;;; -*- lexical-binding: t; -*-
 ;; package management
 ;;
 
@@ -212,12 +213,13 @@
      ["Application"
       ("g" "magit" hydra-submenu-git/body)
       ("o" "org-mode" transient-org-mode)
+      ("r" "org-roam" transient-org-roam)
       ("E" "eval-expresssion (M-:)" eval-expression)
       (":" "eval-expresssion (M-:)" eval-expression)
       ("t" "terminal" duc/ivy-terminal)
       ("u" "package" hydra-submenu-package/body)
       ("A" "anki" hydra-submenu-anki/body)
-      ("r" "org-fc" transient-org-fc)]]
+      ("R" "org-fc" transient-org-fc)]]
     [["More Navigation"
       ("n" "buffer" switch-to-buffer)
       ("m" "files" duc/incremental-search-filenames-dwim)
@@ -250,7 +252,8 @@
   (defhydra hydra-submenu-eval (:exit t)
     ("e" duc/eval-dwim "dwim")
     ("b" duc/eval-buffer "buffer")
-    ("p" duc/eval-print-dwim "print"))
+    ("p" duc/eval-print-dwim "print")
+    ("P" duc/pretty-print-dwim "pretty print"))
   (defhydra hydra-submenu-help (:exit t :hint nil)
     "
 ^Describe^           ^Info^
@@ -904,16 +907,32 @@ _p_/_a_: push notes         _i_: screenshot
       ("y" "yank filename (relative to project)" duc/yank-file-path-relative-to-project)
       ;; e.g. "nc termbin.com 9999"
       ("3" "M-|" shell-command-on-region)]])
+  (transient-define-prefix transient-org-roam ()
+    "org-roam"
+    [["node"
+      ("i" "insert" org-roam-node-insert)
+      ("N" "insert" org-roam-node-insert)
+      ("f" "find" org-roam-node-find)
+      ("c" "capture" org-roam-capture)
+      ("s" "toggle buffer" org-roam-buffer-toggle)]
+     ["dailies"
+      ("l" "daily today" org-roam-dailies-goto-today)
+      ("L" "daily previous" org-roam-dailies-goto-previous-note)]
+     ["ui"
+      ("u" "ui" org-roam-ui-mode)
+      ("z" "local" org-roam-ui-node-local)
+      ("Z" "zoom" org-roam-ui-node-zoom)]])
   (transient-define-prefix transient-org-mode ()
     "org-mode"
     [["edit"
       ("c" "C-c C-c" org-ctrl-c-ctrl-c)
       ("m" "region->md" org-md-convert-region-to-md)
       ("t" "insert template" org-insert-structure-template)
+      ("I" "take screenshot" org-download-screenshot)
       ("e" "encrypt entry" org-encrypt-entry)
       ("E" "encrypt all" org-encrypt-entries)
       ("d" "decrypt entry" org-decrypt-entry)
-      ("D" "decrypy all" org-decrypt-entries)]
+      ("D" "decrypt all" org-decrypt-entries)]
      ["bnote"
       ("b" "bnote" duc/create-or-open-bnote)
       ("l" "search & insert link" (lambda () (interactive)
@@ -1192,13 +1211,34 @@ _p_/_a_: push notes         _i_: screenshot
                                         ; Also don't intent src blocks.
   (setq org-edit-src-content-indentation 0))
 
-(use-package org-roam)
+(use-package org-roam
+  :init
+  (setq org-roam-directory (file-truename "~/dev/rotes"))
+  :config
+  (org-roam-db-autosync-mode))
+
+(use-package org-roam-ui
+  :straight
+  (:host github :repo "org-roam/org-roam-ui" :branch "main" :files ("*.el" "out"))
+  :after org-roam
+  ;; normally we'd recommend hooking orui after org-roam, but since org-roam does not have
+  ;; a hookable mode anymore, you're advised to pick something yourself
+  ;; if you don't care about startup time, use
+  ;;    :hook (after-init . org-roam-ui-mode)
+  :config
+  (setq org-roam-ui-sync-theme t
+        org-roam-ui-follow t
+        org-roam-ui-update-on-save t
+        org-roam-ui-open-on-start t))
 
 (use-package org-download
   :init
   (setq org-download-annotate-function (lambda (link) ""))
   (setq org-download-image-dir "~/dev/notes/img")
-  (setq org-download-screenshot-method "screencapture -i %s")
+  (setq org-download-screenshot-method
+        (pcase system-type
+          ('gnu/linux "scrot -s %s")
+          (_ "screencapture -i %s")))
   (setq org-download-image-org-width 400))
 
 (use-package org-ql)

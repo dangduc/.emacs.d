@@ -281,8 +281,12 @@ e.g.
                             (geiser-mode-eval-to-buffer-prefix "\n;; "))
                         (geiser-eval-last-sexp p))
                     (duc/scheme-send-last-sexp)))
-    ('emacs-lisp-mode (eval-print-last-sexp p))
-    (_ (eval-print-last-sexp p))))
+    ('emacs-lisp-mode (let ((eval-expression-print-length 1000)
+                            (eval-expression-print-level 100))
+                        (eval-print-last-sexp p)))
+    (_ (let ((eval-expression-print-length 1000)
+             (eval-expression-print-level 100))
+         (eval-print-last-sexp p)))))
 
 (setq async-shell-command-display-buffer nil)
 (setq shell-command-dont-erase-buffer 'end-last-out)
@@ -297,7 +301,15 @@ e.g.
     ('emacs-lisp-mode (eval-buffer))
     (_ (eval-buffer))))
 
+(defun duc/pretty-print-dwim ()
+  (interactive)
+  (pcase major-mode
+    ('javascript-mode (json-pretty-print))
+    ('emacs-lisp-mode (indent-pp-sexp t))
+    (_ (indent-pp-sexp t))))
+
 (defvar-local duc/header-line-format nil)
+
 (defun duc/mode-line-in-header ()
   "Toggle displaying mode-line in header instead of footer
 https://emacs-doctor.com/emacs-strip-tease.html"
