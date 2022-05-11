@@ -674,7 +674,39 @@ _p_/_a_: push notes         _i_: screenshot
   (marginalia-mode))
 
 (use-package orderless
+  :straight t
+  :ensure t
   :config
+  ;; https://www.reddit.com/r/emacs/comments/nichkl/how_to_use_different_completion_styles_in_the/
+  (with-eval-after-load 'company
+    ;; https://github.com/oantolin/orderless#company
+    (defun orderless-just-one-face (fn &rest args)
+      (let ((orderless-match-faces [completions-common-part]))
+        (ignore orderless-match-faces)
+        (apply fn args)))
+
+    (advice-add 'company-capf--candidates
+                :around #'orderless-just-one-face)
+
+    (defvar j-backup-completion-styles completion-styles
+      "Original `completion-styles' Emacs comes with.")
+
+    (defun j-company-capf-without-orderless (f &rest args)
+      "Set `completion-styles' to be the default Emacs `completion-styles'
+while `company-capf' runs."
+      company-prefix
+      (let ((prior-completion-styles completion-styles))
+        (if (or (length< company-prefix 2)
+                (not (native-comp-available-p)))
+            (setq completion-styles j-backup-completion-styles)
+          (setq completion-styles `(,(if (featurep 'orderless)
+                                         'orderless
+                                       'flex))))
+        (let ((result (apply f args)))
+          (setq completion-styles prior-completion-styles)
+          result)))
+    (advice-add 'company-capf :around 'j-company-capf-without-orderless))
+
   ;; The basic completion style is specified as fallback in addition to
   ;; orderless in order to ensure that completion commands which rely on
   ;; dynamic completion tables, e.g., completion-table-dynamic or
@@ -685,9 +717,14 @@ _p_/_a_: push notes         _i_: screenshot
   ;; completion-category-overrides variable. In addition, the
   ;; partial-completion style allows you to use wildcards for file
   ;; completion and partial paths, e.g., /u/s/l for /usr/share/local.
-  (setq completion-styles '(orderless basic)
+  (setq completion-styles '(orderless)
         completion-category-defaults nil
-        completion-category-overrides '((file (styles basic partial-completion))))
+        completion-category-overrides
+        '((file (styles basic partial-completion orderless))))
+  ;; The prior comment about `completion-styles' is obsolete now that we have
+  ;; the above advice to use the original `completion-styles' when
+  ;; `company-capf' runs.
+  ;; * Obsolete comment. BEGIN *
   ;; Don't set this. Instead, make `ivy' use `orderless'.
   ;; If we set this, `complany' completion becomes slow because it leverages
   ;; `completion-styles' which uses flex matching.
@@ -695,11 +732,40 @@ _p_/_a_: push notes         _i_: screenshot
   ;; something else, we can look into customizing
   ;; completion-styles, completion-category-overrides, completion-category-defaults.
   ;; (setq completion-styles '(orderless))
+  ;; * Obsolete comment. END *
   (setq orderless-matching-styles
         '(orderless-literal
           orderless-flex
           orderless-regexp
-          orderless-initialism)))
+          orderless-initialism))
+
+  ;; -> !pattern -> Exclude pattern from search.
+  (defun without-if-bang (pattern _index _total)
+    (cond
+     ((equal "!" pattern)
+      '(orderless-literal . ""))
+     ((string-prefix-p "!" pattern)
+      `(orderless-without-literal . ,(substring pattern 1)))))
+
+  ;; -> ~pattern -> Search pattern fuzzily.
+  (defun with-twiddle (pattern _index _total)
+    (cond
+     ((equal "~" pattern)
+      '(orderless-literal . ""))
+     ((string-prefix-p "~" pattern)
+      `(orderless-flex . ,(substring pattern 1)))))
+
+  ;; -> @pattern -> Search pattern literally.
+  (defun with-at (pattern _index _total)
+    (cond
+     ((equal "@" pattern)
+      '(orderless-literal . ""))
+     ((string-prefix-p "@" pattern)
+      `(orderless-literal . ,(substring pattern 1)))))
+
+  (setq orderless-style-dispatchers '(with-at
+                                      with-twiddle
+                                      without-if-bang)))
 
 (use-package prescient
   :after counsel
