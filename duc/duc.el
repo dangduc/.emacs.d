@@ -325,6 +325,7 @@ https://emacs-doctor.com/emacs-strip-tease.html"
   (interactive)
   (let* ((initial-buffer-name
           (concat
+           "buffer-"
            (nth (random (length duc/five-letter-verbs)) duc/five-letter-verbs)
            "-"
            (nth (random (length duc/five-letter-nouns)) duc/five-letter-nouns)))
