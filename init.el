@@ -62,7 +62,7 @@
 ;; display columns position in mode-line
 (column-number-mode t)
 
-(global-hl-line-mode t)
+(global-hl-line-mode -1)
 (setq global-hl-line-sticky-flag nil)
 
 ;; helps Emacs keep up with fast input. This is another attempt to
