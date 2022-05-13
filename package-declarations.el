@@ -12,7 +12,7 @@
   (add-to-list 'load-path duc/duc-dir)
   (setq display-buffer-alist
         '(("terminal-epijudge"
-           (display-buffer-below-selected display-buffer-at-bottom)
+           ()
            (inhibit-same-window . t))))
   :config
 
