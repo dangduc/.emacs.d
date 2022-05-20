@@ -222,8 +222,8 @@
       ("R" "org-fc" transient-org-fc)]]
     [["More Navigation"
       ("n" "buffer" switch-to-buffer)
-      ("m" "files" duc/incremental-search-filenames-dwim)
-      ("M" "files (all)" duc/incremental-search-filenames-in-directory)
+      ("m" "files" project-find-file)
+      ("M" "files (all)" project-or-external-find-file)
       ("p" "project" hydra-submenu-project/body)]
      ["Other"
       ("H" "help" hydra-submenu-help/body)
@@ -673,133 +673,26 @@ _p_/_a_: push notes         _i_: screenshot
   ;; enabled right away. Note that this forces loading the package.
   (marginalia-mode))
 
-(use-package orderless
-  :straight t
-  :ensure t
+(use-package flx
   :config
-  ;; https://www.reddit.com/r/emacs/comments/nichkl/how_to_use_different_completion_styles_in_the/
-  (with-eval-after-load 'company
-    ;; https://github.com/oantolin/orderless#company
-    (defun orderless-just-one-face (fn &rest args)
-      (let ((orderless-match-faces [completions-common-part]))
-        (ignore orderless-match-faces)
-        (apply fn args)))
+  (set-face-attribute 'flx-highlight-face nil
+                      :inherit 'match
+                      :underline t
+                      :overline nil
+                      :weight 'bold))
 
-    (advice-add 'company-capf--candidates
-                :around #'orderless-just-one-face)
-
-    (defvar j-backup-completion-styles completion-styles
-      "Original `completion-styles' Emacs comes with.")
-
-    (defun j-company-capf-without-orderless (f &rest args)
-      "Set `completion-styles' to be the default Emacs `completion-styles'
-while `company-capf' runs."
-      company-prefix
-      (let ((prior-completion-styles completion-styles))
-        (if (or (length< company-prefix 2)
-                (not (native-comp-available-p)))
-            (setq completion-styles j-backup-completion-styles)
-          (setq completion-styles `(,(if (featurep 'orderless)
-                                         'orderless
-                                       'flex))))
-        (let ((result (apply f args)))
-          (setq completion-styles prior-completion-styles)
-          result)))
-    (advice-add 'company-capf :around 'j-company-capf-without-orderless))
-
-  ;; The basic completion style is specified as fallback in addition to
-  ;; orderless in order to ensure that completion commands which rely on
-  ;; dynamic completion tables, e.g., completion-table-dynamic or
-  ;; completion-table-in-turn, work correctly. Furthermore the basic
-  ;; completion style needs to be tried first (not as a fallback) for
-  ;; TRAMP hostname completion to work. In order to achieve that, we add an
-  ;; entry for the file completion category in the
-  ;; completion-category-overrides variable. In addition, the
-  ;; partial-completion style allows you to use wildcards for file
-  ;; completion and partial paths, e.g., /u/s/l for /usr/share/local.
-  (setq completion-styles '(orderless)
+(use-package flx-completion
+  :straight
+  (flx-completion :type git :host github :repo "jojojames/flx-completion")
+  :after flx
+  :config
+  (setq completion-styles '(flx)
+        ;; For example, project-find-file uses 'project-files which uses
+        ;; substring completion by default. Set to nil to make sure it's using
+        ;; flx.
         completion-category-defaults nil
         completion-category-overrides
-        '((file (styles basic partial-completion orderless))))
-  ;; The prior comment about `completion-styles' is obsolete now that we have
-  ;; the above advice to use the original `completion-styles' when
-  ;; `company-capf' runs.
-  ;; * Obsolete comment. BEGIN *
-  ;; Don't set this. Instead, make `ivy' use `orderless'.
-  ;; If we set this, `complany' completion becomes slow because it leverages
-  ;; `completion-styles' which uses flex matching.
-  ;; In the future, if we're not using `ivy' and want to use `orderless' with
-  ;; something else, we can look into customizing
-  ;; completion-styles, completion-category-overrides, completion-category-defaults.
-  ;; (setq completion-styles '(orderless))
-  ;; * Obsolete comment. END *
-  (setq orderless-matching-styles
-        '(orderless-literal
-          orderless-flex
-          orderless-regexp
-          orderless-initialism))
-
-  ;; -> !pattern -> Exclude pattern from search.
-  (defun without-if-bang (pattern _index _total)
-    (cond
-     ((equal "!" pattern)
-      '(orderless-literal . ""))
-     ((string-prefix-p "!" pattern)
-      `(orderless-without-literal . ,(substring pattern 1)))))
-
-  ;; -> ~pattern -> Search pattern fuzzily.
-  (defun with-twiddle (pattern _index _total)
-    (cond
-     ((equal "~" pattern)
-      '(orderless-literal . ""))
-     ((string-prefix-p "~" pattern)
-      `(orderless-flex . ,(substring pattern 1)))))
-
-  ;; -> @pattern -> Search pattern literally.
-  (defun with-at (pattern _index _total)
-    (cond
-     ((equal "@" pattern)
-      '(orderless-literal . ""))
-     ((string-prefix-p "@" pattern)
-      `(orderless-literal . ,(substring pattern 1)))))
-
-  (setq orderless-style-dispatchers '(with-at
-                                      with-twiddle
-                                      without-if-bang)))
-
-(use-package prescient
-  :after counsel
-  :init
-  ;; Order of filter methods does not affect candidate order, but may affect
-  ;; highlighting and query speed.
-  (setq prescient-filter-method '(prefix initialism literal regexp))
-  ;; Prescient does limited sorting of candidates by:
-  ;; (1) How candidates are initially ordered as input.
-  ;; (2) Candidate selection history.
-  ;;   a. Last selected candidates.
-  ;;   b. Followed by most frequently selected.
-  ;; (3) Candidate string length.
-
-  ;; Disable sorting by candidate length.
-  (setq prescient-sort-length-enable nil)
-  :config
-  (prescient-persist-mode))
-
-(use-package ivy-prescient
-  :after prescient
-  ;; Configures prescient for sorting ivy candidates.
-  :init
-  (setq ivy-prescient-retain-classic-highlighting t)
-  ;; AFAICT prescient does not affect ivy filtering configured by
-  ;; `ivy-re-builders-alist`, so toggling this var does nothing.
-  (setq ivy-prescient-enable-filtering nil)
-  :config
-  (ivy-prescient-mode))
-
-(use-package company-prescient
-  :after company
-  :config
-  (company-prescient-mode))
+        '((file (styles basic partial-completion)))))
 
 (defun disable-company-mode-in-eshell-mode ()
   (company-mode -1))
