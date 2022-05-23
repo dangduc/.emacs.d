@@ -1053,9 +1053,13 @@ _p_/_a_: push notes         _i_: screenshot
 (use-package lsp-mode
   :init
   (setq lsp-log-io t)
-  :hook ((clojure-mode . lsp)
+  (setq lsp-lens-auto-enable nil)
+  :hook ((c-mode . lsp)
+         (clojure-mode . lsp)
          (clojurec-mode . lsp)
          (clojurescript-mode . lsp)))
+
+(use-package ccls)
 
 ; Python projects should initialize the python lsp themselves.
 ; using
