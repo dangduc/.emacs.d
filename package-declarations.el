@@ -677,26 +677,40 @@ _p_/_a_: push notes         _i_: screenshot
   ;; enabled right away. Note that this forces loading the package.
   (marginalia-mode))
 
-(use-package flx
+(use-package orderless
+  :straight t
+  :ensure t
+  :commands (orderless-filter))
+
+(use-package flx-rs
+  :ensure t
+  :straight
+  (flx-rs
+   :repo "jcs-elpa/flx-rs"
+   :fetcher github
+   :files (:defaults "bin"))
   :config
-  (set-face-attribute 'flx-highlight-face nil
-                      :inherit 'match
-                      :underline t
-                      :overline nil
-                      :weight 'bold))
+  (flx-rs-load-dyn)
+  ;; This is not necessary since `flx-all-completions' already checks for this
+  ;; function. It'll still help other libraries that call `flx-score' though.
+  (advice-add 'flx-score :override #'flx-rs-score))
+
+(use-package flx)
 
 (use-package flx-completion
   :straight
   (flx-completion :type git :host github :repo "jojojames/flx-completion")
   :after flx
   :config
-  (setq completion-styles '(flx)
-        ;; For example, project-find-file uses 'project-files which uses
-        ;; substring completion by default. Set to nil to make sure it's using
-        ;; flx.
-        completion-category-defaults nil
-        completion-category-overrides
-        '((file (styles basic partial-completion)))))
+  (setq flx-completion-filter-fn 'flx-completion-filter-using-orderless)
+
+  (push 'flx completion-styles)
+  (setq
+   ;; For example, project-find-file uses 'project-files which uses
+   ;; substring completion by default. Set to nil to make sure it's using
+   ;; flx.
+   completion-category-defaults nil
+   completion-category-overrides nil))
 
 (defun disable-company-mode-in-eshell-mode ()
   (company-mode -1))
