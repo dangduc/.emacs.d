@@ -412,6 +412,8 @@ _p_/_a_: push notes         _i_: screenshot
 
 (use-package solarized-theme)
 
+(use-package catppuccin-theme)
+
 (use-package modus-themes
   :init
   (setq modus-themes-deuteranopia t)
