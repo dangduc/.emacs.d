@@ -261,6 +261,7 @@
 _m_: mode             _p_: list packages
 _k_: key-to-func      _a_: apropos
 _K_: func-to-key      _M_: search emacs manual
+_s_: symbol
 _f_: function
 _v_: variable         _d_: toggle error debugging
 _c_: face             _w_: watch function for step-debugging
@@ -268,6 +269,7 @@ _b_: bindings (list)  _W_: stop watching function for step-debugging
 _B_: bindings
 "
     ("m" describe-mode)
+    ("s" describe-symbol)
     ("f" describe-function)
     ("v" describe-variable)
     ("k" describe-key)
