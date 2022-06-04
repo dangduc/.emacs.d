@@ -697,20 +697,54 @@ _p_/_a_: push notes         _i_: screenshot
 
 (use-package flx)
 
-(use-package flx-completion
+(use-package orderless
+  :straight t
+  :ensure t
+  :commands (orderless-filter))
+
+(use-package flx-rs
+  :ensure t
   :straight
-  (flx-completion :type git :host github :repo "jojojames/flx-completion")
+  (flx-rs
+   :repo "jcs-elpa/flx-rs"
+   :fetcher github
+   :files (:defaults "bin"))
+  :config
+  (flx-rs-load-dyn))
+
+(use-package flx)
+(use-package sublime-fuzzy
+  :straight
+  (sublime-fuzzy
+   :repo "jcs-elpa/sublime-fuzzy"
+   :fetcher github
+   :files (:defaults "bin"))
+  :config
+  (sublime-fuzzy-load-dyn))
+
+(use-package hotfuzz)
+
+(use-package fussy
+  :ensure t
+  :straight
+  (fussy :type git :host github :repo "jojojames/fussy")
   :after flx
   :config
-  (setq flx-completion-filter-fn 'flx-completion-filter-using-orderless)
+  (setq fussy-score-fn 'fussy-sublime-fuzzy-score)
+  (setq fussy-filter-fn 'fussy-filter-flex)
 
-  (push 'flx completion-styles)
+  (push 'fussy completion-styles)
   (setq
    ;; For example, project-find-file uses 'project-files which uses
    ;; substring completion by default. Set to nil to make sure it's using
    ;; flx.
    completion-category-defaults nil
-   completion-category-overrides nil))
+   completion-category-overrides nil)
+
+  ;; `eglot' defaults to flex, so set an override to point to fussy instead.
+  (with-eval-after-load 'eglot
+    (add-to-list 'completion-category-overrides
+                 '(eglot (styles fussy basic)))))
 
 (defun disable-company-mode-in-eshell-mode ()
   (company-mode -1))
