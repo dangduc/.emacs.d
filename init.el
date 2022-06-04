@@ -187,10 +187,14 @@
 
 ;; end bootstrap straight.el
 
+
+;; Setup personal lisp directory.
+(add-to-list 'load-path (expand-file-name "lisp" user-emacs-directory))
+
 ;; Package declarations
 ;;
 
-(load-file (expand-file-name "package-declarations.el" user-emacs-directory))
+(require 'package-declarations)
 
 ;; End package declarations
 

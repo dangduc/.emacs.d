@@ -3,12 +3,13 @@
 (require 'five-letter-words)
 
 (defvar duc/font-family (pcase system-type
-                          ('gnu/linux "DejaVu Sans Mono")
+                          ('gnu/linux "JetBrains Mono")
                           (_ "InconsolateG for Powerline")))
+
 (defvar duc/font-height (pcase system-type
                           ('windows-nt 100)
                           ('gnu/linux 140)
-                          (_ 160)))
+                          (_ 120)))
 
 
 (defvar duc/font-family-mode-line (pcase system-type
@@ -19,7 +20,7 @@
 (defvar duc/font-height-mode-line (pcase system-type
                           ('windows-nt 120)
                           ('gnu/linux 120)
-                          (_ 160)))
+                          (_ 16`0)))
 
 (defvar duc/margin-height-mode-line 1)
 

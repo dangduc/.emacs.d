@@ -8,8 +8,6 @@
 (use-package duc
   :straight nil
   :init
-  (defvar duc/duc-dir (expand-file-name "duc" user-emacs-directory))
-  (add-to-list 'load-path duc/duc-dir)
   (setq display-buffer-alist
         '(("terminal-epijudge"
            ()
@@ -894,7 +892,7 @@ _p_/_a_: push notes         _i_: screenshot
     "file"
     [["navigate"
       ("f" "find file" find-file)
-      ("i" "package-declarations.el" (lambda () (interactive) (find-file "~/.emacs.d/package-declarations.el")))
+      ("i" "package-declarations.el" (lambda () (interactive) (find-file "~/.emacs.d/lisp/package-declarations.el")))
       ("I" "init.el" (lambda () (interactive) (find-file "~/.emacs.d/init.el")))
       ("1" "index.org" (lambda () (interactive) (find-file "~/dev/notes/index.org")))
       ("2" "how-to.org" (lambda () (interactive) (find-file "~/dev/notes/how-to.org")))
