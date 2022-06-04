@@ -711,6 +711,15 @@ _p_/_a_: push notes         _i_: screenshot
   (flx-rs-load-dyn))
 
 (use-package flx)
+
+(use-package fzf-native
+  :straight
+  (:repo "dangduc/fzf-native"
+   :host github
+   :files (:defaults "bin"))
+  :config
+  (fzf-native-load-dyn))
+
 (use-package sublime-fuzzy
   :straight
   (sublime-fuzzy
@@ -728,7 +737,7 @@ _p_/_a_: push notes         _i_: screenshot
   (fussy :type git :host github :repo "jojojames/fussy")
   :after flx
   :config
-  (setq fussy-score-fn 'fussy-sublime-fuzzy-score)
+  (setq fussy-score-fn 'fussy-fzf-native-score)
   (setq fussy-filter-fn 'fussy-filter-flex)
 
   (push 'fussy completion-styles)
