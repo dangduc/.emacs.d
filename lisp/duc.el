@@ -919,4 +919,9 @@ projectile cache when it's possible and update recentf list."
     (message file-name)
     (duc/yank-string file-name)))
 
+(defun duc/yank-absolute-path-to-parent ()
+  (interactive)
+  (let ((parent-directory (file-name-directory (buffer-file-name))))
+    (duc/yank-string parent-directory)))
+
 (provide 'duc)

@@ -924,6 +924,7 @@ _p_/_a_: push notes         _i_: screenshot
       ("r" "capture region" duc/org-capture-region-with-code-block)]
      ["other"
       ("y" "yank filename (relative to project)" duc/yank-file-path-relative-to-project)
+      ("Y" "yank parent directory of file" duc/yank-absolute-path-to-parent)
       ;; e.g. "nc termbin.com 9999"
       ("3" "M-|" shell-command-on-region)]])
   (transient-define-prefix transient-org-roam ()
