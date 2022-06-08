@@ -142,6 +142,28 @@
      (vterm-send-return)
      (pop-to-buffer current-buffer-p))))
 
+(defun duc/completing-shell-history ()
+  (interactive)
+  (let ((history
+         (split-string
+          (replace-regexp-in-string "^: [0-9]+:0;" ""
+                                    (with-temp-buffer
+                                      (insert-file-contents "~/.zsh_history")
+                                      (buffer-substring-no-properties
+                                       (point-min)
+                                       (point-max))))
+          "\n" t)))
+    (completing-read "$ " history)))
+
+(defun duc/shell-send-string-to-project-dwim ()
+  (interactive)
+  (let ((project-root (projectile-acquire-root))
+        (command (duc/completing-shell-history)))
+    (let ((directory-name (car (last (split-string project-root "/") 2))))
+      (duc/ivy-shell-send-string command
+                                 (concat "terminal-" directory-name)
+                                 project-root))))
+
 (defun duc/sidebar-toggle ()
   "Toggle both `dired-sidebar' and `ibuffer-sidebar'."
   (interactive)

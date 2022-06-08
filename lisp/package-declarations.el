@@ -215,6 +215,7 @@
       ("E" "eval-expresssion (M-:)" eval-expression)
       (":" "eval-expresssion (M-:)" eval-expression)
       ("t" "terminal" duc/ivy-terminal)
+      ("T" "send to terminal" duc/shell-send-string-to-project-dwim)
       ("u" "package" hydra-submenu-package/body)
       ("A" "anki" hydra-submenu-anki/body)
       ("R" "org-fc" transient-org-fc)]]
