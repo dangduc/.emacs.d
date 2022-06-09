@@ -527,6 +527,43 @@ AG-PROMPT, if non-nil, is passed as `ivy-read' prompt argument. "
                         (swiper--cleanup))
               :caller 'counsel-ag)))
 
+(defun duc/create-or-open-bnote-type (type)
+  (interactive)
+  (let* ((new-entry (concat duc/create-bnote-default-dir
+                            type
+                            "-"
+                            (format-time-string "%y%2m%2d")
+                            ".org")))
+    (unless new-entry-exists-p)))
+
+(defun duc/create-or-open-bnote-type (type)
+  (interactive)
+  (let* ((new-entry (concat duc/create-bnote-default-dir
+                           type
+                           "-"
+                           (format-time-string "%y%2m%2d")
+                           ".org"
+                           ))
+         (new-entry-exists-p (or (get-buffer new-entry)
+                                 (file-exists-p new-entry))))
+    (unless new-entry-exists-p
+      ; Entry not found, so we'll create a new entry.
+      (let ((last-entry (car (last (directory-files duc/create-bnote-default-dir
+                                                    t
+                                                    (concat "^" type "-"))))))
+        (if (and last-entry (file-exists-p last-entry))
+            (copy-file last-entry
+                       new-entry)
+          (append-to-file "#+STARTUP: showeverything indent
+
+* Log
+
+* Backlinks"
+                          nil new-entry))))
+    (find-file new-entry)
+    (unless new-entry-exists-p
+      (search-forward "* Log"))))
+
 (defun duc/create-or-open-bnote ()
   (interactive)
   (let* ((new-entry (concat duc/create-bnote-default-dir
