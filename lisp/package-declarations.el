@@ -761,9 +761,16 @@ _p_/_a_: push notes         _i_: screenshot
 (use-package company
   :diminish company-mode
   :init
-  (setq company-idle-delay .01)
+  (setq company-idle-delay 0.01)
   (setq company-minimum-prefix-length 1)
   :config
+  (defun d-company-capf-with-og-completion-styles (f &rest args)
+    "Set `completion-styles' to be the default Emacs `completion-styles'
+while `company-capf' runs."
+    (let ((completion-styles '(basic substring flx)))
+      (apply f args)))
+  (advice-add 'company-capf :around 'd-company-capf-with-og-completion-styles)
+
   (company-tng-mode)
   (global-company-mode))
 
@@ -916,7 +923,7 @@ _p_/_a_: push notes         _i_: screenshot
       ("K" "delete file" duc/delete-this-file)]
      ["note"
       ("l" "bnote" duc/create-or-open-bnote)
-      ("n" "bnote" duc/create-or-open-bnote)
+      ("L" "yesterday" (lambda () (interactive) (duc/create-or-open-bnote-type "yesterday")))
       ("D" "capture drill" (lambda () (interactive) (org-capture nil "d")))
       ("c" "capture note" (lambda () (interactive) (org-capture nil "c")))
       ("C" "capture longer note" (lambda () (interactive) (org-capture nil "C")))
