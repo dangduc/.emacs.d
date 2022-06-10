@@ -923,7 +923,8 @@ while `company-capf' runs."
       ("K" "delete file" duc/delete-this-file)]
      ["note"
       ("l" "bnote" duc/create-or-open-bnote)
-      ("L" "yesterday" (lambda () (interactive) (duc/create-or-open-bnote-type "yesterday")))
+      ("m" "morning" (lambda () (interactive) (duc/create-or-open-bnote-type "morning")))
+      ("e" "evening" (lambda () (interactive) (duc/create-or-open-bnote-type "evening")))
       ("D" "capture drill" (lambda () (interactive) (org-capture nil "d")))
       ("c" "capture note" (lambda () (interactive) (org-capture nil "c")))
       ("C" "capture longer note" (lambda () (interactive) (org-capture nil "C")))

@@ -556,7 +556,9 @@ AG-PROMPT, if non-nil, is passed as `ivy-read' prompt argument. "
                        new-entry)
           (append-to-file "#+STARTUP: showeverything indent
 
+
 * Log
+
 
 * Backlinks"
                           nil new-entry))))
