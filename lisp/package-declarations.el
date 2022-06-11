@@ -912,12 +912,7 @@ while `company-capf' runs."
       ("i" "package-declarations.el" (lambda () (interactive) (find-file "~/.emacs.d/lisp/package-declarations.el")))
       ("I" "init.el" (lambda () (interactive) (find-file "~/.emacs.d/init.el")))
       ("1" "index.org" (lambda () (interactive) (find-file "~/dev/notes/index.org")))
-      ("2" "how-to.org" (lambda () (interactive) (find-file "~/dev/notes/how-to.org")))
-      ("z" "create linked note" duc/create-linked-note)
-      ("Z" "create chrestoturing note" (lambda () (interactive) (duc/create-linked-note "~/dev/chrestoturing/")))
-      ("T" "View TODOs" (lambda () (interactive) (multi-occur-in-matching-buffers "log.org" "\\*\\*\\*\\* TODO")))
-      ("b" "sidebar" duc/sidebar-toggle)
-      ("s" "sidebar" duc/sidebar-toggle)]
+      ("b" "sidebar" duc/sidebar-toggle)]
      ["edit"
       ("w" "write file" save-buffer)
       ("K" "delete file" duc/delete-this-file)]
@@ -925,7 +920,7 @@ while `company-capf' runs."
       ("l" "bnote" duc/create-or-open-bnote)
       ("m" "morning" (lambda () (interactive) (duc/create-or-open-bnote-type "morning")))
       ("e" "evening" (lambda () (interactive) (duc/create-or-open-bnote-type "evening")))
-      ("D" "capture drill" (lambda () (interactive) (org-capture nil "d")))
+      ("L" "create w/ type" duc/completing-bnote-type)
       ("c" "capture note" (lambda () (interactive) (org-capture nil "c")))
       ("C" "capture longer note" (lambda () (interactive) (org-capture nil "C")))
       ("t" "capture todo" (lambda () (interactive) (org-capture nil "t")))

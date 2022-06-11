@@ -527,76 +527,80 @@ AG-PROMPT, if non-nil, is passed as `ivy-read' prompt argument. "
                         (swiper--cleanup))
               :caller 'counsel-ag)))
 
-(defun duc/create-or-open-bnote-type (type)
-  (interactive)
-  (let* ((new-entry (concat duc/create-bnote-default-dir
-                            type
-                            "-"
-                            (format-time-string "%y%2m%2d")
-                            ".org")))
-    (unless new-entry-exists-p)))
-
-(defun duc/create-or-open-bnote-type (type)
-  (interactive)
-  (let* ((new-entry (concat duc/create-bnote-default-dir
-                           type
-                           "-"
-                           (format-time-string "%y%2m%2d")
-                           ".org"
-                           ))
-         (new-entry-exists-p (or (get-buffer new-entry)
-                                 (file-exists-p new-entry))))
-    (unless new-entry-exists-p
-      ; Entry not found, so we'll create a new entry.
-      (let ((last-entry (car (last (directory-files duc/create-bnote-default-dir
-                                                    t
-                                                    (concat "^" type "-"))))))
-        (if (and last-entry (file-exists-p last-entry))
-            (copy-file last-entry
-                       new-entry)
-          (append-to-file "#+STARTUP: showeverything indent
+(defconst duc/bnote-default-template
+  "#+STARTUP: showeverything indent
 
 
 * Log
 
 
-* Backlinks"
-                          nil new-entry))))
-    (find-file new-entry)
-    (unless new-entry-exists-p
-      (search-forward "* Log"))))
+* Backlinks")
 
-(defun duc/create-or-open-bnote ()
+(defconst duc/bnote-study-template
+  "#+STARTUP: showall indent
+
+
+* Mind dump
+:PROPERTIES:
+:VISIBILITY: folded
+:END:
+
+
+* Thinking about the subject
+:PROPERTIES:
+:VISIBILITY: folded
+:END:
+
+
+* Questions
+
+
+* Summary (3-5 sentences)
+:PROPERTIES:
+:VISIBILITY: folded
+:END:
+
+
+- What are the key ideas?
+
+- How can I apply this knowledge that I learned?
+
+- How do these ideas relate to what I already know?
+
+
+* Backlinks")
+
+(defun duc/create-or-open-bnote-type (type &optional template)
   (interactive)
   (let* ((new-entry (concat duc/create-bnote-default-dir
-                           "bnote"
-                           "-"
-                           (format-time-string "%y%2m%2d")
-                           ".org"
-                           ))
-         (new-entry-exists-p (or (get-buffer new-entry)
-                                 (file-exists-p new-entry))))
-    (unless new-entry-exists-p
-      ; Entry not found, so we'll create a new entry.
-      (let ((last-entry (car (last (directory-files duc/create-bnote-default-dir
-                                                    t
-                                                    "^bnote-")))))
-        (if (and last-entry (file-exists-p last-entry))
-            (copy-file last-entry
-                       new-entry)
-          (append-to-file "#+STARTUP: showeverything indent
-#+LINK: ◊ file:bnote-%s.org
-#+TODO: [_] | [X]
-#+TODO: [/] |
-
-* Daily Log
-
-
-* Backlinks"
-                          nil new-entry))))
+                            type
+                            "-"
+                            (format-time-string "%y%2m%2d")
+                            ".org"))
+         (entry-exists (or (get-buffer new-entry)
+                           (file-exists-p new-entry)))
+         (force-template (if template t))
+         (template (or template duc/bnote-default-template)))
+    (unless entry-exists
+                                        ; Entry not found, so we'll create a new entry.
+      (if force-template
+          (append-to-file template nil new-entry)
+        (let ((last-entry (car (last (directory-files duc/create-bnote-default-dir
+                                                      t
+                                                      (concat "^" type "-"))))))
+          (if last-entry
+              (copy-file last-entry new-entry)
+            (append-to-file template nil new-entry)))))
     (find-file new-entry)
-    (unless new-entry-exists-p
-      (search-forward "* Daily Log"))))
+    (unless entry-exists
+      (search-forward "*"))))
+
+(defun duc/completing-bnote-type ()
+  (interactive)
+  (let* ((type (completing-read "type: " '("bnote" "morning" "evening" "study")))
+         (template (and (string-prefix-p "study" type)
+                        duc/bnote-study-template)))
+    (duc/create-or-open-bnote-type type template)))
 
 (defun duc/insert-bnote-lozenge-empty-link ()
     (interactive)
