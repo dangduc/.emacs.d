@@ -917,7 +917,7 @@ while `company-capf' runs."
       ("w" "write file" save-buffer)
       ("K" "delete file" duc/delete-this-file)]
      ["note"
-      ("l" "bnote" duc/create-or-open-bnote)
+      ("l" "bnote" (lambda () (interactive) (duc/create-or-open-bnote-type "bnote")))
       ("m" "morning" (lambda () (interactive) (duc/create-or-open-bnote-type "morning")))
       ("e" "evening" (lambda () (interactive) (duc/create-or-open-bnote-type "evening")))
       ("L" "create w/ type" duc/completing-bnote-type)
