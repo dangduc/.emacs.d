@@ -717,9 +717,9 @@ _p_/_a_: push notes         _i_: screenshot
   :straight
   (:repo "dangduc/fzf-native"
    :host github
-   :files (:defaults "bin"))
+   :files (:defaults "*.c" "*.h" "*.txt"))
   :config
-  (fzf-native-load-dyn))
+  (fzf-native-load-own-build-dyn))
 
 (use-package sublime-fuzzy
   :straight
