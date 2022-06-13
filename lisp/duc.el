@@ -9,7 +9,7 @@
 (defvar duc/font-height (pcase system-type
                           ('windows-nt 100)
                           ('gnu/linux 140)
-                          (_ 120)))
+                          (_ 140)))
 
 
 (defvar duc/font-family-mode-line (pcase system-type
