@@ -155,14 +155,17 @@
           "\n" t)))
     (completing-read "$ " history)))
 
-(defun duc/shell-send-string-to-project-dwim ()
+(defun duc/shell-send-string-to-project-dwim (&optional command working-directory)
   (interactive)
-  (let ((project-root (projectile-acquire-root))
-        (command (duc/completing-shell-history)))
-    (let ((directory-name (car (last (split-string project-root "/") 2))))
+  (let ((working-directory (or working-directory (if (projectile-project-p)
+                                                     (projectile-acquire-root)
+                                                   (file-name-directory (buffer-file-name)))))
+        (command (or command (duc/completing-shell-history))))
+    (let ((directory-name (car (last (split-string working-directory "/" t "") 1))))
       (duc/ivy-shell-send-string command
                                  (concat "terminal-" directory-name)
-                                 project-root))))
+                                 working-directory)
+      (message (concat "terminal-" directory-name " --> " command)))))
 
 (defun duc/sidebar-toggle ()
   "Toggle both `dired-sidebar' and `ibuffer-sidebar'."
@@ -293,8 +296,39 @@ e.g.
                                                      (region-end))))
                   (t (python-shell-send-buffer))))))
     ('latex-mode (preview-section))
-    ('org-mode (duc/eval-dwim-org-latex-fragment))
+    ('org-mode (duc/eval-dwim-org))
     (_ (eval-last-sexp p))))
+
+(defun duc/org-src-block-parameter-property (parameter params-as-string)
+  (if (stringp params-as-string)
+      (let ((parameters (mapcar
+                         (lambda (token) (if (string-prefix-p ":" token) (intern token) token))
+                         (split-string params-as-string " " t " "))))
+        (plist-get parameters parameter))))
+
+;(src-block (:language "emacs-lisp"
+;            :switches nil
+;            :parameters :dir "~/"
+;            :begin 135 :end 197
+;            :number-lines nil :preserve-indent nil
+;            :retain-labels t :use-labels t
+;            :label-fmt nil
+;            :value "    (setq foo 'bar)"
+;            :post-blank 3
+;            :post-affiliated 135
+;            :parent nil))
+(defun duc/eval-dwim-org ()
+  (interactive)
+  (cond ((org-in-src-block-p t)
+         (let ((lang (org-element-property :language (org-element-at-point)))
+               (dir (duc/org-src-block-parameter-property
+                     :dir
+                     (org-element-property :parameters (org-element-at-point)))))
+           (cond ((string-equal lang "bash")
+                  (let ((line-of-bash (string-trim (buffer-substring (line-beginning-position)
+                                                                     (line-end-position)))))
+                    (duc/shell-send-string-to-project-dwim line-of-bash dir))))))
+        (t (duc/eval-dwim-org-latex-fragment))))
 
 (defun duc/eval-print-dwim (p)
   (interactive "P")
@@ -925,8 +959,10 @@ projectile cache when it's possible and update recentf list."
 
 (defun duc/incremental-search-filenames-dwim ()
   (interactive)
-  (let* ((project-root (projectile-acquire-root))
-         (active-git-project-p (projectile-file-exists-p (expand-file-name ".git" project-root))))
+  (let* ((working-directory (if (projectile-project-p)
+                                (projectile-acquire-root)
+                              (pwd)))
+         (active-git-project-p (projectile-file-exists-p (expand-file-name ".git" working-directory))))
     (if active-git-project-p
         (duc/incremental-search-filenames-in-version-control)
       (duc/incremental-search-filenames-in-directory))))
