@@ -122,7 +122,7 @@
            (buffer-name (completing-read "shell : " terminal-buffers nil nil initial-buffer-name)))
       (if (member buffer-name terminal-buffers)
           (switch-to-buffer buffer-name)
-        (vterm (concat "terminal-" buffer-name))))))
+        (vterm (concat buffer-name))))))
 
 (defun duc/ivy-shell-send-string (string &optional terminal working-directory clear)
   (let ((current-buffer-p (current-buffer))
