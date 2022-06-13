@@ -718,6 +718,8 @@ _p_/_a_: push notes         _i_: screenshot
   (:repo "dangduc/fzf-native"
    :host github
    :files (:defaults "*.c" "*.h" "*.txt"))
+  :init
+  (setq fzf-native-always-compile-module t)
   :config
   (fzf-native-load-own-build-dyn))
 
