@@ -20,7 +20,7 @@
 (defvar duc/font-height-mode-line (pcase system-type
                           ('windows-nt 120)
                           ('gnu/linux 120)
-                          (_ 16`0)))
+                          (_ 160)))
 
 (defvar duc/margin-height-mode-line 1)
 
