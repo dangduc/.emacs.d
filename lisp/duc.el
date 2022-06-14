@@ -148,7 +148,8 @@
          (split-string
           (replace-regexp-in-string "^: [0-9]+:0;" ""
                                     (with-temp-buffer
-                                      (insert-file-contents "~/.zsh_history")
+                                      (insert-file-contents (or local/shell-history-file
+                                                                "~/.zsh_history"))
                                       (buffer-substring-no-properties
                                        (point-min)
                                        (point-max))))
