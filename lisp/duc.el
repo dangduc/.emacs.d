@@ -158,9 +158,12 @@
 
 (defun duc/shell-send-string-to-project-dwim (&optional command working-directory)
   (interactive)
-  (let ((working-directory (or working-directory (if (projectile-project-p)
-                                                     (projectile-acquire-root)
-                                                   (file-name-directory (buffer-file-name)))))
+  (let ((working-directory
+         (or working-directory
+             (if (projectile-project-p)
+                 (projectile-acquire-root)
+               (file-name-directory (or (buffer-file-name)
+                                        (project-find-file))))))
         (command (or command (duc/completing-shell-history))))
     (let ((directory-name (car (last (split-string working-directory "/" t "") 1))))
       (duc/ivy-shell-send-string command
