@@ -732,8 +732,6 @@ _p_/_a_: push notes         _i_: screenshot
   :config
   (sublime-fuzzy-load-dyn))
 
-(use-package hotfuzz)
-
 (use-package fussy
   :ensure t
   :straight
