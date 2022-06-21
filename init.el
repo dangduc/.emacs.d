@@ -30,6 +30,7 @@
 (setq read-process-output-max (* 1024 1024)) ;; 1mb
 
 ;; Get rid of extraneous UI
+(menu-bar-mode t) ; But display menu bar.
 (tool-bar-mode -1)
 (scroll-bar-mode -1)
 (setq inhibit-startup-message t
