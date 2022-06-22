@@ -1,5 +1,7 @@
 ;;;; -*- lexical-binding: t; -*-
 
+(require 'cl-lib)
+
 (require 'five-letter-words)
 
 (defvar duc/font-family (pcase system-type
@@ -1006,5 +1008,77 @@ projectile cache when it's possible and update recentf list."
   (interactive)
   (let ((parent-directory (file-name-directory (buffer-file-name))))
     (duc/yank-string parent-directory)))
+
+(defvar duc/company-shortcut-keywords
+  '(;; Words
+    ("ab" "about")
+    ("bc" "because")
+    ("ck" "check-in")
+    ("dnt" "don't")
+    ("dont" "don't")
+    ("eg" "e.g.,")
+    ("ie" "i.e.,")
+    ("isu" "insufficient")
+    ("ne" "necessary")
+    ("no" "notice")
+    ("ol" "outline")
+    ("th" "thought")
+    ("tk" "think")
+    ("rr" "remember")
+    ("rp" "responsibilities")
+    ("su" "sufficient")
+    ("une" "unnecessary")
+    ("up" "update")
+    ("wo" "wonder")
+    ;; Fragments
+    ("ai" "action item")
+    ("fe" "for example")
+    ("iow" "in other words")
+    ("st" "such that")
+    ("wb" "would be")
+    ("cop" "class of problems")
+    ;; Starting sentences
+    ("Hs" "How so?")
+    ("Wp" "What's the principle behind this?")
+    ("Ws" "Why so?")
+    ;;; Prompts
+    ("Ai" "Action item - ")
+    ("Ow" "Outcome wanted - ")
+    ("Pe" "Purpose -")
+    ;;; Questions
+    ("wam" "Why am I feeling this way?")
+    ("wwl" "What went well?")
+    ("wcb" "What could have gone better?")
+    ("wbm" "What might I need to learn, or what strategies might I use the next time to get better results?")))
+
+(defun duc/company-shortcut--prefix ()
+    (let ((wap (thing-at-point 'word 'strip-properties)))
+      (when (and wap
+                 (save-excursion
+                   (search-backward wap (line-beginning-position) t)))
+        (match-string 0))))
+
+(defun duc/company-shortcut--make-candidate (candidate)
+  (let ((text (cadr candidate))
+        (annotation "S"))
+    (propertize text 'annotation annotation)))
+
+(defun duc/company-shortcut--candidates (prefix)
+  (let (res)
+    (dolist (item duc/company-shortcut-keywords)
+      (when (string= prefix (car item))
+        (push (duc/company-shortcut--make-candidate item) res)))
+    res))
+
+(defun duc/company-shortcut--annotation (candidate)
+  (format " (%s)" (get-text-property 0 'annotation candidate)))
+
+(defun duc/company-shortcut (command &optional arg &rest ignored)
+  (interactive (list 'interactive))
+  (cl-case command
+    (interactive (company-begin-backend 'duc/company-shortcut))
+    (prefix (duc/company-shortcut--prefix))
+    (candidates (duc/company-shortcut--candidates arg))
+    (annotation (duc/company-shortcut--annotation arg))))
 
 (provide 'duc)

@@ -771,6 +771,8 @@ while `company-capf' runs."
       (apply f args)))
   (advice-add 'company-capf :around 'd-company-capf-with-og-completion-styles)
 
+  (push 'duc/company-shortcut company-backends)
+
   (company-tng-mode)
   (global-company-mode))
 
