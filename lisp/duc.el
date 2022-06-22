@@ -1016,6 +1016,7 @@ projectile cache when it's possible and update recentf list."
     ("ck" "check-in")
     ("dnt" "don't")
     ("dont" "don't")
+    ("fo" "following")
     ("eg" "e.g.,")
     ("ie" "i.e.,")
     ("isu" "insufficient")
@@ -1032,11 +1033,22 @@ projectile cache when it's possible and update recentf list."
     ("wo" "wonder")
     ;; Fragments
     ("ai" "action item")
+    ("dt" "due to")
     ("fe" "for example")
     ("iow" "in other words")
+    ("mdt" "maybe due to")
     ("st" "such that")
     ("wb" "would be")
     ("cop" "class of problems")
+    ;; Emotion Matrix
+    ("ui" "<unpleasant-intense>")
+    ("um" "<unpleasant-mild>")
+    ("pi" "<pleasant-intense>")
+    ("pm" "<pleasant-mild>")
+    ;; Epistemic Status
+    ("bs" "<believe-strongly>")
+    ("bw" "<believe-weakly>")
+    ("bm" "<believe-mildly>")
     ;; Starting sentences
     ("Hs" "How so?")
     ("Wp" "What's the principle behind this?")
@@ -1050,6 +1062,8 @@ projectile cache when it's possible and update recentf list."
     ("wwl" "What went well?")
     ("wcb" "What could have gone better?")
     ("wbm" "What might I need to learn, or what strategies might I use the next time to get better results?")))
+
+(defcustom duc/company-shortcut-append-just-one-space nil nil)
 
 (defun duc/company-shortcut--prefix ()
     (let ((wap (thing-at-point 'word 'strip-properties)))
@@ -1079,6 +1093,7 @@ projectile cache when it's possible and update recentf list."
     (interactive (company-begin-backend 'duc/company-shortcut))
     (prefix (duc/company-shortcut--prefix))
     (candidates (duc/company-shortcut--candidates arg))
-    (annotation (duc/company-shortcut--annotation arg))))
+    (annotation (duc/company-shortcut--annotation arg))
+    (post-completion (if duc/company-shortcut-append-just-one-space (just-one-space)))))
 
 (provide 'duc)
