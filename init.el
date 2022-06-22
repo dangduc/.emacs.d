@@ -114,8 +114,9 @@
 (setq mac-command-modifier 'meta)
 
 
-(when (< emacs-major-version 28)
+(when (> emacs-major-version 28)
   (pixel-scroll-precision-mode 1))
+
 ;; Start emacs server
 ;; e.g. ~/.zshrc
 ;;   # (find-file) send to emacs server.

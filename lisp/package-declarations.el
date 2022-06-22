@@ -905,8 +905,10 @@ while `company-capf' runs."
       ("k" "kill" delete-window)
       ("p" "toggle pin" duc/toggle-pin-buffer)]
      ["Other"
-      ("o" "next buffer command in OTHER window" other-window-prefix)
-      ("O" "next buffer command in SAME window" same-window-prefix)]])
+      ("o" "next buffer command in OTHER window" (lambda ()
+                                                   (interactive) (other-window-prefix)))
+      ("O" "next buffer command in SAME window" (lambda ()
+                                                  (interactive) (same-window-prefix)))]])
   (transient-define-prefix transient-file ()
     "file"
     [["navigate"
