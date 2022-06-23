@@ -1005,6 +1005,7 @@ while `company-capf' runs."
       ("h" "hydra" org-fc-hydra/body)]]))
 
 (use-package magit
+  :straight (:build (:not compile)) ;; https://github.com/magit/magit/issues/4676
   :after transient
   :commands (magit-toplevel
              magit-status
