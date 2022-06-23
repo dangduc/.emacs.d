@@ -880,16 +880,17 @@ while `company-capf' runs."
   (transient-define-prefix transient-buffer ()
     "buffer"
     [["edit"
-      ("N" "new buffer" duc/new-buffer)
+      ("N" "new" duc/new-buffer)
       ("m" "move buffer & file (ie, rename)" (lambda () (interactive) (duc/rename-file (buffer-name))))
-      ("w" "save buffer" save-buffer)
-      ("r" "reload buffer" revert-buffer)
+      ("r" "rename" rename-buffer)
+      ("w" "save" save-buffer)
+      ("R" "reload" revert-buffer)
       ("k" "kill buffer" kill-buffer)]
      ["navigation"
-      ("p" "prev buffer" previous-buffer)
-      ("n" "next buffer" next-buffer)
+      ("p" "prev" previous-buffer)
+      ("n" "next" next-buffer)
       ("l" "list buffers" list-buffers)
-      ("o" "switch buffer" switch-to-buffer)]
+      ("o" "switch" switch-to-buffer)]
      ["other"
       ("i" "create indirect buffer" clone-indirect-buffer)
       ("t" "tail -f" auto-revert-tail-mode)
