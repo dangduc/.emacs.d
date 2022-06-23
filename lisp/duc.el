@@ -1066,11 +1066,11 @@ projectile cache when it's possible and update recentf list."
 (defcustom duc/company-shortcut-append-just-one-space nil nil)
 
 (defun duc/company-shortcut--prefix ()
-    (let ((wap (thing-at-point 'word 'strip-properties)))
-      (when (and wap
-                 (save-excursion
-                   (search-backward wap (line-beginning-position) t)))
-        (match-string 0))))
+  (let ((wap (thing-at-point 'word 'strip-properties)))
+    (when (and wap
+               (save-excursion
+                 (search-backward wap (line-beginning-position) t)))
+      (match-string 0))))
 
 (defun duc/company-shortcut--make-candidate (candidate)
   (let ((text (cadr candidate))
