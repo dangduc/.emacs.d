@@ -221,7 +221,7 @@
       ("R" "org-fc" transient-org-fc)]]
     [["More Navigation"
       ("n" "buffer" switch-to-buffer)
-      ("m" "files" project-find-file)
+      ("m" "files" projectile-find-file-dwim)
       ("M" "files (all)" project-or-external-find-file)
       ("p" "project" hydra-submenu-project/body)]
      ["Other"
