@@ -717,7 +717,7 @@ _p_/_a_: push notes         _i_: screenshot
   :straight
   (:repo "dangduc/fzf-native"
    :host github
-   :files (:defaults "*.c" "*.h" "*.txt"))
+   :files (:defaults "bin" "*.c" "*.h" "*.txt"))
   :init
   (setq fzf-native-always-compile-module t)
   :config
