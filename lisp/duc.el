@@ -1030,6 +1030,7 @@ projectile cache when it's possible and update recentf list."
     ("su" "sufficient")
     ("une" "unnecessary")
     ("up" "update")
+    ("vs" "versus")
     ("wo" "wonder")
     ;; Fragments
     ("ai" "action item")
@@ -1037,6 +1038,7 @@ projectile cache when it's possible and update recentf list."
     ("fe" "for example")
     ("iow" "in other words")
     ("mdt" "maybe due to")
+    ("otoh" "on the other hand")
     ("st" "such that")
     ("wb" "would be")
     ("cop" "class of problems")
