@@ -1089,6 +1089,7 @@ projectile cache when it's possible and update recentf list."
 (defun duc/company-shortcut--annotation (candidate)
   (format " (%s)" (get-text-property 0 'annotation candidate)))
 
+;; TODO replace with company-abbrev.
 (defun duc/company-shortcut (command &optional arg &rest ignored)
   (interactive (list 'interactive))
   (cl-case command

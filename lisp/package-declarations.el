@@ -375,6 +375,14 @@ _p_/_a_: push notes         _i_: screenshot
   ; the keys are on the home row.
   (setq aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l)))
 
+(use-package abbrev
+  :straight (:type built-in)
+  :config
+  (setq save-abbrevs 'silent) ;; save abbrevs when files are saved
+  :init
+  (setq abbrev-file-name
+        (expand-file-name "abbrev_defs.el" user-emacs-directory)))
+
 (use-package tree-sitter)
 
 (use-package tree-sitter-langs
