@@ -52,7 +52,7 @@
   (add-hook 'before-save-hook
             (lambda ()
               (pcase major-mode
-                ('org-mode (if (s-starts-with-p "bnote-" (buffer-name))
+                ('org-mode (if (s-ends-with-p "/dev/notes/" (file-name-directory (buffer-file-name)))
                                (duc/bnote-update-backlinks-for-note)))))))
 
 (with-eval-after-load 'evil
