@@ -758,6 +758,7 @@ _p_/_a_: push notes         _i_: screenshot
   :init
   (setq fzf-native-always-compile-module t)
   :config
+  (setq fussy-score-fn 'fussy-fzf-native-score)
   (fzf-native-load-own-build-dyn))
 
 (let ((straight-disable-compile t))
@@ -765,7 +766,6 @@ _p_/_a_: push notes         _i_: screenshot
     :straight (:repo "rustify-emacs/fuz.el"
                :host github)
     :config
-    (setq fussy-score-fn 'fussy-fuz-score)
     (unless (require 'fuz-core nil t)
       (fuz-build-and-load-dymod))))
 
@@ -775,9 +775,7 @@ _p_/_a_: push notes         _i_: screenshot
   (fussy :type git :host github :repo "jojojames/fussy")
   :after flx
   :config
-  (setq fussy-score-fn 'fussy-fzf-native-score)
   (setq fussy-filter-fn 'fussy-filter-flex)
-
   (push 'fussy completion-styles)
   (setq
    ;; For example, project-find-file uses 'project-files which uses
