@@ -1293,7 +1293,7 @@ while `company-capf' runs."
   (setq org-ditaa-jar-path "~/.emacs.d/vendor/not-elisp/ditaa0_9.jar")
   (setq org-plantuml-jar-path "~/.emacs.d/vendor/not-elisp/plantuml.jar")
 
-  (setq org-default-notes-file "~/dev/notes/log.org")
+  (setq org-default-notes-file "~/dev/notes/notes.org")
   (setq org-capture-templates
         '(("D" "drill" entry (file+datetree "") "* %<%H%M:%S> %^{question} :drill:\n** Answer\n%^{answer}"
            :immediate-finish t)
