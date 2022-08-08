@@ -1042,7 +1042,9 @@ while `company-capf' runs."
       ("n" "narrow" org-narrow-to-subtree)
       ("N" "widen" widen)
       ("w" "widen" widen)
-      ("o" "open link" org-open-at-point)]])
+      ("o" "open link" (lambda () (interactive)
+                         (org-open-at-point)
+                         (balance-windows)))]])
   (transient-define-prefix transient-org-fc ()
     "org-fc"
     [["Review"
