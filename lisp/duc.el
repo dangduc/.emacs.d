@@ -497,6 +497,7 @@ Author: @syegge.
 
 (defcustom duc/create-linked-note-default-dir "~/dev/huhmann/" nil)
 (defcustom duc/create-bnote-default-dir "~/dev/notes/" nil)
+(defcustom duc/bnote-template-default-dir "~/dev/notes/templates" nil)
 
 (defun duc/create-linked-note (&optional project)
   (interactive)
@@ -640,6 +641,19 @@ AG-PROMPT, if non-nil, is passed as `ivy-read' prompt argument. "
   (let* ((type (completing-read "type: " '("bnote" "morning" "evening" "study")))
          (template (and (string-prefix-p "study" type)
                         duc/bnote-study-template)))
+    (duc/create-or-open-bnote-type type template)))
+
+(defun duc/completing-bnote-template ()
+  (interactive)
+  (let* ((files (directory-files duc/bnote-template-default-dir nil "\.org$"))
+         (file (completing-read "template: " files nil t))
+         (type (file-name-sans-extension file))
+         (template (with-temp-buffer
+                     (insert-file-contents (concat duc/bnote-template-default-dir
+                                                   "/"
+                                                   file))
+                     (buffer-substring-no-properties (point-min)
+                                                     (point-max)))))
     (duc/create-or-open-bnote-type type template)))
 
 (defun duc/insert-bnote-lozenge-empty-link ()
