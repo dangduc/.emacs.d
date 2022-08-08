@@ -67,3 +67,4 @@ local.el
 /epkgs/
 .org-id-locations
 /eln-cache/
+/package-quickstart.el
