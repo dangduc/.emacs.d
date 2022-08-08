@@ -901,20 +901,42 @@ while `company-capf' runs."
   (define-key transient-edit-map (kbd "q") 'transient-quit-one)
   (define-key transient-sticky-map (kbd "q") 'transient-quit-seq)
 
+  (defmacro transient-define-suffix--transient-buffer (&rest commands)
+    "Create transient suffixes for transient-buffer that can recognize args"
+    `(progn
+       ,@(cl-loop
+          for command in commands
+          appending
+          (let* ((str (symbol-name command))
+                 (sym (intern (format "transient-%s--args" (symbol-name command)))))
+            `((transient-define-suffix ,sym (&optional args)
+                (concat ,str " that recognizes transient args")
+                (interactive (list (transient-args transient-current-command)))
+                (transient-set)
+                (let ((other-window-prefix-switch (transient-arg-value "--other-window-prefix" args)))
+                  (when other-window-prefix-switch
+                    (other-window-prefix))
+                  (call-interactively (quote ,command)))))))))
+
+  (transient-define-suffix--transient-buffer switch-to-buffer
+                                             duc/new-buffer
+                                             list-buffers)
+
   (transient-define-prefix transient-buffer ()
     "buffer"
+    ["Switches"
+     ("w" "other-window-prefix" "--other-window-prefix")]
     [["edit"
-      ("N" "new" duc/new-buffer)
+      ("N" "new" transient-duc/new-buffer--args )
       ("m" "move buffer & file (ie, rename)" (lambda () (interactive) (duc/rename-file (buffer-name))))
       ("r" "rename" rename-buffer)
-      ("w" "save" save-buffer)
       ("R" "reload" revert-buffer)
       ("k" "kill buffer" kill-buffer)]
      ["navigation"
       ("p" "prev" previous-buffer)
       ("n" "next" next-buffer)
-      ("l" "list buffers" list-buffers)
-      ("o" "switch" switch-to-buffer)]
+      ("l" "list buffers" transient-list-buffers--args)
+      ("o" "switch" transient-switch-to-buffer--args)]
      ["other"
       ("i" "create indirect buffer" clone-indirect-buffer)
       ("t" "tail -f" auto-revert-tail-mode)
