@@ -894,10 +894,10 @@ while `company-capf' runs."
 (use-package transient
   :config
   ;; Bind esc
-  (define-key transient-map (kbd "<escape>") 'transient-quit-one)
+  (define-key transient-map (kbd "<escape>") 'transient-quit-all)
   (define-key transient-edit-map (kbd "<escape>") 'transient-quit-one)
   (define-key transient-sticky-map (kbd "<escape>") 'transient-quit-seq)
-  (define-key transient-map (kbd "q") 'transient-quit-one)
+  (define-key transient-map (kbd "q") 'transient-quit-all)
   (define-key transient-edit-map (kbd "q") 'transient-quit-one)
   (define-key transient-sticky-map (kbd "q") 'transient-quit-seq)
 
