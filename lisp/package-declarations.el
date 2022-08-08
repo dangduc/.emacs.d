@@ -440,6 +440,11 @@ _p_/_a_: push notes         _i_: screenshot
         (set-face-attribute 'modus-themes-hl-line nil :background "#DEECF4"))))
   (advice-add 'load-theme :after #'duc/theme-setup-modus-operandi-theme))
 
+(use-package mindre-theme
+  :init
+  (setq mindre-use-more-bold nil)
+  (setq mindre-use-faded-lisp-parens t))
+
 ;; end themes
 
 (use-package undo-tree
@@ -731,15 +736,6 @@ _p_/_a_: push notes         _i_: screenshot
   (setq fzf-native-always-compile-module t)
   :config
   (fzf-native-load-own-build-dyn))
-
-(use-package sublime-fuzzy
-  :straight
-  (sublime-fuzzy
-   :repo "jcs-elpa/sublime-fuzzy"
-   :fetcher github
-   :files (:defaults "bin"))
-  :config
-  (sublime-fuzzy-load-dyn))
 
 (use-package fussy
   :ensure t
@@ -1352,7 +1348,6 @@ while `company-capf' runs."
   (pdf-loader-install))
 
 (use-package org-pdftools
-  :after duc
   :hook (org-mode . org-pdftools-setup-link)
   :init
   (defun duc/yank-org-pdftools-get-link ()
