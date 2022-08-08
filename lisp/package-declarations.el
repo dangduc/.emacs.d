@@ -424,7 +424,7 @@ _p_/_a_: push notes         _i_: screenshot
 
 (use-package seoul256-theme
   :straight (:host github
-                   :repo "dangduc/seoul256-emacs")
+             :repo "dangduc/seoul256-emacs")
   :no-require t
   :config
   (setq seoul256-background 256))

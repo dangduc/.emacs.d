@@ -623,7 +623,7 @@ AG-PROMPT, if non-nil, is passed as `ivy-read' prompt argument. "
          (force-template (if template t))
          (template (or template duc/bnote-default-template)))
     (unless entry-exists
-                                        ; Entry not found, so we'll create a new entry.
+      ; Entry not found, so we'll create a new entry.
       (if force-template
           (append-to-file template nil new-entry)
         (let ((last-entry (car (last (directory-files duc/create-bnote-default-dir
