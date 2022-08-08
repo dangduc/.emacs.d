@@ -913,7 +913,8 @@ while `company-capf' runs."
                 (concat ,str " that recognizes transient args")
                 (interactive (list (transient-args transient-current-command)))
                 (transient-set)
-                (let ((other-window-prefix-switch (transient-arg-value "--other-window-prefix" args)))
+                (let ((other-window-prefix-switch
+                       (transient-arg-value "--other-window-prefix" args)))
                   (when other-window-prefix-switch
                     (other-window-prefix))
                   (call-interactively (quote ,command)))))))))
@@ -927,7 +928,7 @@ while `company-capf' runs."
     ["Switches"
      ("w" "other-window-prefix" "--other-window-prefix")]
     [["edit"
-      ("N" "new" transient-duc/new-buffer--args )
+      ("N" "new" transient-duc/new-buffer--args)
       ("m" "move buffer & file (ie, rename)" (lambda () (interactive) (duc/rename-file (buffer-name))))
       ("r" "rename" rename-buffer)
       ("R" "reload" revert-buffer)
