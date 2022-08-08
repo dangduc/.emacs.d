@@ -1046,6 +1046,7 @@ projectile cache when it's possible and update recentf list."
     ("up" "update")
     ("vs" "versus")
     ("wo" "wonder")
+    ("w/" "with") ; TODO doesn't work with slashes.
     ;; Fragments
     ("ai" "action item")
     ("dt" "due to")
