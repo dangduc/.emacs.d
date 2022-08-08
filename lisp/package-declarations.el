@@ -90,6 +90,23 @@
   (with-eval-after-load 'autorevert
     (diminish 'auto-revert-mode)))
 
+(use-package tab-bar
+  :config
+  ;; Make tab bar switches create a new tab if there were no tabs to switch to.
+  (advice-add 'tab-bar-switch-to-next-tab
+              :after
+              (lambda (&rest _)
+                (when (= (length (funcall tab-bar-tabs-function)) 1)
+                  (tab-new 1))))
+  (advice-add 'tab-bar-switch-to-prev-tab
+              :after
+              (lambda (&rest _)
+                (when (= (length (funcall tab-bar-tabs-function)) 1)
+                  (tab-new -1))))
+
+  ;; Show tab bar only when we have more than 1 tab.
+  (setf tab-bar-show 1))
+
 (use-package which-key
   :diminish which-key-mode
   :init
@@ -1320,9 +1337,9 @@ while `company-capf' runs."
   (setq elfeed-feeds local/elfeed-feeds))
 
 (use-package geiser
-  :config
-  (setq geiser-mode-company-p nil)
   :init
+  (setq geiser-mode-company-p nil)
+  :config
   ; Have evil's normal mode handle last-sexp ending at point, as
   ; you would expect it to.
   ; e.g.   (list 'one 'two 'three)
@@ -1345,11 +1362,14 @@ while `company-capf' runs."
 
 (use-package pdf-tools
   :init
-  (pdf-loader-install))
+  (setq pdf-view-resize-factor 1.1)
+  (setq-default pdf-view-display-size 'fit-page)
+  :config
+  (pdf-tools-install))
 
 (use-package org-pdftools
   :hook (org-mode . org-pdftools-setup-link)
-  :init
+  :config
   (defun duc/yank-org-pdftools-get-link ()
     "Use while pdf text highlighted to yank org-link to text, e.g.,
 [[pdf:~/dev/pdfs/some-paper.pdf::16++16.23;;annot-16-0]]"
