@@ -1338,4 +1338,18 @@ while `company-capf' runs."
 
 (use-package lua-mode)
 
+(use-package pdf-tools
+  :init
+  (pdf-loader-install))
+
+(use-package org-pdftools
+  :after duc
+  :hook (org-mode . org-pdftools-setup-link)
+  :init
+  (defun duc/yank-org-pdftools-get-link ()
+    "Use while pdf text highlighted to yank org-link to text, e.g.,
+[[pdf:~/dev/pdfs/some-paper.pdf::16++16.23;;annot-16-0]]"
+    (interactive)
+    (duc/yank-string (org-pdftools-get-link))))
+
 (provide 'package-declarations)
