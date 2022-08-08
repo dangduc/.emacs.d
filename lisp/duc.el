@@ -703,11 +703,11 @@ AG-PROMPT, if non-nil, is passed as `ivy-read' prompt argument. "
         (when fill-prefix (do-auto-fill))))))
 
 (defun duc/bnote-update-backlinks-for-note ()
-  (interactive)
   (let ((back-buffer (current-buffer))
         (back-filename (buffer-file-name (current-buffer)))
         (files-to-update
-         (seq-filter (lambda (f) (file-exists-p f))
+         (seq-filter (lambda (f) (or (get-file-buffer f)
+                                     (file-exists-p f)))
                      (org-element-map (org-element-parse-buffer) 'link
                        (lambda (link)
                          (when (and (string= (org-element-property :type link) "file")
@@ -736,22 +736,24 @@ AG-PROMPT, if non-nil, is passed as `ivy-read' prompt argument. "
            (with-current-buffer forward-buffer
              (goto-char (point-max))
              (insert (format "** [[-:%s]].\n" (file-name-base back-filename)))))))
-     files-to-update)))
+     files-to-update))
+  ; Return NIL to open link.
+  nil)
 
 (defun duc/org-open-at-point-follow-with-template ()
-  (let ((current-element (org-element-context))
-        path)
-    (when (and (eq 'link (car current-element))
-               (string= "file" (org-element-property :type current-element)))
-      (setq path (org-element-property :path current-element))
-      (when (not (file-exists-p path))
-        (with-temp-file path
+  (let* ((current-element (org-element-context))
+         (f (when (and (eq 'link (car current-element))
+                          (string= "file" (org-element-property :type current-element)))
+                 (org-element-property :path current-element))))
+    (when (and f (not (or (get-file-buffer f)
+                          (file-exists-p f))))
+      (let ((buf (find-file-noselect f)))
+        (with-current-buffer buf
           (let ((title (capitalize
                         (string-replace
                          "-"
                          " "
-                         (string-remove-prefix "bnote-"
-                                               (file-name-sans-extension path))))))
+                         (file-name-sans-extension f)))))
             (insert (format "#+STARTUP: showall indent
 #+TITLE: %s
 #+DATE: %s
@@ -762,10 +764,27 @@ AG-PROMPT, if non-nil, is passed as `ivy-read' prompt argument. "
 
 
 
-* Backlinks\n" title (current-time-string) "- file:%s.org" title))))))))
+* Backlinks\n" title (current-time-string) "- file:%s.org" title)))
+          ; Reload in-buffer settings.
+          (org-mode-restart)))))
+  ; Return NIL to open link.
+  nil)
 
-
+(add-hook 'org-open-at-point-functions #'duc/bnote-update-backlinks-for-note)
 (add-hook 'org-open-at-point-functions #'duc/org-open-at-point-follow-with-template)
+
+(defun duc/bnote-convert-str-to-link ()
+  "Replaces STR in region with its org-link
+Intended for use in bnotes.
+e.g., Hello World -> [[-:hello-world]]"
+  (interactive)
+  (when (use-region-p)
+    (let* ((str (buffer-substring (region-beginning)
+                                  (region-end)))
+           ; Hard-coding assumption
+           ; #+LINK: - file:%s.org
+           (link (format "[[-:%s]]" (downcase (string-replace " " "-" str)))))
+      (replace-string-in-region str link (region-beginning) (region-end)))))
 
 (defun duc/anki-connect-push ()
   (interactive)
