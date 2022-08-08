@@ -1400,20 +1400,4 @@ while `company-capf' runs."
 
 (use-package lua-mode)
 
-(use-package pdf-tools
-  :init
-  (setq pdf-view-resize-factor 1.1)
-  (setq-default pdf-view-display-size 'fit-page)
-  :config
-  (pdf-tools-install))
-
-(use-package org-pdftools
-  :hook (org-mode . org-pdftools-setup-link)
-  :config
-  (defun duc/yank-org-pdftools-get-link ()
-    "Use while pdf text highlighted to yank org-link to text, e.g.,
-[[pdf:~/dev/pdfs/some-paper.pdf::16++16.23;;annot-16-0]]"
-    (interactive)
-    (duc/yank-string (org-pdftools-get-link))))
-
 (provide 'package-declarations)
