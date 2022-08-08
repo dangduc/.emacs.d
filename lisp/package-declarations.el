@@ -209,7 +209,8 @@
       ("w" "window/frame" transient-window)
       ("L" "lc" hydra-submenu-leetcode/body)]
      ["Application"
-      ("g" "magit" hydra-submenu-git/body)
+      ("g" "major" transient-major)
+      ("v" "magit" hydra-submenu-git/body)
       ("o" "org-mode" transient-org-mode)
       ("r" "org-roam" transient-org-roam)
       ("E" "eval-expresssion (M-:)" eval-expression)
@@ -331,13 +332,13 @@ _L_: font line spacing
     "
               ^Git^
 ^^^^^^^^---------------------------------
-_g_: status      _L_: log       _b_: blame
+_v_: status      _L_: log       _b_: blame
 _c_: clone       _f_: file log
 _j_: smerge next _u_: upper     _e_: smerge
 _k_: smerge prev _l_: lower     _m_: smerge
 _P_: 80-char sentences
 "
-    ("g" magit-status)
+    ("v" magit-status)
     ("c" duc/git-clone)
     ("L" magit-log)
     ("f" magit-log-buffer-file)
@@ -943,6 +944,14 @@ while `company-capf' runs."
       ("Y" "yank parent directory of file" duc/yank-absolute-path-to-parent)
       ;; e.g. "nc termbin.com 9999"
       ("3" "M-|" shell-command-on-region)]])
+  (transient-define-prefix transient-major-pdf-view ()
+    "pdf-view-mode"
+    [["pdf-view-mode"
+      ("l" "yank link" duc/yank-org-pdftools-get-link)]])
+  (defun transient-major ()
+    (interactive)
+    (pcase major-mode
+      ('pdf-view-mode (transient-major-pdf-view))))
   (transient-define-prefix transient-org-roam ()
     "org-roam"
     [["node"
