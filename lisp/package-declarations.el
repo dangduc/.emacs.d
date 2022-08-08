@@ -8,6 +8,8 @@
 (use-package duc
   :straight nil
   :init
+  ; e.g., switch-to-buffer respects other-window-prefix
+  (setq switch-to-buffer-obey-display-actions t)
   (setq display-buffer-alist
         '(("terminal-epijudge"
            ()
