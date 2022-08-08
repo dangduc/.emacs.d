@@ -11,7 +11,13 @@
   ; e.g., switch-to-buffer respects other-window-prefix
   (setq switch-to-buffer-obey-display-actions t)
   (setq display-buffer-alist
-        '(("terminal-epijudge"
+        '(("\.org$"
+           (display-buffer-reuse-window
+            display-buffer-below-selected)
+           (inhibit-same-window . t)
+           (window-min-width . 50)
+           (window-min-height . 20))
+          ("terminal-epijudge"
            ()
            (inhibit-same-window . t))))
   :config
