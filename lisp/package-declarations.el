@@ -15,13 +15,11 @@
            (display-buffer-reuse-window
             display-buffer-below-selected)
            (inhibit-same-window . t)
-           (window-min-width . 50)
-           (window-min-height . 20))
+           (window-min-height . 10))
           ("terminal-epijudge"
-           ()
+           () ; Intentionally empty
            (inhibit-same-window . t))))
   :config
-
   ;; Set font
   (set-face-attribute 'default nil
                       :family duc/font-family
@@ -761,6 +759,15 @@ _p_/_a_: push notes         _i_: screenshot
   (setq fzf-native-always-compile-module t)
   :config
   (fzf-native-load-own-build-dyn))
+
+(let ((straight-disable-compile t))
+  (use-package fuz
+    :straight (:repo "rustify-emacs/fuz.el"
+               :host github)
+    :config
+    (setq fussy-score-fn 'fussy-fuz-score)
+    (unless (require 'fuz-core nil t)
+      (fuz-build-and-load-dymod))))
 
 (use-package fussy
   :ensure t
