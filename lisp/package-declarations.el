@@ -1190,6 +1190,24 @@ while `company-capf' runs."
 
 (setq python-indent-offset 2)
 
+(use-package pyvenv
+  :config
+  (pyvenv-mode t)
+  ;; Usage
+  ;; 1. pyvenv-activate --> project-directory/venv
+  ;; 2. C-c C-p to run inferior python.
+  ;; 3. <leader> e e
+  ;; 4. pyvenv-deactivate
+  ;; https://stackoverflow.com/a/70371884
+
+  ;; Set correct Python interpreter
+  (setq pyvenv-post-activate-hooks
+        (list (lambda ()
+                (setq python-shell-interpreter (concat pyvenv-virtual-env "bin/python3")))))
+  (setq pyvenv-post-deactivate-hooks
+        (list (lambda ()
+                (setq python-shell-interpreter "python3")))))
+
 (use-package yasnippet
   :config
   (yas-global-mode 1))
