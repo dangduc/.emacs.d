@@ -15,7 +15,7 @@
            (display-buffer-reuse-window
             display-buffer-below-selected)
            (inhibit-same-window . t)
-           (window-min-height . 10))
+           (window-min-height . 13))
           ("terminal-epijudge"
            () ; Intentionally empty
            (inhibit-same-window . t))))
