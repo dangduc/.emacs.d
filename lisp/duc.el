@@ -1143,7 +1143,7 @@ projectile cache when it's possible and update recentf list."
     (when (and wap
                (save-excursion
                  (search-backward wap (line-beginning-position) t)))
-      (match-string 0))))
+      (match-string-no-properties 0))))
 
 (defun duc/company-shortcut--make-candidate (candidate)
   (let ((text (cadr candidate))
@@ -1168,6 +1168,7 @@ projectile cache when it's possible and update recentf list."
     (prefix (duc/company-shortcut--prefix))
     (candidates (duc/company-shortcut--candidates arg))
     (annotation (duc/company-shortcut--annotation arg))
+    (kind 'text)
     (post-completion (if duc/company-shortcut-append-just-one-space (just-one-space)))))
 
 (provide 'duc)

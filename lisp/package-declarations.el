@@ -806,7 +806,15 @@ while `company-capf' runs."
       (apply f args)))
   (advice-add 'company-capf :around 'd-company-capf-with-og-completion-styles)
 
-  (push 'duc/company-shortcut company-backends)
+  (defvar company-backends-original nil)
+  (setq company-backends-original (or company-backends-original
+                                      company-backends))
+  (setq company-backends
+        (mapcar (lambda (backend)
+                  (if (eq backend 'company-dabbrev)
+                      'duc/company-shortcut
+                    backend))
+                company-backends-original))
 
   (company-tng-mode)
   (global-company-mode))
