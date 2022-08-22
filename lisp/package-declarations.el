@@ -784,6 +784,10 @@ _p_/_a_: push notes         _i_: screenshot
    completion-category-defaults nil
    completion-category-overrides nil)
 
+  ;; Enable caching of results and filtering.
+  (setq fussy-use-cache t)
+  (advice-add 'company-auto-begin :before #'fussy-wipe-cache)
+
   ;; `eglot' defaults to flex, so set an override to point to fussy instead.
   (with-eval-after-load 'eglot
     (add-to-list 'completion-category-overrides
