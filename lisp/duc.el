@@ -537,36 +537,44 @@ INITIAL-DIRECTORY, if non-nil, is used as the root directory for search.
 EXTRA-AG-ARGS string, if non-nil, is appended to `counsel-ag-base-command'.
 AG-PROMPT, if non-nil, is passed as `ivy-read' prompt argument. "
   (interactive)
-  (setq counsel-ag-command counsel-ag-base-command)
-  (setq counsel--regex-look-around counsel--grep-tool-look-around)
-  (counsel-require-program counsel-ag-command)
-  (when current-prefix-arg
-    (setq initial-directory
-          (or initial-directory
-              (read-directory-name (concat
-                                    (car (split-string counsel-ag-command))
-                                    " in directory: "))))
-    (setq extra-ag-args
-          (or extra-ag-args
-              (read-from-minibuffer (format
-                                     "%s args: "
-                                     (car (split-string counsel-ag-command)))))))
-  (setq counsel-ag-command (counsel--format-ag-command (or extra-ag-args "") "%s"))
-  (let ((default-directory (or initial-directory
-                               (counsel--git-root)
-                               default-directory)))
-    (ivy-read (or ag-prompt
-                  (concat (car (split-string counsel-ag-command)) ": "))
-              #'counsel-ag-function
-              :initial-input initial-input
-              :dynamic-collection t
-              :keymap counsel-ag-map
-              :history 'counsel-git-grep-history
-              :action #'duc/counsel-insert-linked-link-action
-              :unwind (lambda ()
-                        (counsel-delete-process)
-                        (swiper--cleanup))
-              :caller 'counsel-ag)))
+  (let ((counsel--regex-look-around counsel--grep-tool-look-around))
+    (let ((counsel-ag-command counsel-ag-base-command))
+      (counsel-require-program counsel-ag-command)
+      (when current-prefix-arg
+        (setq initial-directory
+              (or initial-directory
+                  (read-directory-name (concat
+                                        (car (split-string counsel-ag-command))
+                                        " in directory: "))))
+        (setq extra-ag-args
+              (or extra-ag-args
+                  (read-from-minibuffer (format
+                                         "%s args: "
+                                         (car (split-string counsel-ag-command))))))))
+    (let ((counsel-ag-command (counsel--format-ag-command (or extra-ag-args "") "%s"))
+          (default-directory (or initial-directory
+                                 (counsel--git-root)
+                                 default-directory)))
+      (ivy-read (or ag-prompt
+                    (concat (car (split-string counsel-ag-command)) ": "))
+                #'counsel-ag-function
+                :initial-input initial-input
+                :dynamic-collection t
+                :keymap counsel-ag-map
+                :history 'counsel-git-grep-history
+                :action #'duc/counsel-insert-linked-link-action
+                :unwind (lambda ()
+                          (counsel-delete-process)
+                          (swiper--cleanup))
+                :caller 'counsel-ag))))
+
+(defun duc/completing-bnote-insert-linked-link ()
+  (interactive)
+  (let ((filename (completing-read
+               "insert bnote link: "
+               (directory-files duc/create-bnote-default-dir nil "\.org$"))))
+    (insert
+     (format "[[-:%s]]" (file-name-sans-extension filename)))))
 
 (defconst duc/bnote-default-template
   "#+STARTUP: showeverything indent
@@ -743,7 +751,9 @@ AG-PROMPT, if non-nil, is passed as `ivy-read' prompt argument. "
 (defun duc/org-open-at-point-follow-with-template ()
   (let* ((current-element (org-element-context))
          (f (when (and (eq 'link (car current-element))
-                          (string= "file" (org-element-property :type current-element)))
+                       (string= "file" (org-element-property :type current-element))
+                       (s-ends-with-p ".org"
+                                      (org-element-property :path current-element)))
                  (org-element-property :path current-element))))
     (when (and f (not (or (get-file-buffer f)
                           (file-exists-p f))))

@@ -1029,8 +1029,7 @@ while `company-capf' runs."
       ("D" "decrypt all" org-decrypt-entries)]
      ["bnote"
       ("b" "bnote" (lambda () (interactive) (duc/create-or-open-bnote-type "bnote")))
-      ("l" "search & insert link" (lambda () (interactive)
-                                    (duc/counsel-ag-insert-linked-link nil nil "--org" nil)))
+      ("l" "search & insert link" duc/completing-bnote-insert-linked-link)
       ("s" "store link at P" org-store-link)
       ("S" "insert link at P" org-insert-link)]
      ["view"
