@@ -725,25 +725,32 @@ AG-PROMPT, if non-nil, is passed as `ivy-read' prompt argument. "
                                                   "Backlinks"))
                                     (s-ends-with-p ".org" (org-element-property :path link)))
                            (org-element-property :path link)))))))
+    ; Update backlinks for each file.
     (mapcar
      (lambda (f)
-       (let* ((forward-buffer (find-file-noselect f))
-              (existing-backlinks-in-f
-               (with-current-buffer forward-buffer
-                 (org-element-map (org-element-parse-buffer) 'link
-                   (lambda (link)
-                     (when (and (string= (org-element-property :type link) "file")
-                                (string= (org-element-property :raw-value
-                                                               (org-element-property
-                                                                :parent (org-element-property
-                                                                         :parent link)))
-                                         "Backlinks"))
-                       (org-element-property :path link)))))))
-         ; Avoid adding existing backlink.
-         (when (not (member (file-name-nondirectory back-filename) existing-backlinks-in-f))
-           (with-current-buffer forward-buffer
-             (goto-char (point-max))
-             (insert (format "** [[-:%s]].\n" (file-name-base back-filename)))))))
+       (let ((forward-buffer (find-file-noselect f)))
+         (with-current-buffer forward-buffer
+           ; When note file contains a backlinks section..
+           (when (org-element-map (org-element-parse-buffer) 'headline
+                   (lambda (h1)
+                     (and (= (org-element-property :level h1) 1)
+                          (string= (org-element-property :raw-value h1) "Backlinks"))))
+             ; ..build list of existing backlinks..
+             (let ((existing-backlinks-in-f
+                    (org-element-map (org-element-parse-buffer) 'link
+                      (lambda (link)
+                        (when (and (string= (org-element-property :type link) "file")
+                                   (string= (org-element-property :raw-value
+                                                                  (org-element-property
+                                                                   :parent (org-element-property
+                                                                            :parent link)))
+                                            "Backlinks"))
+                          (org-element-property :path link))))))
+               ; ..and add backlink if new entry.
+               (when (not (member (file-name-nondirectory back-filename) existing-backlinks-in-f))
+                 (with-current-buffer forward-buffer
+                   (goto-char (point-max))
+                   (insert (format "** [[-:%s]].\n" (file-name-base back-filename))))))))))
      files-to-update))
   ; Return NIL to open link.
   nil)
