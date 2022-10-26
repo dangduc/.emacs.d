@@ -130,6 +130,20 @@
           (switch-to-buffer buffer-name)
         (vterm (concat buffer-name))))))
 
+(defun duc/run-this-in-eshell (cmd)
+  "Runs the command 'cmd' in eshell."
+  (with-current-buffer "*eshell*"
+    (let ((toggle-readonly (eq evil-state 'normal)))
+      (when toggle-readonly
+        (evil-insert 1))
+      (eshell-kill-input)
+      (end-of-buffer)
+      (insert cmd)
+      (eshell-send-input)
+      (when toggle-readonly
+        (evil-normal-state))
+      (set-window-point (get-buffer-window "*eshell*") (point-max)))))
+
 (defun duc/ivy-shell-send-string (string &optional terminal working-directory clear)
   (let ((current-buffer-p (current-buffer))
         (candidate-terminal-buffers (mapcar (function buffer-name) (buffer-list))))
@@ -172,10 +186,16 @@
                                         (project-find-file))))))
         (command (or command (duc/completing-shell-history))))
     (let ((directory-name (car (last (split-string working-directory "/" t "") 1))))
-      (duc/ivy-shell-send-string command
-                                 (concat "terminal-" directory-name)
-                                 working-directory)
-      (message (concat "terminal-" directory-name " --> " command)))))
+      (setq my-working-directory working-directory)
+      (if (s-starts-with-p "/ssh:" working-directory)
+          ; Is tramp path eg, /ssh:root@143.198.51.22:/
+          (duc/run-this-in-eshell command) ; HACK - Assumes we already got tramp session setup.
+                                           ;        Ignores value of working-directory.
+        ; Not tramp path, send to local terminal
+        (duc/ivy-shell-send-string command
+                                   (concat "terminal-" directory-name)
+                                   working-directory))
+      (message (concat "terminal-" directory-name " --> " working-directory " - " command)))))
 
 (defun duc/sidebar-toggle ()
   "Toggle both `dired-sidebar' and `ibuffer-sidebar'."
