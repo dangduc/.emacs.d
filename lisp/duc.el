@@ -306,7 +306,7 @@ e.g.
                                                      (region-end))))
                   (t (python-shell-send-buffer))))))
     ('latex-mode (preview-section))
-    ('org-mode (duc/eval-dwim-org))
+    ('org-mode (duc/eval-dwim-org p))
     (_ (eval-last-sexp p))))
 
 (defun duc/org-src-block-parameter-property (parameter params-as-string)
@@ -327,14 +327,16 @@ e.g.
 ;            :post-blank 3
 ;            :post-affiliated 135
 ;            :parent nil))
-(defun duc/eval-dwim-org ()
-  (interactive)
+(defun duc/eval-dwim-org (p)
+  (interactive "P")
   (cond ((org-in-src-block-p t)
          (let ((lang (org-element-property :language (org-element-at-point)))
                (dir (duc/org-src-block-parameter-property
                      :dir
                      (org-element-property :parameters (org-element-at-point)))))
-           (cond ((string-equal lang "bash")
+           (cond ((string-equal lang "emacs-lisp")
+                  (eval-last-sexp p))
+                 ((string-equal lang "bash")
                   (let ((line-of-bash (string-trim (buffer-substring (line-beginning-position)
                                                                      (line-end-position)))))
                     (duc/shell-send-string-to-project-dwim line-of-bash dir))))))
