@@ -1285,8 +1285,8 @@ while `company-capf' runs."
 (use-package ob-asymptote
   :after org
   :straight (:type git
-                   :repo "https://git.sr.ht/~bzg/org-contrib"
-                   :files ("lisp/ob-asymptote.el"))
+             :repo "https://git.sr.ht/~bzg/org-contrib"
+             :files ("lisp/ob-asymptote.el"))
   :config
   (org-babel-do-load-languages
    'org-babel-load-languages
