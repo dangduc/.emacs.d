@@ -24,6 +24,10 @@
                           ('gnu/linux 120)
                           (_ 160)))
 
+(defvar duc/font-family-variable-pitch (pcase system-type
+                                         ('darwin "SF Pro Text")
+                                         (_ "Sans Serif")))
+
 (defvar duc/margin-height-mode-line 1)
 
 (defvar duc/font-weight 'normal)

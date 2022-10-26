@@ -27,6 +27,12 @@
                       :weight duc/font-weight
                       :width 'normal)
 
+  (set-face-attribute 'variable-pitch nil
+                      :family duc/font-family-variable-pitch
+                      :height 'unspecified
+                      :weight 'unspecified
+                      :width 'unspecified)
+
   (with-eval-after-load 'org-faces
     (set-face-attribute 'org-block nil
                         :inherit '(fixed-pitch shadow)
