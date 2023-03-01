@@ -210,9 +210,18 @@
     (message password)
     password))
 
+(defun duc/seq-random-choose (sequence limit)
+  (let ((n (min limit (seq-length sequence)))
+        (s (copy-sequence sequence)))
+    (dotimes (i n)
+      (let* ((p (+ i (random (- (seq-length s) i))))
+             (ival (seq-elt s i))
+             (pval (seq-elt s p)))
+        (setf (seq-elt s p) ival)
+        (setf (seq-elt s i) pval)))
+    (seq-take s n)))
 
-
-;; e.g. [[file:~/tb/tableau-auth-android/tableauauth/src/main/java/com/tableau/tableauauth/webauth/WebAuthActivity.kt::250]]
+;; e.g. [[file:~/../../WebAuthActivity.kt::250]]
 (defun duc/org-link-create-filename-line-number ()
   (interactive)
   (concat "["
@@ -839,14 +848,41 @@ e.g., Hello World -> [[-:hello-world]]"
 
 (defun duc/play-sound (&optional filepath)
   (interactive)
-  (let ((filepath (shell-quote-argument ; Escape special characters to be
+  (let* ((filepath (shell-quote-argument ; Escape special characters to be
                                         ; compatible with words like
                                         ; 'Raison d’être'.
                    (expand-file-name    ; Resolve path so that tilde char
                                         ; won't be escaped and make the
                                         ; path invalid.
-                    (or filepath (completing-read "sound file to play: "))))))
-    (shell-command-to-string (format "afplay %s" filepath))))
+                    (or filepath (completing-read "sound file to play: ")))))
+         (ext (file-name-extension filepath)))
+    (cond ((string-match-p ext "mp3|wav")
+           ; afplay included with macOS
+           (shell-command-to-string (format "afplay %s" filepath)))
+          ((string-match-p ext "ogg")
+           ; ogg123 included with vorbis-tools
+           (shell-command-to-string (format "ogg123 --quiet %s" filepath)))
+          (t (error (format "Unsupported extension for file %s" filepath))))))
+
+(defvar-local duc/sounds-in-random-order--playlist nil)
+
+(defun duc/sounds-in-random-order-play (filelist)
+  (setf duc/sounds-in-random-order--playlist
+        (duc/seq-random-choose filelist (seq-length filelist)))
+  (duc/sounds-in-random-order-replay))
+
+(defun duc/sounds-in-random-order-replay ()
+  (dolist (filepath duc/sounds-in-random-order--playlist)
+    (duc/play-sound filepath)))
+
+(defun duc/sounds-in-random-order-playlist ()
+  (mapcar (lambda (filepath)
+            (let ((name (file-name-base filepath)))
+              (cond ((string-match "\\(forvo-vi\\)-\\([a-z\\-]+\\)-\\([0-9]+\\)"
+                                   name)
+                     (match-string 2 name))
+                    (t name))))
+          duc/sounds-in-random-order--playlist))
 
 ;; soundoftext.com
 
@@ -929,14 +965,16 @@ e.g., Hello World -> [[-:hello-world]]"
 ;; https://api.forvo.com/documentation/word-pronunciations/
 
 (defun duc/forvo-query-for-mp3--get (word)
-  (let ((apikey local/forvo-api-key)
+  (let ((limit 5)
+        (apikey local/forvo-api-key)
         (request-backend 'curl)
         (json-array-type 'list)
         reply
         err)
                                ; e.g. https://apifree.forvo.com/action/word-pronunciations/format/json/word/forvo/id_lang_speak/39/order/rate-desc/limit/1/key/XXXX/
-    (let ((response (request (format "https://apifree.forvo.com/action/word-pronunciations/format/json/word/%s/id_lang_speak/39/order/rate-desc/limit/1/key/%s/"
+    (let ((response (request (format "https://apifree.forvo.com/action/word-pronunciations/format/json/word/%s/language/vi/order/rate-desc/limit/%s/key/%s/"
                                      word
+                                     limit
                                      apikey)
                       :type "GET"
                       :parser 'json-read
@@ -965,6 +1003,57 @@ e.g., Hello World -> [[-:hello-world]]"
       (duc/download-mp3 pathmp3 filepath)
       (duc/play-sound filepath)
       (kill-new filepath))))
+
+(defun duc/forvo-search-for-word--get (search-word apikey search-language search-limit)
+  (let ((request-backend 'curl)
+        (json-array-type 'list)
+        reply
+        err)
+    (let ((response (request (format "https://apifree.forvo.com/action/word-pronunciations/format/json/word/%s/language/%s/order/rate-desc/limit/%s/key/%s/"
+                                     search-word
+                                     search-language
+                                     search-limit
+                                     apikey)
+                      :type "GET"
+                      :parser 'json-read
+                      :headers '(("Content-Type" . "application/json"))
+                      :success (cl-function (lambda (&key data &allow-other-keys)
+                                              (setq reply data)))
+                      :error (cl-function (lambda (&key _ &key error-thrown &allow-other-keys)
+                                            (setq err (string-trim (cdr error-thrown)))))
+                      :sync t)))
+      (unless (request-response-done-p response)
+        (request--curl-callback (get-buffer-process (request-response--buffer response)) "finished\n")))
+    (when err (error "Error with server %s" err))
+    (or reply (error "empty reply"))))
+
+(defun duc/forvo-search-and-download-all (search-word &optional search-language)
+  (let* ((apikey local/forvo-api-key)
+         (search-language (or search-language "vi"))
+         (search-limit 20)
+         (download-limit 5)
+         (download-dir local/forvo-download-directory)
+         ; Fetch results from forvo.com
+         (results (duc/forvo-search-for-word--get search-word apikey search-language search-limit))
+         (items (cdr (assoc 'items results)))
+         ; Forvo search is a bit loose, so we need to filter
+         ; out items that don't exactly match our words.
+         (items-with-my-word (seq-take
+                              (seq-filter (lambda (item)
+                                            (let ((actual (cdr (assoc 'word item))))
+                                              (string= search-word actual)))
+                                          items)
+                              download-limit)))
+    ; Download my words
+    (mapcar (lambda (item)
+              (let ((id (cdr (assoc 'id item)))
+                    (word (cdr (assoc 'word item)))
+                    (pathmp3 (cdr (assoc 'pathmp3 item))))
+                                        ; Download it
+                (let ((url pathmp3)
+                      (filepath (format "%s/forvo-vi-%s-%s.mp3" download-dir word id)))
+                  (duc/download-mp3 url filepath))))
+            items-with-my-word)))
 
 ;; Taken from spacemacs/rename-file.
 (defun duc/rename-file (filename &optional new-filename)
