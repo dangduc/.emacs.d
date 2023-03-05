@@ -865,13 +865,17 @@ e.g., Hello World -> [[-:hello-world]]"
            (shell-command-to-string (format "ogg123 --quiet %s" filepath)))
           (t (error (format "Unsupported extension for file %s" filepath))))))
 
+(defun duc/play-sounds (playlist)
+  (dolist (filepath playlist)
+    (duc/play-sound filepath)))
+
 (defvar-local duc/sounds-in-random-order--playlist nil)
 
 (defun duc/sounds-in-random-order-play (filelist-a filelist-b &optional limit-a limit-b)
   (setf duc/sounds-in-random-order--playlist
         (duc/seq-random-choose
          (seq-concatenate 'list
-                          (duc/seq-random-choose filelist-a (or limit-a 2))
+                          (duc/seq-random-choose filelist-a (or limit-a 1))
                           (duc/seq-random-choose filelist-b (or limit-b 1)))))
   (duc/sounds-in-random-order-replay))
 
