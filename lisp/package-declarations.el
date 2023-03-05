@@ -2,6 +2,24 @@
 ;; package management
 ;;
 
+
+; Alist of major and minor modes to leader-g transient.
+; leader-g transients are mutually-exclusive. Minor mode transients
+; have priority over major mode transients.
+(defvar g-mode-alist '())
+
+(defun g-mode-to-transient ()
+  (interactive)
+  (let ((transient-fn (cdr (or (assoc (seq-find (lambda (minor-mode)
+                                                  (assoc minor-mode g-mode-alist))
+                                                local-minor-modes)
+                                      g-mode-alist)
+                               (assoc major-mode
+                                      g-mode-alist)))))
+    (if transient-fn
+        (apply transient-fn nil)
+      (message "No leader-g transient"))))
+
 (use-package bind-key
   :ensure t)
 
@@ -1018,7 +1036,8 @@ while `company-capf' runs."
   (defun transient-major ()
     (interactive)
     (pcase major-mode
-      ('pdf-view-mode (transient-major-pdf-view))))
+      ('pdf-view-mode (transient-major-pdf-view))
+      (_ (g-mode-to-transient))))
   (transient-define-prefix transient-org-roam ()
     "org-roam"
     [["node"
@@ -1062,21 +1081,7 @@ while `company-capf' runs."
                          (balance-windows)))]])
   (transient-define-prefix transient-org-fc ()
     "org-fc"
-    [["Review"
-      ("RET" "flip" org-fc-review-flip)
-      ("p" "edit" org-fc-review-edit)
-      ("i" "edit" org-fc-review-edit)
-      ("q" "quit" org-fc-review-quit)
-      ("s" "suspend" org-fc-review-suspend-card)]
-     ["Rate"
-      ("a" "again" org-fc-review-rate-again)
-      ("e" "easy" org-fc-review-rate-easy)
-      ("g" "good" org-fc-review-rate-good)
-      ("h" "hard" org-fc-review-rate-hard)
-      ("1" "easy" org-fc-review-rate-easy)
-      ("2" "good" org-fc-review-rate-good)
-      ("3" "hard" org-fc-review-rate-hard)]
-     ["Capture"
+    [["Capture"
       ("N" "normal" (lambda () (interactive) (org-capture nil "n")))
       ("n" "normal" org-fc-type-normal-init)
       ("c" "cloze" (lambda () (interactive) (org-fc-type-cloze-init 'deletion)))]
@@ -1395,8 +1400,68 @@ while `company-capf' runs."
     (setq org-fc-review-history-file (expand-file-name "org-fc-reviews.tsv" dir)))
   :config
   (set-face-attribute 'org-fc-type-cloze-hole-face nil :foreground "blue"
-                                                       :weight 'unspecified)
-  (require 'org-fc-hydra))
+                      :weight 'unspecified)
+  (require 'org-fc-hydra)
+
+  (define-key org-fc-review-flip-mode-map (kbd "RET") nil)
+  (define-key org-fc-review-flip-mode-map (kbd "q") nil)
+  (define-key org-fc-review-flip-mode-map (kbd "p") nil)
+  (define-key org-fc-review-flip-mode-map (kbd "s") nil)
+
+  (define-key org-fc-review-rate-mode-map (kbd "a") nil)
+  (define-key org-fc-review-rate-mode-map (kbd "h") nil)
+  (define-key org-fc-review-rate-mode-map (kbd "g") nil)
+  (define-key org-fc-review-rate-mode-map (kbd "e") nil)
+  (define-key org-fc-review-rate-mode-map (kbd "s") nil)
+  (define-key org-fc-review-rate-mode-map (kbd "p") nil)
+  (define-key org-fc-review-rate-mode-map (kbd "q") nil)
+
+  (define-key org-fc-review-edit-mode-map (kbd "C-c C-c") nil)
+  (define-key org-fc-review-edit-mode-map (kbd "C-c C-k") nil)
+
+  (transient-define-prefix transient-org-fc-review-flip ()
+    "org-fc"
+    [["Review"
+      ("RET" "flip" org-fc-review-flip)
+      ("i" "edit" org-fc-review-edit)
+      ("q" "quit" org-fc-review-quit)
+      ("s" "suspend" org-fc-review-suspend-card)]
+     ["Other"
+      ("m" "dashboard" org-fc-dashboard)
+      ("S" "screenshot" (lambda () (interactive)
+                          (let ((org-download-image-dir "~/dev/org-fc/img"))
+                            (org-download-screenshot))))
+      ("h" "hydra" org-fc-hydra/body)]])
+
+  (transient-define-prefix transient-org-fc-review-rate ()
+    "org-fc"
+    [["Rate"
+      ("a" "again" org-fc-review-rate-again)
+      ("1" "easy" org-fc-review-rate-easy)
+      ("2" "good" org-fc-review-rate-good)
+      ("3" "hard" org-fc-review-rate-hard)]
+     ["Other"
+      ("m" "dashboard" org-fc-dashboard)
+      ("S" "screenshot" (lambda () (interactive)
+                          (let ((org-download-image-dir "~/dev/org-fc/img"))
+                            (org-download-screenshot))))
+      ("h" "hydra" org-fc-hydra/body)]])
+
+  (transient-define-prefix transient-org-fc-review-edit ()
+    "org-fc"
+    [["Edit"
+      ("r" "resume review of card" org-fc-review-resume)
+      ("q" "quit review entirely" org-fc-review-quit)]
+     ["Other"
+      ("m" "dashboard" org-fc-dashboard)
+      ("S" "screenshot" (lambda () (interactive)
+                          (let ((org-download-image-dir "~/dev/org-fc/img"))
+                            (org-download-screenshot))))
+      ("h" "hydra" org-fc-hydra/body)]])
+
+  (push '(org-fc-review-flip-mode . transient-org-fc-review-flip) g-mode-alist)
+  (push '(org-fc-review-rate-mode . transient-org-fc-review-rate) g-mode-alist)
+  (push '(org-fc-review-edit-mode . transient-org-fc-review-edit) g-mode-alist))
 
 (use-package anki-editor
   :init

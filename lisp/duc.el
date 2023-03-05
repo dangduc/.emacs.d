@@ -210,8 +210,9 @@
     (message password)
     password))
 
-(defun duc/seq-random-choose (sequence limit)
-  (let ((n (min limit (seq-length sequence)))
+(defun duc/seq-random-choose (sequence &optional limit)
+  (let ((n (min (or limit (seq-length sequence))
+                (seq-length sequence)))
         (s (copy-sequence sequence)))
     (dotimes (i n)
       (let* ((p (+ i (random (- (seq-length s) i))))
@@ -866,9 +867,12 @@ e.g., Hello World -> [[-:hello-world]]"
 
 (defvar-local duc/sounds-in-random-order--playlist nil)
 
-(defun duc/sounds-in-random-order-play (filelist)
+(defun duc/sounds-in-random-order-play (filelist-a filelist-b &optional limit-a limit-b)
   (setf duc/sounds-in-random-order--playlist
-        (duc/seq-random-choose filelist (seq-length filelist)))
+        (duc/seq-random-choose
+         (seq-concatenate 'list
+                          (duc/seq-random-choose filelist-a (or limit-a 2))
+                          (duc/seq-random-choose filelist-b (or limit-b 1)))))
   (duc/sounds-in-random-order-replay))
 
 (defun duc/sounds-in-random-order-replay ()
@@ -878,7 +882,7 @@ e.g., Hello World -> [[-:hello-world]]"
 (defun duc/sounds-in-random-order-playlist ()
   (mapcar (lambda (filepath)
             (let ((name (file-name-base filepath)))
-              (cond ((string-match "\\(forvo-vi\\)-\\([a-z\\-]+\\)-\\([0-9]+\\)"
+              (cond ((string-match "\\(forvo-vi\\)-\\(.+\\)-\\([0-9]+\\)"
                                    name)
                      (match-string 2 name))
                     (t name))))
@@ -1048,10 +1052,10 @@ e.g., Hello World -> [[-:hello-world]]"
     (mapcar (lambda (item)
               (let ((id (cdr (assoc 'id item)))
                     (word (cdr (assoc 'word item)))
-                    (pathmp3 (cdr (assoc 'pathmp3 item))))
+                    (pathogg (cdr (assoc 'pathogg item))))
                                         ; Download it
-                (let ((url pathmp3)
-                      (filepath (format "%s/forvo-vi-%s-%s.mp3" download-dir word id)))
+                (let ((url pathogg)
+                      (filepath (format "%s/forvo-vi-%s-%s.ogg" download-dir word id)))
                   (duc/download-mp3 url filepath))))
             items-with-my-word)))
 

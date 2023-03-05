@@ -37,7 +37,7 @@
       inhibit-startup-echo-area-message t)
 
 ;; enable transparent osx titlebar (a la Chrome)
-(push '(ns-transparent-titlebar . t) default-frame-alist)
+(push '(ns-transparent-titlebar . nil) default-frame-alist)
 
 ;; nil or dark, to switch to between black or white title text
 ;; e.g. (ns-appearance . dark|nil)
