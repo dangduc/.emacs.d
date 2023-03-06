@@ -1303,7 +1303,10 @@ projectile cache when it's possible and update recentf list."
 
 (defvar duc/prd-p2c-table-file (expand-file-name "prd-p2c-table.csv" user-emacs-directory))
 (defvar duc/prd-saved-dices-file (expand-file-name ".prd-saved-dices.el" user-emacs-directory))
-(defvar duc/prd-saved-dices-alist nil)
+(defvar duc/prd-saved-dices-alist nil
+  "Listing of dice with nominal probablities and current miss rolls.
+format ((NAME . P MISSES)..)  e.g. ((Omnislash . 0.3 0)
+                                    (Multicast . 0.5 2))")
 
 (defun duc/prd-nominal-probability-to-c (p)
   "Function to return an incremental probabilty C
