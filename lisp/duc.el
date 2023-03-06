@@ -1301,4 +1301,57 @@ projectile cache when it's possible and update recentf list."
     (kind 'text)
     (post-completion (if duc/company-shortcut-append-just-one-space (just-one-space)))))
 
+(defvar duc/prd-p2c-table-file (expand-file-name "prd-p2c-table.csv" user-emacs-directory))
+(defvar duc/prd-saved-dices-file (expand-file-name ".prd-saved-dices.el" user-emacs-directory))
+(defvar duc/prd-saved-dices-alist nil)
+
+(defun duc/prd-nominal-probability-to-c (p)
+  "Function to return an incremental probabilty C
+given nomimal probability P.
+P is a number between 0.000 and 1.000.
+
+See https://liquipedia.net/dota2/Pseudo_Random_Distribution
+See https://observablehq.com/@manuelblanc/pseudo-random-distribution
+"
+  (with-temp-buffer
+    (insert-file-contents duc/prd-p2c-table-file)
+    (goto-line (+ (floor (* p 1000)) 1))
+    (string-to-number (buffer-substring (line-beginning-position)
+                                        (line-end-position)))))
+
+(defun duc/prd-dices-file-save ()
+  (when duc/prd-saved-dices-alist
+    (let ((out duc/prd-saved-dices-alist))
+      (with-temp-file duc/prd-saved-dices-file
+        (let ((print-level nil)
+              (print-length nil))
+          (print out (current-buffer)))))))
+
+(defun duc/prd-dices-file-load ()
+  (unless duc/prd-saved-dices-alist
+    (with-temp-buffer
+      (condition-case nil
+          (progn
+            (insert-file-contents duc/prd-saved-dices-file)
+            (setq duc/prd-saved-dices-alist (read (current-buffer))))
+        (error
+         (message "Could not read `duc/prd-saved-dices-alist' from %s" duc/prd-saved-dices-file)
+         nil)))))
+
+(defun duc/prd-roll (di-to-roll)
+  (let* ((nums (alist-get di-to-roll duc/prd-saved-dices-alist))
+         (p (car nums))
+         (c (duc/prd-nominal-probability-to-c p))
+         (n (cadr nums))
+         (cn (* c (+ n 1)))
+         (proc (< (random 1000) (floor (* cn 1000)))))
+    ; Update alist di entry
+    (setq duc/prd-saved-dices-alist
+          (mapcar (lambda (di)
+                    (if (eq (car di) di-to-roll)
+                        `(,di-to-roll . (,p ,(if proc 0 (+ n 1))))
+                      di))
+                  duc/prd-saved-dices-alist))
+    proc))
+
 (provide 'duc)

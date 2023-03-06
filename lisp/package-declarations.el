@@ -83,7 +83,9 @@
             (lambda ()
               (pcase major-mode
                 ('org-mode (if (s-ends-with-p "/dev/notes/" (file-name-directory (buffer-file-name)))
-                               (duc/bnote-update-backlinks-for-note)))))))
+                               (duc/bnote-update-backlinks-for-note))))))
+
+  (duc/prd-dices-file-load))
 
 (with-eval-after-load 'evil
   (define-key minibuffer-local-map [escape] 'minibuffer-keyboard-quit)
