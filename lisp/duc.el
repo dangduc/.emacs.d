@@ -1341,20 +1341,36 @@ See https://observablehq.com/@manuelblanc/pseudo-random-distribution
          (message "Could not read `duc/prd-saved-dices-alist' from %s" duc/prd-saved-dices-file)
          nil)))))
 
-(defun duc/prd-roll (di-to-roll)
-  (let* ((nums (alist-get di-to-roll duc/prd-saved-dices-alist))
+(defun duc/prd-roll (die-to-roll)
+  (unless (assoc die-to-roll duc/prd-saved-dices-alist)
+    (throw 'unknown-die "Die not in list"))
+  (let* ((nums (alist-get die-to-roll duc/prd-saved-dices-alist))
          (p (car nums))
          (c (duc/prd-nominal-probability-to-c p))
          (n (cadr nums))
          (cn (* c (+ n 1)))
          (proc (< (random 1000) (floor (* cn 1000)))))
-    ; Update alist di entry
+    ; Update alist die entry
     (setq duc/prd-saved-dices-alist
-          (mapcar (lambda (di)
-                    (if (eq (car di) di-to-roll)
-                        `(,di-to-roll . (,p ,(if proc 0 (+ n 1))))
-                      di))
+          (mapcar (lambda (die)
+                    (if (eq (car die) die-to-roll)
+                        `(,die-to-roll . (,p ,(if proc 0 (+ n 1))))
+                      die))
                   duc/prd-saved-dices-alist))
     proc))
+
+(defun duc/prd-roll-and-save (die-to-roll)
+  (let ((result (duc/prd-roll die-to-roll)))
+    (duc/prd-dices-file-save)
+    result))
+
+(defun duc/prd-die-add (die)
+  (unless (assoc (car die) duc/prd-saved-dices-alist)
+    (push die duc/prd-saved-dices-alist)
+    (setq duc/prd-saved-dices-alist
+          (sort duc/prd-saved-dices-alist
+                (lambda (first second)
+                  (string< (car first) (car second)))))
+    t))
 
 (provide 'duc)
