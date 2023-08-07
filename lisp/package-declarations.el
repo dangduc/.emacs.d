@@ -40,13 +40,13 @@
   :config
   ;; Set font
   (set-face-attribute 'default nil
-                      :family duc/font-family
+                      :font (find-font (font-spec :name duc/font-family))
                       :height duc/font-height
                       :weight duc/font-weight
-                      :width 'normal)
+                      :width 'unspecified)
 
   (set-face-attribute 'variable-pitch nil
-                      :family duc/font-family-variable-pitch
+                      :family (find-font (font-spec :name duc/font-family-variable-pitch))
                       :height 'unspecified
                       :weight 'unspecified
                       :width 'unspecified)

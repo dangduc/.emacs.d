@@ -89,10 +89,10 @@
   (setq duc/font-family (completing-read "font: "
                                          (font-family-list)))
   (set-face-attribute 'default nil
-                      :family duc/font-family
+                      :font (find-font (font-spec :name duc/font-family))
                       :height duc/font-height
                       :weight duc/font-weight
-                      :width 'normal)
+                      :width 'unspecified)
   (set-face-attribute 'org-block nil
                       :inherit '(fixed-pitch shadow)
                       :extend t
