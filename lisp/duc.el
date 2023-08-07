@@ -674,7 +674,13 @@ AG-PROMPT, if non-nil, is passed as `ivy-read' prompt argument. "
                                                       t
                                                       (concat "^" type "-"))))))
           (if last-entry
-              (copy-file last-entry new-entry)
+              ; Copy over the most recent entry if exists.
+              (let ((new-entry-file-buffer (find-file-noselect new-entry)))
+                (with-current-buffer new-entry-file-buffer
+                  (insert-file-contents last-entry)
+                  ; Reload major-mode incl hooks.
+                  (normal-mode)))
+            ; Else copy over the template.
             (append-to-file template nil new-entry)))))
     (find-file new-entry)
     (unless entry-exists
