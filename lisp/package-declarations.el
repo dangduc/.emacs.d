@@ -236,8 +236,15 @@
    :keymaps 'override
    "<SPC>" 'leader-main-menu)
 
+  (transient-define-infix leader-main-menu-flag-use-cache ()
+    :description "Invalidate cache (for some actions)"
+    :class 'transient-switch
+    :key "`c"
+    :argument "--invalidate-cache")
+
   (transient-define-prefix leader-main-menu ()
     "Main"
+    ["Args" (leader-main-menu-flag-use-cache)]
     [["Navigate"
       ("h" "left" evil-window-left)
       ("l" "right" evil-window-right)
@@ -271,8 +278,10 @@
       ("R" "org-fc" transient-org-fc)]]
     [["More Navigation"
       ("n" "buffer" switch-to-buffer)
-      ("m" "files" projectile-find-file-dwim)
-      ("M" "files (all)" project-or-external-find-file)
+      ("m" "files" (lambda () (interactive)
+                     (let ((invalidate-cache (member "--invalidate-cache" (transient-args 'leader-main-menu))))
+                       (projectile-find-file-dwim invalidate-cache))))
+      ("M" "files (all)" (lambda () (interactive) (project-or-external-find-file t)))
       ("p" "project" hydra-submenu-project/body)]
      ["Other"
       ("H" "help" hydra-submenu-help/body)
