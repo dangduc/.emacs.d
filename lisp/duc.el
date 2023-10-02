@@ -657,32 +657,33 @@ AG-PROMPT, if non-nil, is passed as `ivy-read' prompt argument. "
 
 (defun duc/create-or-open-bnote-type (type &optional template)
   (interactive)
-  (let* ((new-entry (concat duc/create-bnote-default-dir
-                            type
-                            "-"
-                            (format-time-string "%y%2m%2d")
-                            ".org"))
-         (entry-exists (or (get-buffer new-entry)
-                           (file-exists-p new-entry)))
+  (let* ((new-entry-name (concat type
+                                 "-"
+                                 (format-time-string "%y%2m%2d")
+                                 ".org"))
+         (new-entry-file (concat duc/create-bnote-default-dir
+                                 new-entry-name))
+         (entry-exists (or (get-buffer new-entry-name)
+                           (file-exists-p new-entry-file)))
          (force-template (if template t))
          (template (or template duc/bnote-default-template)))
     (unless entry-exists
-      ; Entry not found, so we'll create a new entry.
+                                        ; Entry not found, so we'll create a new entry.
       (if force-template
-          (append-to-file template nil new-entry)
+          (append-to-file template nil new-entry-file)
         (let ((last-entry (car (last (directory-files duc/create-bnote-default-dir
                                                       t
                                                       (concat "^" type "-"))))))
           (if last-entry
-              ; Copy over the most recent entry if exists.
-              (let ((new-entry-file-buffer (find-file-noselect new-entry)))
+                                        ; Copy over the most recent entry if exists.
+              (let ((new-entry-file-buffer (find-file-noselect new-entry-file)))
                 (with-current-buffer new-entry-file-buffer
                   (insert-file-contents last-entry)
-                  ; Reload major-mode incl hooks.
+                                        ; Reload major-mode incl hooks.
                   (normal-mode)))
-            ; Else copy over the template.
-            (append-to-file template nil new-entry)))))
-    (find-file new-entry)
+                                        ; Else copy over the template.
+            (append-to-file template nil new-entry-file)))))
+    (find-file new-entry-file)
     (unless entry-exists
       (search-forward "*"))))
 
