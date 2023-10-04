@@ -1363,8 +1363,21 @@ while `company-capf' runs."
                                         ; Also don't intent src blocks.
   (setq org-edit-src-content-indentation 0))
 
+(use-package emacsql
+  :straight (:host github
+             :repo "magit/emacsql"
+             :branch "main"))
+
+(use-package emacsql-sqlite-builtin
+  :straight (:host github
+             :repo "magit/emacsql"
+             :branch "main"
+             :files ("emacsql-sqlite-builtin.el")))
+
 (use-package org-roam
+  :after emacsql-sqlite-builtin
   :init
+  (setq org-roam-database-connector 'sqlite-builtin)
   (let ((d "~/dev/rotes"))
     (unless (file-exists-p d)
       (make-directory d))
