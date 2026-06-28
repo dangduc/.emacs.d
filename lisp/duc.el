@@ -553,56 +553,34 @@ Author: @syegge.
     (find-file fname)))
 
 (defun duc/counsel-insert-linked-link-action (x)
-  "Go to occurrence X in current Git repository."
+  "Insert an Org link to occurrence X (\"file:line:text\") at the end of buffer."
   (when (string-match "\\`\\(.*?\\):\\([0-9]+\\):\\(.*\\)\\'" x)
-    (let ((file-name (match-string-no-properties 1 x))
-          (line-number (match-string-no-properties 2 x)))
+    (let ((file-name (match-string-no-properties 1 x)))
       (goto-char (point-max))
       (insert "\n")
-      (insert (concat "- " "[[" "file:" file-name "][" (completing-read "Link title: " nil) "]]"))
-      (swiper--ensure-visible)
-      (run-hooks 'counsel-grep-post-action-hook)
-      (unless (eq ivy-exit 'done)
-        (swiper--cleanup)
-        (swiper--add-overlays (ivy--regex ivy-text))))))
+      (insert (concat "- [[file:" file-name "][" (completing-read "Link title: " nil) "]]")))))
 
-(defun duc/counsel-ag-insert-linked-link (&optional initial-input initial-directory extra-ag-args ag-prompt)
-  "Grep for a string in the current directory using ag.
-INITIAL-INPUT can be given as the initial minibuffer input.
-INITIAL-DIRECTORY, if non-nil, is used as the root directory for search.
-EXTRA-AG-ARGS string, if non-nil, is appended to `counsel-ag-base-command'.
-AG-PROMPT, if non-nil, is passed as `ivy-read' prompt argument. "
+(defun duc/counsel-ag-insert-linked-link (&optional initial-directory)
+  "Grep (ripgrep) under INITIAL-DIRECTORY and insert an Org link to the match.
+With a prefix argument, prompt for the directory to search."
   (interactive)
-  (let ((counsel--regex-look-around counsel--grep-tool-look-around))
-    (let ((counsel-ag-command counsel-ag-base-command))
-      (counsel-require-program counsel-ag-command)
-      (when current-prefix-arg
-        (setq initial-directory
-              (or initial-directory
-                  (read-directory-name (concat
-                                        (car (split-string counsel-ag-command))
-                                        " in directory: "))))
-        (setq extra-ag-args
-              (or extra-ag-args
-                  (read-from-minibuffer (format
-                                         "%s args: "
-                                         (car (split-string counsel-ag-command))))))))
-    (let ((counsel-ag-command (counsel--format-ag-command (or extra-ag-args "") "%s"))
-          (default-directory (or initial-directory
-                                 (counsel--git-root)
-                                 default-directory)))
-      (ivy-read (or ag-prompt
-                    (concat (car (split-string counsel-ag-command)) ": "))
-                #'counsel-ag-function
-                :initial-input initial-input
-                :dynamic-collection t
-                :keymap counsel-ag-map
-                :history 'counsel-git-grep-history
-                :action #'duc/counsel-insert-linked-link-action
-                :unwind (lambda ()
-                          (counsel-delete-process)
-                          (swiper--cleanup))
-                :caller 'counsel-ag))))
+  (let* ((default-directory (or initial-directory
+                                (and current-prefix-arg
+                                     (read-directory-name "rg in directory: "))
+                                (and (fboundp 'vc-root-dir) (vc-root-dir))
+                                default-directory))
+         (query (read-string "rg: "))
+         (candidates
+          (and (not (string-empty-p query))
+               (split-string
+                (shell-command-to-string
+                 (format "rg -i --no-heading --line-number --color never %s ."
+                         (shell-quote-argument query)))
+                "\n" t)))
+         (choice (and candidates
+                      (completing-read "match: " candidates nil t))))
+    (when choice
+      (duc/counsel-insert-linked-link-action choice))))
 
 (defun duc/completing-bnote-insert-linked-link ()
   (interactive)
@@ -1151,24 +1129,14 @@ projectile cache when it's possible and update recentf list."
   )
 
 (defun duc/incremental-search-filenames-in-directory ()
+  "Recursively find a file under `default-directory' (vertico + consult-find)."
   (interactive)
-  (let ((currentenv (getenv "FZF_DEFAULT_COMMAND")))
-    (ignore-errors
-      (setenv "FZF_DEFAULT_COMMAND"
-              "")
-      (counsel-fzf))
-    (setenv "FZF_DEFAULT_COMMAND" (if (currentenv) currentenv ""))))
+  (consult-find default-directory))
 
 (defun duc/incremental-search-filenames-in-version-control ()
+  "Find a file tracked in the current project (vertico + project.el)."
   (interactive)
-  (let ((currentenv (getenv "FZF_DEFAULT_COMMAND")))
-    (ignore-errors
-      (setenv "FZF_DEFAULT_COMMAND"
-              "(git ls-files --exclude-standard --others --cached ||
-               ind . -maxdepth 9 -path \"*/\\.*\" -prune -o -print -o -type l -print |
-               sed s/^..//) 2> /dev/null")
-      (counsel-fzf))
-    setenv "FZF_DEFAULT_COMMAND" (if (currentenv) currentenv "")))
+  (project-find-file))
 
 (defun duc/incremental-search-filenames-dwim ()
   (interactive)

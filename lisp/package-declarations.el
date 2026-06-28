@@ -389,7 +389,7 @@
       ("s" "split" (lambda () (interactive) (split-window) (balance-windows)))
       ("a" "ace" ace-window)]
      ["Search"
-      ("," "in files" counsel-rg)
+      ("," "in files" consult-ripgrep)
       ("<" "occur in files" deadgrep)
       ("B" "occur in file " occur)]
      ["Action"
@@ -469,10 +469,10 @@ _B_: bindings
     ("k" describe-key)
     ("K" where-is)
     ("c" describe-face)
-    ("b" counsel-descbinds)
+    ("b" describe-bindings)
     ("B" describe-bindings)
     ("p" package-list-packages)
-    ("a" counsel-apropos)
+    ("a" apropos-command)
     ("M" info-apropos)
     ("d" toggle-debug-on-error)
     ("w" debug-on-entry)
@@ -504,24 +504,18 @@ _L_: font line spacing
   (defhydra hydra-submenu-package (:exit t)
     ("l" package-list-packages-no-fetch "package-list"))
   (defhydra hydra-submenu-project (:exit t)
-    ("n" (let ((counsel-projectile-switch-project-action
-                'counsel-projectile-switch-project-action-switch-to-buffer))
-           (counsel-projectile-switch-project)) "buffer")
-    ("m" (let ((counsel-projectile-switch-project-action
-                'counsel-projectile-switch-project-action-fzf))
-           (counsel-projectile-switch-project)) "file")
-    ("," (let ((counsel-projectile-switch-project-action
-                'counsel-projectile-switch-project-action-rg))
-           (counsel-projectile-switch-project)) "contents")
-    ("p" (let ((counsel-projectile-switch-project-action
-                'counsel-projectile-switch-project-action-vc))
-           (counsel-projectile-switch-project)) "vc")
-    ("v" (let ((counsel-projectile-switch-project-action
-                'counsel-projectile-switch-project-action-vc))
-           (counsel-projectile-switch-project)) "vc")
-    ("g" (let ((counsel-projectile-switch-project-action
-                'counsel-projectile-switch-project-action-vc))
-           (counsel-projectile-switch-project)) "vc"))
+    ("n" (let ((projectile-switch-project-action #'projectile-switch-to-buffer))
+           (projectile-switch-project)) "buffer")
+    ("m" (let ((projectile-switch-project-action #'projectile-find-file))
+           (projectile-switch-project)) "file")
+    ("," (let ((projectile-switch-project-action #'consult-ripgrep))
+           (projectile-switch-project)) "contents")
+    ("p" (let ((projectile-switch-project-action #'projectile-vc))
+           (projectile-switch-project)) "vc")
+    ("v" (let ((projectile-switch-project-action #'projectile-vc))
+           (projectile-switch-project)) "vc")
+    ("g" (let ((projectile-switch-project-action #'projectile-vc))
+           (projectile-switch-project)) "vc"))
   (defhydra hydra-submenu-git (:exit t :hint nil)
     "
               ^Git^
@@ -558,7 +552,7 @@ _p_/_a_: push notes         _i_: screenshot
     ("a" duc/anki-connect-push)
     ("r" anki-editor-retry-failure-notes)
     ("n" (org-capture nil "1"))
-    ("c" (counsel-rg nil "~/dev/notes/corpus"))
+    ("c" (consult-ripgrep "~/dev/notes/corpus"))
     ("d" osx-dictionary-search-word-at-point)
     ("i" org-download-screenshot)
     ("I" org-download-image)
@@ -578,13 +572,22 @@ _p_/_a_: push notes         _i_: screenshot
   (setq abbrev-file-name
         (expand-file-name "abbrev_defs.el" user-emacs-directory)))
 
-(use-package tree-sitter)
+(use-package tree-sitter
+  :defer t)
 
 (use-package tree-sitter-langs
-  :after tree-sitter
-  :config
+  :after tree-sitter)
+
+;; Enable tree-sitter the first time a file is opened, keeping it off the
+;; startup path (the `*scratch*' buffer is a prog-mode derivative, so a
+;; prog-mode-hook trigger would fire during init). `global-tree-sitter-mode'
+;; turns it on in that buffer and future ones.
+(defun duc/enable-tree-sitter-once ()
+  (require 'tree-sitter-langs)
+  (add-hook 'tree-sitter-after-on-hook #'tree-sitter-hl-mode)
   (global-tree-sitter-mode)
-  (add-hook 'tree-sitter-after-on-hook #'tree-sitter-hl-mode))
+  (remove-hook 'find-file-hook #'duc/enable-tree-sitter-once))
+(add-hook 'find-file-hook #'duc/enable-tree-sitter-once)
 
 ;; themes
 
@@ -678,6 +681,7 @@ _p_/_a_: push notes         _i_: screenshot
   (add-hook 'prog-mode-hook 'whitespace-mode))
 
 (use-package macrostep
+  :commands (macrostep-expand macrostep-collapse)
   :init
   (with-eval-after-load 'evil
     (define-key evil-normal-state-map (kbd "C-;") 'macrostep-collapse)
@@ -740,9 +744,11 @@ _p_/_a_: push notes         _i_: screenshot
      escape))
   (lispyville-mode))
 
-(use-package ag)
+(use-package ag
+  :commands (ag ag-project ag-regexp ag-files))
 
-(use-package deadgrep)
+(use-package deadgrep
+  :commands (deadgrep))
 
 (use-package projectile
   :commands (projectile-project-p
@@ -760,19 +766,6 @@ _p_/_a_: push notes         _i_: screenshot
   (setq projectile-enable-caching t)
   :config
   (projectile-mode))
-
-(use-package counsel-projectile
-  :after projectile
-  :init
-  (defun counsel-projectile-switch-project-action-fzf (project)
-    "Call `counsel-fzf' (ie fuzzy find-file)from PROJECT's root."
-    (let ((default-directory project)
-          (projectile-switch-project-action
-           (lambda ()
-             (counsel-fzf))))
-      (counsel-projectile-switch-project-by-name project)))
-  :config
-  (counsel-projectile-mode))
 
 (use-package ibuffer-projectile
   :commands (ibuffer-projectile-set-filter-groups
@@ -795,73 +788,19 @@ _p_/_a_: push notes         _i_: screenshot
   :config
   (show-paren-mode 1))
 
-(use-package ivy
-  :after evil
-  :bind (:map ivy-minibuffer-map ("M-x" . ivy-dispatching-done))
-  :init
-  (setq ivy-use-virtual-buffers nil)
-  (setq ivy-flx-limit 100)
-  (setq ivy-re-builders-alist
-        '((counsel-git-log . ivy--regex-plus)
-          (swiper . ivy--regex-plus)
-          (swiper-multi . ivy--regex-plus)
-          (projectile-completing-read . ivy--regex-plus)
-          (counsel-fzf . regexp-quote)
-          (counsel-rg . ivy--regex-plus)
-          (t . ivy--regex-plus)))
-  (setq ivy-initial-inputs-alist nil)
-
-  (setq ivy-count-format "")
-  (setq ivy-height 15)
-  ;; this is the default
-  (setq ivy-do-completion-in-region t)
-  :config
-  ;; swapping behavior
-  (define-key ivy-minibuffer-map (kbd "RET") 'ivy-alt-done)
-  (define-key ivy-minibuffer-map (kbd "C-j") 'ivy-done)
-
-  (define-key ivy-minibuffer-map (kbd "<C-return>") 'ivy-immediate-done)
-
-  ;; Unbind ivy-restrict-to-matches to prevent clearing
-  ;; minibuffer when chording S-SPC unintentionally.
-  (define-key ivy-minibuffer-map (kbd "S-SPC") nil)
-
-  ;; Escape quits.
-  (with-eval-after-load 'evil
-    (define-key ivy-minibuffer-map [escape] 'minibuffer-keyboard-quit)))
-
-(use-package counsel
-  :bind (("M-x" . counsel-M-x))
-  :commands (counsel-ag
-             counsel-find-file
-             counsel-rg
-             counsel-git
-             counsel-fzf
-             counsel-fzf-occur
-             counsel-describe-face)
+;; consult provides the vertico-era replacements for the counsel/swiper
+;; commands this config used (consult-line, consult-ripgrep, consult-find, ...).
+(use-package consult
+  :commands (consult-line
+             consult-ripgrep
+             consult-grep
+             consult-find
+             consult-buffer
+             consult-imenu
+             consult-project-buffer)
   :init
   (with-eval-after-load 'projectile
-    (setq projectile-switch-project-action 'counsel-fzf))
-  (setq counsel-async-filter-update-time 100000)
-
-  (setq counsel-git-cmd "git ls-files --exclude-standard --full-name --others --cached --")
-  (setq counsel-rg-base-command "rg -i --no-heading --line-number --color never %s .")
-  (setq counsel-ag-base-command "ag -U --nocolor --nogroup %s -- .")
-  :config
-  (ivy-set-prompt 'counsel-fzf (lambda () "> "))
-  (setenv "FZF_DEFAULT_COMMAND"
-          "(git ls-files --exclude-standard --others --cached ||
-        ind . -maxdepth 9 -path \"*/\\.*\" -prune -o -print -o -type l -print |
-           sed s/^..//) 2> /dev/null"))
-
-(use-package swiper
-  :commands (swiper)
-  :diminish ivy-mode
-  :config
-  ; Select input that happens to also match one of the candidates.
-  ; e.g. Selecting 'bar' when there is candidate 'barricade'.
-  ; Alternatively, c-M-j
-  (setq ivy-use-selectable-prompt t))
+    (setq projectile-switch-project-action 'projectile-find-file)))
 
 (use-package vertico
   ;; The vertico ELPA package bundles its extensions (vertico-directory etc.),
@@ -1025,7 +964,9 @@ while `company-capf' runs."
                   (yas-activate-extra-mode 'typescript-mode))
                 (+setup-tide-mode)))))
 
-(use-package restclient)
+(use-package restclient
+  :mode ("\\.http\\'" . restclient-mode)
+  :commands (restclient-mode))
 
 (use-package magit
   :after transient
@@ -1115,9 +1056,11 @@ while `company-capf' runs."
   :init
   (setq markdown-command "multimarkdown"))
 
-(use-package swift-mode)
+(use-package swift-mode
+  :mode "\\.swift\\'")
 
-(use-package kotlin-mode)
+(use-package kotlin-mode
+  :mode ("\\.kt\\'" "\\.kts\\'"))
 
 (use-package lsp-mode
   :init
@@ -1128,18 +1071,27 @@ while `company-capf' runs."
          (clojurec-mode . lsp)
          (clojurescript-mode . lsp)))
 
-(use-package ccls)
+(use-package ccls
+  ;; Loaded lazily when a C-family buffer opens, so it registers its lsp client
+  ;; without pulling lsp-mode in at startup.
+  :defer t
+  :hook ((c-mode c++-mode objc-mode) . (lambda () (require 'ccls))))
 
 ; Python projects should initialize the python lsp themselves.
 ; using
 ;   (lsp) after require
 (use-package lsp-python-ms
+  ;; `:defer t' prevents use-package from inserting an eager load-time require
+  ;; (it can't derive deferral from the lambda hook), which otherwise pulls in
+  ;; lsp-mode at startup.
+  :defer t
   :hook (python-mode . (lambda ()
                          (require 'lsp-python-ms))))
 
 (setq python-indent-offset 2)
 
 (use-package pyvenv
+  :hook (python-mode . pyvenv-mode)
   :config
   (pyvenv-mode t)
   ;; Usage
@@ -1161,7 +1113,8 @@ while `company-capf' runs."
   :config
   (yas-global-mode 1))
 
-(use-package racket-mode)
+(use-package racket-mode
+  :mode "\\.rkt\\'")
 
 (use-package rainbow-mode)
 
@@ -1201,6 +1154,7 @@ while `company-capf' runs."
   (setq TeX-parse-self t))
 
 (use-package leetcode
+  :commands (leetcode)
   :init
   (setq leetcode-prefer-language "python3")
   :config
@@ -1268,16 +1222,24 @@ while `company-capf' runs."
 
 ;; Modern emacsql (GNU ELPA) has built-in SQLite support; the separate
 ;; `emacsql-sqlite-builtin' package is folded in and no longer needed.
-(use-package emacsql)
+;; Deferred: org-roam requires it lazily, so it stays off the startup path.
+(use-package emacsql
+  :defer t)
 
 (use-package org-roam
-  :after emacsql
+  ;; Load on first roam command instead of at startup; DB autosync (the ~2s
+  ;; startup cost) is moved to an idle timer so it runs shortly after init
+  ;; without blocking it.
+  :commands (org-roam-node-find org-roam-node-insert org-roam-capture
+             org-roam-buffer-toggle org-roam-db-sync org-roam-dailies-capture-today)
   :init
   (setq org-roam-database-connector 'sqlite-builtin)
   (let ((d "~/dev/rotes"))
     (unless (file-exists-p d)
       (make-directory d))
     (setq org-roam-directory (file-truename d)))
+  (run-with-idle-timer
+   1 nil (lambda () (require 'org-roam) (org-roam-db-autosync-mode)))
   :config
   (org-roam-db-autosync-mode))
 
@@ -1304,7 +1266,8 @@ while `company-capf' runs."
           (_ "screencapture -i %s")))
   (setq org-download-image-org-width 400))
 
-(use-package org-ql)
+(use-package org-ql
+  :commands (org-ql-search org-ql-select org-ql-query org-ql-view))
 
 (use-package org-fc
   :vc (:url "https://git.sr.ht/~l3kn/org-fc")
@@ -1382,17 +1345,21 @@ while `company-capf' runs."
   (push '(org-fc-review-edit-mode . transient-org-fc-review-edit) g-mode-alist))
 
 (use-package anki-editor
+  :commands (anki-editor-mode anki-editor-push-notes)
   :init
   (setq anki-editor-org-tags-as-anki-tags nil)
   (setq request-log-level 'debug))
 
-(use-package osx-dictionary)
+(use-package osx-dictionary
+  :commands (osx-dictionary-search-word-at-point osx-dictionary-search-input))
 
 (use-package elfeed
+  :commands (elfeed)
   :config
   (setq elfeed-feeds local/elfeed-feeds))
 
 (use-package geiser
+  :commands (geiser run-geiser geiser-mode)
   :init
   (setq geiser-mode-company-p nil)
   :config
@@ -1409,12 +1376,14 @@ while `company-capf' runs."
       (unless evil-move-beyond-eol
         (advice-add 'duc/geiser-eval-last-sexp :around 'evil-collection-geiser-last-sexp)))))
 
-(use-package clojure-mode)
+(use-package clojure-mode
+  :mode ("\\.clj\\'" "\\.cljs\\'" "\\.cljc\\'" "\\.edn\\'"))
 
 (use-package geiser-mit
   :after geiser)
 
-(use-package lua-mode)
+(use-package lua-mode
+  :mode "\\.lua\\'")
 (use-package outline-indent)
 
 ;; Local working copies under ~/dev; loaded only when present.

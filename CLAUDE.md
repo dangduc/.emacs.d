@@ -35,7 +35,9 @@ straight.el was removed in the Emacs 30 migration; there is no `straight/` boots
 
 ## Conventions
 
-- Personal commands and vars are namespaced `duc/...` and live in `lisp/duc.el`.
+- Personal commands and vars are namespaced `duc/...` and live in `lisp/duc.el`. (A few keep legacy `duc/ivy-*` names but use plain `completing-read`.)
 - Keybindings are defined inside the relevant `use-package` block (the config uses `evil`, `general`, and `hydra`).
+- **Completion:** vertico + marginalia + orderless + `consult` (with `fussy`/`flx` matching). The old ivy/counsel/swiper stack was removed; use `consult-*` and built-ins (`project-find-file`, `apropos-command`, …) for new bindings.
+- **Startup/deferral:** prefer lazy loading — give each `use-package` a `:commands`/`:mode`/`:hook`/`:bind` trigger (or `:defer t`) so it stays off the startup path. Note: a `:hook` whose function is a *lambda* does not defer on its own — add `:defer t`. The build in `/Applications/Emacs.app` (30.2) has **no native-comp**; a native-comp build would further cut startup.
 - `local.el` is the place for machine-specific, non-committed settings; it is loaded if present and is gitignored.
 - All elisp files use lexical binding (`-*- lexical-binding: t; -*-`).
