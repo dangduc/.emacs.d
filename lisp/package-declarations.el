@@ -1274,6 +1274,15 @@ while `company-capf' runs."
   ;; org-fc's algo classes inherit `eieio-singleton', which lives in eieio-base.
   :init
   (require 'eieio-base)
+  ;; Work around an org-fc bug: `org-fc-algo-noop.el' is missing its
+  ;; `org-fc-core'/`eieio-base' requires (unlike `org-fc-algo-sm2.el'), so
+  ;; package.el compiles it standalone into a broken .elc/.eln that fails to
+  ;; bind the class as a variable -> "void-variable org-fc-algo-noop" at load.
+  ;; Pre-load the algo from source (which works) and `provide' it so org-fc's
+  ;; own `(require 'org-fc-algo-noop)' skips the broken compiled file.
+  (require 'org-fc-core)
+  (let ((load-suffixes '(".el")))
+    (load "org-fc-algo-noop" nil t))
   (let ((dir "~/dev/org-fc"))
     (unless (file-exists-p dir)
       (make-directory dir))
@@ -1396,6 +1405,10 @@ while `company-capf' runs."
   :ensure nil
   :if (file-directory-p "~/dev/emacs-ironsworn")
   :load-path "~/dev/emacs-ironsworn"
-  :init (setq rpgdm-ironsworn-project (expand-file-name "~/dev/emacs-ironsworn")))
+  ;; rpgdm-ironsworn.el calls `f-join' at load time but doesn't require `f';
+  ;; it used to work only because a now-deferred package pulled `f' in early.
+  :init
+  (require 'f)
+  (setq rpgdm-ironsworn-project (expand-file-name "~/dev/emacs-ironsworn")))
 
 (provide 'package-declarations)

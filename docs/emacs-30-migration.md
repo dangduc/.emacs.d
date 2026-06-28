@@ -120,6 +120,31 @@ init and config phases, so deferred packages look "expensive" (gap time, not
 CPU). Cross-check with `(featurep 'pkg)` on a daemon to see what actually loaded
 eagerly.
 
+### Deferral exposed transitive-load regressions
+
+Deferring packages removed transitive `require`s that other packages silently
+relied on. Two surfaced as startup warnings:
+
+- **`rpgdm-ironsworn`**: calls `f-join` at load time without `(require 'f)`; `f`
+  used to be pulled in by an eagerly-loaded package. Fixed with `:init (require 'f)`.
+- **`org-fc`** ("Symbol's value as variable is void: org-fc-algo-noop"): a deeper
+  one, *not* really about deferral. `org-fc-algo-noop.el` is missing its
+  `org-fc-core`/`eieio-base` requires (unlike `org-fc-algo-sm2.el`), so package.el
+  byte/native-compiles it standalone with `eieio-singleton`/`org-fc-algo`
+  undefined. The `defclass` then can't emit EIEIO's backward-compat
+  class-name-as-variable binding, so the file's final
+  `(org-fc-register-algo 'noop org-fc-algo-noop)` hits a void variable. The
+  *source* loads fine — only the standalone-compiled file is broken. Durable
+  config fix: in `:init`, `(require 'org-fc-core)` then force-load the algo from
+  source so org-fc's own `require` skips the broken compiled file:
+  `(let ((load-suffixes '(".el"))) (load "org-fc-algo-noop" nil t))`.
+
+Method for diagnosing "void-variable/void-function at startup": reproduce in
+`emacs -Q --batch` loading just the offending package; compare loading the raw
+`.el` source vs the `.elc`; and advise `require` to print a backtrace to find who
+pulls a package in (that's how the `lsp-python-ms` lambda-hook eager require was
+found).
+
 ### Completion stack collapsed to vertico
 
 Removed the dual ivy/counsel/swiper + vertico setup down to a single stack:
