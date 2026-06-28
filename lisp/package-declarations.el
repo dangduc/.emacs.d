@@ -23,20 +23,148 @@
 (use-package bind-key
   :ensure t)
 
+(use-package transient
+  :config
+  ;; Bind esc
+  (define-key transient-map (kbd "<escape>") 'transient-quit-all)
+  (define-key transient-edit-map (kbd "<escape>") 'transient-quit-one)
+  (define-key transient-sticky-map (kbd "<escape>") 'transient-quit-seq)
+  (define-key transient-map (kbd "q") 'transient-quit-all)
+  (define-key transient-edit-map (kbd "q") 'transient-quit-one)
+  (define-key transient-sticky-map (kbd "q") 'transient-quit-seq)
+
+  (transient-define-prefix transient-buffer ()
+    "buffer"
+    ["Switches"
+     ("w" "other-window-prefix" "--other-window-prefix")]
+    [["edit"
+      ("N" "new" duc/new-buffer)
+      ("m" "move buffer & file (ie, rename)" (lambda () (interactive) (duc/rename-file (buffer-name))))
+      ("r" "rename" rename-buffer)
+      ("R" "reload" revert-buffer)
+      ("k" "kill buffer" kill-buffer)]
+     ["navigation"
+      ("p" "prev" previous-buffer)
+      ("n" "next" next-buffer)
+      ("l" "list buffers" list-buffers)
+      ("o" "switch" switch-to-buffer)]
+     ["other"
+      ("i" "create indirect buffer" clone-indirect-buffer)
+      ("t" "tail -f" auto-revert-tail-mode)
+      ("y" "yank buffer name" duc/yank-buffer-name)]])
+  (transient-define-prefix transient-window ()
+    "window"
+    [["Frame"
+      ("w" "toggle maximize" toggle-frame-maximized)
+      ("n" "next" other-frame)
+      ("N" "new" make-frame-command)]
+     ["Window"
+      ("b" "balance" balance-windows)
+      ("k" "kill" delete-window)
+      ("p" "toggle pin" duc/toggle-pin-buffer)]
+     ["Other"
+      ("o" "next buffer command in OTHER window" (lambda ()
+                                                   (interactive) (other-window-prefix)))
+      ("O" "next buffer command in SAME window" (lambda ()
+                                                  (interactive) (same-window-prefix)))]])
+  (transient-define-prefix transient-file ()
+    "file"
+    [["navigate"
+      ("f" "find file" find-file)
+      ("i" "package-declarations.el" (lambda () (interactive) (find-file "~/.emacs.d/lisp/package-declarations.el")))
+      ("I" "init.el" (lambda () (interactive) (find-file "~/.emacs.d/init.el")))
+      ("1" "index.org" (lambda () (interactive) (find-file "~/dev/notes/index.org")))
+      ("b" "sidebar" duc/sidebar-toggle)]
+     ["edit"
+      ("w" "write file" save-buffer)
+      ("K" "delete file" duc/delete-this-file)]
+     ["note"
+      ("l" "bnote" (lambda () (interactive) (duc/create-or-open-bnote-type "bnote")))
+      ("d" "agenda" (lambda () (interactive) (duc/create-or-open-bnote-type "daily-agenda")))
+      ("m" "morning" (lambda () (interactive) (duc/create-or-open-bnote-type "morning")))
+      ("e" "evening" (lambda () (interactive) (duc/create-or-open-bnote-type "evening")))
+      ("L" "create w/ type" duc/completing-bnote-type)
+      ("c" "capture note" (lambda () (interactive) (org-capture nil "c")))
+      ("C" "capture longer note" (lambda () (interactive) (org-capture nil "C")))
+      ("t" "capture todo" (lambda () (interactive) (org-capture nil "t")))
+      ("r" "capture region" duc/org-capture-region-with-code-block)]
+     ["other"
+      ("y" "yank filename (relative to project)" duc/yank-file-path-relative-to-project)
+      ("Y" "yank parent directory of file" duc/yank-absolute-path-to-parent)
+      ;; e.g. "nc termbin.com 9999"
+      ("3" "M-|" shell-command-on-region)]])
+  (transient-define-prefix transient-major-pdf-view ()
+    "pdf-view-mode"
+    [["pdf-view-mode"
+      ("l" "yank link" duc/yank-org-pdftools-get-link)]])
+  (defun transient-major ()
+    (interactive)
+    (pcase major-mode
+      ('pdf-view-mode (transient-major-pdf-view))
+      (_ (g-mode-to-transient))))
+  (transient-define-prefix transient-org-roam ()
+    "org-roam"
+    [["node"
+      ("i" "insert" org-roam-node-insert)
+      ("N" "insert" org-roam-node-insert)
+      ("f" "find" org-roam-node-find)
+      ("c" "capture" org-roam-capture)
+      ("s" "toggle buffer" org-roam-buffer-toggle)]
+     ["dailies"
+      ("l" "daily today" org-roam-dailies-goto-today)
+      ("L" "daily previous" org-roam-dailies-goto-previous-note)]
+     ["ui"
+      ("u" "ui" org-roam-ui-mode)
+      ("z" "local" org-roam-ui-node-local)
+      ("Z" "zoom" org-roam-ui-node-zoom)]])
+  (transient-define-prefix transient-org-mode ()
+    "org-mode"
+    [["edit"
+      ("c" "C-c C-c" org-ctrl-c-ctrl-c)
+      ("m" "region->md" org-md-convert-region-to-md)
+      ("t" "insert template" org-insert-structure-template)
+      ("I" "take screenshot" org-download-screenshot)
+      ("e" "encrypt entry" org-encrypt-entry)
+      ("E" "encrypt all" org-encrypt-entries)
+      ("d" "decrypt entry" org-decrypt-entry)
+      ("D" "decrypt all" org-decrypt-entries)]
+     ["bnote"
+      ("b" "bnote" (lambda () (interactive) (duc/create-or-open-bnote-type "bnote")))
+      ("l" "search & insert link" duc/completing-bnote-insert-linked-link)
+      ("s" "store link at P" org-store-link)
+      ("S" "insert link at P" org-insert-link)]
+     ["view"
+      ("A" "agenda" org-agenda)
+      ("L" "toggle descriptive links" org-toggle-link-display)
+      ("i" "toggle inline images" org-toggle-inline-images)
+      ("n" "narrow" org-narrow-to-subtree)
+      ("N" "widen" widen)
+      ("v" "toggle word-wrap" visual-line-mode)
+      ("o" "open link" (lambda () (interactive)
+                         (org-open-at-point)
+                         (balance-windows)))
+      ("w" "log work entry" org-worklog-entry)]])
+  (transient-define-prefix transient-org-fc ()
+    "org-fc"
+    [["Capture"
+      ("N" "normal" (lambda () (interactive) (org-capture nil "n")))
+      ("n" "normal" org-fc-type-normal-init)
+      ("c" "cloze" (lambda () (interactive) (org-fc-type-cloze-init 'deletion)))]
+     ["Other"
+      ("r" "review buffer" org-fc-review-buffer)
+      ("R" "review all" org-fc-review-all)
+      ("m" "dashboard" org-fc-dashboard)
+      ("S" "screenshot" (lambda () (interactive)
+                          (let ((org-download-image-dir "~/dev/org-fc/img"))
+                            (org-download-screenshot))))
+      ("h" "hydra" org-fc-hydra/body)]]))
+
 (use-package duc
   :straight nil
   :init
-  ; e.g., switch-to-buffer respects other-window-prefix
+                                        ; e.g., switch-to-buffer respects other-window-prefix
   (setq switch-to-buffer-obey-display-actions t)
-  (setq display-buffer-alist
-        '(("\.org$"
-           (display-buffer-reuse-window
-            display-buffer-below-selected)
-           (inhibit-same-window . t)
-           (window-min-height . 13))
-          ("terminal-epijudge"
-           () ; Intentionally empty
-           (inhibit-same-window . t))))
+
   :config
   ;; Set font
   (set-face-attribute 'default nil
@@ -76,8 +204,11 @@
 
   (add-hook 'org-mode-hook
             (lambda ()
-              (auto-fill-mode t)
-              (setq-local truncate-lines t)))
+              (progn
+                (auto-fill-mode -1)
+                (setq-local truncate-lines nil)
+                (visual-line-mode 1)
+                (company-mode -1))))
 
   (add-hook 'before-save-hook
             (lambda ()
@@ -109,6 +240,8 @@
   (setq pulsar-face 'pulsar-magenta)
   (setq pulsar-highlight-face 'pulsar-yellow)
   (pulsar-global-mode 1))
+
+(global-unset-key (kbd "s-q"))
 
 (use-package diminish
   :config
@@ -275,7 +408,9 @@
       ("T" "send to terminal" duc/shell-send-string-to-project-dwim)
       ("u" "package" hydra-submenu-package/body)
       ("A" "anki" hydra-submenu-anki/body)
-      ("R" "org-fc" transient-org-fc)]]
+      ("R" "org-fc" transient-org-fc)
+      ("d" "rpgdm" hydra-rpgdm/body)
+      ]]
     [["More Navigation"
       ("n" "buffer" switch-to-buffer)
       ("m" "files" (lambda () (interactive)
@@ -502,6 +637,20 @@ _p_/_a_: push notes         _i_: screenshot
   :init
   (setq mindre-use-more-bold nil)
   (setq mindre-use-faded-lisp-parens t))
+
+;(use-package fruity-theme
+;  :straight (:host github
+;                   :repo "jojojames/fruity-theme")
+;  :init
+;  (setq fruity-want-transparent-line-numbers t)
+;  (setq fruity-want-dark-modeline t))
+
+(use-package fruity-theme
+  :straight (:local-repo "~/.emacs.d/vendor/fruity-theme"
+             :type nil)
+  :init
+  (setq fruity-want-transparent-line-numbers nil)
+  (setq fruity-want-dark-modeline nil))
 
 ;; end themes
 
@@ -794,7 +943,7 @@ _p_/_a_: push notes         _i_: screenshot
   (setq fzf-native-always-compile-module t)
   :config
   (setq fussy-score-fn 'fussy-fzf-native-score)
-  (fzf-native-load-own-build-dyn))
+  (fzf-native-load-dyn))
 
 (let ((straight-disable-compile t))
   (use-package fuz
@@ -810,6 +959,7 @@ _p_/_a_: push notes         _i_: screenshot
   (fussy :type git :host github :repo "jojojames/fussy")
   :after flx
   :config
+  ;(setq fussy-score-fn 'flx-score)
   (setq fussy-filter-fn 'fussy-filter-flex)
   (push 'fussy completion-styles)
   (setq
@@ -835,7 +985,7 @@ _p_/_a_: push notes         _i_: screenshot
 (use-package company
   :diminish company-mode
   :init
-  (setq company-idle-delay 0.01)
+  (setq company-idle-delay 0.2)
   (setq company-minimum-prefix-length 1)
   :config
   (defun d-company-capf-with-og-completion-styles (f &rest args)
@@ -844,17 +994,9 @@ while `company-capf' runs."
     (let ((completion-styles '(basic substring flx)))
       (apply f args)))
   (advice-add 'company-capf :around 'd-company-capf-with-og-completion-styles)
-
   (defvar company-backends-original nil)
   (setq company-backends-original (or company-backends-original
                                       company-backends))
-  (setq company-backends
-        (mapcar (lambda (backend)
-                  (if (eq backend 'company-dabbrev)
-                      'duc/company-shortcut
-                    backend))
-                company-backends-original))
-
   (company-tng-mode)
   (global-company-mode))
 
@@ -948,162 +1090,6 @@ while `company-capf' runs."
                 (+setup-tide-mode)))))
 
 (use-package restclient)
-
-(use-package transient
-  :config
-  ;; Bind esc
-  (define-key transient-map (kbd "<escape>") 'transient-quit-all)
-  (define-key transient-edit-map (kbd "<escape>") 'transient-quit-one)
-  (define-key transient-sticky-map (kbd "<escape>") 'transient-quit-seq)
-  (define-key transient-map (kbd "q") 'transient-quit-all)
-  (define-key transient-edit-map (kbd "q") 'transient-quit-one)
-  (define-key transient-sticky-map (kbd "q") 'transient-quit-seq)
-
-  (defmacro transient-define-suffix--transient-buffer (&rest commands)
-    "Create transient suffixes for transient-buffer that can recognize args"
-    `(progn
-       ,@(cl-loop
-          for command in commands
-          appending
-          (let* ((str (symbol-name command))
-                 (sym (intern (format "transient-%s--args" (symbol-name command)))))
-            `((transient-define-suffix ,sym (&optional args)
-                (concat ,str " that recognizes transient args")
-                (interactive (list (transient-args transient-current-command)))
-                (transient-set)
-                (let ((other-window-prefix-switch
-                       (transient-arg-value "--other-window-prefix" args)))
-                  (when other-window-prefix-switch
-                    (other-window-prefix))
-                  (call-interactively (quote ,command)))))))))
-
-  (transient-define-suffix--transient-buffer switch-to-buffer
-                                             duc/new-buffer
-                                             list-buffers)
-
-  (transient-define-prefix transient-buffer ()
-    "buffer"
-    ["Switches"
-     ("w" "other-window-prefix" "--other-window-prefix")]
-    [["edit"
-      ("N" "new" transient-duc/new-buffer--args)
-      ("m" "move buffer & file (ie, rename)" (lambda () (interactive) (duc/rename-file (buffer-name))))
-      ("r" "rename" rename-buffer)
-      ("R" "reload" revert-buffer)
-      ("k" "kill buffer" kill-buffer)]
-     ["navigation"
-      ("p" "prev" previous-buffer)
-      ("n" "next" next-buffer)
-      ("l" "list buffers" transient-list-buffers--args)
-      ("o" "switch" transient-switch-to-buffer--args)]
-     ["other"
-      ("i" "create indirect buffer" clone-indirect-buffer)
-      ("t" "tail -f" auto-revert-tail-mode)
-      ("y" "yank buffer name" duc/yank-buffer-name)]])
-  (transient-define-prefix transient-window ()
-    "window"
-    [["Frame"
-      ("w" "toggle maximize" toggle-frame-maximized)
-      ("n" "next" other-frame)
-      ("N" "new" make-frame-command)]
-     ["Window"
-      ("b" "balance" balance-windows)
-      ("k" "kill" delete-window)
-      ("p" "toggle pin" duc/toggle-pin-buffer)]
-     ["Other"
-      ("o" "next buffer command in OTHER window" (lambda ()
-                                                   (interactive) (other-window-prefix)))
-      ("O" "next buffer command in SAME window" (lambda ()
-                                                  (interactive) (same-window-prefix)))]])
-  (transient-define-prefix transient-file ()
-    "file"
-    [["navigate"
-      ("f" "find file" find-file)
-      ("i" "package-declarations.el" (lambda () (interactive) (find-file "~/.emacs.d/lisp/package-declarations.el")))
-      ("I" "init.el" (lambda () (interactive) (find-file "~/.emacs.d/init.el")))
-      ("1" "index.org" (lambda () (interactive) (find-file "~/dev/notes/index.org")))
-      ("b" "sidebar" duc/sidebar-toggle)]
-     ["edit"
-      ("w" "write file" save-buffer)
-      ("K" "delete file" duc/delete-this-file)]
-     ["note"
-      ("l" "bnote" (lambda () (interactive) (duc/create-or-open-bnote-type "bnote")))
-      ("m" "morning" (lambda () (interactive) (duc/create-or-open-bnote-type "morning")))
-      ("e" "evening" (lambda () (interactive) (duc/create-or-open-bnote-type "evening")))
-      ("L" "create w/ type" duc/completing-bnote-type)
-      ("c" "capture note" (lambda () (interactive) (org-capture nil "c")))
-      ("C" "capture longer note" (lambda () (interactive) (org-capture nil "C")))
-      ("t" "capture todo" (lambda () (interactive) (org-capture nil "t")))
-      ("r" "capture region" duc/org-capture-region-with-code-block)]
-     ["other"
-      ("y" "yank filename (relative to project)" duc/yank-file-path-relative-to-project)
-      ("Y" "yank parent directory of file" duc/yank-absolute-path-to-parent)
-      ;; e.g. "nc termbin.com 9999"
-      ("3" "M-|" shell-command-on-region)]])
-  (transient-define-prefix transient-major-pdf-view ()
-    "pdf-view-mode"
-    [["pdf-view-mode"
-      ("l" "yank link" duc/yank-org-pdftools-get-link)]])
-  (defun transient-major ()
-    (interactive)
-    (pcase major-mode
-      ('pdf-view-mode (transient-major-pdf-view))
-      (_ (g-mode-to-transient))))
-  (transient-define-prefix transient-org-roam ()
-    "org-roam"
-    [["node"
-      ("i" "insert" org-roam-node-insert)
-      ("N" "insert" org-roam-node-insert)
-      ("f" "find" org-roam-node-find)
-      ("c" "capture" org-roam-capture)
-      ("s" "toggle buffer" org-roam-buffer-toggle)]
-     ["dailies"
-      ("l" "daily today" org-roam-dailies-goto-today)
-      ("L" "daily previous" org-roam-dailies-goto-previous-note)]
-     ["ui"
-      ("u" "ui" org-roam-ui-mode)
-      ("z" "local" org-roam-ui-node-local)
-      ("Z" "zoom" org-roam-ui-node-zoom)]])
-  (transient-define-prefix transient-org-mode ()
-    "org-mode"
-    [["edit"
-      ("c" "C-c C-c" org-ctrl-c-ctrl-c)
-      ("m" "region->md" org-md-convert-region-to-md)
-      ("t" "insert template" org-insert-structure-template)
-      ("I" "take screenshot" org-download-screenshot)
-      ("e" "encrypt entry" org-encrypt-entry)
-      ("E" "encrypt all" org-encrypt-entries)
-      ("d" "decrypt entry" org-decrypt-entry)
-      ("D" "decrypt all" org-decrypt-entries)]
-     ["bnote"
-      ("b" "bnote" (lambda () (interactive) (duc/create-or-open-bnote-type "bnote")))
-      ("l" "search & insert link" duc/completing-bnote-insert-linked-link)
-      ("s" "store link at P" org-store-link)
-      ("S" "insert link at P" org-insert-link)]
-     ["view"
-      ("A" "agenda" org-agenda)
-      ("L" "toggle descriptive links" org-toggle-link-display)
-      ("i" "toggle inline images" org-toggle-inline-images)
-      ("n" "narrow" org-narrow-to-subtree)
-      ("N" "widen" widen)
-      ("w" "widen" widen)
-      ("o" "open link" (lambda () (interactive)
-                         (org-open-at-point)
-                         (balance-windows)))]])
-  (transient-define-prefix transient-org-fc ()
-    "org-fc"
-    [["Capture"
-      ("N" "normal" (lambda () (interactive) (org-capture nil "n")))
-      ("n" "normal" org-fc-type-normal-init)
-      ("c" "cloze" (lambda () (interactive) (org-fc-type-cloze-init 'deletion)))]
-     ["Other"
-      ("r" "review buffer" org-fc-review-buffer)
-      ("R" "review all" org-fc-review-all)
-      ("m" "dashboard" org-fc-dashboard)
-      ("S" "screenshot" (lambda () (interactive)
-                          (let ((org-download-image-dir "~/dev/org-fc/img"))
-                            (org-download-screenshot))))
-      ("h" "hydra" org-fc-hydra/body)]]))
 
 (use-package magit
   :straight (:build (:not compile)) ;; https://github.com/magit/magit/issues/4676
@@ -1298,16 +1284,6 @@ while `company-capf' runs."
   :config
   (evil-define-key 'normal ereader-mode-map (kbd "0") 'evil-digit-argument-or-evil-beginning-of-line))
 
-(use-package ob-asymptote
-  :after org
-  :straight (:type git
-             :repo "https://git.sr.ht/~bzg/org-contrib"
-             :files ("lisp/ob-asymptote.el"))
-  :config
-  (org-babel-do-load-languages
-   'org-babel-load-languages
-   '((asymptote . t))))
-
 (use-package asy-mode
   :after org-contrib
   :straight (:host github
@@ -1414,6 +1390,7 @@ while `company-capf' runs."
 (use-package org-fc
   :straight
   (org-fc :type git
+          :host nil
           :repo "https://git.sr.ht/~l3kn/org-fc"
           :files (:defaults "awk" "demo.org"))
   :init
@@ -1521,5 +1498,15 @@ while `company-capf' runs."
   :after geiser)
 
 (use-package lua-mode)
+(use-package outline-indent)
+
+(use-package rpgdm
+  :straight (:local-repo "~/dev/emacs-rpgdm"
+             :files (:defaults "dnd-5e" "docs" "tables" "images")))
+
+(use-package rpgdm-ironsworn
+  :straight (:local-repo "~/dev/emacs-ironsworn"
+                         :files (:defaults "assets" "moves" "tables" "tables" "images"))
+  :init (setq rpgdm-ironsworn-project (expand-file-name "~/dev/emacs-ironsworn")))
 
 (provide 'package-declarations)

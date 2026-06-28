@@ -11,7 +11,7 @@
 (defvar duc/font-height (pcase system-type
                           ('windows-nt 100)
                           ('gnu/linux 140)
-                          (_ 140)))
+                          (_ 180)))
 
 
 (defvar duc/font-family-mode-line (pcase system-type
@@ -1379,5 +1379,40 @@ See https://observablehq.com/@manuelblanc/pseudo-random-distribution
                 (lambda (first second)
                   (string< (car first) (car second)))))
     t))
+
+;; below the line of confidence are functions under review
+
+(defun org-worklog-entry (message)
+  "Insert a timestamped entry under the '* worklog' heading.
+Prompts for MESSAGE to log with current timestamp."
+  (interactive "sWorklog message: ")
+  (duc/create-or-open-bnote-type "wlog")
+  (save-excursion
+    (goto-char (point-min))
+    (if (re-search-forward "^\\* worklog$" nil t)
+        ;; Found worklog heading
+        (progn
+          (end-of-line)
+          ;; Search for the next heading or end of buffer
+          (let ((next-heading (save-excursion
+                               (if (re-search-forward "^\\*+ " nil t)
+                                   (line-beginning-position)
+                                 (point-max)))))
+            ;; Go just before the next heading or end of buffer
+            (goto-char next-heading)
+            ;; Skip backward over blank lines
+            (skip-chars-backward " \t\n")
+            ;; Insert new entry on a new line
+            (insert "\n" (format "- <%s> %s"
+                               (format-time-string "%Y-%m-%d %a %H:%M")
+                               message))))
+      ;; No worklog heading found, create it at the end
+      (goto-char (point-max))
+      (unless (bolp) (insert "\n"))
+      (insert "* worklog\n")
+      (insert (format "- <%s> %s"
+                     (format-time-string "%Y-%m-%d %a %H:%M")
+                     message))))
+  (message "Worklog entry added: %s" message))
 
 (provide 'duc)

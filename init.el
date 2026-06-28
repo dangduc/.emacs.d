@@ -211,7 +211,8 @@
  '(cua-overwrite-cursor-color "#b58900")
  '(cua-read-only-cursor-color "#859900")
  '(custom-safe-themes
-   '("e27c391095dcee30face81de5c8354afb2fbe69143e1129109a16d17871fc055" default))
+   '("8c6877285c69ee82295d0b58bb50aa9089610d866e30a2efd6a2f16bf3b8c1ed" "12aa998599ee9df2f58daa9a03996ca4a181f025b15e5f3b37ceca3a2d84097f" "78bfb07bb1c709f0c55d7d4cd8926fcb458494eb67cb2cba972eea34b43a628c" "05f77f04b559be365da0ac5c3f1987126d3b9cecac9a4628c058610b376d36e6" "137891cd4d6b8b460e6dd3bcb44c9c2c3ee98215c06e4ec345f966b204553802" "8da0000454ccc7f994ad5adffd88d8627dbd0f8f5bbb52d2169d7b1b10b769c9" "5c9533a3cfb1dfa369b18ef7fe0c1b456d2972b8e1cf4408f50dd200e5b94149" "0742156ef2c8636772ab24205a2f9cf0b102c078a7d2bbeec5bd5ef55f79931f" "957cfd573613e0ee706484b9495feee8c1204cefeb0e0b58a03a585c9d1aceb8" "e2842ca432d7730564299734940566db52135b45f7c9c113fe3a2612ece73ed4" "d849b24d1258c504e41617c43922154ba6a413d61de07446d93fa4fe5cc21ea3" "e27c391095dcee30face81de5c8354afb2fbe69143e1129109a16d17871fc055" default))
+ '(elfeed-feeds '("https://unsongbook.com/feed/"))
  '(fci-rule-color "#171717")
  '(highlight-changes-colors '("#d33682" "#6c71c4"))
  '(highlight-symbol-colors
@@ -248,7 +249,13 @@
  '(pos-tip-background-color "#073642")
  '(pos-tip-foreground-color "#93a1a1")
  '(safe-local-variable-values
-   '((eval lsp)
+   '((eval progn
+           (require 'rpgdm-ironsworn)
+           (rpgdm-mode))
+     (flycheck-cppcheck-standards . "c11")
+     (eval visual-line-mode t)
+     (eval auto-fill-mode nil)
+     (eval lsp)
      (eval set
            (make-local-variable 'lsp-python-ms-python-executable-cmd)
            (concat
