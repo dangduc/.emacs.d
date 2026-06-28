@@ -31,7 +31,7 @@ Targets Emacs 30+ (`/Applications/Emacs.app`). Three mechanisms — know which a
 - **Built-ins and local packages** opt out with `:ensure nil` (e.g. `org`, `abbrev`, `tab-bar`, `whitespace`, `bind-key`, the local `duc` package in `lisp/`, the vendored `asy-mode`/`fruity-theme`, and the `~/dev` rpgdm repos loaded via `:load-path`).
 - **git submodules** in `vendor/` (see `.gitmodules`: `auto-compile`, `packed`, `pulsar`) are loaded before `package.el` initializes (`auto-compile` in `early-init.el`). Every `vendor/` subdir is added to `load-path` in `init.el`.
 
-straight.el was removed in the Emacs 30 migration; there is no `straight/` bootstrap and no `:straight` keys. The `package-selected-packages` list in `init.el`'s `custom-set-variables` is stale theme cruft, not the source of truth — `lisp/package-declarations.el` is.
+straight.el was removed in the Emacs 30 migration; there is no `straight/` bootstrap and no `:straight` keys. See `docs/emacs-30-migration.md` for the migration, startup-deferral, and native-comp build notes. The `package-selected-packages` list in `init.el`'s `custom-set-variables` is stale theme cruft, not the source of truth — `lisp/package-declarations.el` is.
 
 ## Conventions
 
