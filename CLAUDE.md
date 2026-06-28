@@ -24,11 +24,14 @@ Startup follows a deliberate sequence — changes that depend on earlier setup m
 
 ## Package management
 
-Two coexisting mechanisms — know which applies before adding a package:
+Targets Emacs 30+ (`/Applications/Emacs.app`). Three mechanisms — know which applies before adding a package:
 
-- **straight.el** is the default (`straight-use-package-by-default t`). New packages are declared with `use-package` in `lisp/package-declarations.el` and are fetched/built into `straight/` (gitignored). No `:straight t` needed.
-- **git submodules** in `vendor/` (see `.gitmodules`: `auto-compile`, `packed`, `pulsar`). Used for packages needed before straight bootstraps, or pinned manually. Every `vendor/` subdir is on `load-path`. Use `:straight nil` in `use-package` to reference a `vendor/` or local package (e.g. the `duc` package).
-- The legacy `package.el` archives are still configured in `early-init.el` and the `package-selected-packages` list in `init.el`'s `custom-set-variables` is mostly stale theme cruft — prefer straight/`use-package` for anything new.
+- **Built-in `package.el` + `use-package`** is the default. `init.el` sets `use-package-always-ensure t`, so a plain `(use-package foo ...)` installs `foo` from the archives declared in `early-init.el` (MELPA/melpa-stable/GNU/Org). No `:ensure t` needed.
+- **`package-vc` via `:vc`** for packages only available as a git repo (not on an archive). Use the use-package `:vc` keyword, e.g. `:vc (:url "https://github.com/owner/repo" :branch "main")`. Current `:vc` packages: `seoul256-theme`, `vscode-icon`, `org-roam-ui`, `org-fc`, `fussy`.
+- **Built-ins and local packages** opt out with `:ensure nil` (e.g. `org`, `abbrev`, `tab-bar`, `whitespace`, `bind-key`, the local `duc` package in `lisp/`, the vendored `asy-mode`/`fruity-theme`, and the `~/dev` rpgdm repos loaded via `:load-path`).
+- **git submodules** in `vendor/` (see `.gitmodules`: `auto-compile`, `packed`, `pulsar`) are loaded before `package.el` initializes (`auto-compile` in `early-init.el`). Every `vendor/` subdir is added to `load-path` in `init.el`.
+
+straight.el was removed in the Emacs 30 migration; there is no `straight/` bootstrap and no `:straight` keys. The `package-selected-packages` list in `init.el`'s `custom-set-variables` is stale theme cruft, not the source of truth — `lisp/package-declarations.el` is.
 
 ## Conventions
 

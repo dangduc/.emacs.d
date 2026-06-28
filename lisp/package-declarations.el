@@ -21,7 +21,7 @@
       (message "No leader-g transient"))))
 
 (use-package bind-key
-  :ensure t)
+  :ensure nil) ;; built-in (ships with use-package)
 
 (use-package transient
   :config
@@ -160,7 +160,7 @@
       ("h" "hydra" org-fc-hydra/body)]]))
 
 (use-package duc
-  :straight nil
+  :ensure nil ;; local package in lisp/
   :init
                                         ; e.g., switch-to-buffer respects other-window-prefix
   (setq switch-to-buffer-obey-display-actions t)
@@ -256,6 +256,7 @@
     (diminish 'auto-revert-mode)))
 
 (use-package tab-bar
+  :ensure nil
   :config
   ;; Make tab bar switches create a new tab if there were no tabs to switch to.
   (advice-add 'tab-bar-switch-to-next-tab
@@ -570,7 +571,7 @@ _p_/_a_: push notes         _i_: screenshot
   (setq aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l)))
 
 (use-package abbrev
-  :straight (:type built-in)
+  :ensure nil
   :config
   (setq save-abbrevs 'silent) ;; save abbrevs when files are saved
   :init
@@ -591,8 +592,7 @@ _p_/_a_: push notes         _i_: screenshot
   :no-require t)
 
 (use-package seoul256-theme
-  :straight (:host github
-             :repo "dangduc/seoul256-emacs")
+  :vc (:url "https://github.com/dangduc/seoul256-emacs")
   :no-require t
   :config
   (setq seoul256-background 256))
@@ -622,18 +622,21 @@ _p_/_a_: push notes         _i_: screenshot
   (defun duc/theme-setup-modus-vivendi-theme (&rest _)
     "Tweak vterm display colors for doom-flatwhite"
     (let ((current-theme (car custom-enabled-themes)))
+      ;; modus-themes v4 dropped the `modus-themes-hl-line' face; tweak the
+      ;; standard `hl-line' face instead.
       (when (eq current-theme 'modus-vivendi)
-        set-face-attribute 'modus-themes-hl-line nil :background "#dedede")))
+        (set-face-attribute 'hl-line nil :background "#dedede"))))
   (advice-add 'load-theme :after #'duc/theme-setup-modus-vivendi-theme)
 
   (defun duc/theme-setup-modus-operandi-theme (&rest _)
     "Tweak vterm display colors for doom-flatwhite"
     (let ((current-theme (car custom-enabled-themes)))
       (when (eq current-theme 'modus-operandi)
-        (set-face-attribute 'modus-themes-hl-line nil :background "#DEECF4"))))
+        (set-face-attribute 'hl-line nil :background "#DEECF4"))))
   (advice-add 'load-theme :after #'duc/theme-setup-modus-operandi-theme))
 
 (use-package mindre-theme
+  :vc (:url "https://github.com/erikbackman/mindre-theme") ;; removed from MELPA
   :init
   (setq mindre-use-more-bold nil)
   (setq mindre-use-faded-lisp-parens t))
@@ -646,8 +649,8 @@ _p_/_a_: push notes         _i_: screenshot
 ;  (setq fruity-want-dark-modeline t))
 
 (use-package fruity-theme
-  :straight (:local-repo "~/.emacs.d/vendor/fruity-theme"
-             :type nil)
+  :ensure nil ;; local copy on load-path (vendor/fruity-theme)
+  :load-path "vendor/fruity-theme"
   :init
   (setq fruity-want-transparent-line-numbers nil)
   (setq fruity-want-dark-modeline nil))
@@ -657,14 +660,13 @@ _p_/_a_: push notes         _i_: screenshot
 (use-package undo-tree
   :diminish undo-tree-mode)
 
-(use-package rainbow-delimiters
-  :straight (:host github
-             :repo "Fanael/rainbow-delimiters"))
+(use-package rainbow-delimiters) ;; GNU ELPA
 
 (use-package habamax-theme
   :no-require t)
 
 (use-package whitespace
+  :ensure nil
   :diminish whitespace-mode
   :init
   (setq whitespace-line-column 80) ;; limit line length
@@ -862,22 +864,8 @@ _p_/_a_: push notes         _i_: screenshot
   (setq ivy-use-selectable-prompt t))
 
 (use-package vertico
-  :straight (vertico
-             :includes
-             (
-              ;; vertico-buffer
-              vertico-directory
-              ;; vertico-flat
-              ;; vertico-grid
-              ;; vertico-indexed
-              ;; vertico-mouse
-              ;; vertico-multiform
-              ;; vertico-quick
-              ;; vertico-repeat
-              ;; vertico-reverse
-              ;; vertico-unobtrusive
-              )
-             :files (:defaults "extensions/*"))
+  ;; The vertico ELPA package bundles its extensions (vertico-directory etc.),
+  ;; so no special recipe is needed under package.el.
   ;; More convenient directory navigation commands
   :bind (:map vertico-map
               ("RET" . vertico-directory-enter)
@@ -885,81 +873,27 @@ _p_/_a_: push notes         _i_: screenshot
               ("M-DEL" . vertico-directory-delete-word))
   ;; Tidy shadowed file names
   :hook (rfn-eshadow-update-overlay . vertico-directory-tidy)
-  :ensure t
   :init
   (vertico-mode))
 
 (use-package marginalia
   ;; Either bind `marginalia-cycle` globally or only in the minibuffer
-  :ensure t
   :init
   ;; Must be in the :init section of use-package such that the mode gets
   ;; enabled right away. Note that this forces loading the package.
   (marginalia-mode))
 
 (use-package orderless
-  :straight t
-  :ensure t
   :commands (orderless-filter))
 
-(use-package flx-rs
-  :ensure t
-  :straight
-  (flx-rs
-   :repo "jcs-elpa/flx-rs"
-   :fetcher github
-   :files (:defaults "bin"))
-  :config
-  (flx-rs-load-dyn)
-  ;; This is not necessary since `flx-all-completions' already checks for this
-  ;; function. It'll still help other libraries that call `flx-score' though.
-  (advice-add 'flx-score :override #'flx-rs-score))
-
+;; Pure-elisp fuzzy matcher. The native modules (flx-rs, fzf-native, fuz) were
+;; dropped during the package.el migration; `fussy' falls back to `flx-score'.
 (use-package flx)
-
-(use-package orderless
-  :straight t
-  :ensure t
-  :commands (orderless-filter))
-
-(use-package flx-rs
-  :ensure t
-  :straight
-  (flx-rs
-   :repo "jcs-elpa/flx-rs"
-   :fetcher github
-   :files (:defaults "bin"))
-  :config
-  (flx-rs-load-dyn))
-
-(use-package flx)
-
-(use-package fzf-native
-  :straight
-  (:repo "dangduc/fzf-native"
-   :host github
-   :files (:defaults "bin" "*.c" "*.h" "*.txt"))
-  :init
-  (setq fzf-native-always-compile-module t)
-  :config
-  (setq fussy-score-fn 'fussy-fzf-native-score)
-  (fzf-native-load-dyn))
-
-(let ((straight-disable-compile t))
-  (use-package fuz
-    :straight (:repo "rustify-emacs/fuz.el"
-               :host github)
-    :config
-    (unless (require 'fuz-core nil t)
-      (fuz-build-and-load-dymod))))
 
 (use-package fussy
-  :ensure t
-  :straight
-  (fussy :type git :host github :repo "jojojames/fussy")
   :after flx
   :config
-  ;(setq fussy-score-fn 'flx-score)
+  (setq fussy-score-fn 'flx-score)
   (setq fussy-filter-fn 'fussy-filter-flex)
   (push 'fussy completion-styles)
   (setq
@@ -1062,8 +996,10 @@ while `company-capf' runs."
   (setq tide-jump-to-definition-reuse-window nil)
   ;; Set up Typescript linting with `web-mode'.
   ;; https://github.com/ananthakumaran/tide/pull/161
-  (eval-after-load 'flycheck
-    (lambda ()
+  (with-eval-after-load 'flycheck
+    ;; `typescript-tslint' was removed from flycheck (tslint is deprecated);
+    ;; only register it if the checker is still defined.
+    (when (flycheck-valid-checker-p 'typescript-tslint)
       (flycheck-add-mode 'typescript-tslint 'web-mode)))
   (defun +setup-tide-mode ()
     (interactive)
@@ -1092,7 +1028,6 @@ while `company-capf' runs."
 (use-package restclient)
 
 (use-package magit
-  :straight (:build (:not compile)) ;; https://github.com/magit/magit/issues/4676
   :after transient
   :commands (magit-toplevel
              magit-status
@@ -1125,19 +1060,16 @@ while `company-capf' runs."
 
   (define-key magit-hunk-section-map (kbd "<return>") 'magit-diff-visit-file-other-window))
 
-(use-package evil-ediff
-  :commands (evil-ediff-init)
+;; `evil-ediff' was merged into `evil-collection' (which supplies the ediff
+;; keybindings now), so we only keep the plain ediff configuration here.
+(use-package ediff
+  :ensure nil
   :init
   (setq magit-ediff-dwim-show-on-hunks t)
   (setq ediff-window-setup-function 'ediff-setup-windows-plain)
   (setq ediff-split-window-function 'split-window-horizontally)
   (setq ediff-diff-options "-w")
-  (add-hook 'ediff-after-quit-hook-internal 'winner-undo)
-  (defun +evil-ediff-init ()
-    "Initialize with `evil-ediff-init' and remove the hook."
-    (evil-ediff-init)
-    (remove-hook 'ediff-mode-hook #'evil-ediff-init))
-  (add-hook 'ediff-mode-hook #'+evil-ediff-init))
+  (add-hook 'ediff-after-quit-hook-internal 'winner-undo))
 
 (use-package ibuffer-sidebar
   :init
@@ -1151,9 +1083,7 @@ while `company-capf' runs."
   (setq dired-subtree-use-backgrounds nil))
 
 (use-package vscode-icon
-  :straight (:host github
-             :repo "jojojames/vscode-icon-emacs"
-             :files (:defaults "icons" "source")))
+  :vc (:url "https://github.com/jojojames/vscode-icon-emacs"))
 
 (use-package dired-sidebar
   :after vscode-icon
@@ -1237,8 +1167,6 @@ while `company-capf' runs."
 
 (use-package vimrc-mode)
 
-(use-package restclient)
-
 ; Remove .json from using major mode
 ; Fixes issue where loading large json file freezes emacs.
 (setq auto-mode-alist (rassq-delete-all 'javascript-mode auto-mode-alist))
@@ -1261,7 +1189,7 @@ while `company-capf' runs."
    "M-k" 'vterm-clear))
 
 (use-package tex
-  :straight auctex
+  :ensure auctex
   :defer t
   :init
   (setq org-format-latex-options
@@ -1286,12 +1214,11 @@ while `company-capf' runs."
 
 (use-package asy-mode
   :after org-contrib
-  :straight (:host github
-                   :repo "vectorgraphics/asymptote"
-                   :files (:defaults "base/asy-mode.el")))
+  ;; Vendored single file from the asymptote repo (vendor/asy-mode/), on load-path.
+  :ensure nil)
 
 (use-package org
-  :straight (:type built-in)
+  :ensure nil
   :config
   ;; org-mode
 
@@ -1339,19 +1266,12 @@ while `company-capf' runs."
                                         ; Also don't intent src blocks.
   (setq org-edit-src-content-indentation 0))
 
-(use-package emacsql
-  :straight (:host github
-             :repo "magit/emacsql"
-             :branch "main"))
-
-(use-package emacsql-sqlite-builtin
-  :straight (:host github
-             :repo "magit/emacsql"
-             :branch "main"
-             :files ("emacsql-sqlite-builtin.el")))
+;; Modern emacsql (GNU ELPA) has built-in SQLite support; the separate
+;; `emacsql-sqlite-builtin' package is folded in and no longer needed.
+(use-package emacsql)
 
 (use-package org-roam
-  :after emacsql-sqlite-builtin
+  :after emacsql
   :init
   (setq org-roam-database-connector 'sqlite-builtin)
   (let ((d "~/dev/rotes"))
@@ -1362,8 +1282,7 @@ while `company-capf' runs."
   (org-roam-db-autosync-mode))
 
 (use-package org-roam-ui
-  :straight
-  (:host github :repo "org-roam/org-roam-ui" :branch "main" :files ("*.el" "out"))
+  :vc (:url "https://github.com/org-roam/org-roam-ui" :branch "main")
   :after org-roam
   ;; normally we'd recommend hooking orui after org-roam, but since org-roam does not have
   ;; a hookable mode anymore, you're advised to pick something yourself
@@ -1388,12 +1307,10 @@ while `company-capf' runs."
 (use-package org-ql)
 
 (use-package org-fc
-  :straight
-  (org-fc :type git
-          :host nil
-          :repo "https://git.sr.ht/~l3kn/org-fc"
-          :files (:defaults "awk" "demo.org"))
+  :vc (:url "https://git.sr.ht/~l3kn/org-fc")
+  ;; org-fc's algo classes inherit `eieio-singleton', which lives in eieio-base.
   :init
+  (require 'eieio-base)
   (let ((dir "~/dev/org-fc"))
     (unless (file-exists-p dir)
       (make-directory dir))
@@ -1500,13 +1417,16 @@ while `company-capf' runs."
 (use-package lua-mode)
 (use-package outline-indent)
 
+;; Local working copies under ~/dev; loaded only when present.
 (use-package rpgdm
-  :straight (:local-repo "~/dev/emacs-rpgdm"
-             :files (:defaults "dnd-5e" "docs" "tables" "images")))
+  :ensure nil
+  :if (file-directory-p "~/dev/emacs-rpgdm")
+  :load-path "~/dev/emacs-rpgdm")
 
 (use-package rpgdm-ironsworn
-  :straight (:local-repo "~/dev/emacs-ironsworn"
-                         :files (:defaults "assets" "moves" "tables" "tables" "images"))
+  :ensure nil
+  :if (file-directory-p "~/dev/emacs-ironsworn")
+  :load-path "~/dev/emacs-ironsworn"
   :init (setq rpgdm-ironsworn-project (expand-file-name "~/dev/emacs-ironsworn")))
 
 (provide 'package-declarations)

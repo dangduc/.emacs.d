@@ -286,9 +286,9 @@ e.g.
                           (or (with-current-buffer "* Mit REPL *"
                                 (save-excursion
                                   (goto-char (point-max))
-                                  (if (eq (point-at-bol) (point-at-eol))
+                                  (if (eq (line-beginning-position) (line-end-position))
                                       (goto-char (- (point-max) 1)))
-                                  (string-match-p (concat repl-prompt "$") (buffer-substring-no-properties (point-at-bol) (point-at-eol)))))
+                                  (string-match-p (concat repl-prompt "$") (buffer-substring-no-properties (line-beginning-position) (line-end-position)))))
                               default-indent-level))))
     (with-temp-buffer
       (let ((new-expression (replace-regexp-in-string "\n" (concat "\n" (make-string indent-level ? )) expression)))
@@ -1273,7 +1273,10 @@ projectile cache when it's possible and update recentf list."
     ("wcb" "What could have gone better?")
     ("wbm" "What might I need to learn, or what strategies might I use the next time to get better results?")))
 
-(defcustom duc/company-shortcut-append-just-one-space nil nil)
+(defcustom duc/company-shortcut-append-just-one-space nil
+  "Whether to append just one space after a company shortcut expansion."
+  :type 'boolean
+  :group 'duc)
 
 (defun duc/company-shortcut--prefix ()
   (let ((wap (thing-at-point 'word 'strip-properties)))
@@ -1325,7 +1328,8 @@ See https://observablehq.com/@manuelblanc/pseudo-random-distribution
 "
   (with-temp-buffer
     (insert-file-contents duc/prd-p2c-table-file)
-    (goto-line (+ (floor (* p 1000)) 1))
+    (goto-char (point-min))
+    (forward-line (floor (* p 1000)))
     (string-to-number (buffer-substring (line-beginning-position)
                                         (line-end-position)))))
 

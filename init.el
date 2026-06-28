@@ -20,12 +20,15 @@
           `(lambda ()
              (setq gc-cons-threshold 402653184
                    gc-cons-percentage .3)
-             (add-hook
-              'focus-out-hook
+             ;; `focus-out-hook' was removed in Emacs 27+. Use
+             ;; `after-focus-change-function' and check the frame focus state.
+             (add-function
+              :after after-focus-change-function
               (lambda ()
                 "Lower `gc-cons-threshold' and then run `garbage-collect'."
-                (let ((gc-cons-threshold 800000))
-                  (garbage-collect))))) t)
+                (unless (frame-focus-state)
+                  (let ((gc-cons-threshold 800000))
+                    (garbage-collect)))))) t)
 
 (setq read-process-output-max (* 1024 1024)) ;; 1mb
 
@@ -34,7 +37,7 @@
 (tool-bar-mode -1)
 (scroll-bar-mode -1)
 (setq inhibit-startup-message t
-      inhibit-startup-echo-area-message t)
+      inhibit-startup-echo-area-message user-login-name)
 
 ;; enable transparent osx titlebar (a la Chrome)
 (push '(ns-transparent-titlebar . nil) default-frame-alist)
@@ -163,31 +166,16 @@
 ;; package management
 ;;
 
-(when (< emacs-major-version 27)
-  (setq package-enable-at-startup nil)
-  ;; (package-initialize)
-  (load-file (expand-file-name "early-init.el" user-emacs-directory)))
+;; Use the built-in `package.el' + `use-package' (both shipped with Emacs 29+).
+;; Archives and priorities are declared in `early-init.el'.
+(require 'package)
+(unless package--initialized
+  (package-initialize))
 
-;; bootstrap straight.el
-(defvar bootstrap-version)
-(let ((bootstrap-file
-       (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
-      (bootstrap-version 5))
-  (unless (file-exists-p bootstrap-file)
-    (with-current-buffer
-        (url-retrieve-synchronously
-         "https://raw.githubusercontent.com/raxod502/straight.el/develop/install.el"
-         'silent 'inhibit-cookies)
-      (goto-char (point-max))
-      (eval-print-last-sexp)))
-  (load bootstrap-file nil 'nomessage))
-
-;; Specifying :straight t is unnecessary if you set straight-use-package-by-default to a non-nil value.
-(setq straight-use-package-by-default t)
-
-(straight-use-package 'use-package)
-
-;; end bootstrap straight.el
+(require 'use-package)
+;; package.el equivalent of straight's `straight-use-package-by-default': every
+;; `use-package' form installs its package unless it opts out with `:ensure nil'.
+(setq use-package-always-ensure t)
 
 
 ;; Setup personal lisp directory.
@@ -199,6 +187,12 @@
 (require 'package-declarations)
 
 ;; End package declarations
+
+;; Start an Emacs server so `emacsclient' can connect (and `emacsclient --eval'
+;; can query/drive the running session). A daemon already starts its own server.
+(require 'server)
+(unless (server-running-p)
+  (server-start))
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
