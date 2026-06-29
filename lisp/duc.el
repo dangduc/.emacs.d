@@ -654,11 +654,11 @@ With a prefix argument, prompt for the directory to search."
                                                       (concat "^" type "-"))))))
           (if last-entry
                                         ; Copy over the most recent entry if exists.
-              (let ((new-entry-file-buffer (find-file-noselect new-entry-file)))
-                (with-current-buffer new-entry-file-buffer
-                  (insert-file-contents last-entry)
-                                        ; Reload major-mode incl hooks.
-                  (normal-mode)))
+                                        ; Copy on disk so the subsequent find-file
+                                        ; does the only org-mode init (was: a
+                                        ; find-file-noselect + normal-mode pair that
+                                        ; initialized org-mode twice).
+              (copy-file last-entry new-entry-file)
                                         ; Else copy over the template.
             (append-to-file template nil new-entry-file)))))
     (find-file new-entry-file)
