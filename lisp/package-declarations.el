@@ -825,20 +825,28 @@ _p_/_a_: push notes         _i_: screenshot
 (use-package orderless
   :commands (orderless-filter))
 
-;; Pure-elisp fuzzy matcher. The native modules (flx-rs, fzf-native, fuz) were
-;; dropped during the package.el migration; `fussy' falls back to `flx-score'.
+;; `flx' is kept as a fallback scorer; the active scorer is the native
+;; `fzf-native' batch path (see below).
 (use-package flx)
+
+;; Native fzf batch scorer, vendored fork in `vendor/fzf-native' (on `load-path'
+;; via init.el). `fussy-setup-fzf' points fussy at `fzf-native-score-all'; the
+;; module itself is loaded lazily on first use through `fzf-native-ensure-loaded'.
+(use-package fzf-native
+  :ensure nil
+  :defer t)
 
 (use-package fussy
   :after flx
   :config
-  (setq fussy-score-fn 'flx-score)
-  (setq fussy-filter-fn 'fussy-filter-flex)
+  ;; Use fzf-native's multithreaded batch scorer (sets `fussy-score-ALL-fn' to
+  ;; `fussy-fzf-score' and `fussy-filter-fn' to `fussy-filter-by-scoring').
+  (fussy-setup-fzf)
   (push 'fussy completion-styles)
   (setq
    ;; For example, project-find-file uses 'project-files which uses
    ;; substring completion by default. Set to nil to make sure it's using
-   ;; flx.
+   ;; fussy.
    completion-category-defaults nil
    completion-category-overrides nil)
 
