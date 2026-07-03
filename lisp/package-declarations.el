@@ -428,6 +428,16 @@
     (let ((transient-show-popup -0.2))
       (transient-setup 'leader-main-menu))))
 
+;; `hydra-submenu-project' below `let'-binds `projectile-switch-project-action'
+;; to rebind projectile's switch action per key. That variable is defined by
+;; projectile (loaded lazily), so without this forward declaration it isn't
+;; special when these forms load: under lexical binding the `let' binds it
+;; lexically, the rebinding silently no-ops, and when projectile later loads its
+;; `defcustom' errors "Defining as dynamic an already lexical var". Declaring it
+;; special here (file-local, no value — projectile still sets the default) makes
+;; the `let' dynamic.
+(defvar projectile-switch-project-action)
+
 (use-package hydra
   :config
   (defhydra hydra-submenu-leetcode (:exit t :hint nil)
