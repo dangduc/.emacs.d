@@ -272,15 +272,22 @@ session whose id we don't have)."
 
 (defun duc/claude--tmux-send (slug message)
   "Type MESSAGE (then Enter) into the `claude' prompt in tmux session SLUG.
-No-op when the session isn't up yet.  Uses the same default tmux socket as the
-session created inside ghostel (both inherit Emacs's environment)."
-  (when (and (executable-find "tmux")
-             (zerop (call-process "tmux" nil nil nil "has-session" "-t" slug)))
-    ;; `-l' sends MESSAGE literally (no key-name interpretation); a separate
-    ;; Enter submits it. Multi-line regions are sent as-is — the Claude TUI
-    ;; treats an embedded newline as submit, so prefer single lines.
-    (call-process "tmux" nil nil nil "send-keys" "-t" slug "-l" message)
-    (call-process "tmux" nil nil nil "send-keys" "-t" slug "Enter")))
+Runs tmux ASYNCHRONOUSLY via `start-process'.  A synchronous `call-process'
+here deadlocks Emacs: it blocks the whole event loop waiting for tmux, but the
+tmux server may be mid-write to one of the ghostel terminal clients whose output
+only Emacs drains — so neither side makes progress and Emacs hangs at 0% CPU
+until the tmux command is killed.  An async send keeps the event loop running,
+so the ghostel clients stay drained and the server never blocks.
+
+Both keystrokes go in one tmux invocation — a lone `;' argument separates tmux
+commands — so the literal text and the submitting Enter keep their order.  `-l'
+sends MESSAGE literally (no key-name interpretation).  Output is discarded;
+sending to a session that isn't up is a harmless no-op."
+  (when (executable-find "tmux")
+    (let ((process-connection-type nil))
+      (start-process "duc-claude-tmux-send" nil "tmux"
+                     "send-keys" "-t" slug "-l" message
+                     ";" "send-keys" "-t" slug "Enter"))))
 
 (defun duc/claude--tmux-safe (s)
   "Return S with characters that break tmux target names replaced by `-'.
@@ -346,10 +353,44 @@ ghostel buffer whose tmux process has since exited — has no live
          (and (bound-and-true-p ghostel--process)
               (process-live-p ghostel--process)))))
 
+(defvar duc/claude--tmux-call-timeout 4.0
+  "Seconds `duc/claude--tmux-call' waits for a tmux command before giving up.")
+
+(defun duc/claude--tmux-call (&rest args)
+  "Run tmux with ARGS; return (EXIT-CODE . OUTPUT), or (nil . \"\") on failure.
+Like `call-process' but DEADLOCK-SAFE: tmux runs via `make-process' and we wait
+with `accept-process-output', which keeps draining every other process's output
+— notably the ghostel terminal clients — so the shared tmux server can never
+block on an undrained client while we wait (the hang `duc/claude--tmux-send'
+documents).  Gives up after `duc/claude--tmux-call-timeout' seconds, returning a
+nil exit code."
+  (if (not (executable-find "tmux"))
+      (cons nil "")
+    (let ((chunks nil)
+          (deadline (+ (float-time) duc/claude--tmux-call-timeout))
+          (proc nil))
+      (setq proc (make-process
+                  :name "duc-claude-tmux-call"
+                  :command (cons "tmux" args)
+                  :connection-type 'pipe
+                  :noquery t
+                  :filter (lambda (_proc s) (push s chunks))
+                  :sentinel #'ignore))
+      ;; Wait for tmux while still servicing ALL process I/O — the PROCESS arg
+      ;; to `accept-process-output' does not restrict draining to PROC
+      ;; (JUST-THIS-ONE is left nil), so the ghostel clients keep draining.
+      (while (and (process-live-p proc) (< (float-time) deadline))
+        (accept-process-output proc 0.1))
+      (when (process-live-p proc)
+        (ignore-errors (kill-process proc))
+        (accept-process-output proc 0.1))
+      (cons (and (memq (process-status proc) '(exit signal))
+                 (process-exit-status proc))
+            (apply #'concat (nreverse chunks))))))
+
 (defun duc/claude--session-live-p (slug)
   "Non-nil when a tmux session named SLUG is currently running."
-  (and (executable-find "tmux")
-       (zerop (call-process "tmux" nil nil nil "has-session" "-t" slug))))
+  (eq 0 (car (duc/claude--tmux-call "has-session" "-t" slug))))
 
 (defun duc/claude--tmux-kill-session (slug)
   "Kill the tmux session named SLUG, ending its `claude' process.
@@ -357,7 +398,7 @@ Return non-nil on success.  No-op (returns nil) when tmux is absent or no
 session named SLUG is running.  The ghostel buffer and any bnote drawer are
 left untouched."
   (and (duc/claude--session-live-p slug)
-       (zerop (call-process "tmux" nil nil nil "kill-session" "-t" slug))))
+       (eq 0 (car (duc/claude--tmux-call "kill-session" "-t" slug)))))
 
 (defun duc/claude--ensure-terminal-slug (slug &optional session-id working-directory freshp inner-command)
   "Create or attach the ghostel + tmux `claude' terminal for tmux session SLUG.
@@ -1648,12 +1689,10 @@ and stops the chain without blocking Emacs."
   "List the names of running Claude tmux sessions (the `ctel …' slugs).
 Non-Claude tmux sessions are ignored — Claude terminals are namespaced with the
 `ctel ' prefix by `duc/claude--session-slug'."
-  (when (executable-find "tmux")
-    (with-temp-buffer
-      (when (zerop (call-process "tmux" nil t nil
-                                 "list-sessions" "-F" "#{session_name}"))
-        (seq-filter (lambda (name) (string-prefix-p "ctel " name))
-                    (split-string (buffer-string) "\n" t))))))
+  (let ((result (duc/claude--tmux-call "list-sessions" "-F" "#{session_name}")))
+    (when (eq 0 (car result))
+      (seq-filter (lambda (name) (string-prefix-p "ctel " name))
+                  (split-string (cdr result) "\n" t)))))
 
 (defun duc/claude--terminal-buffers ()
   "Return an alist of (SLUG . BUFFER) for live `*ctel …*' ghostel buffers.
