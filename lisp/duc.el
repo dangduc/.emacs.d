@@ -4,6 +4,13 @@
 
 (require 'five-letter-words)
 
+;; `ghostel' is loaded lazily, so when this file is byte-compiled its
+;; `defcustom' for `ghostel-buffer-name' isn't in scope yet. Declare it special
+;; here so the `let'-bindings below (in `duc/ivy-terminal' /
+;; `duc/ivy-shell-send-string') bind it dynamically rather than lexically —
+;; otherwise Emacs signals "Defining as dynamic an already lexical var".
+(defvar ghostel-buffer-name)
+
 (defvar duc/font-family (pcase system-type
                           ('gnu/linux "JetBrains Mono")
                           (_ "InconsolateG for Powerline")))
@@ -128,7 +135,10 @@
            (buffer-name (completing-read "shell : " terminal-buffers nil nil initial-buffer-name)))
       (if (member buffer-name terminal-buffers)
           (switch-to-buffer buffer-name)
-        (vterm (concat buffer-name))))))
+        ;; ghostel (unlike vterm) has no BUFFER-NAME arg; the new terminal's
+        ;; buffer takes its name from `ghostel-buffer-name'.
+        (let ((ghostel-buffer-name buffer-name))
+          (ghostel))))))
 
 (defun duc/run-this-in-eshell (cmd)
   "Runs the command 'cmd' in eshell."
@@ -147,20 +157,347 @@
 (defun duc/ivy-shell-send-string (string &optional terminal working-directory clear)
   (let ((current-buffer-p (current-buffer))
         (candidate-terminal-buffers (mapcar (function buffer-name) (buffer-list))))
-    (let ((buffer-name (if terminal
-                           terminal
-                         (completing-read "shell : " candidate-terminal-buffers))))
-     (if (member buffer-name candidate-terminal-buffers)
+    (let* ((buffer-name (if terminal
+                            terminal
+                          (completing-read "shell : " candidate-terminal-buffers)))
+           (existing (member buffer-name candidate-terminal-buffers)))
+     (if existing
          (pop-to-buffer buffer-name)
-       (vterm buffer-name))
-     (when working-directory
-       (vterm-send-string (concat "cd " working-directory))
-       (vterm-send-return))
+       ;; ghostel names the new buffer from `ghostel-buffer-name'; let-bind it
+       ;; so the terminal is created with the requested name.  A fresh shell's
+       ;; PTY is spawned in `default-directory', so bind that to
+       ;; WORKING-DIRECTORY and skip the `cd' round-trip entirely.
+       (let ((ghostel-buffer-name buffer-name)
+             (default-directory (if working-directory
+                                    (file-name-as-directory
+                                     (expand-file-name working-directory))
+                                  default-directory)))
+         (ghostel)))
+     ;; Only an already-running terminal needs an explicit `cd' (its PTY is
+     ;; already parked in some other directory).  Paste, don't type: one atomic
+     ;; bracketed-paste chunk, then Enter to submit.
+     (when (and existing working-directory)
+       (ghostel-paste-string (concat "cd " working-directory))
+       (ghostel-send-key "return"))
      (when clear
-       (vterm-clear))
-     (vterm-send-string string)
-     (vterm-send-return)
+       (ghostel-clear))
+     (ghostel-paste-string string)
+     (ghostel-send-key "return")
      (pop-to-buffer current-buffer-p))))
+
+;;; Claude Code CLI sessions driven from Org properties
+;;
+;; An Org entry can describe a running `claude' session via its PROPERTIES
+;; drawer:
+;;
+;;   * Some header
+;;   :PROPERTIES:
+;;   :CLAUDE_SESSION_ID: 5f3b…            ; the session's identity (dedup key)
+;;   :WORKING_DIRECTORY: ~/dev/project     ; optional — start dir for a new one
+;;   :TITLE: foobar                        ; arbitrary label shown in the name
+;;   :END:
+;;
+;; A session's identity is its CLAUDE_SESSION_ID; TITLE is an arbitrary label.
+;; The tmux session name and ghostel buffer are `ctel TITLE <id8>' /
+;; `*ctel TITLE <id8>*', where <id8> is the first 8 chars of CLAUDE_SESSION_ID
+;; (see `duc/claude--session-slug').  Invoking `duc/eval-dwim' inside such an
+;; entry sends the active region (or the current line) to that `claude' CLI.
+;; tmux keeps the conversation alive independently of the Emacs buffer, and lets
+;; us inject text by session name with `tmux send-keys' regardless of focus.
+
+(defvar duc/claude-session-ready-delay 2.5
+  "Seconds to wait after creating a Claude tmux session before the first send.
+Gives the `claude' CLI time to reach its input prompt so the initial message
+isn't dropped.")
+
+(defcustom duc/claude-projects-directory "~/.claude/projects"
+  "Directory where the Claude Code CLI stores per-project conversation logs.
+Each conversation is a `<session-id>.jsonl' under an encoded-cwd subdirectory
+\(both `/' and `.' in the path are encoded as `-', so the name is lossy — the
+real working directory is read from the log's `cwd' field).
+`duc/claude-resume-session' lists these to resume a conversation by id."
+  :type 'directory)
+
+(defun duc/claude--nonempty (s)
+  "Return S when it is a non-blank string, else nil."
+  (and (stringp s) (not (string-blank-p s)) s))
+
+(defun duc/claude--tmux-launch-argv (slug session-id working-directory freshp &optional inner-command)
+  "Argv list that creates or attaches to tmux session SLUG running `claude'.
+Returns (\"tmux\" \"new-session\" …) suitable for `ghostel-exec' — tmux is the
+terminal's own process (no intervening shell), so nothing is echoed as typed
+input.  The tmux start-command is the last argv entry, which tmux itself runs
+via the default shell.
+
+When FRESHP, start a new conversation pinned to SESSION-ID (`--session-id');
+otherwise resume SESSION-ID (`--resume').  WORKING-DIRECTORY, when non-nil, is
+the tmux session start directory.
+
+INNER-COMMAND, when non-nil, is used as the tmux start-command instead of the
+bare `claude' invocation — an already shell-quoted compound command that itself
+ends by exec-ing `claude'.  It is a single argv entry that tmux passes to
+`sh -c', so its internal quoting is preserved.  When given, WORKING-DIRECTORY is
+ignored (the target dir may not exist yet; INNER-COMMAND cd's into it).
+
+With neither SESSION-ID nor INNER-COMMAND the argv carries no start-command, so
+`new-session -A' purely attaches to an existing SLUG (used to reopen a live
+session whose id we don't have)."
+  (let* ((claude-command
+          (cond (inner-command inner-command)
+                ((null session-id) nil)
+                (freshp (format "claude --session-id %s" (shell-quote-argument session-id)))
+                (t (format "claude --resume %s" (shell-quote-argument session-id)))))
+         ;; Claude Code enables the Kitty keyboard protocol when the terminal
+         ;; advertises it (ghostel's xterm-ghostty TERM does), which encodes a
+         ;; lone ESC as an extended `CSI 27 u' sequence rather than a bare \e.
+         ;; tmux drops extended keys unless told to forward them, so ESC gets
+         ;; eaten in the claude TUI.  Enable extended-keys and advertise the
+         ;; extkeys feature for the xterm-ghostty terminal so the CSI-u ESC
+         ;; reaches claude.  Also zero `escape-time' (its 500ms default holds a
+         ;; bare ESC waiting for a sequence).  `set -s' targets the server this
+         ;; session runs on and persists for later `-A' reattaches (which don't
+         ;; re-run the start-command).
+         (start-command
+          (and claude-command
+               (concat "tmux set -s escape-time 0 \\; "
+                       "set -s extended-keys on \\; "
+                       "set -as terminal-features 'xterm*:extkeys' 2>/dev/null; "
+                       claude-command))))
+    ;; `-A' turns `new-session' into attach-if-exists, so a detached session that
+    ;; outlived a killed ghostel buffer is reattached instead of erroring.
+    (append (list "tmux" "new-session" "-A" "-s" slug)
+            (when (and working-directory (not inner-command))
+              (list "-c" working-directory))
+            (when start-command (list start-command)))))
+
+(defun duc/claude--tmux-send (slug message)
+  "Type MESSAGE (then Enter) into the `claude' prompt in tmux session SLUG.
+No-op when the session isn't up yet.  Uses the same default tmux socket as the
+session created inside ghostel (both inherit Emacs's environment)."
+  (when (and (executable-find "tmux")
+             (zerop (call-process "tmux" nil nil nil "has-session" "-t" slug)))
+    ;; `-l' sends MESSAGE literally (no key-name interpretation); a separate
+    ;; Enter submits it. Multi-line regions are sent as-is — the Claude TUI
+    ;; treats an embedded newline as submit, so prefer single lines.
+    (call-process "tmux" nil nil nil "send-keys" "-t" slug "-l" message)
+    (call-process "tmux" nil nil nil "send-keys" "-t" slug "Enter")))
+
+(defun duc/claude--tmux-safe (s)
+  "Return S with characters that break tmux target names replaced by `-'.
+tmux splits a target name on `:' (window) and `.' (pane), so a TITLE containing
+either — or a newline/tab — would misroute `has-session'/`send-keys'.  Spaces
+are fine and are preserved."
+  (replace-regexp-in-string "[:.\n\r\t]" "-" (or s "")))
+
+(defun duc/claude--id8 (session-id)
+  "Return the short 8-character form of SESSION-ID used in session names."
+  (cond ((not (stringp session-id)) "")
+        ((>= (length session-id) 8) (substring session-id 0 8))
+        (t session-id)))
+
+(defun duc/claude--session-slug (title session-id)
+  "Return the tmux session name / ghostel buffer infix for TITLE + SESSION-ID.
+Format is `ctel TITLE <id8>', where <id8> is the first 8 characters of
+SESSION-ID.  TITLE is an arbitrary label, made tmux-target-safe (see
+`duc/claude--tmux-safe'); a blank TITLE collapses the name to `ctel <id8>'.  The
+`ctel ' prefix namespaces Claude terminals among other tmux sessions."
+  (string-join
+   (seq-remove #'string-empty-p
+               (list "ctel"
+                     (string-trim (duc/claude--tmux-safe title))
+                     (duc/claude--id8 session-id)))
+   " "))
+
+(defun duc/claude--session-label (title session-id)
+  "Return the human list label `TITLE <id8>' for TITLE + SESSION-ID.
+Unlike `duc/claude--session-slug' this keeps TITLE verbatim (no `ctel ' prefix,
+no tmux sanitising) — it is for display, not for addressing tmux."
+  (string-join
+   (seq-remove #'string-empty-p
+               (list (string-trim (or title ""))
+                     (duc/claude--id8 session-id)))
+   " "))
+
+(defun duc/claude--terminal-buffer-name (slug)
+  "Ghostel buffer name for the Claude session addressed by SLUG.
+SLUG is the `ctel TITLE <id8>' tmux session name; the buffer is `*SLUG*'."
+  (format "*%s*" slug))
+
+;; A `*ctel …*' buffer's slug carries only the 8-char id, so record the session's
+;; full identity on the buffer itself (set by `duc/claude--ensure-terminal').
+;; `duc/claude-session-add-to-bnote' and `duc/claude--collect-sessions' read these.
+(defvar-local duc/claude--buffer-session-id nil
+  "Full CLAUDE_SESSION_ID of the Claude session shown in this ghostel buffer.")
+
+(defvar-local duc/claude--buffer-title nil
+  "Arbitrary TITLE label of the Claude session shown in this ghostel buffer.")
+
+(defvar-local duc/claude--buffer-directory nil
+  "Working directory of the Claude session shown in this ghostel buffer.")
+
+(defun duc/claude--terminal-live-p (buffer)
+  "Non-nil when BUFFER is a ghostel terminal with a live process.
+A buffer made by `get-buffer-create' but never initialized by ghostel — e.g.
+the `fundamental-mode' husk left behind when `ghostel-exec' signalled, or a
+ghostel buffer whose tmux process has since exited — has no live
+`ghostel--process' and must not be mistaken for a running terminal."
+  (and (buffer-live-p buffer)
+       (with-current-buffer buffer
+         (and (bound-and-true-p ghostel--process)
+              (process-live-p ghostel--process)))))
+
+(defun duc/claude--session-live-p (slug)
+  "Non-nil when a tmux session named SLUG is currently running."
+  (and (executable-find "tmux")
+       (zerop (call-process "tmux" nil nil nil "has-session" "-t" slug))))
+
+(defun duc/claude--tmux-kill-session (slug)
+  "Kill the tmux session named SLUG, ending its `claude' process.
+Return non-nil on success.  No-op (returns nil) when tmux is absent or no
+session named SLUG is running.  The ghostel buffer and any bnote drawer are
+left untouched."
+  (and (duc/claude--session-live-p slug)
+       (zerop (call-process "tmux" nil nil nil "kill-session" "-t" slug))))
+
+(defun duc/claude--ensure-terminal-slug (slug &optional session-id working-directory freshp inner-command)
+  "Create or attach the ghostel + tmux `claude' terminal for tmux session SLUG.
+SLUG is both the tmux session name and the ghostel buffer infix (buffer
+`*SLUG*').  SESSION-ID / FRESHP / WORKING-DIRECTORY / INNER-COMMAND shape the
+tmux start-command (see `duc/claude--tmux-launch-argv'); with none of them a
+live SLUG is simply reattached.
+
+Return a plist (:buffer NAME :slug SLUG :created BOOL).  :created is non-nil
+only when a new ghostel buffer was spawned this call."
+  ;; `ghostel-exec' (and the `ghostel--process' var) are not autoloaded — only
+  ;; the interactive `ghostel'/`ghostel-project' entry points are — so load the
+  ;; feature before using them, or the first send/resume fails with
+  ;; "Symbol's function definition is void: ghostel-exec".
+  (require 'ghostel)
+  (unless (executable-find "tmux")
+    (user-error "tmux not found on `exec-path'; install tmux to use Claude Code sessions"))
+  (let* ((buffer-name (duc/claude--terminal-buffer-name slug))
+         (existing (get-buffer buffer-name))
+         (working-directory (and working-directory (expand-file-name working-directory))))
+    (if (duc/claude--terminal-live-p existing)
+        (list :buffer buffer-name :slug slug :created nil)
+      ;; Any name-matching buffer without a live ghostel process is stale — a
+      ;; dead terminal or a `fundamental-mode' husk from a failed `ghostel-exec'.
+      ;; Kill it first: `ghostel-exec' refuses a buffer that already has a
+      ;; process, and reusing a husk would just redisplay an empty buffer.
+      ;; Recreating reattaches a still-detached tmux session via `new-session -A'.
+      (when existing
+        (let ((kill-buffer-query-functions nil))
+          (kill-buffer existing)))
+      (save-window-excursion
+        ;; Run tmux directly as the terminal's process via `ghostel-exec' (argv
+        ;; entries, no intervening shell) rather than typing/pasting a
+        ;; `tmux new-session …' line into a shell — so nothing is echoed as
+        ;; input and the tmux start-command launches `claude' immediately.
+        (let* ((argv (duc/claude--tmux-launch-argv
+                      slug session-id working-directory freshp inner-command))
+               (buffer (get-buffer-create buffer-name)))
+          (with-current-buffer buffer
+            (ghostel-exec buffer (car argv) (cdr argv)))))
+      (list :buffer buffer-name :slug slug :created t))))
+
+(defun duc/claude--ensure-terminal (title &optional session-id working-directory inner-command)
+  "Create or attach the ghostel + tmux `claude' terminal for TITLE + SESSION-ID.
+The tmux session name and ghostel buffer are derived as `ctel TITLE <id8>' (see
+`duc/claude--session-slug'); TITLE is an arbitrary label.  With SESSION-ID,
+resume that conversation; otherwise start a fresh one (in WORKING-DIRECTORY when
+given) pinned to a newly generated id.
+
+INNER-COMMAND, when non-nil, is a shell-quoted compound command run inside the
+tmux session in place of the bare `claude' invocation.
+
+Return a plist (:buffer NAME :slug SLUG :created BOOL :session-id ID).  :created
+is non-nil only when a new ghostel buffer was spawned this call; :session-id is
+the freshly minted id in that case (else nil, so callers know not to persist)."
+  (require 'org-id)
+  (let* ((freshp (null session-id))
+         (effective-id (or session-id (org-id-uuid)))
+         (slug (duc/claude--session-slug title effective-id))
+         (info (duc/claude--ensure-terminal-slug
+                slug effective-id working-directory freshp inner-command)))
+    ;; Stamp the session's full id / label / dir onto the terminal buffer so it
+    ;; can identify itself later (the slug carries only the 8-char id).
+    (when-let ((buf (get-buffer (plist-get info :buffer))))
+      (with-current-buffer buf
+        (setq duc/claude--buffer-session-id effective-id
+              duc/claude--buffer-title (duc/claude--nonempty title)
+              duc/claude--buffer-directory
+              (and working-directory (expand-file-name working-directory)))))
+    (append info (list :session-id (and freshp effective-id)))))
+
+(defun duc/claude-session-send (message title &optional session-id working-directory)
+  "Send MESSAGE to a Claude Code CLI session labelled TITLE, creating it if needed.
+The session is addressed by the `ctel TITLE <id8>' tmux/buffer slug (see
+`duc/claude--session-slug'); TITLE is an arbitrary label.  With SESSION-ID,
+resume that conversation; otherwise start a fresh one (in WORKING-DIRECTORY when
+given) pinned to a newly generated id.
+
+Return the generated session id when a fresh session was created (so the caller
+can persist it), or nil when an existing terminal was reused."
+  (let* ((info (duc/claude--ensure-terminal title session-id working-directory))
+         (buffer-name (plist-get info :buffer))
+         (slug (plist-get info :slug)))
+    (display-buffer buffer-name)
+    (if (plist-get info :created)
+        ;; Defer the first message until `claude' has had time to boot.
+        (run-with-timer duc/claude-session-ready-delay nil
+                        #'duc/claude--tmux-send slug message)
+      (duc/claude--tmux-send slug message))
+    (plist-get info :session-id)))
+
+(defun duc/claude--session-heading-marker ()
+  "Marker at the ancestor heading that defines the TITLE property, or nil.
+Search runs from point upward so CLAUDE_SESSION_ID is written back onto the
+heading that actually owns the Claude-session drawer."
+  (save-excursion
+    (catch 'found
+      (when (org-before-first-heading-p)
+        (throw 'found nil))
+      (org-back-to-heading t)
+      (while t
+        (when (org-entry-get (point) "TITLE" nil)
+          (throw 'found (point-marker)))
+        (unless (org-up-heading-safe)
+          (throw 'found nil))))))
+
+(defun duc/claude-session-header-p ()
+  "Non-nil when point is inside an Org entry describing a Claude Code session.
+Such an entry has a TITLE property together with a CLAUDE_SESSION_ID or a
+WORKING_DIRECTORY (looked up with inheritance)."
+  (and (derived-mode-p 'org-mode)
+       (org-entry-get (point) "TITLE" t)
+       (or (org-entry-get (point) "CLAUDE_SESSION_ID" t)
+           (org-entry-get (point) "WORKING_DIRECTORY" t))))
+
+(defun duc/claude-session-send-dwim ()
+  "Send the active region (or current line) to this entry's Claude session.
+Reads TITLE / CLAUDE_SESSION_ID / WORKING_DIRECTORY from the enclosing Org
+entry, creates the tmux + ghostel session when needed, and persists a freshly
+generated CLAUDE_SESSION_ID back into the drawer when a new session starts."
+  (interactive)
+  (let* ((title (duc/claude--nonempty (org-entry-get (point) "TITLE" t)))
+         (session-id (duc/claude--nonempty (org-entry-get (point) "CLAUDE_SESSION_ID" t)))
+         (working-directory (duc/claude--nonempty
+                             (org-entry-get (point) "WORKING_DIRECTORY" t)))
+         (message (string-trim
+                   (if (use-region-p)
+                       (buffer-substring-no-properties (region-beginning) (region-end))
+                     (buffer-substring-no-properties (line-beginning-position)
+                                                     (line-end-position))))))
+    (unless title
+      (user-error "No TITLE property for this Claude session entry"))
+    (let ((new-id (duc/claude-session-send message title session-id working-directory)))
+      ;; Persist the id only when we minted a fresh one, so later sends resume
+      ;; the same conversation.
+      (when (and new-id (not session-id))
+        (let ((marker (duc/claude--session-heading-marker)))
+          (org-entry-put (or marker (point)) "CLAUDE_SESSION_ID" new-id)))
+      (message "Sent to Claude session %s%s" title
+               (if new-id (format " (new %s)" new-id) "")))))
 
 (defun duc/completing-shell-history ()
   (interactive)
@@ -359,7 +696,9 @@ e.g.
 ;            :parent nil))
 (defun duc/eval-dwim-org (p)
   (interactive "P")
-  (cond ((org-in-src-block-p t)
+  (cond ((duc/claude-session-header-p)
+         (duc/claude-session-send-dwim))
+        ((org-in-src-block-p t)
          (let ((lang (org-element-property :language (org-element-at-point)))
                (dir (duc/org-src-block-parameter-property
                      :dir
@@ -688,6 +1027,1185 @@ With a prefix argument, prompt for the directory to search."
 (defun duc/insert-bnote-lozenge-empty-link ()
     (interactive)
   (insert (concat "[[◊:" (format-time-string "%y%2m%2d") "]]")))
+
+;;; mobile-phoenix worktree launcher + Claude-session log
+;;
+;; `duc/mp-worktree-create' is a native-elisp port of ~/bin/mp-worktree-create.py.
+;; It creates a fresh mobile-phoenix worktree (a new branch off origin/main for
+;; implement/qa/other, or a detached checkout of a PR head for review), clones
+;; node_modules copy-on-write, and opens a ghostel + tmux `claude' session that
+;; runs `yarn install' then drops into an interactive Claude Code prompt in the
+;; worktree.  It then records the worktree as a Claude-session drawer under the
+;; toplevel `* Claude Sessions' header of today's bnote — carrying TITLE +
+;; CLAUDE_SESSION_ID + WORKING_DIRECTORY so `duc/claude-session-send-dwim' /
+;; `duc/claude-open-or-create-terminal-session' can drive or resume it later.
+;;
+;; GUS work-item refs are resolved by shelling out to the shared gus-query.py
+;; bridge; PR refs are resolved via `gh'.  The naming (slug / branch / tab title)
+;; is kept byte-compatible with the Python script so both tools agree.
+
+(defcustom duc/mp-worktree-repo "~/tb/mobile-phoenix"
+  "Main mobile-phoenix checkout that `duc/mp-worktree-create' branches from."
+  :type 'string :group 'duc)
+
+(defcustom duc/mp-worktree-tb-dir "~/tb"
+  "Directory under which `duc/mp-worktree-create' creates worktree directories."
+  :type 'string :group 'duc)
+
+(defcustom duc/mp-worktree-gus-query-script
+  "~/.claude/skills/mp-query-fixed-stories-for-qa/scripts/gus-query.py"
+  "gus-query.py bridge used by `duc/mp-worktree-create' to resolve GUS refs."
+  :type 'string :group 'duc)
+
+(defcustom duc/claude-session-bnote-header "Claude Sessions"
+  "Toplevel Org heading (sans stars) under which `duc/mp-worktree-create'
+appends a Claude-session drawer in today's bnote.  Created if absent." )
+
+;;; naming helpers (kept byte-compatible with the Python script) ----------
+
+(defun duc/mp-worktree--slugify (text)
+  "Lowercase TEXT, collapse non-alphanumerics to single hyphens, trim hyphens."
+  (let ((s (replace-regexp-in-string
+            "[^a-zA-Z0-9]+" "-" (downcase (string-trim (or text ""))))))
+    (string-trim s "-+" "-+")))
+
+(defun duc/mp-worktree--wdigits (wnum)
+  "Return the first run of digits in WNUM, or an empty string."
+  (if (and wnum (string-match "[0-9]+" wnum)) (match-string 0 wnum) ""))
+
+(defun duc/mp-worktree--clean-subject (subject)
+  "Tab-title subject: drop a leading `@?W-1234:'/`W-1234 -' prefix and unwrap a
+leading `[Bracket]' to bare text.  Case is preserved."
+  (let ((s (string-trim (or subject ""))))
+    (setq s (replace-regexp-in-string
+             "\\`@?[wW]-[0-9]+[[:space:]]*[:-]?[[:space:]]*" "" s))
+    (string-trim
+     (replace-regexp-in-string "\\`\\[\\([^]]+\\)\\][[:space:]]*" "\\1 " s))))
+
+(defun duc/mp-worktree--git (repo &rest args)
+  "Run `git -C REPO ARGS…' synchronously, returning (EXIT-CODE . TRIMMED-OUTPUT).
+Used only for fast, local metadata reads (branch existence, remote URL); the
+slow, network-bound steps (fetch, worktree add) go through
+`duc/mp-worktree--run-async' so they never block Emacs's UI thread."
+  (with-temp-buffer
+    (let ((code (apply #'call-process "git" nil t nil "-C" repo args)))
+      (cons code (string-trim (buffer-string))))))
+
+(defun duc/mp-worktree--run-async (name command callback)
+  "Run COMMAND (a program+args list) asynchronously, then call CALLBACK.
+CALLBACK receives (EXIT-CODE TRIMMED-OUTPUT) once the process exits.  NAME
+labels the process/buffer.  stdout and stderr are merged.  This is the
+non-blocking counterpart to `call-process' — the whole `duc/mp-worktree-create'
+flow is a chain of these so the Emacs UI stays responsive (see
+https://nullprogram.com/blog/2019/03/10/)."
+  (let ((buffer (generate-new-buffer (format " *%s*" name))))
+    (make-process
+     :name name
+     :buffer buffer
+     :command command
+     :connection-type 'pipe
+     :noquery t
+     :stderr buffer
+     :sentinel
+     (lambda (proc _event)
+       (when (memq (process-status proc) '(exit signal))
+         (let ((code (process-exit-status proc))
+               (output (with-current-buffer (process-buffer proc)
+                         (string-trim (buffer-string)))))
+           (kill-buffer (process-buffer proc))
+           (funcall callback code output)))))))
+
+;;; GUS reference resolution (via gus-query.py) ----------
+
+(defun duc/mp-worktree--normalize-ref (raw)
+  "Turn any accepted GUS ref form in RAW into something gus-query.py classifies.
+W-forms collapse to `W-<digits>'; URLs and record ids pass through; nil if empty."
+  (let ((r (replace-regexp-in-string "\\`@+" "" (string-trim (or raw "")))))
+    (cond
+     ((string-empty-p r) nil)
+     ((or (string-match-p "ADM_Work__c/" r)
+          (string-prefix-p "http" (downcase r)))
+      r)
+     ((string-match "\\`[wW]-?\\([0-9]+\\)\\'" r) (concat "W-" (match-string 1 r)))
+     ((string-match-p "\\`[0-9]+\\'" r) (concat "W-" r))
+     (t r))))
+
+(defun duc/mp-worktree--fail (fmt &rest args)
+  "Report a `duc/mp-worktree-create' failure and abort the async chain.
+Emits a message (chain continuations simply stop calling forward), returning
+nil so a sentinel can `(unless …)'-guard on it."
+  (message "%s" (apply #'format fmt args))
+  nil)
+
+(defun duc/mp-worktree--resolve-gus (raw callback)
+  "Resolve GUS ref RAW to (DIGITS NAME SUBJECT), then call CALLBACK with them.
+Runs gus-query.py asynchronously so the UI never blocks.  On any failure —
+including a browser-requiring reauth (never auto-run) — reports it via
+`duc/mp-worktree--fail' and does not call CALLBACK.  Synchronous, instant
+validation (ref shape, script presence) still signals a `user-error'."
+  (let ((ref (duc/mp-worktree--normalize-ref raw))
+        (script (expand-file-name duc/mp-worktree-gus-query-script)))
+    (unless ref
+      (user-error "mp-worktree-create: could not make sense of GUS ref %S" raw))
+    (unless (file-exists-p script)
+      (user-error "mp-worktree-create: gus-query.py not found: %s" script))
+    (message "mp-worktree-create: resolving GUS %s…" ref)
+    (duc/mp-worktree--run-async
+     "mp-worktree-gus" (list "python3" script ref)
+     (lambda (code output)
+       (let ((payload (condition-case nil
+                          (json-parse-string output :object-type 'alist
+                                              :array-type 'list :null-object nil)
+                        (error nil))))
+         (cond
+          ((or (string-match-p "REAUTH_NEEDED" output)
+               (eq t (and payload (alist-get 'reauth_needed payload))))
+           (duc/mp-worktree--fail "mp-worktree-create: GUS needs re-authentication (a browser step, not auto-run).  Run `dx auth login' (or the gus-query reauth_cmd) then retry"))
+          ((not (and payload (alist-get 'records payload)))
+           (duc/mp-worktree--fail "mp-worktree-create: GUS lookup failed for %S%s" ref
+                                  (if (zerop code) "" (format " (python3 exit %d)" code))))
+          (t
+           (let* ((rec (car (alist-get 'records payload)))
+                  (name (or (alist-get 'Name rec) ref))
+                  (subject (or (alist-get 'Subject__c rec) "")))
+             (funcall callback (duc/mp-worktree--wdigits name) name subject)))))))))
+
+;;; PR reference resolution (review command, via gh) ----------
+
+(defun duc/mp-worktree--looks-like-gus-ref (raw)
+  "Non-nil when RAW is unmistakably a GUS ref (rejected for the review command)."
+  (let ((r (replace-regexp-in-string "\\`@+" "" (string-trim (or raw "")))))
+    (or (string-match-p "\\`[wW]-?[0-9]+\\'" r)
+        (string-match-p "gus\\.lightning" (downcase r))
+        (string-match-p "ADM_Work__c" r)
+        (string-match-p "\\`[a-zA-Z0-9]\\{15\\}\\'" r)
+        (string-match-p "\\`[a-zA-Z0-9]\\{18\\}\\'" r))))
+
+(defun duc/mp-worktree--normalize-pr-ref (raw)
+  "Extract a PR number (as a string) from RAW: a pull URL or 273/PR#273/#273/…."
+  (let ((r (string-trim (or raw ""))))
+    (cond
+     ((string-empty-p r) nil)
+     ((string-match "/pull/\\([0-9]+\\)" r) (match-string 1 r))
+     ((string-match "\\`\\(?:[pP][rR]\\)?[#-]?\\([0-9]+\\)\\'" r) (match-string 1 r))
+     (t nil))))
+
+(defun duc/mp-worktree--repo-slug (repo)
+  "owner/name for REPO's origin remote, so `gh -R' works regardless of cwd."
+  (let ((url (cdr (duc/mp-worktree--git repo "remote" "get-url" "origin"))))
+    (when (string-match "github\\.com[:/]\\([^/]+/[^/]+?\\)\\(?:\\.git\\)?\\'" url)
+      (match-string 1 url))))
+
+(defun duc/mp-worktree--resolve-pr (repo raw callback)
+  "Resolve PR ref RAW to (NUM TITLE HEAD-OID), then call CALLBACK with them.
+Runs `gh pr view' asynchronously so the UI never blocks; reports failures via
+`duc/mp-worktree--fail' without calling CALLBACK.  Synchronous, instant
+validation (GUS-ref rejection, ref shape) still signals a `user-error'."
+  (when (duc/mp-worktree--looks-like-gus-ref raw)
+    (user-error "mp-worktree-create: `review' takes a PR reference, not a GUS ref (%s).  Use implement/qa/other for a GUS story, or pass a PR (273 | PR#273 | a pull URL)" raw))
+  (let ((num (duc/mp-worktree--normalize-pr-ref raw)))
+    (unless num
+      (user-error "mp-worktree-create: could not make sense of PR ref %S (want 273 | PR#273 | PR-273 | a github pull URL)" raw))
+    (let ((args (append (list "gh" "pr" "view" num)
+                        (let ((slug (duc/mp-worktree--repo-slug repo)))
+                          (when slug (list "-R" slug)))
+                        (list "--json" "number,title,headRefOid,url"))))
+      (message "mp-worktree-create: resolving PR #%s…" num)
+      (duc/mp-worktree--run-async
+       "mp-worktree-gh" args
+       (lambda (code output)
+         (cond
+          ((not (zerop code))
+           (duc/mp-worktree--fail "mp-worktree-create: `gh pr view %s' failed:\n%s" num output))
+          (t
+           (let ((data (condition-case nil
+                           (json-parse-string output :object-type 'alist
+                                               :null-object nil)
+                         (error nil))))
+             (if (not data)
+                 (duc/mp-worktree--fail "mp-worktree-create: gh returned unparseable output")
+               (funcall callback
+                        (let ((n (alist-get 'number data)))
+                          (if n (number-to-string n) num))
+                        (or (alist-get 'title data) "")
+                        (or (alist-get 'headRefOid data) "")))))))))))
+
+;;; worktree / branch bookkeeping ----------
+
+(defun duc/mp-worktree--local-branch-exists-p (repo name)
+  (zerop (car (duc/mp-worktree--git
+               repo "rev-parse" "--verify" "--quiet"
+               (concat "refs/heads/" name)))))
+
+(defun duc/mp-worktree--remote-branch-exists-p (repo name)
+  (zerop (car (duc/mp-worktree--git
+               repo "rev-parse" "--verify" "--quiet"
+               (concat "refs/remotes/origin/" name)))))
+
+(defun duc/mp-worktree--unique-names (repo base-dir base-branch)
+  "Append -2, -3, … to BASE-DIR/BASE-BRANCH until both path and branch are free.
+Returns (PATH . BRANCH)."
+  (let ((path base-dir) (branch base-branch) (n 2))
+    (while (or (file-exists-p path)
+               (duc/mp-worktree--local-branch-exists-p repo branch)
+               (duc/mp-worktree--remote-branch-exists-p repo branch))
+      (setq path (format "%s-%d" base-dir n)
+            branch (format "%s-%d" base-branch n)
+            n (1+ n)))
+    (cons path branch)))
+
+(defun duc/mp-worktree--primary-node-modules (repo)
+  "node_modules of the main checkout — the APFS-clone source for cow mode, or nil."
+  (let ((nm (expand-file-name "node_modules" repo)))
+    (and (file-directory-p nm) nm)))
+
+(defun duc/mp-worktree--default-prompt (command work subject base source nm-mode)
+  "The claude prompt used when --prompt isn't given (the session-handoff skill)."
+  (concat "/mp-worktree-create-session-handoff "
+          (mapconcat
+           #'identity
+           (list (format "work=%s" (or work "none"))
+                 (format "subject=%s"
+                         (let ((c (duc/mp-worktree--clean-subject subject)))
+                           (if (string-empty-p c) "(none)" c)))
+                 (format "base=%s" base)
+                 (format "source=%s" source)
+                 (format "command=%s" command)
+                 (format "nodeModules=%s (already set up)" nm-mode))
+           " | ")))
+
+(defun duc/mp-worktree--parse-args (tokens)
+  "Parse TOKENS (shell-split CLI args) into a plist.
+Keys :command :ref :nm-mode :prompt :repo :user :dry-run.  `implement' is the
+implied default command; review/qa/other must be typed."
+  (let ((command "implement") (positionals '())
+        (nm-mode "cow") (prompt nil) (repo nil) (user nil) (dry-run nil))
+    (cl-labels ((need (val flag) (or val (user-error "mp-worktree-create: %s needs a value" flag)))
+                (as-mode (m) (if (member m '("cow" "clean")) m
+                               (user-error "mp-worktree-create: --node-modules-dir-mode must be cow or clean"))))
+      (while tokens
+        (let ((tok (pop tokens)))
+          (cond
+           ((string= tok "--node-modules-dir-mode")
+            (setq nm-mode (as-mode (need (pop tokens) tok))))
+           ((string-prefix-p "--node-modules-dir-mode=" tok)
+            (setq nm-mode (as-mode (substring tok (length "--node-modules-dir-mode=")))))
+           ((string= tok "--prompt") (setq prompt (need (pop tokens) tok)))
+           ((string-prefix-p "--prompt=" tok) (setq prompt (substring tok (length "--prompt="))))
+           ((string= tok "--repo") (setq repo (need (pop tokens) tok)))
+           ((string-prefix-p "--repo=" tok) (setq repo (substring tok (length "--repo="))))
+           ((string= tok "--user") (setq user (need (pop tokens) tok)))
+           ((string-prefix-p "--user=" tok) (setq user (substring tok (length "--user="))))
+           ((string= tok "--dry-run") (setq dry-run t))
+           ((string-prefix-p "-" tok) (user-error "mp-worktree-create: unknown option %s" tok))
+           (t (push tok positionals))))))
+    (setq positionals (nreverse positionals))
+    (when (and positionals (member (car positionals) '("implement" "review" "qa" "other")))
+      (setq command (pop positionals)))
+    (let ((ref (and positionals (pop positionals))))
+      (when positionals
+        (user-error "mp-worktree-create: unexpected extra arguments: %s"
+                    (string-join positionals " ")))
+      (list :command command :ref ref :nm-mode nm-mode :prompt prompt
+            :repo repo :user user :dry-run dry-run))))
+
+(defun duc/mp-worktree--session-names (tab-title)
+  "Derive (HEADING . TITLE) for a Claude-session drawer from the script's TAB-TITLE.
+The script formats its tab title as `W<digits> <description>' (or
+`PR<num> <description>', or `W? <slug>' for an ad-hoc worktree).  Returns:
+
+  HEADING  the `**' text — `Session [[W:<digits>]] <description>' when there is a
+           W-number, else `Session [[PR:<num>]] …' / `Session <description>'.
+  TITLE    the CLAUDE_SESSION_ID drawer name — `@W-<digits> <description>' (the
+           GUS `@W-' form) when there is a W-number, else the tab title verbatim."
+  (cond
+   ((string-match "\\`W\\([0-9]+\\)[ \t]*\\(.*\\)\\'" tab-title)
+    (let ((digits (match-string 1 tab-title))
+          (desc (string-trim (match-string 2 tab-title))))
+      (cons (format "Session [[W:%s]]%s" digits
+                    (if (string-empty-p desc) "" (concat " " desc)))
+            (format "@W-%s%s" digits
+                    (if (string-empty-p desc) "" (concat " " desc))))))
+   ((string-match "\\`PR\\([0-9]+\\)[ \t]*\\(.*\\)\\'" tab-title)
+    (let ((num (match-string 1 tab-title))
+          (desc (string-trim (match-string 2 tab-title))))
+      (cons (format "Session [[PR:%s]]%s" num
+                    (if (string-empty-p desc) "" (concat " " desc)))
+            tab-title)))
+   (t
+    ;; No W#/PR# (e.g. `W? other 20260716…'): keep the tab title for both.
+    (cons (format "Session %s" tab-title) tab-title))))
+
+(defun duc/claude--find-session-heading (session-id)
+  "Return a marker at the current bnote's `**' session entry for SESSION-ID, or nil.
+Searches under the `duc/claude-session-bnote-header' toplevel header for a
+level-2 heading whose CLAUDE_SESSION_ID property equals SESSION-ID (a session's
+identity).  The current buffer must be today's bnote (an Org buffer)."
+  (save-excursion
+    (goto-char (point-min))
+    (when (re-search-forward (concat "^\\* "
+                                     (regexp-quote duc/claude-session-bnote-header)
+                                     "[ \t]*$")
+                             nil t)
+      (let ((end (save-excursion (beginning-of-line) (org-end-of-subtree t) (point)))
+            found)
+        (while (and (not found) (re-search-forward "^\\*\\* " end t))
+          (when (equal (org-entry-get (point) "CLAUDE_SESSION_ID") session-id)
+            (setq found (point-marker))))
+        found))))
+
+(defun duc/claude--append-session-drawer (heading properties)
+  "Upsert a Claude-session drawer into today's bnote and return its buffer.
+HEADING is the `**' heading text.  PROPERTIES is an alist of (KEY . VALUE)
+string pairs; pairs whose VALUE is nil or blank are skipped.
+
+When today's bnote already has a level-2 entry (under the toplevel
+`duc/claude-session-bnote-header' header) whose CLAUDE_SESSION_ID property
+matches the one in PROPERTIES, that entry is updated in place — its heading
+refreshed and its properties set — so re-creating a session (same id) doesn't
+duplicate its drawer.
+Otherwise a new entry is appended under the header (created if absent), after
+any existing content, with one blank line on each side.  Point is left on the
+entry heading and the buffer is saved."
+  ;; Ensure today's bnote exists and is the current buffer.
+  (duc/create-or-open-bnote-type "bnote")
+  (let* ((session-id (cdr (assoc "CLAUDE_SESSION_ID" properties)))
+         (existing (and (duc/claude--nonempty session-id)
+                        (duc/claude--find-session-heading session-id)))
+         (live (seq-filter (lambda (kv)
+                             (let ((v (cdr kv)))
+                               (and (stringp v) (not (string-blank-p v)))))
+                           properties)))
+    (if existing
+        ;; Update in place: refresh the heading text and (re)set each property.
+        (progn
+          (goto-char existing)
+          (org-back-to-heading t)
+          (org-edit-headline heading)
+          (dolist (kv live)
+            (org-entry-put (point) (car kv) (cdr kv)))
+          (goto-char existing))
+      (goto-char (point-min))
+      (if (re-search-forward (concat "^\\* "
+                                     (regexp-quote duc/claude-session-bnote-header)
+                                     "[ \t]*$")
+                             nil t)
+          ;; Land at the end of the existing subtree's real content (before the
+          ;; blank lines / next top-level header).
+          (progn (beginning-of-line) (org-end-of-subtree t))
+        ;; No header yet: start one at EOB, separated from any prior content.
+        (goto-char (point-max))
+        (skip-chars-backward " \t\n")
+        (delete-region (point) (point-max))
+        (unless (bobp) (insert "\n\n"))
+        (insert "* " duc/claude-session-bnote-header))
+      (skip-chars-backward " \t\n")
+      (let* ((prop-lines
+              (mapconcat (lambda (kv) (format ":%s: %s\n" (car kv) (cdr kv)))
+                         live ""))
+             (entry (concat "** " heading "\n:PROPERTIES:\n" prop-lines ":END:\n")))
+        (insert "\n\n" entry)
+        ;; Collapse any leftover whitespace and leave exactly one blank line
+        ;; before a following heading (or nothing at EOB).
+        (let ((entry-start (- (point) (length entry))))
+          (when (looking-at "[ \t\n]+")
+            (replace-match ""))
+          (unless (eobp) (insert "\n"))
+          (goto-char entry-start)))))
+  (save-buffer)
+  (current-buffer))
+
+(defun duc/mp-worktree--log-session (tab-title worktree branch command session-id)
+  "Append a Claude-session drawer for a freshly created worktree.
+TAB-TITLE is the `W<digits> …' / `PR<num> …' tab title; WORKTREE the worktree
+directory; BRANCH its branch (nil = detached); COMMAND the run command; and
+SESSION-ID the pinned CLAUDE_SESSION_ID.  Opens today's bnote and inserts a
+`**' entry under `duc/claude-session-bnote-header'.  Returns the drawer TITLE."
+  (let* ((names (duc/mp-worktree--session-names tab-title))
+         (heading (car names))
+         (title (cdr names)))
+    (duc/claude--append-session-drawer
+     heading
+     (list (cons "TITLE" title)
+           (cons "CLAUDE_SESSION_ID" session-id)
+           (cons "WORKING_DIRECTORY" (abbreviate-file-name worktree))
+           (cons "BRANCH" (or branch "(detached HEAD)"))
+           (cons "COMMAND" command)
+           (cons "CREATED" (format-time-string "[%Y-%m-%d %a %H:%M]"))))
+    (message "mp-worktree-create: logged Claude session %S" title)
+    title))
+
+(defun duc/mp-worktree-create (args-string)
+  "Create a mobile-phoenix worktree and open a ghostel + tmux `claude' session.
+ARGS-STRING is parsed like the mp-worktree-create.py CLI it ports:
+
+  [command] [ref] [--node-modules-dir-mode cow|clean] [--prompt STR]
+                  [--repo DIR] [--user NAME] [--dry-run]
+
+COMMAND is implement (default, may be omitted) | review | qa | other.  For
+implement/qa/other a new branch is cut off freshly-fetched origin/main (REF, if
+given, is a GUS work-item resolved via gus-query.py for naming + subject).  For
+review a detached-HEAD worktree is checked out on an existing PR head (REF is a
+required PR reference, resolved via `gh'; a GUS ref here is an error).
+
+node_modules is cloned copy-on-write from the main checkout (cow, the default)
+or installed fresh (clean).  The tmux session runs `yarn install' then drops
+into `claude', and a Claude-session drawer is appended under the toplevel
+`* Claude Sessions' header in today's bnote — ready for `duc/eval-dwim' /
+`duc/claude-open-or-create-terminal-session' to drive or resume.
+
+Examples: \"implement W-22371650\", \"W-22371650\", \"review 273\",
+\"implement W-22371650 --node-modules-dir-mode clean --prompt fix-reducer\"."
+  (interactive (list (read-string "mp-worktree-create " "implement ")))
+  (require 'org-id)
+  (let* ((opts (duc/mp-worktree--parse-args (split-string-shell-command args-string)))
+         (command (plist-get opts :command))
+         (ref (plist-get opts :ref))
+         (repo (expand-file-name (or (plist-get opts :repo) duc/mp-worktree-repo)))
+         (tb (expand-file-name duc/mp-worktree-tb-dir))
+         (user (or (plist-get opts :user) (getenv "USER") "dev")))
+    (unless (or (file-directory-p (expand-file-name ".git" repo))
+                (file-exists-p (expand-file-name ".git" repo)))
+      (user-error "mp-worktree-create: %s is not a git checkout (pass --repo)" repo))
+    ;; 1) Resolve the ref (async for review/GUS) and decide the worktree shape,
+    ;;    then hand a `shape' plist to `duc/mp-worktree--proceed', which drives
+    ;;    the fetch → worktree add → node_modules → launch chain.  Everything
+    ;;    slow runs through `make-process', so the UI never blocks.
+    (cond
+     ((string= command "review")
+      (unless ref
+        (user-error "mp-worktree-create: `review' requires a PR reference (273 | PR#273 | PR-273 | a github pull URL)"))
+      (duc/mp-worktree--resolve-pr
+       repo ref
+       (lambda (num title-text head-oid)
+         (let* ((slug (let ((s (duc/mp-worktree--slugify
+                                (duc/mp-worktree--clean-subject title-text))))
+                        (if (string-empty-p s) (format "pr-%s" num) s)))
+                (raw-name (format "mp-pr-%s-%s" num slug)))
+           (duc/mp-worktree--proceed
+            opts repo
+            (list :command command :subject title-text :slug slug
+                  ;; Cap the whole basename at 20 chars; trim a dangling hyphen.
+                  :base-dir (expand-file-name
+                             (string-trim-right
+                              (substring raw-name 0 (min 20 (length raw-name))) "-+")
+                             tb)
+                  :base-branch nil
+                  :base-ref (if (string-empty-p head-oid) (format "PR #%s" num) head-oid)
+                  :source-desc (format "PR #%s" num)
+                  :work-tag (format "PR-%s" num)
+                  :tab-head (format "PR%s" num)
+                  :pr-num num))))))
+     (ref
+      (duc/mp-worktree--resolve-gus
+       ref
+       (lambda (d name subj)
+         (let ((slug (let ((s (duc/mp-worktree--slugify subj)))
+                       (if (string-empty-p s) (format "w-%s" d) s))))
+           (duc/mp-worktree--proceed
+            opts repo
+            (list :command command :subject subj :slug slug
+                  :base-dir (expand-file-name (format "mp-w-%s-%s" d slug) tb)
+                  :base-branch (format "dev/%s/w-%s-%s" user d slug)
+                  :base-ref "origin/main"
+                  :source-desc name
+                  :work-tag (format "W-%s" d)
+                  :tab-head (format "W%s" d)
+                  :pr-num nil))))))
+     (t
+      ;; No story: name the ad-hoc worktree after the command + a timestamp.
+      (let ((slug (format "%s-%s" command (format-time-string "%Y%m%d-%H%M%S"))))
+        (duc/mp-worktree--proceed
+         opts repo
+         (list :command command :subject "" :slug slug
+               :base-dir (expand-file-name (format "mp-%s" slug) tb)
+               :base-branch (format "dev/%s/%s" user slug)
+               :base-ref "origin/main"
+               :source-desc "(ad-hoc, no GUS ref)"
+               :work-tag "none"
+               :tab-head "W?"
+               :pr-num nil)))))))
+
+(defun duc/mp-worktree--proceed (opts repo shape)
+  "Fetch, add the worktree, clone node_modules, and launch — all async.
+OPTS is the parsed option plist; REPO the main checkout; SHAPE the resolved
+worktree plist built by `duc/mp-worktree-create' (:command :subject :slug
+:base-dir :base-branch :base-ref :source-desc :work-tag :tab-head :pr-num).
+Each slow step runs via `duc/mp-worktree--run-async'; a failing step reports
+and stops the chain without blocking Emacs."
+  (let* ((command (plist-get shape :command))
+         (reviewp (string= command "review"))
+         (dry-run (plist-get opts :dry-run))
+         (nm-mode (plist-get opts :nm-mode))
+         (base-dir (plist-get shape :base-dir))
+         (base-branch (plist-get shape :base-branch))
+         (base-ref (plist-get shape :base-ref))
+         (subject (plist-get shape :subject))
+         (slug (plist-get shape :slug))
+         (pr-num (plist-get shape :pr-num))
+         ;; Collision-free names (review only collides on the directory).
+         (names (duc/mp-worktree--unique-names
+                 repo base-dir (if reviewp (concat "__detached__" slug) base-branch)))
+         (path (car names))
+         (branch (unless reviewp (cdr names)))
+         (clean-subj (duc/mp-worktree--clean-subject subject))
+         (title (string-trim
+                 (format "%s %s" (plist-get shape :tab-head)
+                         (if (string-empty-p clean-subj)
+                             (replace-regexp-in-string "-" " " slug)
+                           clean-subj))))
+         ;; node_modules: cow clones from the main checkout, else clean.
+         (src-nm (duc/mp-worktree--primary-node-modules repo))
+         (effective-nm (if (and (string= nm-mode "cow") (not src-nm)) "clean" nm-mode))
+         (yarn-cmd (if (string= effective-nm "cow")
+                       "yarn install --check-files" "yarn install"))
+         (prompt (or (plist-get opts :prompt)
+                     (duc/mp-worktree--default-prompt
+                      command (plist-get shape :work-tag) subject base-ref
+                      (plist-get shape :source-desc) effective-nm)))
+         (session-id (org-id-uuid)))
+    ;; Print the plan (mirrors the script; useful for --dry-run too).
+    (message (concat "mp-worktree-create plan:\n"
+                     (format "  command    : %s\n" command)
+                     (format "  source     : %s\n" (plist-get shape :source-desc))
+                     (unless (string-empty-p subject) (format "  subject    : %s\n" subject))
+                     (format "  base ref   : %s\n" base-ref)
+                     (format "  branch     : %s\n" (or branch "(detached HEAD)"))
+                     (format "  worktree   : %s\n" path)
+                     (format "  node_modules: %s\n" effective-nm)
+                     (format "  tab title  : %s" title)))
+    (when (and (string= nm-mode "cow") (not src-nm))
+      (message "mp-worktree-create: no node_modules in the main checkout — falling back to clean install"))
+    (if dry-run
+        (message "mp-worktree-create: --dry-run, created nothing (would open session %S)" title)
+      ;; The launch step: open the ghostel + tmux session, then log the drawer.
+      (let* ((launch
+             (lambda ()
+               (let* ((inner (format "cd %s && %s && claude --session-id %s %s"
+                                     (shell-quote-argument path) yarn-cmd
+                                     (shell-quote-argument session-id)
+                                     (shell-quote-argument prompt)))
+                      (info (duc/claude--ensure-terminal title session-id nil inner)))
+                 (display-buffer (plist-get info :buffer))
+                 (save-window-excursion
+                   (duc/mp-worktree--log-session title path branch command session-id))
+                 (message "mp-worktree-create: created %s → %s" title path))))
+            ;; node_modules cow clone (cp -Rc), then launch.  When cow doesn't
+            ;; apply, launch straight away — `yarn install' populates it.
+            (clone-then-launch
+             (lambda ()
+               (if (and (string= effective-nm "cow") src-nm)
+                   (progn
+                     (message "mp-worktree-create: cloning node_modules (APFS cow)…")
+                     (duc/mp-worktree--run-async
+                      "mp-worktree-cp"
+                      (list "cp" "-Rc" src-nm (expand-file-name "node_modules" path))
+                      (lambda (code output)
+                        (if (zerop code)
+                            (message "mp-worktree-create: cloned node_modules (APFS cow) from %s" src-nm)
+                          (message "mp-worktree-create: node_modules cow clone failed (%s); `yarn install' will populate it" output))
+                        ;; Launch regardless — a failed clone just means a full install.
+                        (funcall launch))))
+                 (funcall launch)))))
+        ;; Chain: fetch → worktree add → clone → launch.
+        (message "mp-worktree-create: fetching %s…" (if reviewp (format "PR #%s" pr-num) "origin/main"))
+        (duc/mp-worktree--run-async
+         "mp-worktree-fetch"
+         (append (list "git" "-C" repo "fetch" "origin")
+                 (if reviewp (list (format "pull/%s/head" pr-num)) (list "main"))
+                 (list "--quiet"))
+         (lambda (code output)
+           (if (not (zerop code))
+               (duc/mp-worktree--fail "mp-worktree-create: fetch of %s failed:\n%s"
+                                      (if reviewp (format "PR #%s" pr-num) "origin/main") output)
+             (message "mp-worktree-create: adding worktree at %s…" path)
+             (duc/mp-worktree--run-async
+              "mp-worktree-add"
+              (if reviewp
+                  (list "git" "-C" repo "worktree" "add" "--detach" path base-ref)
+                (list "git" "-C" repo "worktree" "add" "-b" branch path base-ref))
+              (lambda (code output)
+                (if (not (zerop code))
+                    (duc/mp-worktree--fail "mp-worktree-create: `git worktree add' failed:\n%s" output)
+                  (funcall clone-then-launch)))))))))))
+
+;;; Discovering and managing Claude Code CLI sessions
+;;
+;; The commands below present the Claude sessions known to Emacs from three
+;; independent sources and let you open, create, and inventory them:
+;;
+;;   1. running tmux sessions      (`ctel …' names — the source of truth for
+;;                                  what's actually alive)
+;;   2. live *ctel …* buffers       (the ghostel terminals showing those sessions)
+;;   3. bnote Claude-session drawers (the persisted TITLE / CLAUDE_SESSION_ID /
+;;                                  WORKING_DIRECTORY / BRANCH metadata)
+;;
+;; A session's identity is its CLAUDE_SESSION_ID; TITLE is an arbitrary label.
+;; The three sources are unioned by the `ctel TITLE <id8>' slug (tmux session
+;; name == ghostel buffer infix == derived from a drawer's TITLE + id).
+
+(defun duc/claude--tmux-sessions ()
+  "List the names of running Claude tmux sessions (the `ctel …' slugs).
+Non-Claude tmux sessions are ignored — Claude terminals are namespaced with the
+`ctel ' prefix by `duc/claude--session-slug'."
+  (when (executable-find "tmux")
+    (with-temp-buffer
+      (when (zerop (call-process "tmux" nil t nil
+                                 "list-sessions" "-F" "#{session_name}"))
+        (seq-filter (lambda (name) (string-prefix-p "ctel " name))
+                    (split-string (buffer-string) "\n" t))))))
+
+(defun duc/claude--terminal-buffers ()
+  "Return an alist of (SLUG . BUFFER) for live `*ctel …*' ghostel buffers.
+SLUG is the `ctel TITLE <id8>' tmux session name (also the buffer infix)."
+  (let (result)
+    (dolist (buf (buffer-list))
+      (let ((name (buffer-name buf)))
+        (when (and name (string-match "\\`\\*\\(ctel .*\\)\\*\\'" name))
+          (push (cons (match-string 1 name) buf) result))))
+    (nreverse result)))
+
+(defun duc/claude--bnote-files ()
+  "List all bnote Org files, if the bnote directory exists."
+  (when (file-directory-p duc/create-bnote-default-dir)
+    (directory-files duc/create-bnote-default-dir t "\\`bnote-[0-9]+\\.org\\'")))
+
+(defun duc/claude--scan-bnote-file (file)
+  "Return the Claude-session drawers parsed from bnote FILE as a list of plists.
+Each plist has :title :session-id :working-directory :branch :command :created
+:heading :file :position (the char position of the heading, valid in the saved
+file since the parse buffer shares its contents)."
+  (let (sessions)
+    (with-temp-buffer
+      (insert-file-contents file)
+      (delay-mode-hooks (org-mode))
+      (org-map-entries
+       (lambda ()
+         (let ((title (org-entry-get nil "TITLE")))
+           (when (duc/claude--nonempty title)
+             (push (list :title (string-trim title)
+                         :session-id (org-entry-get nil "CLAUDE_SESSION_ID")
+                         :working-directory (org-entry-get nil "WORKING_DIRECTORY")
+                         :branch (org-entry-get nil "BRANCH")
+                         :command (org-entry-get nil "COMMAND")
+                         :created (org-entry-get nil "CREATED")
+                         :heading (org-get-heading t t t t)
+                         :file file
+                         :position (point))
+                   sessions))))
+       t))
+    (nreverse sessions)))
+
+(defun duc/claude--all-bnote-sessions ()
+  "Scan every bnote file for Claude-session drawers.
+Return a hash table mapping CLAUDE_SESSION_ID to its newest drawer plist (later
+files win).  Drawers lacking a CLAUDE_SESSION_ID are skipped — the id is a
+session's identity."
+  (let ((table (make-hash-table :test 'equal)))
+    (dolist (file (sort (copy-sequence (duc/claude--bnote-files)) #'string<))
+      (when (file-readable-p file)
+        (dolist (session (duc/claude--scan-bnote-file file))
+          (let ((id (duc/claude--nonempty (plist-get session :session-id))))
+            (when id (puthash id session table))))))
+    table))
+
+(defun duc/claude--session-completions ()
+  "Return a sorted list of known Claude session labels (`TITLE <id8>').
+Unions bnote drawers, running tmux sessions and live terminal buffers."
+  (sort (mapcar (lambda (row) (plist-get row :label))
+                (duc/claude--collect-sessions))
+        #'string<))
+
+(defun duc/claude--git-branch (dir)
+  "Return the current git branch of DIR, or nil when unavailable."
+  (let ((dir (and dir (expand-file-name dir))))
+    (when (and dir (file-directory-p dir) (executable-find "git"))
+      (with-temp-buffer
+        (let ((default-directory (file-name-as-directory dir)))
+          (when (zerop (call-process "git" nil t nil
+                                     "rev-parse" "--abbrev-ref" "HEAD"))
+            (duc/claude--nonempty (string-trim (buffer-string)))))))))
+
+(defun duc/claude-open-or-create-terminal-session (input)
+  "Open a known Claude session, or start a fresh one titled INPUT.
+Completes over the labels (`TITLE <id8>') of sessions known from running tmux
+sessions, live terminal buffers, and bnote Claude-session drawers.  When INPUT
+matches a known session it is opened — attached if live, else resumed from its
+CLAUDE_SESSION_ID.  Otherwise INPUT is treated as a new arbitrary TITLE and a
+fresh session is started and logged to today's bnote."
+  (interactive (list (completing-read "Claude session (or new title): "
+                                      (duc/claude--session-completions))))
+  (let* ((rows (duc/claude--collect-sessions))
+         (row (seq-find (lambda (r) (equal (plist-get r :label) input)) rows))
+         (session-id (and row (duc/claude--nonempty (plist-get row :session-id)))))
+    (cond
+     ;; Known session with an id: attach-if-live-else-resume, keyed by id.
+     (session-id
+      (duc/claude-resume-session session-id (plist-get row :directory)))
+     ;; Known but idless live session (e.g. resumed from disk, no drawer):
+     ;; reattach by its slug.
+     ((and row (plist-get row :tmux))
+      (pop-to-buffer (plist-get (duc/claude--ensure-terminal-slug
+                                 (plist-get row :slug))
+                                :buffer)))
+     ;; Otherwise treat INPUT as a new title and start a fresh session.
+     (t
+      (let* ((info (duc/claude--ensure-terminal input))
+             (new-id (plist-get info :session-id)))
+        (when new-id
+          (save-window-excursion
+            (duc/claude--append-session-drawer
+             (format "Session %s" (duc/claude--session-label input new-id))
+             (list (cons "TITLE" input)
+                   (cons "CLAUDE_SESSION_ID" new-id)
+                   (cons "CREATED" (format-time-string "[%Y-%m-%d %a %H:%M]"))))))
+        (pop-to-buffer (plist-get info :buffer)))))))
+
+(defun duc/claude--session-id-p (s)
+  "Non-nil when S looks like a Claude session id (a hyphenated UUID)."
+  (and (stringp s)
+       (string-match-p
+        "\\`[0-9a-fA-F]\\{8\\}-[0-9a-fA-F]\\{4\\}-[0-9a-fA-F]\\{4\\}-[0-9a-fA-F]\\{4\\}-[0-9a-fA-F]\\{12\\}\\'"
+        (string-trim s))))
+
+(defun duc/claude--jsonl-cwd (file)
+  "Return the working directory (`cwd') recorded in Claude log FILE, or nil.
+Reads the recorded `cwd' rather than decoding FILE's parent directory name,
+which is lossy (Claude encodes both `/' and `.' as `-').  Only a bounded prefix
+of FILE is read — `cwd' appears on the first message line, near the top."
+  (when (and file (file-readable-p file))
+    (with-temp-buffer
+      (insert-file-contents file nil 0 65536)
+      (goto-char (point-min))
+      (when (re-search-forward
+             "\"cwd\"[[:space:]]*:[[:space:]]*\"\\(\\(?:[^\"\\]\\|\\\\.\\)*\\)\""
+             nil t)
+        (let ((raw (match-string 1)))
+          (setq raw (replace-regexp-in-string "\\\\/" "/" raw))
+          (setq raw (replace-regexp-in-string "\\\\\\\\" "\\\\" raw))
+          (duc/claude--nonempty raw))))))
+
+(defun duc/claude--session-id-file (session-id)
+  "Return the path to SESSION-ID's Claude conversation log, or nil.
+Claude stores each session at
+`duc/claude-projects-directory'/<encoded-cwd>/SESSION-ID.jsonl."
+  (let* ((root (expand-file-name duc/claude-projects-directory))
+         (matches (and (file-directory-p root)
+                       (file-expand-wildcards
+                        (expand-file-name (concat "*/" session-id ".jsonl") root)))))
+    (car matches)))
+
+(defun duc/claude--session-id-directory (session-id)
+  "Return the working directory Claude recorded for SESSION-ID, or nil."
+  (duc/claude--jsonl-cwd (duc/claude--session-id-file session-id)))
+
+(defun duc/claude--project-cwd (project-dir)
+  "Return the `cwd' shared by every session log in encoded PROJECT-DIR.
+All logs in a Claude project directory record the same `cwd', so it is read
+once (from up to a few logs, in case the first is an empty stub) instead of
+per session.  Falls back to a lossy decode of the directory name."
+  (let* ((files (file-expand-wildcards (expand-file-name "*.jsonl" project-dir)))
+         (cwd (seq-some #'duc/claude--jsonl-cwd (seq-take files 3))))
+    (or cwd
+        (replace-regexp-in-string
+         "-" "/" (file-name-nondirectory (directory-file-name project-dir))))))
+
+(defun duc/claude--disk-sessions ()
+  "Return the Claude sessions found on disk as records, newest first.
+Each record is a plist (:id :directory :file :mtime).  Scans
+`duc/claude-projects-directory'; the working directory is resolved once per
+project directory (its sessions all share one cwd)."
+  (let* ((root (expand-file-name duc/claude-projects-directory))
+         (project-dirs (and (file-directory-p root)
+                            (seq-filter #'file-directory-p
+                                        (directory-files root t "\\`[^.]"))))
+         records)
+    (dolist (pd project-dirs)
+      (let ((dir (duc/claude--project-cwd pd)))
+        (dolist (file (file-expand-wildcards (expand-file-name "*.jsonl" pd)))
+          (push (list :id (file-name-base file)
+                      :directory dir
+                      :file file
+                      :mtime (file-attribute-modification-time
+                              (file-attributes file)))
+                records))))
+    (sort records (lambda (a b) (time-less-p (plist-get b :mtime)
+                                             (plist-get a :mtime))))))
+
+(defun duc/claude--session-candidate (record)
+  "Format RECORD as an aligned completion line `<working-dir>  <date>  <id>'."
+  (format "%-38s  %s  %s"
+          (let ((d (plist-get record :directory)))
+            (if d (abbreviate-file-name (directory-file-name d)) "—"))
+          (format-time-string "%Y-%m-%d %H:%M" (plist-get record :mtime))
+          (plist-get record :id)))
+
+(defun duc/claude--read-disk-session (prompt)
+  "Completing-read a Claude session from disk; return (SESSION-ID . DIRECTORY).
+Completes over the sessions under `duc/claude-projects-directory' (each shown as
+`<working-dir>  <date>  <id>', newest first); a raw session id may also be typed.
+Signals `user-error' for an unrecognised entry."
+  (let* ((records (duc/claude--disk-sessions))
+         (index (make-hash-table :test 'equal))
+         (cands (mapcar (lambda (r)
+                          (let ((label (duc/claude--session-candidate r)))
+                            (puthash label r index)
+                            label))
+                        records))
+         ;; Keep the newest-first order rather than let completion re-sort.
+         (table (lambda (string pred action)
+                  (if (eq action 'metadata)
+                      '(metadata (category . claude-session)
+                                 (display-sort-function . identity)
+                                 (cycle-sort-function . identity))
+                    (complete-with-action action cands string pred))))
+         (choice (completing-read prompt table nil nil))
+         (record (gethash choice index)))
+    (cond
+     (record (cons (plist-get record :id) (plist-get record :directory)))
+     ((duc/claude--session-id-p choice)
+      (let ((id (string-trim choice)))
+        (cons id (duc/claude--session-id-directory id))))
+     (t (user-error "Not a known Claude session or session id: %s" choice)))))
+
+(defun duc/claude-resume-session (session-id &optional directory)
+  "Resume the Claude Code CLI conversation SESSION-ID in DIRECTORY.
+Interactively, completes over the Claude sessions found on disk under
+`duc/claude-projects-directory', each shown as a `<working-dir>  <date>  <id>'
+row — filter by typing part of the working directory (or the date/id).  You may
+also type a raw session id that isn't listed.
+
+DIRECTORY defaults to the working directory recorded for SESSION-ID — from a
+bnote Claude-session drawer if one tracks it, else from the session's on-disk
+log.  The session's TITLE is taken from its drawer, or defaults to DIRECTORY's
+base name; the tmux/buffer name is `ctel TITLE <id8>' (see
+`duc/claude--session-slug'), so re-resuming the same id reattaches rather than
+duplicating.  A live session is reattached; a dead one relaunches via
+`claude --resume' after killing any stale terminal buffer (reattaching to a dead
+terminal would show only its exited output)."
+  (interactive
+   (let ((sel (duc/claude--read-disk-session "Resume Claude session (dir/date/id): ")))
+     (list (car sel) (cdr sel))))
+  (let* ((drawer (gethash session-id (duc/claude--all-bnote-sessions)))
+         (directory (or directory
+                        (duc/claude--nonempty (plist-get drawer :working-directory))
+                        (duc/claude--session-id-directory session-id)))
+         (title (or (duc/claude--nonempty (plist-get drawer :title))
+                    (and directory
+                         (file-name-nondirectory (directory-file-name directory)))
+                    ""))
+         (slug (duc/claude--session-slug title session-id))
+         (live (duc/claude--session-live-p slug)))
+    (unless (or live directory)
+      (user-error "No working directory found for Claude session %s" session-id))
+    ;; A dead session's leftover terminal buffer must go so a fresh
+    ;; `claude --resume' relaunches instead of redisplaying exited output.
+    (unless live
+      (let ((buffer-name (duc/claude--terminal-buffer-name slug)))
+        (when (get-buffer buffer-name)
+          (let ((kill-buffer-query-functions nil))
+            (kill-buffer buffer-name)))))
+    (let ((info (duc/claude--ensure-terminal title session-id directory)))
+      (pop-to-buffer (plist-get info :buffer))
+      (message "%s Claude session %s%s"
+               (if live "Attached to" "Resuming")
+               (duc/claude--session-label title session-id)
+               (if (and (not live) directory)
+                   (format " in %s" (abbreviate-file-name directory))
+                 "")))))
+
+(defun duc/claude--session-context ()
+  "Return (SESSION-ID DIRECTORY TITLE) for the Claude session in context, or nil.
+Recognises a `*ctel …*' ghostel terminal buffer (via the buffer-locals stamped
+by `duc/claude--ensure-terminal') and a line of `duc/claude-sessions-mode' (via
+its row).  Returns nil when neither applies or the row carries no id."
+  (cond
+   ((bound-and-true-p duc/claude--buffer-session-id)
+    (list duc/claude--buffer-session-id
+          duc/claude--buffer-directory
+          duc/claude--buffer-title))
+   ((derived-mode-p 'duc/claude-sessions-mode)
+    (let* ((row (duc/claude--sessions-row-at-point))
+           (id (and row (plist-get row :session-id))))
+      (when id
+        (list id
+              (plist-get row :directory)
+              (plist-get (plist-get row :drawer) :title)))))))
+
+(defun duc/claude-session-add-to-bnote (session-id &optional directory title)
+  "Register the Claude session SESSION-ID in today's bnote, unless already tracked.
+Writes a Claude-session drawer (TITLE / CLAUDE_SESSION_ID / WORKING_DIRECTORY /
+BRANCH / CREATED) under the `duc/claude-session-bnote-header' header, so a session
+that so far exists only on disk becomes tracked — listed by
+`duc/claude-list-all-terminal-sessions' and resumable by id from there.
+
+Invoked from a `*ctel …*' terminal buffer it adds that buffer's session; on a
+line of `duc/claude-sessions-mode' it adds that row's session; elsewhere it
+completes over the on-disk sessions (or a raw id) and prompts for a TITLE.  When
+the session already has a drawer in any bnote it is not duplicated — point jumps
+to the existing entry instead.  TITLE is an arbitrary label (default: DIRECTORY's
+base name)."
+  (interactive
+   (or (duc/claude--session-context)
+       (let* ((sel (duc/claude--read-disk-session
+                    "Add Claude session to bnote (dir/date/id): "))
+              (dir (cdr sel)))
+         (list (car sel) dir
+               (read-string "Session title: "
+                            (and dir (file-name-nondirectory
+                                      (directory-file-name dir))))))))
+  (let ((existing (gethash session-id (duc/claude--all-bnote-sessions))))
+    (if existing
+        ;; Already tracked: don't duplicate — reveal the existing drawer.
+        (progn
+          (find-file (plist-get existing :file))
+          (goto-char (plist-get existing :position))
+          (when (fboundp 'org-fold-show-entry) (org-fold-show-entry))
+          (message "Claude session %s is already in %s"
+                   (duc/claude--session-label
+                    (or (duc/claude--nonempty title) (plist-get existing :title))
+                    session-id)
+                   (abbreviate-file-name (plist-get existing :file))))
+      (let* ((directory (or directory (duc/claude--session-id-directory session-id)))
+             (title (or (duc/claude--nonempty title)
+                        (and directory (file-name-nondirectory
+                                        (directory-file-name directory)))
+                        ""))
+             (file (duc/claude--session-id-file session-id))
+             ;; Date the drawer from the session log's mtime (when it was last
+             ;; active), falling back to now if the log isn't on disk.
+             (created (format-time-string
+                       "[%Y-%m-%d %a %H:%M]"
+                       (and file (file-attribute-modification-time
+                                  (file-attributes file)))))
+             (buffer (duc/claude--append-session-drawer
+                      (format "Session %s" (duc/claude--session-label title session-id))
+                      (list (cons "TITLE" title)
+                            (cons "CLAUDE_SESSION_ID" session-id)
+                            (cons "WORKING_DIRECTORY"
+                                  (and directory (abbreviate-file-name directory)))
+                            (cons "BRANCH" (duc/claude--git-branch directory))
+                            (cons "CREATED" created)))))
+        (pop-to-buffer buffer)
+        (when (fboundp 'org-fold-show-entry) (org-fold-show-entry))
+        (message "Added Claude session %s to %s"
+                 (duc/claude--session-label title session-id)
+                 (abbreviate-file-name (or (buffer-file-name buffer) "bnote")))))))
+
+(defun duc/claude-new-session-at-working-directory (directory &optional title)
+  "Start a fresh Claude Code CLI session in DIRECTORY and log it to today's bnote.
+Prompts for the working directory and a session TITLE (default: the directory's
+base name).  Mints a CLAUDE_SESSION_ID, records a Claude-session drawer (with
+WORKING_DIRECTORY, BRANCH and CREATED) under the toplevel Claude-sessions
+header, and shows the terminal."
+  (interactive
+   (let* ((dir (read-directory-name
+                "Claude session working directory: "
+                (or (and (fboundp 'projectile-project-root)
+                         (ignore-errors (projectile-project-root)))
+                    default-directory)))
+          (default-title (file-name-nondirectory (directory-file-name dir))))
+     (list dir (read-string "Session title: " default-title))))
+  (let* ((directory (expand-file-name directory))
+         (title (or (duc/claude--nonempty title)
+                    (file-name-nondirectory (directory-file-name directory))))
+         (info (duc/claude--ensure-terminal title nil directory))
+         (new-id (plist-get info :session-id))
+         (branch (duc/claude--git-branch directory)))
+    (save-window-excursion
+      (duc/claude--append-session-drawer
+       (format "Session %s" (duc/claude--session-label title new-id))
+       (list (cons "TITLE" title)
+             (cons "CLAUDE_SESSION_ID" new-id)
+             (cons "WORKING_DIRECTORY" (abbreviate-file-name directory))
+             (cons "BRANCH" branch)
+             (cons "CREATED" (format-time-string "[%Y-%m-%d %a %H:%M]")))))
+    (pop-to-buffer (plist-get info :buffer))
+    (message "Started Claude session %s at %s" title
+             (abbreviate-file-name directory))))
+
+;; --- tabulated inventory of all sessions ------------------------------------
+
+(defvar-local duc/claude--session-rows nil
+  "Row plists backing the current *Claude sessions* list buffer.")
+
+(defun duc/claude--collect-sessions ()
+  "Gather every known Claude session as a list of row plists, sorted by label.
+Unions bnote drawers, running tmux sessions and live terminal buffers by their
+`ctel TITLE <id8>' slug (the tmux session name / buffer infix), then annotates
+each with its label, session id, liveness, working directory and git branch."
+  (let* ((drawers (duc/claude--all-bnote-sessions))
+         (tmux (duc/claude--tmux-sessions))
+         (buffers (duc/claude--terminal-buffers))
+         ;; slug -> drawer, computed from each drawer's TITLE + id.
+         (drawer-by-slug (make-hash-table :test 'equal))
+         (slugs (make-hash-table :test 'equal))
+         rows)
+    (maphash (lambda (_id drawer)
+               (let ((slug (duc/claude--session-slug
+                            (plist-get drawer :title)
+                            (plist-get drawer :session-id))))
+                 (puthash slug drawer drawer-by-slug)
+                 (puthash slug t slugs)))
+             drawers)
+    (dolist (name tmux) (puthash name t slugs))
+    (dolist (cell buffers) (puthash (car cell) t slugs))
+    (maphash
+     (lambda (slug _)
+       (let* ((drawer (gethash slug drawer-by-slug))
+              (buffer (cdr (assoc slug buffers)))
+              ;; A live buffer knows its own full id / dir even without a drawer.
+              (session-id (or (duc/claude--nonempty (plist-get drawer :session-id))
+                              (and buffer (buffer-local-value
+                                           'duc/claude--buffer-session-id buffer))))
+              (label (if drawer
+                         (duc/claude--session-label (plist-get drawer :title) session-id)
+                       ;; Orphan slug (no drawer): its label is the slug minus
+                       ;; the `ctel ' prefix.
+                       (string-remove-prefix "ctel " slug)))
+              (dir (or (duc/claude--nonempty (plist-get drawer :working-directory))
+                       (and buffer (duc/claude--nonempty
+                                    (buffer-local-value 'duc/claude--buffer-directory buffer)))
+                       (and buffer (buffer-local-value 'default-directory buffer))))
+              (branch (or (duc/claude--nonempty (plist-get drawer :branch))
+                          (duc/claude--git-branch dir))))
+         (push (list :slug slug
+                     :label label
+                     :session-id session-id
+                     :buffer buffer
+                     :tmux (and (member slug tmux) t)
+                     :directory dir
+                     :branch branch
+                     :drawer drawer)
+               rows)))
+     slugs)
+    (sort rows (lambda (a b) (string< (plist-get a :label)
+                                      (plist-get b :label))))))
+
+(defun duc/claude--sessions-refresh ()
+  "Recompute `tabulated-list-entries' for the *Claude sessions* buffer.
+Each entry is keyed by the session slug so the row commands can recover it."
+  (let ((rows (duc/claude--collect-sessions)))
+    (setq duc/claude--session-rows rows)
+    (setq tabulated-list-entries
+          (mapcar
+           (lambda (row)
+             (list (plist-get row :slug)
+                   (vector
+                    (or (plist-get row :label) "—")
+                    (if (plist-get row :buffer) "yes" "—")
+                    (if (plist-get row :tmux) "run" "—")
+                    (let ((d (plist-get row :directory)))
+                      (if d (abbreviate-file-name (directory-file-name d)) "—"))
+                    (or (plist-get row :branch) "—"))))
+           rows))))
+
+(defvar duc/claude-sessions-mode-map
+  (let ((map (make-sparse-keymap)))
+    (define-key map (kbd "RET") #'duc/claude-sessions-open)
+    (define-key map (kbd "o") #'duc/claude-sessions-open)
+    (define-key map (kbd "r") #'duc/claude-sessions-resume)
+    (define-key map (kbd "a") #'duc/claude-session-add-to-bnote)
+    (define-key map (kbd "j") #'duc/claude-sessions-visit-drawer)
+    (define-key map (kbd "k") #'duc/claude-session-kill-tmux-session)
+    map)
+  "Keymap for `duc/claude-sessions-mode'.")
+
+(define-derived-mode duc/claude-sessions-mode tabulated-list-mode "Claude-Sessions"
+  "Major mode listing all known Claude Code CLI sessions."
+  (setq tabulated-list-format
+        [("Session" 40 t)
+         ("Buf" 4 t)
+         ("tmux" 5 t)
+         ("Dir" 44 t)
+         ("Branch" 26 t)])
+  (setq tabulated-list-padding 1)
+  (setq tabulated-list-sort-key '("Session" . nil))
+  (add-hook 'tabulated-list-revert-hook #'duc/claude--sessions-refresh nil t)
+  (tabulated-list-init-header))
+
+(defun duc/claude--sessions-row-at-point ()
+  "Return the row plist for the session on the current list line, or nil."
+  (let ((slug (tabulated-list-get-id)))
+    (and slug (seq-find (lambda (r) (equal (plist-get r :slug) slug))
+                        duc/claude--session-rows))))
+
+(defun duc/claude-sessions-open ()
+  "Open the Claude session on the current list line (attach if live, else resume)."
+  (interactive)
+  (let* ((row (duc/claude--sessions-row-at-point))
+         (id (and row (plist-get row :session-id))))
+    (cond
+     ((null row) (user-error "No session on this line"))
+     (id (duc/claude-resume-session id (plist-get row :directory)))
+     ((plist-get row :tmux)
+      (pop-to-buffer (plist-get (duc/claude--ensure-terminal-slug
+                                 (plist-get row :slug))
+                                :buffer)))
+     (t (user-error "Session %s has no id to resume and no running tmux session"
+                    (plist-get row :label))))))
+
+(defun duc/claude-sessions-resume ()
+  "Resume the Claude session on the current list line in its working directory."
+  (interactive)
+  (let* ((row (duc/claude--sessions-row-at-point))
+         (id (and row (plist-get row :session-id))))
+    (cond
+     ((null row) (user-error "No session on this line"))
+     (id (duc/claude-resume-session id (plist-get row :directory)))
+     (t (user-error "No CLAUDE_SESSION_ID recorded for %s" (plist-get row :label))))))
+
+(defun duc/claude-sessions-visit-drawer ()
+  "Visit the bnote Claude-session drawer for the session on the current line."
+  (interactive)
+  (let* ((row (duc/claude--sessions-row-at-point))
+         (drawer (plist-get row :drawer)))
+    (if drawer
+        (progn
+          (find-file (plist-get drawer :file))
+          (goto-char (plist-get drawer :position))
+          (when (fboundp 'org-fold-show-entry) (org-fold-show-entry)))
+      (user-error "No bnote drawer for session %s"
+                  (if row (plist-get row :label) "on this line")))))
+
+(defun duc/claude-session-kill-tmux-session ()
+  "Kill the tmux session for the Claude session on the current list line.
+Only for `duc/claude-sessions-mode'.  Prompts for confirmation, then ends the
+`claude' process by killing its tmux session, leaving the ghostel buffer and any
+bnote drawer intact, and refreshes the list so the `tmux' column updates."
+  (interactive)
+  (unless (derived-mode-p 'duc/claude-sessions-mode)
+    (user-error "Not in a Claude sessions list"))
+  (let* ((row (duc/claude--sessions-row-at-point))
+         (slug (and row (plist-get row :slug)))
+         (label (and row (plist-get row :label))))
+    (unless row
+      (user-error "No session on this line"))
+    (unless (duc/claude--session-live-p slug)
+      (user-error "No running tmux session for %s" label))
+    (when (yes-or-no-p (format "Kill tmux session %s (ends its claude process)? "
+                               label))
+      (if (duc/claude--tmux-kill-session slug)
+          (progn
+            (revert-buffer)
+            (message "Killed tmux session %s" label))
+        (message "Failed to kill tmux session %s" label)))))
+
+(defun duc/claude-list-all-terminal-sessions ()
+  "List all Claude Code CLI sessions in a tabulated buffer.
+Columns: session label (`TITLE <id8>'), whether an Emacs terminal buffer exists,
+whether a tmux session is running, working directory, and git branch.  Data is
+unioned from bnote Claude-session drawers, running tmux sessions, and live
+`*ctel …*' buffers.  RET/o opens the session under point (attach if live, else
+resume); `r' resumes it in its working directory; `a' adds it to today's bnote;
+`j' visits its bnote drawer; `k' kills its tmux session; `g' refreshes."
+  (interactive)
+  (let ((buffer (get-buffer-create "*Claude sessions*")))
+    (with-current-buffer buffer
+      (duc/claude-sessions-mode)
+      (duc/claude--sessions-refresh)
+      (tabulated-list-print))
+    (pop-to-buffer buffer)))
 
 (defun duc/add-bnote-with-char (bullet)
   (interactive)

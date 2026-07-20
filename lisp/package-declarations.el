@@ -139,10 +139,11 @@
       ("i" "toggle inline images" org-toggle-inline-images)
       ("n" "narrow" org-narrow-to-subtree)
       ("N" "widen" widen)
-      ("v" "toggle word-wrap" visual-line-mode)
+      ("v" "toggle word-wrap" (lambda () (interactive)
+                                (visual-line-mode 'toggle)))
       ("o" "open link" (lambda () (interactive)
-                         (org-open-at-point)
-                         (balance-windows)))
+                          (org-open-at-point)
+                          (balance-windows)))
       ("w" "log work entry" org-worklog-entry)]])
   (transient-define-prefix transient-org-fc ()
     "org-fc"
@@ -166,18 +167,23 @@
   (setq switch-to-buffer-obey-display-actions t)
 
   :config
-  ;; Set font
-  (set-face-attribute 'default nil
-                      :font (find-font (font-spec :name duc/font-family))
-                      :height duc/font-height
-                      :weight duc/font-weight
-                      :width 'unspecified)
+  ;; Set font. `find-font' returns nil when there is no display (e.g. --batch
+  ;; or daemon startup) or when the font isn't installed; passing :font/:family
+  ;; nil to `set-face-attribute' signals "Invalid font or font-spec" and aborts
+  ;; the rest of this :config block. Guard on the lookup so startup is robust.
+  (when (find-font (font-spec :name duc/font-family))
+    (set-face-attribute 'default nil
+                        :font (find-font (font-spec :name duc/font-family))
+                        :height duc/font-height
+                        :weight duc/font-weight
+                        :width 'unspecified))
 
-  (set-face-attribute 'variable-pitch nil
-                      :family (find-font (font-spec :name duc/font-family-variable-pitch))
-                      :height 'unspecified
-                      :weight 'unspecified
-                      :width 'unspecified)
+  (when (find-font (font-spec :name duc/font-family-variable-pitch))
+    (set-face-attribute 'variable-pitch nil
+                        :family (find-font (font-spec :name duc/font-family-variable-pitch))
+                        :height 'unspecified
+                        :weight 'unspecified
+                        :width 'unspecified))
 
   (with-eval-after-load 'org-faces
     (set-face-attribute 'org-block nil
@@ -205,8 +211,6 @@
   (add-hook 'org-mode-hook
             (lambda ()
               (progn
-                (auto-fill-mode -1)
-                (setq-local truncate-lines nil)
                 (visual-line-mode 1)
                 (company-mode -1))))
 
@@ -407,10 +411,12 @@
       (":" "eval-expresssion (M-:)" eval-expression)
       ("t" "terminal" duc/ivy-terminal)
       ("T" "send to terminal" duc/shell-send-string-to-project-dwim)
+      ("C" "claude" hydra-submenu-claude/body)
       ("u" "package" hydra-submenu-package/body)
       ("A" "anki" hydra-submenu-anki/body)
       ("R" "org-fc" transient-org-fc)
-      ("d" "rpgdm" hydra-rpgdm/body)
+      ("d" "rpgdm" hydra-rpgdm/body
+       :if (lambda () (fboundp 'hydra-rpgdm/body)))
       ]]
     [["More Navigation"
       ("n" "buffer" switch-to-buffer)
@@ -458,6 +464,22 @@
     ("b" duc/eval-buffer "buffer")
     ("p" duc/eval-print-dwim "print")
     ("P" duc/pretty-print-dwim "pretty print"))
+  (defhydra hydra-submenu-claude (:exit t :hint nil)
+    "
+^Claude Code CLI^
+^^^^^^^^----------------------------
+  _w_: new worktree (mp-worktree-create)
+  _d_: new session at directory
+  _o_: open/create session
+  _r_: resume session
+  _a_: add session to bnote
+  _l_: list all sessions "
+    ("w" duc/mp-worktree-create)
+    ("d" duc/claude-new-session-at-working-directory)
+    ("o" duc/claude-open-or-create-terminal-session)
+    ("r" duc/claude-resume-session)
+    ("a" duc/claude-session-add-to-bnote)
+    ("l" duc/claude-list-all-terminal-sessions))
   (defhydra hydra-submenu-help (:exit t :hint nil)
     "
 ^Describe^           ^Info^
@@ -611,13 +633,13 @@ _p_/_a_: push notes         _i_: screenshot
   (setq seoul256-background 256))
 
 (use-package doom-themes
-  :after vterm
+  :after ghostel
   :config
   (defun duc/theme-setup-doom-flatwhite-theme (&rest _)
-    "Tweak vterm display colors for doom-flatwhite"
+    "Tweak ghostel display colors for doom-flatwhite"
     (let ((current-theme (car custom-enabled-themes)))
       (when (eq current-theme 'doom-flatwhite)
-        (set-face-attribute 'vterm-color-black nil
+        (set-face-attribute 'ghostel-color-black nil
                             ;; "Normal" ansi color for foreground black (maybe).
                             :foreground "#7a7a7a"
                             ;; "Bright" ANSI color for foreground black (maybe).
@@ -835,13 +857,15 @@ _p_/_a_: push notes         _i_: screenshot
 (use-package orderless
   :commands (orderless-filter))
 
-;; `flx' is kept as a fallback scorer; the active scorer is the native
-;; `fzf-native' batch path (see below).
+;; `flx' is kept as a pure-elisp fallback scorer; the active scorer is the
+;; native `fzf-native' batch path (see below).
 (use-package flx)
 
 ;; Native fzf batch scorer, vendored fork in `vendor/fzf-native' (on `load-path'
-;; via init.el). `fussy-setup-fzf' points fussy at `fzf-native-score-all'; the
-;; module itself is loaded lazily on first use through `fzf-native-ensure-loaded'.
+;; via init.el). It ships prebuilt dynamic modules under `bin/' — on Apple
+;; Silicon `fzf-native-load-dyn' picks `bin/Darwin/arm64/fzf-native-module.so'.
+;; `fussy-setup-fzf' points fussy at the native `fussy-fzf-score'; the module is
+;; loaded lazily on first completion via `fussy--ensure-fzf-loaded'.
 (use-package fzf-native
   :ensure nil
   :defer t)
@@ -1142,22 +1166,48 @@ while `company-capf' runs."
 ; Fixes issue where loading large json file freezes emacs.
 (setq auto-mode-alist (rassq-delete-all 'javascript-mode auto-mode-alist))
 
-(use-package vterm
+(use-package ghostel
   :if (not (eq system-type 'windows-nt))
   :after general
+  :commands (ghostel ghostel-project)
   :init
-  (defvar vterm-install t)
-  (setq vterm-module-cmake-args "-D USE_SYSTEM_LIBVTERM=no")
-  (setq vterm-kill-buffer-on-exit nil)
-  (setq vterm-max-scrollback 100000)
-  (setq vterm-clear-scrollback-when-clearing t)
+  ;; Unlike vterm, ghostel uses a prebuilt native module rather than a local
+  ;; cmake build. The default `ask' pops an interactive prompt on first launch,
+  ;; which blocks programmatic callers (see `duc/ivy-shell-send-string'); use
+  ;; `download' to fetch the prebuilt binary from GitHub releases silently.
+  (setq ghostel-module-auto-install 'download)
+  (setq ghostel-kill-buffer-on-exit nil)
+  ;; `ghostel-max-scrollback' is in BYTES (vterm's `vterm-max-scrollback' was
+  ;; in lines). ~100MB is a very deep history, comparable to the old
+  ;; 100000-line setting.
+  (setq ghostel-max-scrollback (* 100 1024 1024))
   :config
   (general-define-key
-   :keymaps 'vterm-mode-map
-   "M-<escape>" 'evil-collection-vterm-toggle-send-escape)
+   :keymaps 'ghostel-mode-map
+   "M-k" 'ghostel-clear))
+
+;; Evil integration for ghostel (analog of `evil-collection-vterm'). Ships in
+;; the ghostel repo's `extensions/' dir and is published to MELPA separately.
+(use-package evil-ghostel
+  :after (ghostel evil)
+  :hook (ghostel-mode . evil-ghostel-mode)
+  :custom
+  ;; Route insert-state ESC to evil (insert->normal) by default.  The package
+  ;; default `auto' forwards ESC to the terminal only in alt-screen (DECSET
+  ;; 1049), which is what made ESC feel eaten at a plain prompt.  `evil' is
+  ;; unconditional and predictable; cycle to `terminal' per-buffer with
+  ;; `M-<escape>' when a program (zsh vi-mode, a TUI) needs the raw ESC.
+  (evil-ghostel-escape 'evil)
+  :config
+  ;; Bind the toggle in evil's insert/normal state maps, not `ghostel-mode-map'.
+  ;; ghostel's semi-char *local* map forwards every `M-<key>' to the terminal
+  ;; (via `ghostel--send-event'), shadowing `ghostel-mode-map'.  Evil's state
+  ;; keymaps live in `emulation-mode-map-alists', which outrank the local map,
+  ;; so binding here lets the evil-mode binding win as desired.
   (general-define-key
-   :keymaps 'vterm-mode-map
-   "M-k" 'vterm-clear))
+   :keymaps 'evil-ghostel-mode-map
+   :states '(insert normal)
+   "M-<escape>" 'evil-ghostel-toggle-send-escape))
 
 (use-package tex
   :ensure auctex
