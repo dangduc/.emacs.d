@@ -42,18 +42,40 @@
 (auto-compile-on-load-mode)
 (auto-compile-on-save-mode)
 
+;; Native-compilation warnings.  This config's utility library (`lisp/duc.el')
+;; and some third-party packages call functions from other packages that are
+;; only loaded lazily, so the native compiler emits many "the function ... is
+;; not known to be defined" warnings.  They are false positives — the functions
+;; exist at runtime once their package loads — but pop the *Warnings* buffer on
+;; every recompile.  `silent' still records them in `*Async-native-compile-log*'
+;; for debugging while keeping them out of your face.
+(setq native-comp-async-report-warnings-errors 'silent)
+
 (setq package-enable-at-startup nil)
 
 ;; Package Repositories
+;; NOTE: elpa.gnu.org / elpa.nongnu.org (both 209.51.188.89) are currently
+;; unreachable from some networks (TCP connects but TLS/HTTP data stalls), so
+;; the GNU and NonGNU archives are served via the Tsinghua (Tuna) mirror.
+;; MELPA is reachable directly. Switch these back to the canonical
+;; https://elpa.gnu.org/packages/ and https://elpa.nongnu.org/nongnu/ once
+;; direct connectivity returns.
 (setq package-archives '(("melpa" . "https://melpa.org/packages/")
                          ("melpa-stable" . "https://stable.melpa.org/packages/")
-                         ("gnu" . "https://elpa.gnu.org/packages/")
+                         ("gnu" . "https://mirrors.tuna.tsinghua.edu.cn/elpa/gnu/")
+                         ("nongnu" . "https://mirrors.tuna.tsinghua.edu.cn/elpa/nongnu/")
                          ("org" . "https://orgmode.org/elpa/")))
 
 (setq package-archive-priorities '(("org" . 15)
                                    ("melpa" . 10)
                                    ("melpa-stable" . 5)
-                                   ("gnu" . 1)))
+                                   ("gnu" . 1)
+                                   ("nongnu" . 1)))
+
+;; Emacs 30 ships many packages built-in (transient, compat, etc.). By default
+;; package.el refuses to upgrade built-ins from ELPA, which breaks Magit's
+;; `transient >= 0.13' requirement. Allow built-in packages to be upgraded.
+(setq package-install-upgrade-built-in t)
 
 ;; Activate all packages (in particular autoloads).
 ;; Use `package-quickstart' feature in Emacs 27 so we only need to

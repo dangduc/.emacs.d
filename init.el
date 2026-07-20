@@ -205,81 +205,91 @@
  '(cua-overwrite-cursor-color "#b58900")
  '(cua-read-only-cursor-color "#859900")
  '(custom-safe-themes
-   '("8c6877285c69ee82295d0b58bb50aa9089610d866e30a2efd6a2f16bf3b8c1ed" "12aa998599ee9df2f58daa9a03996ca4a181f025b15e5f3b37ceca3a2d84097f" "78bfb07bb1c709f0c55d7d4cd8926fcb458494eb67cb2cba972eea34b43a628c" "05f77f04b559be365da0ac5c3f1987126d3b9cecac9a4628c058610b376d36e6" "137891cd4d6b8b460e6dd3bcb44c9c2c3ee98215c06e4ec345f966b204553802" "8da0000454ccc7f994ad5adffd88d8627dbd0f8f5bbb52d2169d7b1b10b769c9" "5c9533a3cfb1dfa369b18ef7fe0c1b456d2972b8e1cf4408f50dd200e5b94149" "0742156ef2c8636772ab24205a2f9cf0b102c078a7d2bbeec5bd5ef55f79931f" "957cfd573613e0ee706484b9495feee8c1204cefeb0e0b58a03a585c9d1aceb8" "e2842ca432d7730564299734940566db52135b45f7c9c113fe3a2612ece73ed4" "d849b24d1258c504e41617c43922154ba6a413d61de07446d93fa4fe5cc21ea3" "e27c391095dcee30face81de5c8354afb2fbe69143e1129109a16d17871fc055" default))
+   '("8c6877285c69ee82295d0b58bb50aa9089610d866e30a2efd6a2f16bf3b8c1ed"
+     "12aa998599ee9df2f58daa9a03996ca4a181f025b15e5f3b37ceca3a2d84097f"
+     "78bfb07bb1c709f0c55d7d4cd8926fcb458494eb67cb2cba972eea34b43a628c"
+     "05f77f04b559be365da0ac5c3f1987126d3b9cecac9a4628c058610b376d36e6"
+     "137891cd4d6b8b460e6dd3bcb44c9c2c3ee98215c06e4ec345f966b204553802"
+     "8da0000454ccc7f994ad5adffd88d8627dbd0f8f5bbb52d2169d7b1b10b769c9"
+     "5c9533a3cfb1dfa369b18ef7fe0c1b456d2972b8e1cf4408f50dd200e5b94149"
+     "0742156ef2c8636772ab24205a2f9cf0b102c078a7d2bbeec5bd5ef55f79931f"
+     "957cfd573613e0ee706484b9495feee8c1204cefeb0e0b58a03a585c9d1aceb8"
+     "e2842ca432d7730564299734940566db52135b45f7c9c113fe3a2612ece73ed4"
+     "d849b24d1258c504e41617c43922154ba6a413d61de07446d93fa4fe5cc21ea3"
+     "e27c391095dcee30face81de5c8354afb2fbe69143e1129109a16d17871fc055"
+     default))
  '(elfeed-feeds '("https://unsongbook.com/feed/"))
  '(fci-rule-color "#171717")
  '(highlight-changes-colors '("#d33682" "#6c71c4"))
  '(highlight-symbol-colors
-   '("#3b6b40f432d6" "#07b9463c4d36" "#47a3341e358a" "#1d873c3f56d5" "#2d86441c3361" "#43b7362d3199" "#061d417f59d7"))
+   '("#3b6b40f432d6" "#07b9463c4d36" "#47a3341e358a" "#1d873c3f56d5"
+     "#2d86441c3361" "#43b7362d3199" "#061d417f59d7"))
  '(highlight-symbol-foreground-color "#93a1a1")
  '(highlight-tail-colors
-   '(("#073642" . 0)
-     ("#5b7300" . 20)
-     ("#007d76" . 30)
-     ("#0061a8" . 50)
-     ("#866300" . 60)
-     ("#992700" . 70)
-     ("#a00559" . 85)
+   '(("#073642" . 0) ("#5b7300" . 20) ("#007d76" . 30) ("#0061a8" . 50)
+     ("#866300" . 60) ("#992700" . 70) ("#a00559" . 85)
      ("#073642" . 100)))
  '(hl-bg-colors
-   '("#866300" "#992700" "#a7020a" "#a00559" "#243e9b" "#0061a8" "#007d76" "#5b7300"))
+   '("#866300" "#992700" "#a7020a" "#a00559" "#243e9b" "#0061a8"
+     "#007d76" "#5b7300"))
  '(hl-fg-colors
-   '("#002b36" "#002b36" "#002b36" "#002b36" "#002b36" "#002b36" "#002b36" "#002b36"))
+   '("#002b36" "#002b36" "#002b36" "#002b36" "#002b36" "#002b36"
+     "#002b36" "#002b36"))
  '(hl-paren-colors '("#2aa198" "#b58900" "#268bd2" "#6c71c4" "#859900"))
  '(lin-mode-hooks '(tide-mode-hook elisp-mode))
  '(lsp-ui-doc-border "#93a1a1")
  '(nrepl-message-colors
-   '("#dc322f" "#cb4b16" "#b58900" "#5b7300" "#b3c34d" "#0061a8" "#2aa198" "#d33682" "#6c71c4"))
+   '("#dc322f" "#cb4b16" "#b58900" "#5b7300" "#b3c34d" "#0061a8"
+     "#2aa198" "#d33682" "#6c71c4"))
  '(org-agenda-files '("~/dev/notes/log.org"))
  '(org-babel-load-languages
-   '((emacs-lisp . t)
-     (python . t)
-     (R . t)
-     (ditaa . t)
-     (plantuml . t)))
+   '((emacs-lisp . t) (python . t) (R . t) (ditaa . t) (plantuml . t)))
  '(org-confirm-babel-evaluate nil)
  '(package-selected-packages
-   '(spacegray-theme darkmine-theme oceanic-theme soft-morning-theme grandshell-theme zweilight-theme punpun-theme badger-theme omtose-phellack-theme busybee-theme phoenix-dark-pink-theme phoenix-dark-mono-theme inkpot-theme panda-theme ujelly-theme night-owl-theme gruvbox-theme underwater-theme madhat2r-theme darkburn-theme northcode-theme zerodark-theme nord nord-theme fold-dwim-org origami outshine esh-autosuggest go-mode ibuffer-vc ibuffer-projectile counsel-projectile counsel-tramp doom-modeline jazz-theme jbeans-theme klere-theme kooten-theme lenlen-theme mbo70s-theme melancholy-theme mellow-theme metalheart-theme mustang-theme solarized-theme sunburn-theme blackboard-theme bliss-theme bubbleberry-theme danneskjold-theme firecode-theme farmhouse-theme eziam-theme ibuffer-sidebar seoul257-theme twilight-bright-theme labburn-theme moe-theme borland-blue-theme autumn-light-theme switch-window restclient moom pkg one-themes ones-theme doneburn-theme plain-theme iodine-theme nofrils-acme-theme nofrils-acme groovy-mode gradle-mode rainbow-blocks rainbow-mode challenger-deep-theme kosmos-theme cosmos-theme habamax-theme kaolin-themes swift3-mode nimbus-theme hydandata-light-theme monotropic-theme darkokai-theme cyberpunk-theme objc-font-lock base16-themes base16 swift-mode darktooth-theme kotlin-mode csharp-mode doom hemisu-theme material-theme flatland-theme light-soap-theme yoshi-theme sexy-monochrome-theme paper-theme hc-zenburn-theme sourcerer-theme github-modern-theme green-is-the-new-black-theme greymatters-theme eclipse-theme distinguished-theme dark-mint-theme dakrone-light-theme cherry-blossom-theme atom-one-dark-theme atom-dark-theme ahungry-theme color-theme-approximate graphene-meta-theme spacemacs-theme elogcat which-key plan9-theme tao-theme eink-theme inverse-acme-theme gruber-darker-theme flatui-dark-theme flatui-theme leuven-theme creamsody-theme apropospriate-theme highlight-indent-guides evil-collection anti-zenburn zenburn markdown-mode sublimity-map sublimity diff-hl macrostep zenburn-theme anti-zenburn-theme minimap doom-themes dracula-theme projectile lispyville smartparens diminish evil-magit company multi-term magit all-the-icons-dired dired-sidebar dired-subtree tide web-mode exec-path-from-shell typescript-mode company-mode counsel ivy rainbow-delimiters hydra evil ht log4e dash))
+   '(ag all-the-icons-dired anki-editor catppuccin-theme clojure-mode
+        consult diminish dired-sidebar doom-themes ereader
+        esh-autosuggest evil-collection evil-ghostel
+        exec-path-from-shell flatland-black-theme fussy geiser-mit
+        general ghostel habamax-theme ibuffer-projectile
+        ibuffer-sidebar jq-mode kotlin-mode leetcode lispyville
+        lua-mode macrostep magit marginalia markdown-mode mindre-theme
+        modus-themes orderless org-download org-fc org-ql org-roam-ui
+        osx-dictionary outline-indent pyvenv racket-mode
+        rainbow-delimiters rainbow-mode restclient seoul256-theme
+        smartparens solarized-theme spinner swift-mode tide
+        tree-sitter-langs typescript-mode undo-tree vertico vimrc-mode
+        vscode-icon vterm web-mode yasnippet))
+ '(package-vc-selected-packages
+   '((org-fc :url "https://git.sr.ht/~l3kn/org-fc")
+     (org-roam-ui :url "https://github.com/org-roam/org-roam-ui"
+                  :branch "main")
+     (mindre-theme :url "https://github.com/erikbackman/mindre-theme")
+     (seoul256-theme :url "https://github.com/dangduc/seoul256-emacs")))
  '(pos-tip-background-color "#073642")
  '(pos-tip-foreground-color "#93a1a1")
  '(safe-local-variable-values
-   '((eval progn
-           (require 'rpgdm-ironsworn)
-           (rpgdm-mode))
-     (flycheck-cppcheck-standards . "c11")
-     (eval visual-line-mode t)
-     (eval auto-fill-mode nil)
-     (eval lsp)
+   '((eval progn (require 'rpgdm-ironsworn) (rpgdm-mode))
+     (flycheck-cppcheck-standards . "c11") (eval visual-line-mode t)
+     (eval auto-fill-mode nil) (eval lsp)
      (eval set
            (make-local-variable 'lsp-python-ms-python-executable-cmd)
-           (concat
-            (projectile-project-root)
-            ".venv/bin/python"))))
+           (concat (projectile-project-root) ".venv/bin/python"))))
  '(smartrep-mode-line-active-bg (solarized-color-blend "#859900" "#073642" 0.2))
  '(vc-annotate-background "#0E0E0E")
  '(vc-annotate-background-mode nil)
  '(vc-annotate-color-map
-   '((20 . "#616161")
-     (40 . "#9E9E9E")
-     (60 . "#9E9E9E")
-     (80 . "#C3C3C3")
-     (100 . "#C3C3C3")
-     (120 . "#DADADA")
-     (140 . "#DADADA")
-     (160 . "#E8E8E8")
-     (180 . "#E8E8E8")
-     (200 . "#E8E8E8")
-     (220 . "#F1F1F1")
-     (240 . "#F1F1F1")
-     (260 . "#F1F1F1")
-     (280 . "#F6F6F6")
-     (300 . "#F6F6F6")
-     (320 . "#F6F6F6")
-     (340 . "#FAFAFA")
-     (360 . "#FAFAFA")))
+   '((20 . "#616161") (40 . "#9E9E9E") (60 . "#9E9E9E") (80 . "#C3C3C3")
+     (100 . "#C3C3C3") (120 . "#DADADA") (140 . "#DADADA")
+     (160 . "#E8E8E8") (180 . "#E8E8E8") (200 . "#E8E8E8")
+     (220 . "#F1F1F1") (240 . "#F1F1F1") (260 . "#F1F1F1")
+     (280 . "#F6F6F6") (300 . "#F6F6F6") (320 . "#F6F6F6")
+     (340 . "#FAFAFA") (360 . "#FAFAFA")))
  '(vc-annotate-very-old-color "#DADADA")
  '(weechat-color-list
-   '(unspecified "#002b36" "#073642" "#a7020a" "#dc322f" "#5b7300" "#859900" "#866300" "#b58900" "#0061a8" "#268bd2" "#a00559" "#d33682" "#007d76" "#2aa198" "#839496" "#657b83")))
+   '(unspecified "#002b36" "#073642" "#a7020a" "#dc322f" "#5b7300"
+                 "#859900" "#866300" "#b58900" "#0061a8" "#268bd2"
+                 "#a00559" "#d33682" "#007d76" "#2aa198" "#839496"
+                 "#657b83")))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

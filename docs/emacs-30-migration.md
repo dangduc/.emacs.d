@@ -53,8 +53,14 @@ straight.el was removed in favor of the built-in `package.el` + `use-package`
   `emacsql-sqlite-builtin` package is folded in. Collapsed two
   `magit/emacsql :branch main` recipes into a single `(use-package emacsql)` and
   kept `(setq org-roam-database-connector 'sqlite-builtin)`.
-- **Native modules dropped**: `flx-rs`, `fzf-native`, `fuz` need compiled
-  binaries; replaced with pure-elisp `flx` (`fussy` → `fussy-score-fn 'flx-score`).
+- **Native modules**: `flx-rs` and `fuz` were dropped (need a Rust toolchain).
+  `fzf-native` is **vendored** in `vendor/fzf-native/` (fork of
+  `dangduc/fzf-native`) and kept — it ships prebuilt dynamic modules under
+  `bin/`, so no compile step is needed (`fzf-native-load-dyn` selects
+  `bin/Darwin/arm64/fzf-native-module.so` on Apple Silicon). `fussy` uses the
+  native batch scorer via `(fussy-setup-fzf)`. Pure-elisp `flx` is kept only as
+  a fallback scorer. If the prebuilt module ever fails to load on a new Emacs
+  ABI, rebuild it with `M-x fzf-native-module-compile` (needs CMake).
 - **asy-mode**: cloning the whole asymptote repo via `:vc` is wasteful (huge C++
   project). Vendored the single `base/asy-mode.el` into `vendor/asy-mode/` instead.
 - **org-fc** (latest master): its algo classes inherit `eieio-singleton`, which
