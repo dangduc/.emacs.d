@@ -185,6 +185,32 @@
      (ghostel-send-key "return")
      (pop-to-buffer current-buffer-p))))
 
+(defun duc/ghostel--evil-paste-to-terminal (orig-fn &optional count register yank-handler)
+  "Route Evil paste to the ghostel PTY inside an alt-screen program.
+Around advice for `evil-ghostel-paste-after' / `evil-ghostel-paste-before'.
+
+`evil-ghostel' only sends a paste to the terminal in semi-char (shell
+prompt) input mode; inside an alt-screen application — tmux, vim, less, a
+pager — its `p' / `P' commands fall back to `evil-paste-after', which calls
+`insert-for-yank' and fails with \"Buffer is read-only\" because the ghostel
+renderer owns the buffer.  When point is in a live ghostel terminal that
+evil-ghostel is not actively routing, bracketed-paste the kill ring (or
+REGISTER) to the subprocess COUNT times instead — the same path
+`ghostel-yank' uses, which tmux forwards to the program it is running.
+
+Outside a ghostel terminal, or while evil-ghostel is routing the shell
+prompt itself, defer to ORIG-FN so normal Evil paste is untouched."
+  (if (and (derived-mode-p 'ghostel-mode)
+           (bound-and-true-p ghostel--term)
+           (not (evil-ghostel--active-p)))
+      (when-let* ((text (if register
+                            (evil-get-register register)
+                          (current-kill 0))))
+        (ghostel--on-user-input)
+        (dotimes (_ (prefix-numeric-value count))
+          (ghostel--paste-text text)))
+    (funcall orig-fn count register yank-handler)))
+
 ;;; Claude Code CLI sessions driven from Org properties
 ;;
 ;; An Org entry can describe a running `claude' session via its PROPERTIES

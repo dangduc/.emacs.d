@@ -1207,7 +1207,15 @@ while `company-capf' runs."
   (general-define-key
    :keymaps 'evil-ghostel-mode-map
    :states '(insert normal)
-   "M-<escape>" 'evil-ghostel-toggle-send-escape))
+   "M-<escape>" 'evil-ghostel-toggle-send-escape)
+  ;; Make `p' / `P' paste into an alt-screen program (tmux, vim, a pager).
+  ;; evil-ghostel routes paste to the PTY only at a shell prompt; in alt-screen
+  ;; it falls back to `evil-paste-after', which errors "Buffer is read-only" on
+  ;; the renderer-owned buffer.  Redirect that fallback to a bracketed paste.
+  (advice-add 'evil-ghostel-paste-after :around
+              #'duc/ghostel--evil-paste-to-terminal)
+  (advice-add 'evil-ghostel-paste-before :around
+              #'duc/ghostel--evil-paste-to-terminal))
 
 (use-package tex
   :ensure auctex
