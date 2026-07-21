@@ -412,6 +412,7 @@
       ("t" "terminal" duc/ivy-terminal)
       ("T" "send to terminal" duc/shell-send-string-to-project-dwim)
       ("C" "claude" hydra-submenu-claude/body)
+      ("i" "agent-shell" hydra-submenu-agent-shell/body)
       ("u" "package" hydra-submenu-package/body)
       ("A" "anki" hydra-submenu-anki/body)
       ("R" "org-fc" transient-org-fc)
@@ -480,6 +481,18 @@
     ("r" duc/claude-resume-session)
     ("a" duc/claude-session-add-to-bnote)
     ("l" duc/claude-list-all-terminal-sessions))
+  (defhydra hydra-submenu-agent-shell (:exit t :hint nil)
+    "
+^agent-shell^
+^^^^^^^^----------------------------
+  _c_: start Claude agent
+  _s_: agent-shell (any agent)
+  _r_: restart agent
+  _h_: help menu "
+    ("c" agent-shell-anthropic-start-claude-code)
+    ("s" agent-shell)
+    ("r" agent-shell-restart)
+    ("h" agent-shell-help-menu))
   (defhydra hydra-submenu-help (:exit t :hint nil)
     "
 ^Describe^           ^Info^
@@ -1216,6 +1229,151 @@ while `company-capf' runs."
               #'duc/ghostel--evil-paste-to-terminal)
   (advice-add 'evil-ghostel-paste-before :around
               #'duc/ghostel--evil-paste-to-terminal))
+
+;; `agent-shell' — an in-Emacs shell for coding agents over the Agent Client
+;; Protocol (ACP), configured for the Claude agent.  It drives Claude through
+;; the external `claude-agent-acp' bridge (install once with
+;;   npm install -g @agentclientprotocol/claude-agent-acp
+;; ), authenticating with the Claude subscription login rather than an API key.
+;; Deps `acp' and `shell-maker' install from MELPA automatically.  Adapted from
+;; xenodium's README example and a shared community config.
+(use-package agent-shell
+  :commands (agent-shell
+             agent-shell-help-menu
+             agent-shell-anthropic-start-claude-code)
+  :config
+  (require 'cl-lib)
+  (require 'map)
+  (setq agent-shell-session-restore-verbosity 'full)
+  (setq agent-shell-confirm-interrupt nil)
+  ;; Reuse the Claude subscription login; no API key stored in the config.
+  (setq agent-shell-anthropic-authentication
+        (agent-shell-anthropic-make-authentication :login t))
+
+  (defun duc/agent-shell--split-shell-toplevel (command)
+    "Split COMMAND on shell operators &&, ||, ;, | at top level only.
+Operators inside single or double quotes are left intact."
+    (let ((segments nil)
+          (start 0)
+          (i 0)
+          (len (length command))
+          (in-single nil)
+          (in-double nil))
+      (cl-flet ((emit (end)
+                  (let ((seg (string-trim (substring command start end))))
+                    (unless (string-empty-p seg)
+                      (push seg segments)))))
+        (while (< i len)
+          (let ((c (aref command i)))
+            (cond
+             ((and (eq c ?\\) (< (1+ i) len))
+              (cl-incf i 2))
+             ((and (not in-double) (eq c ?\'))
+              (setq in-single (not in-single)) (cl-incf i))
+             ((and (not in-single) (eq c ?\"))
+              (setq in-double (not in-double)) (cl-incf i))
+             ((or in-single in-double)
+              (cl-incf i))
+             ((and (or (eq c ?&) (eq c ?|))
+                   (< (1+ i) len)
+                   (eq (aref command (1+ i)) c))
+              (emit i) (cl-incf i 2) (setq start i))
+             ((or (eq c ?\;) (eq c ?|))
+              (emit i) (cl-incf i) (setq start i))
+             (t (cl-incf i)))))
+        (emit i))
+      (nreverse segments)))
+
+  (defun duc/agent-shell-can-auto (permission)
+    "Auto-approve safe PERMISSION requests; return nil to fall back to prompt.
+Finds, reads, searches, and fetches are always allowed.  Shell commands are
+allowed only when every top-level segment matches a read-only allowlist.
+Edits, writes, and everything else return nil so `agent-shell' shows its
+interactive permission dialog.  See `agent-shell-permission-responder-function'."
+    (cl-labels
+        ((allow-once ()
+           (when-let* ((choice
+                        (seq-find
+                         (lambda (option)
+                           (equal (map-elt option :kind) "allow_once"))
+                         (map-elt permission :options))))
+             (funcall (map-elt permission :respond)
+                      (map-elt choice :option-id))
+             t)))
+      (let* ((tool-call (map-elt permission :tool-call))
+             (kind (map-elt tool-call :kind)))
+        (pcase kind
+          ("find"
+           (prog1 (allow-once)
+             (message "auto-reading: %s" (map-elt tool-call :path))))
+          ("read"
+           (prog1 (allow-once)
+             (message "auto-reading: %s" (map-elt tool-call :path))))
+          ("search"
+           (prog1 (allow-once)
+             (message "auto-searching: %s" (map-elt tool-call :title))))
+          ("fetch"
+           (prog1 (allow-once)
+             (message "auto-fetching: %s" (map-elt tool-call :title))))
+          ("execute"
+           (let* ((command (map-elt tool-call :command))
+                  (safe-segment-rx
+                   (rx bos
+                       (or
+                        (seq (or "cmake" "make" "grep" "rg" "wc"
+                                 "head" "tail" "cat" "ls" "find"
+                                 "echo" "pwd" "file" "which" "type"
+                                 "curl")
+                             (or eos (any " \t")))
+                        (seq "git "
+                             (or "show" "log" "diff" "status" "blame"
+                                 "ls-files" "rev-parse" "branch"
+                                 "describe" "config --get"))
+                        (seq "cd /Users/ducnguyen/.emacs.d")
+                        "sed -n")))
+                  (segments (duc/agent-shell--split-shell-toplevel command))
+                  (all-safe (and segments
+                                 (cl-every
+                                  (lambda (seg)
+                                    (string-match-p safe-segment-rx seg))
+                                  segments))))
+             (if all-safe
+                 (progn
+                   (message "auto-allowing: %s" command)
+                   (allow-once))
+               (message "agent-shell: permission UI for: %s" command)
+               nil)))
+          (_
+           (message "agent-shell: permission UI for %s" kind)
+           nil)))))
+
+  (setq agent-shell-permission-responder-function #'duc/agent-shell-can-auto)
+
+  ;; `global-company-mode' is on, so drive `agent-shell''s @/ completion through
+  ;; company instead of its built-in `post-self-insert-hook' trigger.
+  (defun duc/agent-shell-maybe-company-complete ()
+    "Begin company completion when @ or / is typed at a word boundary.
+Only fires at line start or after whitespace, avoiding spurious completions
+mid-word or in paths.  A company-based replacement for
+`agent-shell--trigger-completion-at-point'."
+    (when (and (memq (char-before) '(?@ ?/))
+               (or (= (point) (1+ (line-beginning-position)))
+                   (memq (char-before (1- (point))) '(?\s ?\t ?\n))))
+      (cond
+       ((eq (char-before) ?@)
+        (company-manual-begin))
+       ((and (eq (char-before) ?/)
+             (agent-shell--command-completion-at-point))
+        (company-manual-begin)))))
+
+  (defun duc/agent-shell-setup-completion ()
+    "Swap `agent-shell''s @/ completion trigger for a company-based one."
+    (remove-hook 'post-self-insert-hook
+                 #'agent-shell--trigger-completion-at-point t)
+    (add-hook 'post-self-insert-hook
+              #'duc/agent-shell-maybe-company-complete nil t))
+
+  (add-hook 'agent-shell-mode-hook #'duc/agent-shell-setup-completion))
 
 (use-package tex
   :ensure auctex

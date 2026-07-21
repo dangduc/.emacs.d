@@ -246,9 +246,9 @@
    '((emacs-lisp . t) (python . t) (R . t) (ditaa . t) (plantuml . t)))
  '(org-confirm-babel-evaluate nil)
  '(package-selected-packages
-   '(ag all-the-icons-dired anki-editor catppuccin-theme clojure-mode
-        consult diminish dired-sidebar doom-themes ereader
-        esh-autosuggest evil-collection evil-ghostel
+   '(ag agent-shell all-the-icons-dired anki-editor catppuccin-theme
+        clojure-mode consult diminish dired-sidebar doom-themes
+        ereader esh-autosuggest evil-collection evil-ghostel
         exec-path-from-shell flatland-black-theme fussy geiser-mit
         general ghostel habamax-theme ibuffer-projectile
         ibuffer-sidebar jq-mode kotlin-mode leetcode lispyville
