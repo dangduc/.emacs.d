@@ -153,15 +153,9 @@
 ;;
 
 ;; Stolen from [Aaron Bedra's Emacs 26 Configuration](http://aaronbedra.com/emacs.d/#vendor-directory)
-;; Setup up vendor directory.
+;; The vendor directory goes on `load-path' *after* `package-initialize' below,
+;; so vendored forks shadow same-named ELPA packages (see there).
 (defvar duc/vendor-dir (expand-file-name "vendor" user-emacs-directory))
-(add-to-list 'load-path duc/vendor-dir)
-
-(dolist (project (directory-files duc/vendor-dir t "\\w+"))
-  (when (file-directory-p project)
-    (add-to-list 'load-path project)))
-
-; n/a
 
 ;; package management
 ;;
@@ -171,6 +165,17 @@
 (require 'package)
 (unless package--initialized
   (package-initialize))
+
+;; `package-initialize' pushes every installed ELPA directory onto the front of
+;; `load-path', so the vendor directories have to be added *after* it to win.
+;; Order matters for the vendored forks that are also installed from an archive
+;; (`fzf-native', `fzfa'): with vendor first, `require' picks up the working
+;; tree in `vendor/' and `fzf-native-load-dyn' loads the module under
+;; `vendor/fzf-native/bin/'.
+(add-to-list 'load-path duc/vendor-dir)
+(dolist (project (directory-files duc/vendor-dir t "\\w+"))
+  (when (file-directory-p project)
+    (add-to-list 'load-path project)))
 
 (require 'use-package)
 ;; package.el equivalent of straight's `straight-use-package-by-default': every
@@ -199,6 +204,7 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(agent-shell-header-style 'text)
  '(compilation-message-face 'default)
  '(cua-global-mark-cursor-color "#2aa198")
  '(cua-normal-cursor-color "#839496")

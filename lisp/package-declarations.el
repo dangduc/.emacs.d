@@ -883,6 +883,229 @@ _p_/_a_: push notes         _i_: screenshot
   :ensure nil
   :defer t)
 
+;; `fzfa' — async fuzzy pickers on top of `fzf-native'. Vendored fork in
+;; `vendor/fzfa' (ahead of the archive build; see the load-path note in
+;; init.el). A package.el install would hand us `fzfa-autoloads.el' at
+;; activation, but a vendored tree gets no autoload file loaded for it, so the
+;; stubs are declared here: one `use-package' per source file, mirroring the
+;; `;;;###autoload' cookies in that tree. `make autoloads' in `vendor/fzfa'
+;; regenerates the canonical list to re-mirror from when fzfa gains commands.
+;; `:commands'/`:autoload' only define stubs, so every file stays off the
+;; startup path; delete the forms for extensions you do not use.
+(use-package fzfa
+  :ensure nil
+  :commands (fzfa-replay fzfa-find-any fzfa-find-some fzfa-passwords)
+  :autoload (fzfa-completing-read fzfa-multi-read))
+
+(use-package fzfa-ag
+  :ensure nil
+  :commands (fzfa-ag-files fzfa-ag))
+
+(use-package fzfa-chrome
+  :ensure nil
+  :commands (fzfa-chrome-refresh fzfa-chrome-bookmarks fzfa-chrome-edit
+             fzfa-chrome-bookmark-copy-url fzfa-chrome-history
+             fzfa-chrome-history-copy-url fzfa-chrome-pass-refresh
+             fzfa-chrome-pass-copy fzfa-chrome-pass-copy-username
+             fzfa-chrome-pass-url)
+  :autoload (fzfa-chrome-setup))
+
+(use-package fzfa-company
+  :ensure nil
+  :commands (fzfa-company fzfa-company-show-doc fzfa-company-show-location)
+  :autoload (fzfa-company-setup))
+
+(use-package fzfa-eglot
+  :ensure nil
+  :commands (fzfa-eglot-symbols))
+
+(use-package fzfa-emacs
+  :ensure nil
+  :commands (fzfa-recent-file fzfa-buffer fzfa-yank-pop fzfa-bookmark
+             fzfa-theme fzfa-font fzfa-man fzfa-swiper fzfa-swiper-all
+             fzfa-unicode-char fzfa-history fzfa-complex-command fzfa-M-x
+             fzfa-M-x-for-buffer fzfa-apropos fzfa-descbinds
+             fzfa-minor-mode-menu fzfa-mark fzfa-global-mark fzfa-register
+             fzfa-outline fzfa-compile-error fzfa-ffap-menu fzfa-frames
+             fzfa-tabs fzfa-browse-files))
+
+(use-package fzfa-embark
+  :ensure nil
+  :autoload (fzfa-embark-setup))
+
+(use-package fzfa-evil
+  :ensure nil
+  :commands (fzfa-evil-marks fzfa-evil-registers fzfa-evil-jumps
+             fzfa-evil-ex-history fzfa-evil-search-history
+             fzfa-evil-command-window fzfa-evil-any)
+  :autoload (fzfa-evil-setup))
+
+(use-package fzfa-fd
+  :ensure nil
+  :commands (fzfa-fd))
+
+(use-package fzfa-find
+  :ensure nil
+  :commands (fzfa-find))
+
+(use-package fzfa-firefox
+  :ensure nil
+  :commands (fzfa-firefox-refresh fzfa-firefox-bookmarks
+             fzfa-firefox-bookmark-copy-url fzfa-firefox-history
+             fzfa-firefox-history-copy-url)
+  :autoload (fzfa-firefox-setup))
+
+(use-package fzfa-flymake
+  :ensure nil
+  :commands (fzfa-flymake fzfa-flymake-project)
+  :autoload (fzfa-flymake-setup))
+
+(use-package fzfa-git
+  :ensure nil
+  :commands (fzfa-git-grep fzfa-git-ls-files fzfa-git-modified-locally
+             fzfa-git-added-files fzfa-git-staged-for-commit
+             fzfa-git-modified-in-head fzfa-git-log-grep))
+
+(use-package fzfa-grep
+  :ensure nil
+  :commands (fzfa-grep fzfa-grep-current-file))
+
+(use-package fzfa-helm
+  :ensure nil
+  :autoload (fzfa-helm-setup))
+
+(use-package fzfa-hg
+  :ensure nil
+  :commands (fzfa-hg-files fzfa-hg-modified-locally fzfa-hg-added-files
+             fzfa-hg-modified-in-head))
+
+(use-package fzfa-hungry
+  :ensure nil
+  :commands (fzfa-hungry-swiper fzfa-hungry-find))
+
+(use-package fzfa-imenu
+  :ensure nil
+  :commands (fzfa-imenu fzfa-imenu-all fzfa-imenu-all-but-current))
+
+(use-package fzfa-info
+  :ensure nil
+  :commands (fzfa-info-emacs fzfa-info-elisp fzfa-info-org fzfa-info-cl
+             fzfa-info-eieio fzfa-info-magit fzfa-info fzfa-info-at-point))
+
+(use-package fzfa-ivy
+  :ensure nil
+  :autoload (fzfa-ivy-setup))
+
+(use-package fzfa-loader
+  :ensure nil
+  :commands (fzfa-sync-autoloads))
+
+(use-package fzfa-locate
+  :ensure nil
+  :commands (fzfa-locate))
+
+(use-package fzfa-mail
+  :ensure nil
+  :commands (fzfa-mail-refresh fzfa-mail)
+  :autoload (fzfa-mail-setup))
+
+(use-package fzfa-make
+  :ensure nil
+  :commands (fzfa-make-reset-cache fzfa-make)
+  :autoload (fzfa-make-setup))
+
+(use-package fzfa-media-thumbnail
+  :ensure nil
+  :autoload (fzfa-media-thumbnail-setup))
+
+(use-package fzfa-music
+  :ensure nil
+  :commands (fzfa-music-refresh fzfa-music-playlist
+             fzfa-music-playlist-shuffle fzfa-music fzfa-music-by-artist
+             fzfa-music-by-genre)
+  :autoload (fzfa-music-setup))
+
+(use-package fzfa-notmuch
+  :ensure nil
+  :commands (fzfa-notmuch fzfa-notmuch-tree fzfa-notmuch-show-thread
+             fzfa-notmuch-tree-thread)
+  :autoload (fzfa-notmuch-setup))
+
+(use-package fzfa-org
+  :ensure nil
+  :commands (fzfa-org-heading fzfa-org-heading-all fzfa-org-agenda
+             fzfa-org-todo fzfa-org-tags-view fzfa-org-insert-link
+             fzfa-org-grep fzfa-org-files fzfa-org-mdfind-files
+             fzfa-org-mdfind-grep fzfa-org-any))
+
+(use-package fzfa-pass
+  :ensure nil
+  :commands (fzfa-pass-copy fzfa-pass-edit fzfa-pass-rename fzfa-pass-delete
+             fzfa-pass-add fzfa-pass-generate fzfa-pass-url)
+  :autoload (fzfa-pass-setup))
+
+(use-package fzfa-posframe
+  :ensure nil
+  :commands (fzfa-posframe-mode))
+
+(use-package fzfa-project
+  :ensure nil
+  :commands (fzfa-project-find-file fzfa-project-find-dir fzfa-project-buffer
+             fzfa-project-recentf fzfa-project-switch-project))
+
+(use-package fzfa-regexp
+  :ensure nil
+  :commands (fzfa-regexp))
+
+(use-package fzfa-replay
+  :ensure nil
+  :commands (fzfa-replay-from-memory fzfa-replay-from-file fzfa-replay-any
+             fzfa-replay-mode)
+  :autoload (fzfa-replay-setup))
+
+(use-package fzfa-rg
+  :ensure nil
+  :commands (fzfa-rg-files fzfa-rg))
+
+(use-package fzfa-safari
+  :ensure nil
+  :commands (fzfa-safari-refresh fzfa-safari-bookmarks
+             fzfa-safari-bookmark-copy-url fzfa-safari-history
+             fzfa-safari-history-copy-url)
+  :autoload (fzfa-safari-setup))
+
+(use-package fzfa-shell
+  :ensure nil
+  :commands (fzfa-shell-command fzfa-shell-project-command fzfa-shell-history))
+
+(use-package fzfa-spotlight
+  :ensure nil
+  :commands (fzfa-spotlight fzfa-spotlight-apps fzfa-spotlight-audio))
+
+(use-package fzfa-tramp
+  :ensure nil
+  :commands (fzfa-ssh fzfa-tramp)
+  :autoload (fzfa-tramp-setup))
+
+(use-package fzfa-transient
+  :ensure nil
+  :commands (fzfa-transient))
+
+(use-package fzfa-ugrep
+  :ensure nil
+  :commands (fzfa-ugrep))
+
+(use-package fzfa-vc
+  :ensure nil
+  :commands (fzfa-vc-modified-files fzfa-vc-modified-locally
+             fzfa-vc-added-files fzfa-vc-staged-for-commit
+             fzfa-vc-modified-in-head fzfa-vc-any))
+
+(use-package fzfa-vertico
+  :ensure nil
+  :commands (fzfa-vertico-columns-mode)
+  :autoload (fzfa-vertico-setup))
+
 (use-package fussy
   :after flx
   :config
