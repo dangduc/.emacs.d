@@ -9,7 +9,7 @@
 	url = https://gitlab.com/protesilaos/pulsar.git
 [submodule "vendor/fzf-native"]
 	path = vendor/fzf-native
-	url = git@github.com:dangduc/fzf-native.git
+	url = https://github.com/fastducduc/fzf-native.git
 [submodule "vendor/fzfa"]
 	path = vendor/fzfa
 	url = https://github.com/jojojames/fzfa
