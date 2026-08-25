@@ -488,7 +488,7 @@ the freshly minted id in that case (else nil, so callers know not to persist)."
                 slug effective-id working-directory freshp inner-command)))
     ;; Stamp the session's full id / label / dir onto the terminal buffer so it
     ;; can identify itself later (the slug carries only the 8-char id).
-    (when-let ((buf (get-buffer (plist-get info :buffer))))
+    (when-let* ((buf (get-buffer (plist-get info :buffer))))
       (with-current-buffer buf
         (setq duc/claude--buffer-session-id effective-id
               duc/claude--buffer-title (duc/claude--nonempty title)

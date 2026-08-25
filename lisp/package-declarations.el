@@ -1675,7 +1675,15 @@ mid-word or in paths.  A company-based replacement for
                                         ; Don't indent by level. (Region-= will remove indents.)
   (setq org-adapt-indentation nil)
                                         ; Also don't intent src blocks.
-  (setq org-edit-src-content-indentation 0))
+                                        ; Org 9.8 (Emacs 31) renamed this to
+                                        ; `org-src-content-indentation'; the old
+                                        ; name is an obsolete alias there and the
+                                        ; only name in Org 9.7 (Emacs 30), so pick
+                                        ; whichever this Org defines.
+  (set (if (boundp 'org-src-content-indentation)
+           'org-src-content-indentation
+         'org-edit-src-content-indentation)
+       0))
 
 ;; Modern emacsql (GNU ELPA) has built-in SQLite support; the separate
 ;; `emacsql-sqlite-builtin' package is folded in and no longer needed.
