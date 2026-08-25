@@ -33,6 +33,15 @@
 (setq package-user-dir
       (format "%selpa/%s/" user-emacs-directory emacs-major-version))
 
+;; `load-prefer-newer' makes Emacs pick FOO.el over an older FOO.elc.  In an
+;; installed macOS bundle the shipped Lisp is gzipped, so when jka-compr.el.gz
+;; is not older than jka-compr.elc that rule sends Emacs to load jka-compr from
+;; a .gz -- which needs jka-compr -- and startup dies with "Recursive load".
+;; Pull it in here, while the nil default still applies and the .elc wins.
+;; (`cp -R' of the .app collapses both mtimes to the copy time and triggers
+;; exactly this; `cp -Rp' preserves the build's ordering.)
+(require 'jka-compr)
+
 (setq load-prefer-newer t)
 
 (let ((dir (file-name-directory (or load-file-name buffer-file-name))))
