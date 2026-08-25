@@ -54,16 +54,16 @@
 (setq package-enable-at-startup nil)
 
 ;; Package Repositories
-;; NOTE: elpa.gnu.org / elpa.nongnu.org (both 209.51.188.89) are currently
-;; unreachable from some networks (TCP connects but TLS/HTTP data stalls), so
-;; the GNU and NonGNU archives are served via the Tsinghua (Tuna) mirror.
-;; MELPA is reachable directly. Switch these back to the canonical
-;; https://elpa.gnu.org/packages/ and https://elpa.nongnu.org/nongnu/ once
-;; direct connectivity returns.
+;; NOTE: elpa.gnu.org / elpa.nongnu.org (both 209.51.188.89) were unreachable
+;; from some networks for a while and the GNU/NonGNU archives were served via
+;; the Tsinghua (Tuna) mirror instead. Direct connectivity is back, and the
+;; mirror now answers 403 for package tarballs (its archive-contents still
+;; works, so installs fail only at download time), so these point at the
+;; canonical archives again.
 (setq package-archives '(("melpa" . "https://melpa.org/packages/")
                          ("melpa-stable" . "https://stable.melpa.org/packages/")
-                         ("gnu" . "https://mirrors.tuna.tsinghua.edu.cn/elpa/gnu/")
-                         ("nongnu" . "https://mirrors.tuna.tsinghua.edu.cn/elpa/nongnu/")
+                         ("gnu" . "https://elpa.gnu.org/packages/")
+                         ("nongnu" . "https://elpa.nongnu.org/nongnu/")
                          ("org" . "https://orgmode.org/elpa/")))
 
 (setq package-archive-priorities '(("org" . 15)
@@ -83,8 +83,15 @@
 ;; Take a look at $EMACS_CODEBASE/lisp/startup.el to refresh your memory.
 ;; The gist is that `package-activate-all' is called in Emacs 27 which
 ;; reads `package-quickstart'.
+;; The quickstart file needs the same per-version split as `package-user-dir'
+;; above: it hard-codes paths inside `package-user-dir' and is byte-compiled by
+;; whichever Emacs wrote it, so a single shared file makes each version clobber
+;; the other's (Emacs 31 writing elpa/31 paths breaks an Emacs 30 startup).
 (if (>= emacs-major-version 27)
-    (setq package-quickstart t)
+    (setq package-quickstart t
+          package-quickstart-file
+          (format "%spackage-quickstart-%s.el"
+                  user-emacs-directory emacs-major-version))
   (package-initialize))
 
 ;; Local Variables:

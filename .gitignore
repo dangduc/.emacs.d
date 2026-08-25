@@ -68,4 +68,5 @@ local.el
 .org-id-locations
 /eln-cache/
 /package-quickstart.el
+/package-quickstart-*.el
 .prd-saved-dices.el
