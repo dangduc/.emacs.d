@@ -723,7 +723,7 @@ e.g.
                       (duc/geiser-eval-last-sexp)
                     (duc/scheme-send-last-sexp)))
     ('emacs-lisp-mode (eval-last-sexp p))
-    ('python-mode
+    ((or 'python-mode 'python-ts-mode)
      (cond ((string-match-p ".*\\/EPIJudge\\/.*" (or (buffer-file-name) ""))
             (let ((terminal "terminal-epijudge"))
               (duc/ivy-shell-send-string (concat "python " (buffer-name))
@@ -809,7 +809,7 @@ e.g.
 (defun duc/pretty-print-dwim ()
   (interactive)
   (pcase major-mode
-    ('javascript-mode (json-pretty-print))
+    ((or 'js-mode 'js-ts-mode 'javascript-mode) (json-pretty-print))
     ('emacs-lisp-mode (indent-pp-sexp t))
     (_ (indent-pp-sexp t))))
 

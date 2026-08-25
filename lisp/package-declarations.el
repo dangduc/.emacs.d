@@ -320,12 +320,15 @@
   ; hideshow
   (add-hook 'json-mode-hook 'hs-minor-mode)
   (add-hook 'java-mode-hook 'hs-minor-mode)
+  (add-hook 'java-ts-mode-hook 'hs-minor-mode)
   (add-hook 'emacs-lisp-mode-hook 'hs-minor-mode)
   (add-hook 'tide-mode-hook 'hs-minor-mode)
   (add-hook 'typescript-mode-hook 'hs-minor-mode)
+  (add-hook 'typescript-ts-base-mode-hook 'hs-minor-mode)
   (add-hook 'kotlin-mode-hook 'hs-minor-mode)
   (add-hook 'swift-mode-hook 'hs-minor-mode)
-  (add-hook 'js-mode-hook 'hs-minor-mode)
+  ; `js-base-mode' covers both `js-mode' and `js-ts-mode'.
+  (add-hook 'js-base-mode-hook 'hs-minor-mode)
   :config
   ; This _somehow_ fixes emacs deterministically freezing while (`/`) searching
   ; for certain strings.
@@ -617,22 +620,24 @@ _p_/_a_: push notes         _i_: screenshot
   (setq abbrev-file-name
         (expand-file-name "abbrev_defs.el" user-emacs-directory)))
 
-(use-package tree-sitter
-  :defer t)
-
-(use-package tree-sitter-langs
-  :after tree-sitter)
-
-;; Enable tree-sitter the first time a file is opened, keeping it off the
-;; startup path (the `*scratch*' buffer is a prog-mode derivative, so a
-;; prog-mode-hook trigger would fire during init). `global-tree-sitter-mode'
-;; turns it on in that buffer and future ones.
-(defun duc/enable-tree-sitter-once ()
-  (require 'tree-sitter-langs)
-  (add-hook 'tree-sitter-after-on-hook #'tree-sitter-hl-mode)
-  (global-tree-sitter-mode)
-  (remove-hook 'find-file-hook #'duc/enable-tree-sitter-once))
-(add-hook 'find-file-hook #'duc/enable-tree-sitter-once)
+;; Built-in tree-sitter (Emacs 31+), replacing the third-party `tree-sitter' /
+;; `tree-sitter-langs' pair, which only did highlighting.
+;; `treesit-enabled-modes' t copies every entry of
+;; `treesit-major-mode-remap-alist' into `major-mode-remap-alist', so each
+;; language opens in its FOO-ts-mode.  That copying is done by the option's
+;; `:set' function, so the value has to be assigned after treesit.el is loaded
+;; -- hence `:demand' (the require costs ~10ms) and `setopt' over `setq'.
+;; `treesit-auto-install-grammar' defaults to `ask', which offers to build a
+;; missing grammar into `user-emacs-directory'/tree-sitter on first visit.
+;;
+;; The ts modes derive from FOO-base-mode rather than FOO-mode, so the hooks
+;; further down hang off the base mode where one exists (`sh-base-mode',
+;; `js-base-mode', `python-base-mode') and name both modes where none does.
+(use-package treesit
+  :ensure nil
+  :demand t
+  :config
+  (setopt treesit-enabled-modes t))
 
 ;; themes
 
@@ -766,7 +771,10 @@ _p_/_a_: push notes         _i_: screenshot
   ; Add major-mode policies.
   (dolist (c '("'" "`"))
     (sp-local-pair '(typescript-mode
-                     javascript-mode) c c)))
+                     typescript-ts-mode
+                     tsx-ts-mode
+                     javascript-mode
+                     js-ts-mode) c c)))
 
 (use-package lispyville
   :diminish (lispyville-mode)
@@ -1203,9 +1211,18 @@ while `company-capf' runs."
                 (setq-local evil-shift-width typescript-indent-level))))
   (setq typescript-enabled-frameworks '(typescript)))
 
+;; `.ts' now lands in `typescript-ts-mode' via `major-mode-remap-alist', so the
+;; `typescript-mode' hook above no longer runs.  `typescript-ts-indent-offset'
+;; already defaults to 2; mirror it into `evil-shift-width' as that hook did.
+(add-hook 'typescript-ts-base-mode-hook
+          (lambda ()
+            (with-eval-after-load 'evil
+              (setq-local evil-shift-width typescript-ts-indent-offset))))
+
 (use-package flycheck
   :init
-  (add-hook 'sh-mode-hook (lambda () (flycheck-mode 1)))
+  ; `sh-base-mode' covers both `sh-mode' and `bash-ts-mode'.
+  (add-hook 'sh-base-mode-hook (lambda () (flycheck-mode 1)))
   (add-hook 'tide-mode-hook (lambda () (flycheck-mode 1))))
 
 (use-package tide
@@ -1229,6 +1246,7 @@ while `company-capf' runs."
     (tide-setup)
     (tide-hl-identifier-mode +1))
   (add-hook 'typescript-mode-hook #'+setup-tide-mode)
+  (add-hook 'typescript-ts-base-mode-hook #'+setup-tide-mode)
 
   (with-eval-after-load 'evil
     (evil-define-key '(normal insert) tide-mode-map (kbd "M-?") 'tide-references))
@@ -1345,6 +1363,7 @@ while `company-capf' runs."
   (setq lsp-log-io t)
   (setq lsp-lens-auto-enable nil)
   :hook ((c-mode . lsp)
+         (c-ts-mode . lsp)
          (clojure-mode . lsp)
          (clojurec-mode . lsp)
          (clojurescript-mode . lsp)))
@@ -1353,7 +1372,7 @@ while `company-capf' runs."
   ;; Loaded lazily when a C-family buffer opens, so it registers its lsp client
   ;; without pulling lsp-mode in at startup.
   :defer t
-  :hook ((c-mode c++-mode objc-mode) . (lambda () (require 'ccls))))
+  :hook ((c-mode c++-mode c-ts-mode c++-ts-mode objc-mode) . (lambda () (require 'ccls))))
 
 ; Python projects should initialize the python lsp themselves.
 ; using
@@ -1363,13 +1382,13 @@ while `company-capf' runs."
   ;; (it can't derive deferral from the lambda hook), which otherwise pulls in
   ;; lsp-mode at startup.
   :defer t
-  :hook (python-mode . (lambda ()
-                         (require 'lsp-python-ms))))
+  :hook (python-base-mode . (lambda ()
+                              (require 'lsp-python-ms))))
 
 (setq python-indent-offset 2)
 
 (use-package pyvenv
-  :hook (python-mode . pyvenv-mode)
+  :hook (python-base-mode . pyvenv-mode)
   :config
   (pyvenv-mode t)
   ;; Usage

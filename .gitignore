@@ -70,3 +70,4 @@ local.el
 /package-quickstart.el
 /package-quickstart-*.el
 .prd-saved-dices.el
+/tree-sitter/
