@@ -1,0 +1,56 @@
+LANG=C.UTF-8 cannot be used, using en_US.UTF-8 instead.
+Running 1 tests (2026-09-08 15:54:01-0700, selector `ce2-unexpected-codex-content-shape-does-not-poison-valid-session')
+Test ce2-unexpected-codex-content-shape-does-not-poison-valid-session backtrace:
+  alist-get(type (type . "input_text"))
+  (equal (alist-get 'type block) "input_text")
+  (and (listp block) (equal (alist-get 'type block) "input_text") (ali
+  (let ((text (and (listp block) (equal (alist-get 'type block) "input
+  #f(lambda (block) [t] (let ((text (and ... ... ...))) (if (stringp t
+  #f(compiled-function (elt) #<bytecode 0xde37379303206b>)((type . "in
+  mapc(#f(compiled-function (elt) #<bytecode 0xde37379303206b>) ((type
+  seq-do(#f(compiled-function (elt) #<bytecode 0xde37379303206b>) ((ty
+  #f(compiled-function (pred sequence) #<bytecode -0x2c92fbccd94d562>)
+  apply(#f(compiled-function (pred sequence) #<bytecode -0x2c92fbccd94
+  seq-some(#f(lambda (block) [t] (let ((text (and (listp block) (equal
+  agent-sidebar--codex-user-text(((type . "input_text") (text . "INVAL
+  (setq preview (agent-sidebar--codex-user-text (alist-get 'content pa
+  (progn (setq preview (agent-sidebar--codex-user-text (alist-get 'con
+  (if (and (null preview) (equal (alist-get 'type payload) "message") 
+  (let nil (if (and (null preview) (equal (alist-get 'type payload) "m
+  (cond ((equal val '"session_meta") (let nil (if session nil (let ((i
+  (let* ((val (alist-get 'type object))) (cond ((equal val '"session_m
+  (progn (let* ((val (alist-get 'type object))) (cond ((equal val '"se
+  (if (listp payload) (progn (let* ((val (alist-get 'type object))) (c
+  (let ((payload (alist-get 'payload object))) (if (listp payload) (pr
+  (let ((object (car tail))) (let ((payload (alist-get 'payload object
+  (while tail (let ((object (car tail))) (let ((payload (alist-get 'pa
+  (let ((tail (agent-sidebar--read-jsonl (plist-get entry :id) 262144)
+  (let (session cwd timestamp model preview) (let ((tail (agent-sideba
+  (condition-case err (let (session cwd timestamp model preview) (let 
+  agent-sidebar--codex-parse((:id "/var/folders/20/4zczrx1s3lq2fv0xmm0
+  (let ((meta (agent-sidebar--codex-parse (list :id file)))) (let* ((f
+  (progn (ce2--write file (list (ce2--codex-meta) (ce2--codex-user '((
+  (unwind-protect (progn (ce2--write file (list (ce2--codex-meta) (ce2
+  (let ((file (make-temp-file "ce2-schema-" nil ".jsonl"))) (unwind-pr
+  #f(lambda () [t] (let ((file (make-temp-file "ce2-schema-" nil ".jso
+  #f(compiled-function () #<bytecode 0x6f4c97feea05771>)()
+  handler-bind-1(#f(compiled-function () #<bytecode 0x6f4c97feea05771>
+  ert--run-test-internal(#s(ert--test-execution-info :test #s(ert-test
+  ert-run-test(#s(ert-test :name ce2-unexpected-codex-content-shape-do
+  ert-run-or-rerun-test(#s(ert--stats :selector ce2-unexpected-codex-c
+  ert-run-tests(ce2-unexpected-codex-content-shape-does-not-poison-val
+  ert-run-tests-batch(ce2-unexpected-codex-content-shape-does-not-pois
+  ert-run-tests-batch-and-exit(ce2-unexpected-codex-content-shape-does
+  eval((ert-run-tests-batch-and-exit 'ce2-unexpected-codex-content-sha
+  command-line-1(("-l" "jka-compr" "-L" "/private/tmp/sidebar-review-7
+  command-line()
+  normal-top-level()
+Test ce2-unexpected-codex-content-shape-does-not-poison-valid-session condition:
+    (wrong-type-argument listp (type . "input_text"))
+   FAILED  1/1  ce2-unexpected-codex-content-shape-does-not-poison-valid-session (0.000804 sec) at agent/agent-sidebar-codex/review/round-2/contrarian-evidence-tests.el:21
+
+Ran 1 tests, 0 results as expected, 1 unexpected (2026-09-08 15:54:01-0700, 0.080533 sec)
+
+1 unexpected results:
+   FAILED  ce2-unexpected-codex-content-shape-does-not-poison-valid-session
+

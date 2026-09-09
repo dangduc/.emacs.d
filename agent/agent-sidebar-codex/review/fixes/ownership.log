@@ -1,0 +1,20 @@
+LANG=C.UTF-8 cannot be used, using en_US.UTF-8 instead.
+Running 9 tests (2026-09-08 15:41:23-0700, selector `"^ownership-"')
+Deleted 1 transcript(s)
+   passed  1/9  ownership-absent-file-does-not-retain-stale-mark (0.789884 sec)
+   passed  2/9  ownership-active-id-precedes-pending-and-transitions (0.004003 sec)
+   passed  3/9  ownership-check-reads-only-selected-file-and-refreshes-metadata (0.018316 sec)
+   passed  4/9  ownership-existing-marker-and-file-alias-control (0.001745 sec)
+   passed  5/9  ownership-home-config-and-session-controls (0.004736 sec)
+Deleted 0. Retained 1 mark(s): Cannot verify open Codex session ownership: No valid Codex thread id in rollout prefix
+   passed  6/9  ownership-malformed-prefix-retains-deletion-mark (0.030366 sec)
+NEW ACP ownership: active-id="23456789-1234-7123-8123-123456789abc" native-marker=nil owned=t
+Deleted 0. Retained 1 mark(s): Transcript belongs to an open session: /var/folders/20/4zczrx1s3lq2fv0xmm0gj1fr0000gn/T/agent-sidebar-merge-GfZvTF/codex/sessions/2026/09/08/rollout-2026-09-08T12-00-00-23456789-1234-7123-8123-123456789abc.jsonl
+NEW ACP after delete: exists=t retained-mark=delete active-id="23456789-1234-7123-8123-123456789abc"
+   passed  7/9  ownership-new-session-real-acp (0.103790 sec)
+   passed  8/9  ownership-rechecks-live-state-after-reading (0.001828 sec)
+Ownership survives actual ACP reload with both legacy markers absent
+   passed  9/9  ownership-reload-uses-session-without-native-path-marker (0.095128 sec)
+
+Ran 9 tests, 9 results as expected, 0 unexpected (2026-09-08 15:41:24-0700, 1.050253 sec)
+

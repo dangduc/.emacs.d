@@ -1,0 +1,102 @@
+LANG=C.UTF-8 cannot be used, using en_US.UTF-8 instead.
+[?1049h[?12;25h[?1h=[H[2J[40d[K[?1l>[?12l[?25h[?1049l[39;49m[?1049h[?12;25h[?1h=[>0c[H[2J[40d[K[H[?25l[7mFile Edit Options Buffers Tools Lisp-Interaction Help                                                                                       [0m[39;49m[27m
+[A
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[30m[48;5;250m-UUU:--- F1  [39;49m[1m[30m[48;5;250m*scratch*   [0m[39;49m[30m[48;5;250m   All L1     (Lisp Interaction ElDoc) ----------------------------------------------------------------------------[39;49m
+[A[?12l[?25h[?12;25h[2d[c[>0q[?2004h[?1004h[40d[?25lFor information about GNU Emacs and the GNU system, type [38;5;18m[48;5;255mC-h C-a[39;49m.[?12l[?25h[?12;25h[H
+[40d[?25l[38;5;20mStreaming probe: [39;49m[K[H[7mFile Edit Options Buffers Tools Minibuf Help                                                                                                [0m[39;49m[27m
+[A
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[30m[48;5;250m-UUU:--- F1  [39;49m[1m[30m[48;5;250m*scratch*   [0m[39;49m[30m[48;5;250m   All L1     (Lisp Interaction Helm ElDoc) -----------------------------------------------------------------------[39;49m
+[A
+[4m[30m[48;5;250m                                                                                                                                            [0m[39;49m
+[A
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[30m[48;5;250m [39;49m[1m[30m[48;5;250m*helm fzfa* [0m[39;49m[30m[48;5;250m L1     C-h m:Help TAB:Act C-o:NextSrc RET/f1..f12:NthAct C-!:Tog.suspend C-h c:Conf                                           [39;49m
+[A[?12l[?25h[?12;25h[40;18H[21;2H[?25l[4m[30m[48;5;250mC-j: Anonymous (keeping session)[0m[39;49m
+[37m[44mfzfa [~/.emacs.d/] (343,025/344,000)                                                                                                        [39;49m
+[38;5;153m[45mdoc-0000000.txt:1:alpha beta gamma                                                                                                          [39;49m
+doc-0000001.txt:1:alpha beta gamma
+doc-0000002.txt:1:alpha beta gamma
+doc-0000003.txt:1:alpha beta gamma
+doc-0000004.txt:1:alpha beta gamma
+doc-0000005.txt:1:alpha beta gamma
+doc-0000006.txt:1:alpha beta gamma
+doc-0000007.txt:1:alpha beta gamma
+doc-0000008.txt:1:alpha beta gamma
+doc-0000009.txt:1:alpha beta gamma
+doc-0000010.txt:1:alpha beta gamma
+doc-0000011.txt:1:alpha beta gamma
+doc-0000012.txt:1:alpha beta gamma
+doc-0000013.txt:1:alpha beta gamma
+doc-0000014.txt:1:alpha beta gamma
+doc-0000015.txt:1:alpha beta gamma[39;21H[30m[48;5;229m[2000 Candidate(s)][39;49m[30m[48;5;250m C-h m:Help TAB:Act C-o:NextSrc RET/f1..f12:NthAct C-!:Tog.suspend C-h c:Conf[39;49m[?12l[?25h[?12;25h[40;18H[22;21H[?25l[37m[44m1,246,000/1,246,000)[39;49m[?12l[?25h[?12;25h[40;18H[22;21H[?25l[37m[44m2,000,000/2,000[39;49m[?12l[?25h[?12;25h[40;18H[K[?1004l[?2004l[?1l>[?12l[?25h[?1049l[39;49m

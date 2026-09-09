@@ -1,0 +1,17 @@
+{
+  "source_sha256": "cde79fdb7f8abd6ad86cd30684c858503b856afeb940a4f1daedcceaf6ae7f8b",
+  "source_lines": 2220,
+  "old_namespace": false,
+  "aliases": false,
+  "checks": {
+    "source-tests.log": [
+      "Ran 127 tests, 127 results as expected, 0 unexpected (2026-09-08 16:36:29-0700, 6.452819 sec)"
+    ],
+    "compiled-tests.log": [
+      "Ran 127 tests, 127 results as expected, 0 unexpected (2026-09-08 16:36:56-0700, 4.946273 sec)"
+    ],
+    "emacs30-tests.log": [
+      "Ran 127 tests, 127 results as expected, 0 unexpected (2026-09-08 16:36:58-0700, 6.975987 sec)"
+    ]
+  }
+}

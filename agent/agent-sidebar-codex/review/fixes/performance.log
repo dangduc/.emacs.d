@@ -1,0 +1,9 @@
+LANG=C.UTF-8 cannot be used, using en_US.UTF-8 instead.
+Running 3 tests (2026-09-08 15:37:55-0700, selector `"^performance-"')
+PERFORMANCE-FIX (:sessions 300 :buffer-characters 67270 :warm-refresh 0.021152 :filter-seconds 0.017879 :parser-calls 300)
+   passed  1/3  performance-300-long-previews-bounded-cache-and-full-transcript (2.121888 sec)
+   passed  2/3  performance-preview-bound-applies-to-three-built-in-providers (0.065474 sec)
+   passed  3/3  performance-preview-boundary-unicode-and-provider-contract (0.001044 sec)
+
+Ran 3 tests, 3 results as expected, 0 unexpected (2026-09-08 15:37:58-0700, 2.188609 sec)
+

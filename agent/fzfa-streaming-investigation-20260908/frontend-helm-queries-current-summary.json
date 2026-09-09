@@ -1,0 +1,59 @@
+{
+  "frontend": "helm",
+  "mode": "queries",
+  "query": "alpha",
+  "error": null,
+  "child_status": 0,
+  "variant": "current",
+  "sent": [
+    {
+      "seconds": 0.9073053329999999,
+      "query": "bravo"
+    },
+    {
+      "seconds": 1.804726458,
+      "query": "zzzznotfound"
+    },
+    {
+      "seconds": 2.710413375,
+      "query": "alpha"
+    },
+    {
+      "seconds": 3.602561166,
+      "query": ""
+    }
+  ],
+  "first_display": 0.15317082405090332,
+  "reader_done_at": 3.571661949157715,
+  "visible_samples_before_eof": 102,
+  "queries": {
+    "alpha": {
+      "seconds": 2.4829719066619873,
+      "candidates": 2000,
+      "alpha": 2000,
+      "bravo": 0,
+      "display_has_records": true
+    },
+    "bravo": {
+      "seconds": 0.6510238647460938,
+      "candidates": 2000,
+      "alpha": 0,
+      "bravo": 2000,
+      "display_has_records": true
+    },
+    "zzzznotfound": {
+      "seconds": 1.5501139163970947,
+      "candidates": 0,
+      "alpha": 0,
+      "bravo": 0,
+      "display_has_records": false
+    },
+    "": {
+      "seconds": 5.012849807739258,
+      "candidates": 2000,
+      "alpha": 1000,
+      "bravo": 1000,
+      "display_has_records": true
+    }
+  }
+}

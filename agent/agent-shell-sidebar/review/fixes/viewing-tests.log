@@ -1,0 +1,8 @@
+LANG=C.UTF-8 cannot be used, using en_US.UTF-8 instead.
+Running 3 tests (2026-09-08 13:30:20-0700, selector `t')
+   passed  1/3  viewing-missing-and-unreadable-files-retain-readable-error (0.002338 sec)
+   passed  2/3  viewing-regular-transcript-retains-real-view-mode (0.002936 sec)
+   passed  3/3  viewing-rejects-nonregular-replacements-before-file-open (0.005039 sec)
+
+Ran 3 tests, 3 results as expected, 0 unexpected (2026-09-08 13:30:20-0700, 0.010566 sec)
+

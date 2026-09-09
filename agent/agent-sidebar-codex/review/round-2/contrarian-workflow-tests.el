@@ -1,0 +1,86 @@
+;;; contrarian-workflow-tests.el --- Second-round command edge cases -*- lexical-binding: t; -*-
+(load (expand-file-name "../../tests.el" (file-name-directory load-file-name)) nil t)
+
+(ert-deftest workflow-r2-collapsed-codex-group-retains-new-session-context ()
+  (codex-test--fixture
+    (codex-test--write agent-sidebar-codex-home root)
+    (agent-sidebar-refresh) (merge--drain)
+    (agent-sidebar-set-grouping '(repo model))
+    (goto-char (point-min))
+    (agent-sidebar-toggle-group)
+    (should-not (merge--rows))
+    (let (launched)
+      (cl-letf (((symbol-function 'agent-sidebar--require-codex-terminal) #'ignore)
+                ((symbol-function 'agent-sidebar--launch-terminal)
+                 (lambda (name _program _args directory) (setq launched (list name directory)))))
+        (agent-sidebar-new-session))
+      (should (equal launched (list "*codex-new*" root))))))
+
+(defun workflow-r2--mixed-agent-group (&optional erase-agent)
+  "Return whether a group with two different agents starts a session.
+ERASE-AGENT injects a mutation removing the agent identity from contexts."
+  (codex-test--fixture
+    (merge--markdown root "codex" codex-test--id "Codex")
+    (merge--markdown root "claude" "claude-id" "Claude")
+    (agent-sidebar-refresh) (merge--drain)
+    (agent-sidebar-set-grouping '(repo))
+    (goto-char (point-min))
+    (let ((original (symbol-function 'agent-sidebar--new-context-for-entry)) launched)
+      (cl-letf (((symbol-function 'agent-shell-sidebar--select-config) (lambda (_name) 'fixture-config))
+                ((symbol-function 'agent-shell-sidebar--start)
+                 (lambda (&rest _) (setq launched t) buffer))
+                ((symbol-function 'agent-shell-sidebar--pop-to) #'ignore)
+                ((symbol-function 'agent-sidebar--new-context-for-entry)
+                 (lambda (entry)
+                   (let ((context (funcall original entry)))
+                     (if erase-agent (plist-put context :agent nil) context)))))
+        (condition-case nil (agent-sidebar-new-session) (user-error nil)))
+      launched)))
+
+(ert-deftest workflow-r2-mixed-agent-group-requires-row ()
+  (should-not (workflow-r2--mixed-agent-group)))
+
+(ert-deftest workflow-r2-erasing-agent-identity-mutation-is-detected ()
+  (should (workflow-r2--mixed-agent-group t))
+  (message "MUTATION: erasing :agent lets an ambiguous agent-shell group start, as detected"))
+
+(ert-deftest workflow-r2-local-codex-actions-reject-remote-cwd-before-stat ()
+  "Reject remote recorded CWDs before asking a remote file handler about them."
+  (let (observations)
+    (dolist (action '(agent-sidebar-visit agent-sidebar-visit-in-agent-shell agent-sidebar-new-session))
+    (codex-test--fixture
+      ;; Disable remote handlers throughout this fixture.  The two stubs below
+      ;; model path classification and record filesystem probes without networking.
+      (let* ((file-name-handler-alist nil)
+             (remote "/ssh:sidebar-review.invalid:/repo/")
+             (file (codex-test--write agent-sidebar-codex-home remote))
+             (original-directory-p (symbol-function 'file-directory-p))
+             remote-stats result)
+        (agent-sidebar-refresh) (merge--drain) (merge--goto file)
+        (cl-letf (((symbol-function 'file-remote-p)
+                   (lambda (path &rest _) (and (string-prefix-p "/ssh:" path) "/ssh:sidebar-review.invalid:")))
+                  ((symbol-function 'file-directory-p)
+                   (lambda (path)
+                     (if (string-prefix-p "/ssh:" path)
+                         (progn (push path remote-stats) nil)
+                       (funcall original-directory-p path))))
+                  ((symbol-function 'agent-sidebar--require-codex-terminal) #'ignore)
+                  ((symbol-function 'agent-sidebar--launch-terminal)
+                   (lambda (&rest _) (ert-fail "Local Codex action launched a remote CWD")))
+                  ((symbol-function 'agent-sidebar--codex-start-agent-shell)
+                   (lambda (&rest _) (ert-fail "Local Codex ACP action launched a remote CWD"))))
+          (setq result (condition-case err (funcall action) (user-error err))))
+        (message "REMOTE CWD: action=%S remote-stat-calls=%S result=%S" action remote-stats result)
+        (should (eq (car-safe result) 'user-error))
+        (push (cons action remote-stats) observations))))
+    (should (cl-every (lambda (observation) (null (cdr observation))) observations))))
+
+(ert-deftest workflow-r2-derived-mode-binds-actions-and-preserves-core-keys ()
+  (codex-test--fixture
+    (should (derived-mode-p 'agent-shell-sidebar-mode))
+    (should (eq (key-binding (kbd "RET")) 'agent-sidebar-visit))
+    (should (eq (key-binding (kbd "A")) 'agent-sidebar-visit-in-agent-shell))
+    (should (eq (key-binding (kbd "N")) 'agent-sidebar-new-session))
+    (should (eq (key-binding (kbd "o")) 'agent-shell-sidebar-open-transcript))
+    (should (eq agent-shell-sidebar--parse-file-function 'agent-sidebar--parse-file))
+    (should (eq agent-shell-sidebar--owned-file-p-function 'agent-sidebar--owned-file-p))))

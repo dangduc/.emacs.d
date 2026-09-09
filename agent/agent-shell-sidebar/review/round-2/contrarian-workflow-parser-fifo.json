@@ -1,0 +1,1 @@
+{"timed_out": false, "returncode": 0, "output": "LANG=C.UTF-8 cannot be used, using en_US.UTF-8 instead.\nFIFO type=nil modes=\"prw-r--r--\" regular=nil discovered=nil\nFIFO header=(:error \"Not a regular transcript file: /var/folders/20/4zczrx1s3lq2fv0xmm0gj1fr0000gn/T/sidebar-workflow-fifo-wc8upb9q/.agent-shell/transcripts/pending.md\")\n", "elapsed_seconds": 0.213}

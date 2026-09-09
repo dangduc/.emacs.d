@@ -1,0 +1,57 @@
+LANG=C.UTF-8 cannot be used, using en_US.UTF-8 instead.
+PROBE ENVIRONMENT: Emacs 31.1; agent-shell 0.74.3
+Running 3 tests (2026-09-08 13:07:48-0700, selector `t')
+Deleted 0. Retained 1 mark(s): Transcript belongs to an open agent-shell: /var/folders/20/4zczrx1s3lq2fv0xmm0gj1fr0000gn/T/sidebar-torvalds-control-Yudykg/.agent-shell/transcripts/session.md
+CONTROL: exact-owner-path owned-file-exists=t retained-mark=delete
+   passed  1/3  torvalds-control-preserves-owned-transcript-at-exact-path (0.426841 sec)
+ALIAS: discovered=t same-file=t exact-owner-path-match=nil owner-listed=t
+Deleted 0. Retained 1 mark(s): Transcript belongs to an open agent-shell: /var/folders/20/4zczrx1s3lq2fv0xmm0gj1fr0000gn/T/sidebar-torvalds-alias-pJc82c/alias/.agent-shell/transcripts/session.md
+DELETION: owned-file-exists=t retained-mark=delete
+   passed  2/3  torvalds-refuses-owned-transcript-through-project-path-alias (0.003205 sec)
+READABILITY: before=unreadable after=readable direct-parser-session="fixture-session" signature-unchanged=t
+RECOVERY: pending-after-refresh=0 cached-error-after-retry="Opening input file: Permission denied, /var/folders/20/4zczrx1s3lq2fv0xmm0gj1fr0000gn/T/sidebar-torvalds-read-PxN0xH/.agent-shell/transcripts/session.md"
+Test torvalds-retries-header-after-read-permission-is-restored backtrace:
+  ert-fail(((should-not (plist-get recovered :error)) :form (plist-get
+  (if (not (unwind-protect (setq value-22 (apply fn-20 args-21)) (setq
+  (let (form-description-24) (if (not (unwind-protect (setq value-22 (
+  (let ((value-22 'ert-form-evaluation-aborted-23)) (let (form-descrip
+  (let* ((fn-20 #'plist-get) (args-21 (condition-case err (list recove
+  (let ((recovered (agent-shell-sidebar--ensure-parsed file))) (messag
+  (let* ((before (file-attributes file)) (unreadable (agent-shell-side
+  (progn (agent-shell-sidebar-mode) (set-file-modes file 0) (let* ((fn
+  (unwind-protect (progn (agent-shell-sidebar-mode) (set-file-modes fi
+  (save-current-buffer (set-buffer temp-buffer) (unwind-protect (progn
+  (let ((temp-buffer (generate-new-buffer " *temp*" t))) (save-current
+  (progn (fset 'agent-shell-buffers vnew) (fset 'project-known-project
+  (unwind-protect (progn (fset 'agent-shell-buffers vnew) (fset 'proje
+  (let* ((vnew #'(lambda nil nil)) (vnew #'(lambda nil nil)) (old (sym
+  (unwind-protect (let* ((vnew #'(lambda nil nil)) (vnew #'(lambda nil
+  (let* ((root (file-name-as-directory (make-temp-file "sidebar-torval
+  #f(lambda () [t] (let* ((root (file-name-as-directory ...)) (file (t
+  #f(compiled-function () #<bytecode 0x9bf106dad05666e>)()
+  handler-bind-1(#f(compiled-function () #<bytecode 0x9bf106dad05666e>
+  ert--run-test-internal(#s(ert--test-execution-info :test ... :result
+  ert-run-test(#s(ert-test :name torvalds-retries-header-after-read-pe
+  ert-run-or-rerun-test(#s(ert--stats :selector t :tests ... :test-map
+  ert-run-tests(t #f(compiled-function (event-type &rest event-args) #
+  ert-run-tests-batch(nil)
+  ert-run-tests-batch-and-exit()
+  command-line-1(("-l" "jka-compr" "-L" "/Users/ducnguyen/.emacs.d/elp
+  command-line()
+  normal-top-level()
+Test torvalds-retries-header-after-read-permission-is-restored condition:
+    (ert-test-failed
+     ((should-not (plist-get recovered :error)) :form
+      (plist-get
+       (:error
+	"Opening input file: Permission denied, /var/folders/20/4zczrx1s3lq2fv0xmm0gj1fr0000gn/T/sidebar-torvalds-read-PxN0xH/.agent-shell/transcripts/session.md")
+       :error)
+      :value
+      "Opening input file: Permission denied, /var/folders/20/4zczrx1s3lq2fv0xmm0gj1fr0000gn/T/sidebar-torvalds-read-PxN0xH/.agent-shell/transcripts/session.md"))
+   FAILED  3/3  torvalds-retries-header-after-read-permission-is-restored (0.001541 sec) at agent/agent-shell-sidebar/review/round-1/torvalds-probe.el:16
+
+Ran 3 tests, 2 results as expected, 1 unexpected (2026-09-08 13:07:49-0700, 0.493058 sec)
+
+1 unexpected results:
+   FAILED  torvalds-retries-header-after-read-permission-is-restored
+

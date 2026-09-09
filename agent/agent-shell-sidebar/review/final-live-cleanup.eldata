@@ -1,0 +1,4 @@
+(:pid 3353 :recursion 0 :library
+      "/Users/ducnguyen/.emacs.d/lisp/agent-shell-sidebar.elc"
+      :compiled t :guard t :fixture-buffer nil :staging-buffers nil
+      :registered-owners nil :reset-hook nil)

@@ -1,0 +1,40 @@
+LANG=C.UTF-8 cannot be used, using en_US.UTF-8 instead.
+Running 3 tests (2026-09-08 12:54:44-0700, selector `(member contrarian-evidence-byte-limit-is-independent-of-boundary contrarian-evidence-first-message-is-a-boundary-without-separator contrarian-evidence-complete-id-at-byte-limit-is-retained)')
+Test contrarian-evidence-byte-limit-is-independent-of-boundary backtrace:
+  ert-fail(((should-not (plist-get header :agent)) :form (plist-get (:
+  (if (not (unwind-protect (setq value-17 (apply fn-15 args-16)) (setq
+  (let (form-description-19) (if (not (unwind-protect (setq value-17 (
+  (let ((value-17 'ert-form-evaluation-aborted-18)) (let (form-descrip
+  (let* ((fn-15 #'plist-get) (args-16 (condition-case err (list header
+  (let ((header (agent-shell-sidebar--parse-header-from-file file))) (
+  (progn (make-directory (file-name-directory file) t) (let ((temp-fil
+  (unwind-protect (progn (make-directory (file-name-directory file) t)
+  (let* ((root (file-name-as-directory (make-temp-file "sidebar-eviden
+  #f(lambda () [t] (let* ((root (file-name-as-directory ...)) (file (e
+  #f(compiled-function () #<bytecode 0x2ccd945a94a8523>)()
+  handler-bind-1(#f(compiled-function () #<bytecode 0x2ccd945a94a8523>
+  ert--run-test-internal(#s(ert--test-execution-info :test #s(ert-test
+  ert-run-test(#s(ert-test :name contrarian-evidence-byte-limit-is-ind
+  ert-run-or-rerun-test(#s(ert--stats :selector ... :tests ... :test-m
+  ert-run-tests((member contrarian-evidence-byte-limit-is-independent-
+  ert-run-tests-batch((member contrarian-evidence-byte-limit-is-indepe
+  ert-run-tests-batch-and-exit((member contrarian-evidence-byte-limit-
+  eval-buffer(#<buffer  *load*> nil "/Users/ducnguyen/.emacs.d/agent/a
+  load-with-code-conversion("/Users/ducnguyen/.emacs.d/agent/agent-she
+  load("/Users/ducnguyen/.emacs.d/agent/agent-shell-sidebar/review/rou
+  command-line-1(("-l" "jka-compr" "-L" "/Users/ducnguyen/.emacs.d/elp
+  command-line()
+  normal-top-level()
+Test contrarian-evidence-byte-limit-is-independent-of-boundary condition:
+    (ert-test-failed
+     ((should-not (plist-get header :agent)) :form
+      (plist-get (:agent "Too Late") :agent) :value "Too Late"))
+   FAILED  1/3  contrarian-evidence-byte-limit-is-independent-of-boundary (0.001238 sec) at agent/agent-shell-sidebar/review/round-1/contrarian-evidence-probe.el:29
+   passed  2/3  contrarian-evidence-first-message-is-a-boundary-without-separator (0.000899 sec)
+   passed  3/3  contrarian-evidence-complete-id-at-byte-limit-is-retained (0.001184 sec)
+
+Ran 3 tests, 2 results as expected, 1 unexpected (2026-09-08 12:54:44-0700, 0.052198 sec)
+
+1 unexpected results:
+   FAILED  contrarian-evidence-byte-limit-is-independent-of-boundary
+

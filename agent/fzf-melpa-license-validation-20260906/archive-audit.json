@@ -1,0 +1,23 @@
+{
+  "source-pr": {
+    "archive": "/private/tmp/fzf-melpa-validation-20260906/source-pr/packages/fzf-native-20260907.242.tar",
+    "files": 24,
+    "missing_inputs": [],
+    "excluded_files_present": [],
+    "unicode_notice_present": true
+  },
+  "main": {
+    "archive": "/private/tmp/fzf-melpa-validation-20260906/main/packages/fzf-native-20260831.1556.tar",
+    "files": 24,
+    "missing_inputs": [],
+    "excluded_files_present": [],
+    "unicode_notice_present": false
+  },
+  "stable": {
+    "archive": "/private/tmp/fzf-melpa-validation-20260906/stable/packages/fzf-native-2.8.tar",
+    "files": 24,
+    "missing_inputs": [],
+    "excluded_files_present": [],
+    "unicode_notice_present": false
+  }
+}

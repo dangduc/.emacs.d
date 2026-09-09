@@ -1,0 +1,48 @@
+LANG=C.UTF-8 cannot be used, using en_US.UTF-8 instead.
+Running 1 tests (2026-09-08 15:24:49-0700, selector `review-root-new-session-pending-row-uses-recorded-directory')
+NEW PENDING ROW: expected="/var/folders/20/4zczrx1s3lq2fv0xmm0gj1fr0000gn/T/agent-sidebar-merge-pg99hw/different recorded repo/" actual="/var/folders/20/4zczrx1s3lq2fv0xmm0gj1fr0000gn/T/agent-sidebar-merge-pg99hw/repo-with space/"
+Test review-root-new-session-pending-row-uses-recorded-directory backtrace:
+  ert-fail(((should (equal launched actual)) :form (equal "/var/folder
+  (if (unwind-protect (setq value-937 (apply fn-935 args-936)) (setq f
+  (let (form-description-939) (if (unwind-protect (setq value-937 (app
+  (let ((value-937 'ert-form-evaluation-aborted-938)) (let (form-descr
+  (let* ((fn-935 #'equal) (args-936 (condition-case err (list launched
+  (let* ((actual (expand-file-name "different recorded repo/" temporar
+  (let ((agent-sidebar-codex-home (expand-file-name "codex/" temporary
+  (save-current-buffer (set-buffer buffer) (agent-sidebar-mode) (let (
+  (progn (fset 'input-pending-p vnew) (fset 'agent-shell-buffers vnew)
+  (unwind-protect (progn (fset 'input-pending-p vnew) (fset 'agent-she
+  (let* ((vnew #'(lambda nil nil)) (vnew #'(lambda nil nil)) (vnew #'(
+  (unwind-protect (let* ((vnew #'(lambda nil nil)) (vnew #'(lambda nil
+  (let* ((temporary (file-name-as-directory (make-temp-file "agent-sid
+  #f(lambda () [t] (let* ((temporary (file-name-as-directory ...)) (ro
+  #f(compiled-function () #<bytecode -0x1891629046514658>)()
+  handler-bind-1(#f(compiled-function () #<bytecode -0x189162904651465
+  ert--run-test-internal(#s(ert--test-execution-info :test ... :result
+  ert-run-test(#s(ert-test :name review-root-new-session-pending-row-u
+  ert-run-or-rerun-test(#s(ert--stats :selector review-root-new-sessio
+  ert-run-tests(review-root-new-session-pending-row-uses-recorded-dire
+  ert-run-tests-batch(review-root-new-session-pending-row-uses-recorde
+  ert-run-tests-batch-and-exit(review-root-new-session-pending-row-use
+  eval((ert-run-tests-batch-and-exit 'review-root-new-session-pending-
+  command-line-1(("-l" "jka-compr" "-L" "/private/tmp/sidebar-review-l
+  command-line()
+  normal-top-level()
+Test review-root-new-session-pending-row-uses-recorded-directory condition:
+    (ert-test-failed
+     ((should (equal launched actual)) :form
+      (equal
+       "/var/folders/20/4zczrx1s3lq2fv0xmm0gj1fr0000gn/T/agent-sidebar-merge-pg99hw/repo-with space/"
+       "/var/folders/20/4zczrx1s3lq2fv0xmm0gj1fr0000gn/T/agent-sidebar-merge-pg99hw/different recorded repo/")
+      :value nil :explanation
+      (arrays-of-different-length 92 100
+				  "/var/folders/20/4zczrx1s3lq2fv0xmm0gj1fr0000gn/T/agent-sidebar-merge-pg99hw/repo-with space/"
+				  "/var/folders/20/4zczrx1s3lq2fv0xmm0gj1fr0000gn/T/agent-sidebar-merge-pg99hw/different recorded repo/"
+				  first-mismatch-at 76)))
+   FAILED  1/1  review-root-new-session-pending-row-uses-recorded-directory (0.366070 sec) at agent/agent-sidebar-codex/review/root-integration-tests.el:4
+
+Ran 1 tests, 0 results as expected, 1 unexpected (2026-09-08 15:24:49-0700, 0.422871 sec)
+
+1 unexpected results:
+   FAILED  review-root-new-session-pending-row-uses-recorded-directory
+

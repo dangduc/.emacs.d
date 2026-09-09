@@ -1,0 +1,21 @@
+LANG=C.UTF-8 cannot be used, using en_US.UTF-8 instead.
+Running 12 tests (2026-09-08 15:35:22-0700, selector `(or "^fix-workflow-" "^review-workflow-")')
+   passed   1/12  review-workflow-ret-and-a-reject-native-missing-cwd-control (0.747971 sec)
+REPO-ONLY CODEX GROUP: calls=((terminal "*codex-new*" "/var/folders/20/4zczrx1s3lq2fv0xmm0gj1fr0000gn/T/agent-sidebar-merge-2qvBBi/repo-with space/"))
+   passed   2/12  review-workflow-repo-only-group-keeps-unique-codex-provider (0.039293 sec)
+CHANGED CWD: expected="/var/folders/20/4zczrx1s3lq2fv0xmm0gj1fr0000gn/T/agent-sidebar-merge-iBIgJA/changed-existing-repository/" launch="/var/folders/20/4zczrx1s3lq2fv0xmm0gj1fr0000gn/T/agent-sidebar-merge-iBIgJA/changed-existing-repository/"
+   passed   3/12  review-workflow-new-revalidates-changed-native-directory (0.012459 sec)
+MISSING CWD: result=(user-error "Selected transcript has no existing working directory") launch=nil
+   passed   4/12  review-workflow-new-rejects-native-missing-cwd (0.025151 sec)
+ERROR ROW: result=(user-error "No valid Codex thread id in rollout prefix") launch=nil
+   passed   5/12  review-workflow-new-rejects-native-error-row (0.011020 sec)
+   passed   6/12  fix-workflow-actions-abort-on-reentrant-provider-replacement (0.032693 sec)
+   passed   7/12  fix-workflow-agent-shell-group-keeps-codex-agent (0.013932 sec)
+   passed   8/12  fix-workflow-group-keeps-captured-home-and-prefix-codex-agent (0.028277 sec)
+   passed   9/12  fix-workflow-group-with-multiple-codex-homes-requires-row (0.015131 sec)
+   passed  10/12  fix-workflow-mixed-provider-group-requires-row (0.033970 sec)
+   passed  11/12  fix-workflow-new-aborts-on-reentrant-owner-change (0.006203 sec)
+   passed  12/12  fix-workflow-new-rejects-removed-display-entry (0.024756 sec)
+
+Ran 12 tests, 12 results as expected, 0 unexpected (2026-09-08 15:35:23-0700, 0.991338 sec)
+

@@ -1,0 +1,299 @@
+LANG=C.UTF-8 cannot be used, using en_US.UTF-8 instead.
+PROBE ENVIRONMENT: Emacs 31.1; agent-shell 0.74.3
+Running 94 tests (2026-09-08 13:30:37-0700, selector `t')
+Test contrarian-evidence-byte-limit-is-independent-of-boundary backtrace:
+  ert-fail(((should-not (plist-get header :agent)) :form (plist-get (:
+  (if (not (unwind-protect (setq value-1409 (apply fn-1407 args-1408))
+  (let (form-description-1411) (if (not (unwind-protect (setq value-14
+  (let ((value-1409 'ert-form-evaluation-aborted-1410)) (let (form-des
+  (let* ((fn-1407 #'plist-get) (args-1408 (condition-case err (list he
+  (let ((header (agent-shell-sidebar--parse-header-from-file file))) (
+  (progn (make-directory (file-name-directory file) t) (let ((temp-fil
+  (unwind-protect (progn (make-directory (file-name-directory file) t)
+  (let* ((root (file-name-as-directory (make-temp-file "sidebar-eviden
+  #f(lambda () [t] (let* ((root (file-name-as-directory ...)) (file (e
+  #f(compiled-function () #<bytecode -0xba7c4855f84c439>)()
+  handler-bind-1(#f(compiled-function () #<bytecode -0xba7c4855f84c439
+  ert--run-test-internal(#s(ert--test-execution-info :test #s(ert-test
+  ert-run-test(#s(ert-test :name contrarian-evidence-byte-limit-is-ind
+  ert-run-or-rerun-test(#s(ert--stats :selector t :tests ... :test-map
+  ert-run-tests(t #f(compiled-function (event-type &rest event-args) #
+  ert-run-tests-batch(nil)
+  ert-run-tests-batch-and-exit()
+  command-line-1(("-l" "jka-compr" "-L" "/Users/ducnguyen/.emacs.d/elp
+  command-line()
+  normal-top-level()
+Test contrarian-evidence-byte-limit-is-independent-of-boundary condition:
+    (ert-test-failed
+     ((should-not (plist-get header :agent)) :form
+      (plist-get (:agent "Too Late") :agent) :value "Too Late"))
+   FAILED   1/94  contrarian-evidence-byte-limit-is-independent-of-boundary (0.001763 sec) at agent/agent-shell-sidebar/review/round-1/contrarian-evidence-probe.el:29
+   passed   2/94  contrarian-evidence-complete-id-at-byte-limit-is-retained (0.001056 sec)
+   passed   3/94  contrarian-evidence-first-message-is-a-boundary-without-separator (0.000674 sec)
+Created .agent-shell/transcripts/fixture.md
+Real writer: recorded="/var/folders/20/4zczrx1s3lq2fv0xmm0gj1fr0000gn/T/sidebar-evidence-5CRIRI/project " parsed="/var/folders/20/4zczrx1s3lq2fv0xmm0gj1fr0000gn/T/sidebar-evidence-5CRIRI/project " resolved="/var/folders/20/4zczrx1s3lq2fv0xmm0gj1fr0000gn/T/sidebar-evidence-5CRIRI/project /"
+   passed   4/94  contrarian-evidence-real-writer-preserves-directory-ending-in-space (0.001215 sec)
+Cutoff: complete="complete-session-identifier" parsed="complete-session-identifier" start-session="complete-session-identifier" file-bytes=8220 visit-error=nil
+Test contrarian-evidence-session-id-cut-by-byte-limit-is-not-used backtrace:
+  ert-fail(((should (or (plist-get header :error) (not (plist-get head
+  (if (unwind-protect (setq value-1412 (or (plist-get header :error) (
+  (let (form-description-1413) (if (unwind-protect (setq value-1412 (o
+  (let ((value-1412 (gensym "ert-form-evaluation-aborted-"))) (let (fo
+  (let ((header (agent-shell-sidebar--parse-header-from-file file)) st
+  (let* ((prefix (format "# Agent Shell Transcript\n**Agent:** Mock\n*
+  (progn (make-directory (file-name-directory file) t) (let* ((prefix 
+  (unwind-protect (progn (make-directory (file-name-directory file) t)
+  (let* ((root (file-name-as-directory (make-temp-file "sidebar-eviden
+  #f(lambda () [t] (let* ((root (file-name-as-directory ...)) (file (e
+  #f(compiled-function () #<bytecode -0xba7c4855f84c439>)()
+  handler-bind-1(#f(compiled-function () #<bytecode -0xba7c4855f84c439
+  ert--run-test-internal(#s(ert--test-execution-info :test #s(ert-test
+  ert-run-test(#s(ert-test :name contrarian-evidence-session-id-cut-by
+  ert-run-or-rerun-test(#s(ert--stats :selector t :tests ... :test-map
+  ert-run-tests(t #f(compiled-function (event-type &rest event-args) #
+  ert-run-tests-batch(nil)
+  ert-run-tests-batch-and-exit()
+  command-line-1(("-l" "jka-compr" "-L" "/Users/ducnguyen/.emacs.d/elp
+  command-line()
+  normal-top-level()
+Test contrarian-evidence-session-id-cut-by-byte-limit-is-not-used condition:
+    (ert-test-failed
+     ((should (or (plist-get header :error) (not ...))) :form
+      (or (plist-get header :error) (not (plist-get header :session-id)))
+      :value nil))
+   FAILED   5/94  contrarian-evidence-session-id-cut-by-byte-limit-is-not-used (0.001503 sec) at agent/agent-shell-sidebar/review/round-1/contrarian-evidence-probe.el:37
+   passed   6/94  identity-active-session-replaces-pending-identity (0.000499 sec)
+   passed   7/94  identity-ambiguous-alias-obeys-explicit-selection-on-every-visit (0.397221 sec)
+Deleted 1 transcript(s)
+   passed   8/94  identity-deletion-ignores-absent-owner-paths (0.390247 sec)
+Deleted 0. Retained 1 mark(s): Transcript belongs to an open agent-shell: /var/folders/20/4zczrx1s3lq2fv0xmm0gj1fr0000gn/T/sidebar-identity-DM0cZY/alias/.agent-shell/transcripts/session.md
+Deleted 0. Retained 1 mark(s): Transcript belongs to an open agent-shell: /var/folders/20/4zczrx1s3lq2fv0xmm0gj1fr0000gn/T/sidebar-identity-DM0cZY/real/.agent-shell/transcripts/session.md
+   passed   9/94  identity-deletion-protects-directory-alias-in-both-directions (0.004962 sec)
+Deleted 1. Retained 1 mark(s): Transcript belongs to an open agent-shell: /var/folders/20/4zczrx1s3lq2fv0xmm0gj1fr0000gn/T/sidebar-identity-Hhhgu0/hard-link.md
+   passed  10/94  identity-deletion-protects-hard-links-and-removes-distinct-copy (0.003986 sec)
+Deleted 0. Retained 1 mark(s): Fixture stat failure
+   passed  11/94  identity-deletion-retains-mark-when-ownership-stat-fails (0.001600 sec)
+   passed  12/94  identity-missing-agent-uses-selected-config-before-reuse (0.001486 sec)
+Installed Claude maker: fresh-alists=t equivalent=t visits=2 starts=1
+   passed  13/94  identity-real-config-maker-reuses-across-fresh-resolutions (0.001349 sec)
+   passed  14/94  identity-removed-config-retains-exact-live-session-access (0.001180 sec)
+   passed  15/94  identity-same-names-do-not-cross-config-directory-or-session (0.002096 sec)
+   passed  16/94  identity-substring-alias-reuses-connecting-and-active-shell (0.022429 sec)
+   passed  17/94  identity-toggle-preserves-ordinary-view-and-removes-only-side-window (0.003392 sec)
+   passed  18/94  identity-unconfigured-exact-name-still-refuses-multiple-configs (0.000357 sec)
+Cancelled timer: no callback, no cache write, no queue or timer.
+   passed  19/94  kingsbury-cancelled-timer-does-not-run (0.001263 sec)
+Mode change: ready timer cancelled without a cache write.
+   passed  20/94  kingsbury-mode-change-cancels-ready-timer (0.001071 sec)
+Read race: next activation repaired the old signature and retained the new session.
+   passed  21/94  kingsbury-read-race-is-rechecked-on-next-activation (0.393739 sec)
+Transient hook error: first file cached=nil, queued=t; remaining=("one.md" "two.md"); timer=[nil 0 0 100000 nil agent-shell-sidebar--parse-tick (#<buffer  *temp*-318177>) idle 0 nil]
+   passed  22/94  kingsbury-transient-read-hook-error-keeps-work-scheduled (0.001965 sec)
+   passed  23/94  metadata-bounded-preview-does-not-invalidate-complete-header (0.002659 sec)
+Test metadata-byte-limit-retains-only-complete-lines backtrace:
+  ert-fail(((should (plist-get header :error)) :form (plist-get (:sess
+  (if (unwind-protect (setq value-748 (apply fn-746 args-747)) (setq f
+  (let (form-description-750) (if (unwind-protect (setq value-748 (app
+  (let ((value-748 'ert-form-evaluation-aborted-749)) (let (form-descr
+  (let* ((fn-746 #'plist-get) (args-747 (condition-case err (list head
+  (let ((header (agent-shell-sidebar--parse-header-from-file file))) (
+  (let ((tail (car tail))) (let ((temp-file file) (temp-buffer (genera
+  (while tail (let ((tail (car tail))) (let ((temp-file file) (temp-bu
+  (let ((tail '("\n**Session ID:** complete\n" "\n**Session ID:** comp
+  (progn (fset 'agent-shell-buffers vnew) (fset 'project-known-project
+  (unwind-protect (progn (fset 'agent-shell-buffers vnew) (fset 'proje
+  (let* ((vnew #'(lambda nil nil)) (vnew #'(lambda nil nil)) (old (sym
+  (unwind-protect (let* ((vnew #'(lambda nil nil)) (vnew #'(lambda nil
+  (let* ((root (file-name-as-directory (make-temp-file "sidebar-metada
+  #f(lambda () [t] (let* ((root (file-name-as-directory ...)) (file (e
+  #f(compiled-function () #<bytecode -0xba7c4855f84c439>)()
+  handler-bind-1(#f(compiled-function () #<bytecode -0xba7c4855f84c439
+  ert--run-test-internal(#s(ert--test-execution-info :test #s(ert-test
+  ert-run-test(#s(ert-test :name metadata-byte-limit-retains-only-comp
+  ert-run-or-rerun-test(#s(ert--stats :selector t :tests ... :test-map
+  ert-run-tests(t #f(compiled-function (event-type &rest event-args) #
+  ert-run-tests-batch(nil)
+  ert-run-tests-batch-and-exit()
+  command-line-1(("-l" "jka-compr" "-L" "/Users/ducnguyen/.emacs.d/elp
+  command-line()
+  normal-top-level()
+Test metadata-byte-limit-retains-only-complete-lines condition:
+    (ert-test-failed
+     ((should (plist-get header :error)) :form
+      (plist-get (:session-id "complete") :error) :value nil))
+   FAILED  24/94  metadata-byte-limit-retains-only-complete-lines (0.002177 sec) at agent/agent-shell-sidebar/review/fixes/metadata-tests.el:63
+   passed  25/94  metadata-cache-belongs-to-each-sidebar-snapshot (0.397610 sec)
+   passed  26/94  metadata-discovery-and-parser-reject-special-files (0.003435 sec)
+   passed  27/94  metadata-empty-directory-is-distinct-from-whitespace-directory (0.001220 sec)
+Test metadata-growth-during-read-does-not-complete-a-cutoff-field backtrace:
+  ert-fail(((should (plist-get header :error)) :form (plist-get (:sess
+  (if (unwind-protect (setq value-773 (apply fn-771 args-772)) (setq f
+  (let (form-description-775) (if (unwind-protect (setq value-773 (app
+  (let ((value-773 'ert-form-evaluation-aborted-774)) (let (form-descr
+  (let* ((fn-771 #'plist-get) (args-772 (condition-case err (list head
+  (let ((header (agent-shell-sidebar--parse-header-from-file file))) (
+  (progn (fset 'insert-file-contents vnew) (let ((header (agent-shell-
+  (unwind-protect (progn (fset 'insert-file-contents vnew) (let ((head
+  (let* ((vnew #'(lambda (&rest args) (write-region (concat label "com
+  (let* ((label "\n**Session ID:** ") (padding (- 8192 (string-bytes l
+  (progn (fset 'agent-shell-buffers vnew) (fset 'project-known-project
+  (unwind-protect (progn (fset 'agent-shell-buffers vnew) (fset 'proje
+  (let* ((vnew #'(lambda nil nil)) (vnew #'(lambda nil nil)) (old (sym
+  (unwind-protect (let* ((vnew #'(lambda nil nil)) (vnew #'(lambda nil
+  (let* ((root (file-name-as-directory (make-temp-file "sidebar-metada
+  #f(lambda () [t] (let* ((root (file-name-as-directory ...)) (file (e
+  #f(compiled-function () #<bytecode -0xba7c4855f84c439>)()
+  handler-bind-1(#f(compiled-function () #<bytecode -0xba7c4855f84c439
+  ert--run-test-internal(#s(ert--test-execution-info :test #s(ert-test
+  ert-run-test(#s(ert-test :name metadata-growth-during-read-does-not-
+  ert-run-or-rerun-test(#s(ert--stats :selector t :tests ... :test-map
+  ert-run-tests(t #f(compiled-function (event-type &rest event-args) #
+  ert-run-tests-batch(nil)
+  ert-run-tests-batch-and-exit()
+  command-line-1(("-l" "jka-compr" "-L" "/Users/ducnguyen/.emacs.d/elp
+  command-line()
+  normal-top-level()
+Test metadata-growth-during-read-does-not-complete-a-cutoff-field condition:
+    (ert-test-failed
+     ((should (plist-get header :error)) :form
+      (plist-get (:session-id "complete-session") :error) :value nil))
+   FAILED  28/94  metadata-growth-during-read-does-not-complete-a-cutoff-field (0.001649 sec) at agent/agent-shell-sidebar/review/fixes/metadata-tests.el:81
+   passed  29/94  metadata-parser-rechecks-after-activation-attributes-were-read (0.002747 sec)
+   passed  30/94  metadata-permission-errors-retry-on-refresh-and-activation (0.001806 sec)
+Created .agent-shell/transcripts/fixture.md
+Created .agent-shell/transcripts/fixture.md
+Created .agent-shell/transcripts/fixture.md
+Created .agent-shell/transcripts/fixture.md
+   passed  31/94  metadata-real-writer-preserves-directory-whitespace (0.002812 sec)
+   passed  32/94  metadata-rechecks-a-discovered-file-before-reading (0.002688 sec)
+   passed  33/94  metadata-true-eof-retains-an-unterminated-complete-field (0.000812 sec)
+Test metadata-truncated-activation-fields-never-start-a-session backtrace:
+  string-match("8192-byte read limit" nil nil t)
+  string-match-p("8192-byte read limit" nil)
+  apply(string-match-p ("8192-byte read limit" nil))
+  (setq value-738 (apply fn-736 args-737))
+  (unwind-protect (setq value-738 (apply fn-736 args-737)) (setq form-
+  (if (unwind-protect (setq value-738 (apply fn-736 args-737)) (setq f
+  (let (form-description-740) (if (unwind-protect (setq value-738 (app
+  (let ((value-738 'ert-form-evaluation-aborted-739)) (let (form-descr
+  (let* ((fn-736 #'string-match-p) (args-737 (condition-case err (list
+  (let ((header (agent-shell-sidebar--parse-header-from-file file))) (
+  (let* ((prefix (concat "# Agent Shell Transcript\n" (if (eq (nth 1 f
+  (let ((field (car tail))) (let* ((prefix (concat "# Agent Shell Tran
+  (while tail (let ((field (car tail))) (let* ((prefix (concat "# Agen
+  (let ((tail (cons '("Session ID" :session-id "complete-session") (co
+  (let ((full-directory (expand-file-name "project " root)) (wrong-dir
+  (progn (fset 'agent-shell-buffers vnew) (fset 'project-known-project
+  (unwind-protect (progn (fset 'agent-shell-buffers vnew) (fset 'proje
+  (let* ((vnew #'(lambda nil nil)) (vnew #'(lambda nil nil)) (old (sym
+  (unwind-protect (let* ((vnew #'(lambda nil nil)) (vnew #'(lambda nil
+  (let* ((root (file-name-as-directory (make-temp-file "sidebar-metada
+  #f(lambda () [t] (let* ((root (file-name-as-directory ...)) (file (e
+  #f(compiled-function () #<bytecode -0xba7c4855f84c439>)()
+  handler-bind-1(#f(compiled-function () #<bytecode -0xba7c4855f84c439
+  ert--run-test-internal(#s(ert--test-execution-info :test ... :result
+  ert-run-test(#s(ert-test :name metadata-truncated-activation-fields-
+  ert-run-or-rerun-test(#s(ert--stats :selector t :tests ... :test-map
+  ert-run-tests(t #f(compiled-function (event-type &rest event-args) #
+  ert-run-tests-batch(nil)
+  ert-run-tests-batch-and-exit()
+  command-line-1(("-l" "jka-compr" "-L" "/Users/ducnguyen/.emacs.d/elp
+  command-line()
+  normal-top-level()
+Test metadata-truncated-activation-fields-never-start-a-session condition:
+    (wrong-type-argument stringp nil)
+   FAILED  34/94  metadata-truncated-activation-fields-never-start-a-session (0.001117 sec) at agent/agent-shell-sidebar/review/fixes/metadata-tests.el:39
+OUSTERHOUT-2: first-sidebar="▾ ousterhout-sidebar-XW0EkJ (1)
+  ▾ Claude (1)
+      09-08 13:30: First prompt
+" pending=nil timer=nil
+   passed  35/94  ousterhout-global-cache-preserves-other-buffer-metadata (0.388526 sec)
+Resuming unsupported by agent. Starting new session.
+OUSTERHOUT-1: actual-session="new-session" retained-request="old-session" old-row-reuses-new=nil
+   passed  36/94  ousterhout-live-request-id-is-not-current-after-fallback (0.000590 sec)
+OUSTERHOUT-3: recorded-agent=Claude Code resolved-agent=Claude visits=2 starts=1
+   passed  37/94  ousterhout-substring-agent-resolution-reuses-started-session (0.007163 sec)
+   passed  38/94  scheduling-disabled-refresh-skips-a-pending-callback (0.000487 sec)
+   passed  39/94  scheduling-idle-reset-rearms-both-timers-from-another-buffer (0.430987 sec)
+   passed  40/94  scheduling-input-and-mode-change-stop-staged-work (0.248843 sec)
+   passed  41/94  scheduling-persistent-hook-failure-is-bounded-and-visible (0.006530 sec)
+   passed  42/94  scheduling-publish-preserves-independent-window-views-and-marks (0.573577 sec)
+   passed  43/94  scheduling-quit-discards-a-partially-written-staging-row (0.578045 sec)
+   passed  44/94  scheduling-quit-retains-work-and-rearms (0.003850 sec)
+   passed  45/94  scheduling-refresh-cancels-snapshot-before-removing-a-file (0.626746 sec)
+Sidebar redraw failed: Injected render failure
+   passed  46/94  scheduling-render-error-stops-and-manual-refresh-recovers (0.365493 sec)
+   passed  47/94  scheduling-rendering-is-progressive-bounded-and-coherent (0.562228 sec)
+   passed  48/94  scheduling-snapshot-freezes-header-and-attribute-pair (0.734771 sec)
+   passed  49/94  scheduling-transient-standard-read-hook-retries-the-same-head (0.006808 sec)
+   passed  50/94  scheduling-user-redraw-invalidates-stale-filter-and-fold-snapshots (0.417312 sec)
+   passed  51/94  sidebar-ambiguous-config-name-never-selects-first (0.000109 sec)
+   passed  52/94  sidebar-cache-detects-size-change-with-identical-mtime (0.002282 sec)
+   passed  53/94  sidebar-chunks-are-bounded-and-preserve-selection (0.027791 sec)
+Deleted 1. Retained 2 mark(s): Transcript belongs to an open agent-shell: /var/folders/20/4zczrx1s3lq2fv0xmm0gj1fr0000gn/T/sidebar-test-mPpbsm/.agent-shell/transcripts/live.md; denied
+   passed  54/94  sidebar-delete-keeps-failed-and-live-transcript-marks (0.002152 sec)
+   passed  55/94  sidebar-discovery-skips-directories-and-remote-roots (0.035875 sec)
+   passed  56/94  sidebar-draw-and-fold-do-not-rescan (0.003274 sec)
+   passed  57/94  sidebar-empty-config-name-never-matches (0.000076 sec)
+   passed  58/94  sidebar-empty-prompt-does-not-preview-agent-message (0.000877 sec)
+   passed  59/94  sidebar-exact-config-beats-substring (0.000047 sec)
+   passed  60/94  sidebar-filter-preserves-marks-and-folds (0.003725 sec)
+   passed  61/94  sidebar-idle-chunks-rearm-after-elapsed-idle (0.000173 sec)
+   passed  62/94  sidebar-input-pending-yields-with-queue-intact (0.000892 sec)
+   passed  63/94  sidebar-jump-selects-window-even-when-toggle-does-not (0.002306 sec)
+   passed  64/94  sidebar-kill-and-mode-change-cancel-both-timers (0.000068 sec)
+   passed  65/94  sidebar-live-session-reuse-is-scoped-and-includes-connecting (0.000141 sec)
+300 transcripts: refresh 27.5 ms, max callback 22.9 ms, 1 scan, 300 reads, 10 parse chunks, 12 total callbacks
+   passed  66/94  sidebar-many-transcripts-use-one-scan-and-bounded-chunks (0.241365 sec)
+   passed  67/94  sidebar-metadata-is-confined-to-header (0.001096 sec)
+   passed  68/94  sidebar-missing-file-is-not-a-stale-cache-hit (0.003259 sec)
+   passed  69/94  sidebar-next-line-stays-on-final-row (0.001328 sec)
+   passed  70/94  sidebar-open-transcript-really-uses-view-mode (0.003694 sec)
+   passed  71/94  sidebar-parser-is-bounded-and-strips-quote (0.000925 sec)
+   passed  72/94  sidebar-pop-to-preserves-dedicated-sidebar (0.000146 sec)
+ACP fixture: session/load + session/new used recorded subdirectory; RET reused existing shell
+   passed  73/94  sidebar-real-acp-start-resume-and-reuse (0.080184 sec)
+   passed  74/94  sidebar-recorded-subdirectory-survives-agent-project-detection (0.000400 sec)
+   passed  75/94  sidebar-redraw-preserves-scroll-position (0.037638 sec)
+   passed  76/94  sidebar-refresh-scans-once-and-discards-obsolete-queue (0.001390 sec)
+   passed  77/94  sidebar-refuses-to-overwrite-non-sidebar-buffer (0.000044 sec)
+   passed  78/94  sidebar-root-labels-are-distinct (0.000138 sec)
+   passed  79/94  sidebar-timers-belong-to-their-buffer (0.001016 sec)
+   passed  80/94  sidebar-unknown-recorded-agent-does-not-use-preferred-agent (0.000046 sec)
+   passed  81/94  sidebar-visit-at-eol-starts-with-transcript-session (0.003567 sec)
+   passed  82/94  sidebar-working-directory-fallback-is-transcript-project (0.000826 sec)
+   passed  83/94  sidebar-zero-chunk-size-still-progresses (0.003432 sec)
+Deleted 0. Retained 1 mark(s): Transcript belongs to an open agent-shell: /var/folders/20/4zczrx1s3lq2fv0xmm0gj1fr0000gn/T/sidebar-torvalds-control-LvVrhx/.agent-shell/transcripts/session.md
+CONTROL: exact-owner-path owned-file-exists=t retained-mark=delete
+   passed  84/94  torvalds-control-preserves-owned-transcript-at-exact-path (0.001311 sec)
+ALIAS: discovered=t same-file=t exact-owner-path-match=nil owner-listed=t
+Deleted 0. Retained 1 mark(s): Transcript belongs to an open agent-shell: /var/folders/20/4zczrx1s3lq2fv0xmm0gj1fr0000gn/T/sidebar-torvalds-alias-1FZ2ZV/alias/.agent-shell/transcripts/session.md
+DELETION: owned-file-exists=t retained-mark=delete
+   passed  85/94  torvalds-refuses-owned-transcript-through-project-path-alias (0.003729 sec)
+READABILITY: before=unreadable after=readable direct-parser-session="fixture-session" signature-unchanged=t
+RECOVERY: pending-after-refresh=1 cached-error-after-retry=nil
+   passed  86/94  torvalds-retries-header-after-read-permission-is-restored (0.001849 sec)
+   passed  87/94  workflow-control-cancel-agent-selector-never-starts (0.000085 sec)
+   passed  88/94  workflow-control-cancel-deletion-retains-marks (0.000492 sec)
+   passed  89/94  workflow-control-discovery-retains-only-normal-md-fixture (0.001266 sec)
+   passed  90/94  workflow-control-mru-disabled-preserves-dedicated-window (0.000155 sec)
+   passed  91/94  workflow-control-two-window-points-survive-redraw (0.000415 sec)
+Disabled refresh: callback scans=0, rearmed=nil
+   passed  92/94  workflow-disable-refresh-before-pending-callback (0.392400 sec)
+FIFO probe: FIFO type=nil modes="prw-r--r--" regular=nil discovered=nil
+FIFO header=(:error "Not a regular transcript file: /var/folders/20/4zczrx1s3lq2fv0xmm0gj1fr0000gn/T/sidebar-workflow-fifo-skqti3ln/.agent-shell/transcripts/pending.md")
+
+FIFO probe: timeout=nil elapsed=0.22
+   passed  93/94  workflow-nonregular-fifo-never-blocks-header-parsing (0.267738 sec)
+Ordinary-window toggle: error=nil side=nil windows=2
+   passed  94/94  workflow-toggle-works-after-sidebar-buffer-switched-to-normal-window (0.000454 sec)
+
+Ran 94 tests, 89 results as expected, 5 unexpected (2026-09-08 13:30:45-0700, 8.000197 sec)
+
+5 unexpected results:
+   FAILED  contrarian-evidence-byte-limit-is-independent-of-boundary
+   FAILED  contrarian-evidence-session-id-cut-by-byte-limit-is-not-used
+   FAILED  metadata-byte-limit-retains-only-complete-lines
+   FAILED  metadata-growth-during-read-does-not-complete-a-cutoff-field
+   FAILED  metadata-truncated-activation-fields-never-start-a-session
+

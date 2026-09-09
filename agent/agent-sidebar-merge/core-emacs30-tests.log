@@ -1,0 +1,242 @@
+SOURCE=/Users/ducnguyen/.emacs.d/lisp/agent-shell-sidebar.el
+DISCOVERY-ERROR pending=319 stage-live=t parse-timer=t automatic-retry-owned=([nil 0 30 0 nil agent-shell-sidebar--refresh-tick (#<buffer  *Independent sidebar owner*>) idle 0 nil])
+DISCOVERY-RECOVERY all headers and staging completed; stale timer had no effect.
+NAME-REUSE old parse and refresh callbacks left the replacement owner unchanged.
+AFTER-READ-REFRESH new metadata and preview published; pending=0.
+READ-REFRESH old-head="/var/folders/20/4zczrx1s3lq2fv0xmm0gj1fr0000gn/T/sidebar-ki2-M0Gecb/.agent-shell/transcripts/0000.md" new-head="/var/folders/20/4zczrx1s3lq2fv0xmm0gj1fr0000gn/T/sidebar-ki2-M0Gecb/.agent-shell/transcripts/fresh.md" new-file-retained=("/var/folders/20/4zczrx1s3lq2fv0xmm0gj1fr0000gn/T/sidebar-ki2-M0Gecb/.agent-shell/transcripts/fresh.md" "/var/folders/20/4zczrx1s3lq2fv0xmm0gj1fr0000gn/T/sidebar-ki2-M0Gecb/.agent-shell/transcripts/0000.md" "/var/folders/20/4zczrx1s3lq2fv0xmm0gj1fr0000gn/T/sidebar-ki2-M0Gecb/.agent-shell/transcripts/0001.md" "/var/folders/20/4zczrx1s3lq2fv0xmm0gj1fr0000gn/T/sidebar-ki2-M0Gecb/.agent-shell/transcripts/0002.md" "/var/folders/20/4zczrx1s3lq2fv0xmm0gj1fr0000gn/T/sidebar-ki2-M0Gecb/.agent-shell/transcripts/0003.md" "/var/folders/20/4zczrx1s3lq2fv0xmm0gj1fr0000gn/T/sidebar-ki2-M0Gecb/.agent-shell/transcripts/0004.md" "/var/folders/20/4zczrx1s3lq2fv0xmm0gj1fr0000gn/T/sidebar-ki2-M0Gecb/.agent-shell/transcripts/0005.md" "/var/folders/20/4zczrx1s3lq2fv0xmm0gj1fr0000gn/T/sidebar-ki2-M0Gecb/.agent-shell/transcripts/0006.md" "/var/folders/20/4zczrx1s3lq2fv0xmm0gj1fr0000gn/T/sidebar-ki2-M0Gecb/.agent-shell/transcripts/0007.md" "/var/folders/20/4zczrx1s3lq2fv0xmm0gj1fr0000gn/T/sidebar-ki2-M0Gecb/.agent-shell/transcripts/0008.md" "/var/folders/20/4zczrx1s3lq2fv0xmm0gj1fr0000gn/T/sidebar-ki2-M0Gecb/.agent-shell/transcripts/0009.md" "/var/folders/20/4zczrx1s3lq2fv0xmm0gj1fr0000gn/T/sidebar-ki2-M0Gecb/.agent-shell/transcripts/0010.md" "/var/folders/20/4zczrx1s3lq2fv0xmm0gj1fr0000gn/T/sidebar-ki2-M0Gecb/.agent-shell/transcripts/0011.md") parsed-new=(:agent "Fresh" :preview "Freshly discovered row") pending=0 visible-new=59
+SOURCE-AFTER=/Users/ducnguyen/.emacs.d/lisp/agent-shell-sidebar.el
+LANG=C.UTF-8 cannot be used, using en_US.UTF-8 instead.
+PROBE ENVIRONMENT: Emacs 30.2.50; agent-shell 0.74.3
+CE2 SOURCE BEFORE="/Users/ducnguyen/.emacs.d/lisp/agent-shell-sidebar.el"
+CW2 reviewed source: /Users/ducnguyen/.emacs.d/lisp/agent-shell-sidebar.el
+
+Running 131 tests (2026-09-08 14:48:31-0700, selector `t')
+   passed    1/131  ce2-bounded-read-excludes-late-field-without-any-boundary (0.001648 sec)
+CE2-MATRIX utf8=nil newline=nil continues=nil bytes=8191 header=(:session-id "intact")
+CE2-MATRIX utf8=nil newline=nil continues=nil bytes=8192 header=(:session-id "intact")
+CE2-MATRIX utf8=nil newline=nil continues=nil bytes=8193 header=(:error "Transcript metadata exceeds the 8192-byte read limit")
+CE2-MATRIX utf8=nil newline=nil continues=t bytes=8191 header=(:error "Transcript metadata exceeds the 8192-byte read limit")
+CE2-MATRIX utf8=nil newline=nil continues=t bytes=8192 header=(:error "Transcript metadata exceeds the 8192-byte read limit")
+CE2-MATRIX utf8=nil newline=nil continues=t bytes=8193 header=(:error "Transcript metadata exceeds the 8192-byte read limit")
+CE2-MATRIX utf8=nil newline=t continues=nil bytes=8191 header=(:session-id "intact")
+CE2-MATRIX utf8=nil newline=t continues=nil bytes=8192 header=(:session-id "intact")
+CE2-MATRIX utf8=nil newline=t continues=nil bytes=8193 header=(:error "Transcript metadata exceeds the 8192-byte read limit")
+CE2-MATRIX utf8=nil newline=t continues=t bytes=8191 header=(:session-id "intact" :error "Transcript metadata exceeds the 8192-byte read limit")
+CE2-MATRIX utf8=nil newline=t continues=t bytes=8192 header=(:session-id "intact" :error "Transcript metadata exceeds the 8192-byte read limit")
+CE2-MATRIX utf8=nil newline=t continues=t bytes=8193 header=(:error "Transcript metadata exceeds the 8192-byte read limit")
+CE2-MATRIX utf8=t newline=nil continues=nil bytes=8191 header=(:session-id "intact")
+CE2-MATRIX utf8=t newline=nil continues=nil bytes=8192 header=(:session-id "intact")
+CE2-MATRIX utf8=t newline=nil continues=nil bytes=8193 header=(:error "Transcript metadata exceeds the 8192-byte read limit")
+CE2-MATRIX utf8=t newline=nil continues=t bytes=8191 header=(:error "Transcript metadata exceeds the 8192-byte read limit")
+CE2-MATRIX utf8=t newline=nil continues=t bytes=8192 header=(:error "Transcript metadata exceeds the 8192-byte read limit")
+CE2-MATRIX utf8=t newline=nil continues=t bytes=8193 header=(:error "Transcript metadata exceeds the 8192-byte read limit")
+CE2-MATRIX utf8=t newline=t continues=nil bytes=8191 header=(:session-id "intact")
+CE2-MATRIX utf8=t newline=t continues=nil bytes=8192 header=(:session-id "intact")
+CE2-MATRIX utf8=t newline=t continues=nil bytes=8193 header=(:error "Transcript metadata exceeds the 8192-byte read limit")
+CE2-MATRIX utf8=t newline=t continues=t bytes=8191 header=(:session-id "intact" :error "Transcript metadata exceeds the 8192-byte read limit")
+CE2-MATRIX utf8=t newline=t continues=t bytes=8192 header=(:session-id "intact" :error "Transcript metadata exceeds the 8192-byte read limit")
+CE2-MATRIX utf8=t newline=t continues=t bytes=8193 header=(:error "Transcript metadata exceeds the 8192-byte read limit")
+   passed    2/131  ce2-cutoff-matrix-distinguishes-bytes-lines-and-eof (0.012766 sec)
+   passed    3/131  ce2-first-metadata-boundary-wins (0.001078 sec)
+Created .agent-shell/transcripts/fixture.md
+   passed    4/131  ce2-real-writer-keeps-tab-and-space-path-suffix (0.001022 sec)
+   passed    5/131  contrarian-evidence-byte-limit-is-independent-of-boundary (0.000748 sec)
+   passed    6/131  contrarian-evidence-complete-id-at-byte-limit-is-retained (0.000885 sec)
+   passed    7/131  contrarian-evidence-first-message-is-a-boundary-without-separator (0.000689 sec)
+Created .agent-shell/transcripts/fixture.md
+Real writer: recorded="/var/folders/20/4zczrx1s3lq2fv0xmm0gj1fr0000gn/T/sidebar-evidence-RpSgo0/project " parsed="/var/folders/20/4zczrx1s3lq2fv0xmm0gj1fr0000gn/T/sidebar-evidence-RpSgo0/project " resolved="/var/folders/20/4zczrx1s3lq2fv0xmm0gj1fr0000gn/T/sidebar-evidence-RpSgo0/project /"
+   passed    8/131  contrarian-evidence-real-writer-preserves-directory-ending-in-space (0.001070 sec)
+Cutoff: complete="complete-session-identifier" parsed=nil start-session=nil file-bytes=8220 visit-error=(user-error "Transcript metadata exceeds the 8192-byte read limit")
+   passed    9/131  contrarian-evidence-session-id-cut-by-byte-limit-is-not-used (0.001093 sec)
+CW2 ambiguous selection: cancel=nil prompted=1 target=" *cw2 live b*"
+   passed   10/131  cw2-ambiguous-live-session-explicit-choice-reuses-selected-config (0.001871 sec)
+CW2 ambiguous selection: cancel=t prompted=1 target=nil
+   passed   11/131  cw2-ambiguous-live-session-selection-cancellation (0.001587 sec)
+CW2 deletion cancellation: no and quit both retain 2 marks; metadata still completes
+   passed   12/131  cw2-cancel-deletion-while-metadata-pending-keeps-marks-and-files (0.695573 sec)
+Deleted 1. Retained 1 mark(s): Fixture deletion denied
+CW2 partial deletion: actual file deleted; failed file retained with visible D
+   passed   13/131  cw2-delete-partial-success-retains-failed-visible-mark (0.005468 sec)
+CW2 refresh: disabled pending scan skipped; explicit refresh performs one scan
+   passed   14/131  cw2-disable-pending-refresh-keeps-manual-refresh-available (0.568603 sec)
+CW2 hide: side window removed; both ordinary sidebar views retained
+   passed   15/131  cw2-hide-side-window-preserves-two-ordinary-sidebar-views (0.001877 sec)
+CW2 staged mark: pending metadata completed in 24 ticks; mark and unmark visible
+   passed   16/131  cw2-mark-command-invalidates-staged-metadata-publication (0.712122 sec)
+CW2 regular view: ordinary selected, dedicated sidebar retained, View mode active
+   passed   17/131  cw2-real-view-command-keeps-side-window-and-selects-ordinary-window (0.004111 sec)
+   passed   18/131  identity-active-session-replaces-pending-identity (0.000443 sec)
+   passed   19/131  identity-ambiguous-alias-obeys-explicit-selection-on-every-visit (0.546980 sec)
+Deleted 1 transcript(s)
+   passed   20/131  identity-deletion-ignores-absent-owner-paths (0.001200 sec)
+Deleted 0. Retained 1 mark(s): Transcript belongs to an open agent-shell: /var/folders/20/4zczrx1s3lq2fv0xmm0gj1fr0000gn/T/sidebar-identity-gaUQ5M/alias/.agent-shell/transcripts/session.md
+Deleted 0. Retained 1 mark(s): Transcript belongs to an open agent-shell: /var/folders/20/4zczrx1s3lq2fv0xmm0gj1fr0000gn/T/sidebar-identity-gaUQ5M/real/.agent-shell/transcripts/session.md
+   passed   21/131  identity-deletion-protects-directory-alias-in-both-directions (0.001974 sec)
+Deleted 1. Retained 1 mark(s): Transcript belongs to an open agent-shell: /var/folders/20/4zczrx1s3lq2fv0xmm0gj1fr0000gn/T/sidebar-identity-fWsFwo/hard-link.md
+   passed   22/131  identity-deletion-protects-hard-links-and-removes-distinct-copy (0.002012 sec)
+Deleted 0. Retained 1 mark(s): Fixture stat failure
+   passed   23/131  identity-deletion-retains-mark-when-ownership-stat-fails (0.001251 sec)
+   passed   24/131  identity-missing-agent-uses-selected-config-before-reuse (0.001138 sec)
+Installed Claude maker: fresh-alists=t equivalent=t visits=2 starts=1
+   passed   25/131  identity-real-config-maker-reuses-across-fresh-resolutions (0.001667 sec)
+   passed   26/131  identity-removed-config-retains-exact-live-session-access (0.020878 sec)
+   passed   27/131  identity-same-names-do-not-cross-config-directory-or-session (0.001732 sec)
+   passed   28/131  identity-substring-alias-reuses-connecting-and-active-shell (0.001807 sec)
+   passed   29/131  identity-toggle-preserves-ordinary-view-and-removes-only-side-window (0.003372 sec)
+   passed   30/131  identity-unconfigured-exact-name-still-refuses-multiple-configs (0.000281 sec)
+Error running timer `agent-shell-sidebar--refresh-tick': (error "Injected transient discovery error")
+
+   passed   31/131  ki2-discovery-error-preserves-stage-until-next-refresh-recovers (4.338320 sec)
+
+   passed   32/131  ki2-recreated-buffer-name-does-not-transfer-old-timer-ownership (0.007314 sec)
+
+   passed   33/131  ki2-refresh-after-read-retains-newly-discovered-work (0.073485 sec)
+
+   passed   34/131  ki2-refresh-during-read-retains-newly-discovered-work (0.073014 sec)
+Cancelled timer: no callback, no cache write, no queue or timer.
+   passed   35/131  kingsbury-cancelled-timer-does-not-run (0.001271 sec)
+Mode change: ready timer cancelled without a cache write.
+   passed   36/131  kingsbury-mode-change-cancels-ready-timer (0.001140 sec)
+Read race: next activation repaired the old signature and retained the new session.
+   passed   37/131  kingsbury-read-race-is-rechecked-on-next-activation (0.363522 sec)
+Transient hook error: first file cached=nil, queued=t; remaining=("one.md" "two.md"); timer=[nil 0 0 100000 nil agent-shell-sidebar--parse-tick (#<buffer  *temp*-452345>) idle 0 nil]
+   passed   38/131  kingsbury-transient-read-hook-error-keeps-work-scheduled (0.001561 sec)
+Deleted 1 transcript(s)
+Deletion schedule: old timer cannot restore the deleted transcript or its mark.
+   passed   39/131  kingsbury2-deletion-while-staged-cannot-resurrect-a-row (0.776070 sec)
+Sidebar redraw failed: Selecting deleted buffer
+Externally killed stage: one explicit renderer error, drained headers, manual refresh recovered.
+   passed   40/131  kingsbury2-external-stage-kill-produces-bounded-explicit-error (0.369513 sec)
+Owner cancellation: other sidebar completed after the first owner and its stage were killed.
+   passed   41/131  kingsbury2-killing-one-owner-does-not-cancel-the-other (0.698986 sec)
+Mark/unmark/filter/agent-fold schedule: exactly 200 Alpha rows, target mark retained.
+   passed   42/131  kingsbury2-mark-unmark-filter-agent-fold-schedule (0.773337 sec)
+   passed   43/131  metadata-bounded-preview-does-not-invalidate-complete-header (0.001486 sec)
+   passed   44/131  metadata-byte-limit-retains-only-complete-lines (0.001590 sec)
+   passed   45/131  metadata-cache-belongs-to-each-sidebar-snapshot (0.357249 sec)
+   passed   46/131  metadata-discovery-and-parser-reject-special-files (0.001809 sec)
+   passed   47/131  metadata-empty-directory-is-distinct-from-whitespace-directory (0.001144 sec)
+   passed   48/131  metadata-growth-during-read-does-not-complete-a-cutoff-field (0.001077 sec)
+   passed   49/131  metadata-parser-rechecks-after-activation-attributes-were-read (0.001709 sec)
+   passed   50/131  metadata-permission-errors-retry-on-refresh-and-activation (0.002154 sec)
+Created .agent-shell/transcripts/fixture.md
+Created .agent-shell/transcripts/fixture.md
+Created .agent-shell/transcripts/fixture.md
+Created .agent-shell/transcripts/fixture.md
+   passed   51/131  metadata-real-writer-preserves-directory-whitespace (0.002935 sec)
+   passed   52/131  metadata-rechecks-a-discovered-file-before-reading (0.002392 sec)
+   passed   53/131  metadata-true-eof-retains-an-unterminated-complete-field (0.000822 sec)
+   passed   54/131  metadata-truncated-activation-fields-never-start-a-session (0.002798 sec)
+OUSTERHOUT-2: first-sidebar="▾ ousterhout-sidebar-cCM4um (1)
+  ▾ Claude (1)
+      09-08 14:48: First prompt
+" pending=nil timer=nil
+   passed   55/131  ousterhout-global-cache-preserves-other-buffer-metadata (0.006109 sec)
+Resuming unsupported by agent. Starting new session.
+OUSTERHOUT-1: actual-session="new-session" retained-request="old-session" old-row-reuses-new=nil
+   passed   56/131  ousterhout-live-request-id-is-not-current-after-fallback (0.000386 sec)
+OUSTERHOUT-3: recorded-agent=Claude Code resolved-agent=Claude visits=2 starts=1
+   passed   57/131  ousterhout-substring-agent-resolution-reuses-started-session (0.003530 sec)
+R2 ownership control: isolated caches, independent folds/filter/mark, 91 + 180 final rows, 46 remaining ticks
+   passed   58/131  ousterhout2-interleaved-buffers-preserve-final-snapshot-ownership (1.598238 sec)
+R2 lifecycle control: killing one owner cancels only its staging buffer/timer; surviving view has 360 rows
+   passed   59/131  ousterhout2-killing-one-owner-leaves-other-staging-work-live (0.926199 sec)
+R2 mode reset control: old cache/staging/timer released, one registry entry, both reconstructed views have 360 rows
+   passed   60/131  ousterhout2-reinitialization-releases-old-generator-and-local-cache (1.802843 sec)
+R2 retry control: failed owner retained its head; other owner advanced independently; final rows 20 + 40
+   passed   61/131  ousterhout2-transient-read-failure-does-not-cross-owner-queues (0.107231 sec)
+   passed   62/131  reentrancy-ensure-parsed-still-caches-outside-sidebar-mode (0.001047 sec)
+   passed   63/131  reentrancy-error-after-refresh-does-not-charge-new-retry-budget (0.075814 sec)
+   passed   64/131  reentrancy-inner-read-cache-result-survives-outer-read (0.072712 sec)
+   passed   65/131  reentrancy-mode-change-during-read-cannot-recreate-work (0.006350 sec)
+   passed   66/131  reentrancy-mode-reinitialization-keeps-replacement-work (0.048427 sec)
+   passed   67/131  reentrancy-nested-timer-cannot-consume-a-second-head (0.074266 sec)
+   passed   68/131  reentrancy-owner-kill-during-read-cannot-schedule-another-buffer (0.005580 sec)
+   passed   69/131  reentrancy-refresh-retains-old-head-for-new-generation (0.047916 sec)
+   passed   70/131  scheduling-disabled-refresh-skips-a-pending-callback (0.000348 sec)
+   passed   71/131  scheduling-idle-reset-rearms-both-timers-from-another-buffer (0.379681 sec)
+   passed   72/131  scheduling-input-and-mode-change-stop-staged-work (0.295061 sec)
+   passed   73/131  scheduling-persistent-hook-failure-is-bounded-and-visible (0.007270 sec)
+   passed   74/131  scheduling-publish-preserves-independent-window-views-and-marks (0.650770 sec)
+   passed   75/131  scheduling-quit-discards-a-partially-written-staging-row (0.625601 sec)
+   passed   76/131  scheduling-quit-retains-work-and-rearms (0.004445 sec)
+   passed   77/131  scheduling-refresh-cancels-snapshot-before-removing-a-file (0.631390 sec)
+Sidebar redraw failed: Injected render failure
+   passed   78/131  scheduling-render-error-stops-and-manual-refresh-recovers (0.328750 sec)
+   passed   79/131  scheduling-rendering-is-progressive-bounded-and-coherent (0.558551 sec)
+   passed   80/131  scheduling-snapshot-freezes-header-and-attribute-pair (0.653156 sec)
+   passed   81/131  scheduling-transient-standard-read-hook-retries-the-same-head (0.006659 sec)
+   passed   82/131  scheduling-user-redraw-invalidates-stale-filter-and-fold-snapshots (0.383471 sec)
+   passed   83/131  sidebar-ambiguous-config-name-never-selects-first (0.000126 sec)
+   passed   84/131  sidebar-cache-detects-size-change-with-identical-mtime (0.001481 sec)
+   passed   85/131  sidebar-chunks-are-bounded-and-preserve-selection (0.039860 sec)
+Deleted 1. Retained 2 mark(s): Transcript belongs to an open agent-shell: /var/folders/20/4zczrx1s3lq2fv0xmm0gj1fr0000gn/T/sidebar-test-5pZVsJ/.agent-shell/transcripts/live.md; denied
+   passed   86/131  sidebar-delete-keeps-failed-and-live-transcript-marks (0.002139 sec)
+   passed   87/131  sidebar-discovery-skips-directories-and-remote-roots (0.040943 sec)
+   passed   88/131  sidebar-draw-and-fold-do-not-rescan (0.003829 sec)
+   passed   89/131  sidebar-empty-config-name-never-matches (0.000080 sec)
+   passed   90/131  sidebar-empty-prompt-does-not-preview-agent-message (0.000805 sec)
+   passed   91/131  sidebar-exact-config-beats-substring (0.000049 sec)
+   passed   92/131  sidebar-filter-preserves-marks-and-folds (0.003862 sec)
+   passed   93/131  sidebar-idle-chunks-rearm-after-elapsed-idle (0.000179 sec)
+   passed   94/131  sidebar-input-pending-yields-with-queue-intact (0.000899 sec)
+   passed   95/131  sidebar-jump-selects-window-even-when-toggle-does-not (0.002776 sec)
+   passed   96/131  sidebar-kill-and-mode-change-cancel-both-timers (0.000107 sec)
+   passed   97/131  sidebar-live-session-reuse-is-scoped-and-includes-connecting (0.000159 sec)
+300 transcripts: refresh 26.6 ms, max callback 22.9 ms, 1 scan, 300 reads, 10 parse chunks, 12 total callbacks
+   passed   98/131  sidebar-many-transcripts-use-one-scan-and-bounded-chunks (0.220745 sec)
+   passed   99/131  sidebar-metadata-is-confined-to-header (0.001398 sec)
+   passed  100/131  sidebar-missing-file-is-not-a-stale-cache-hit (0.003447 sec)
+   passed  101/131  sidebar-next-line-stays-on-final-row (0.000955 sec)
+   passed  102/131  sidebar-open-transcript-really-uses-view-mode (0.005081 sec)
+   passed  103/131  sidebar-parser-is-bounded-and-strips-quote (0.001011 sec)
+   passed  104/131  sidebar-pop-to-preserves-dedicated-sidebar (0.000150 sec)
+ACP fixture: session/load + session/new used recorded subdirectory; RET reused existing shell
+   passed  105/131  sidebar-real-acp-start-resume-and-reuse (0.151095 sec)
+   passed  106/131  sidebar-recorded-subdirectory-survives-agent-project-detection (0.000453 sec)
+   passed  107/131  sidebar-redraw-preserves-scroll-position (0.035971 sec)
+   passed  108/131  sidebar-refresh-scans-once-and-discards-obsolete-queue (0.001392 sec)
+   passed  109/131  sidebar-refuses-to-overwrite-non-sidebar-buffer (0.000055 sec)
+   passed  110/131  sidebar-root-labels-are-distinct (0.000128 sec)
+   passed  111/131  sidebar-timers-belong-to-their-buffer (0.001115 sec)
+   passed  112/131  sidebar-unknown-recorded-agent-does-not-use-preferred-agent (0.000044 sec)
+   passed  113/131  sidebar-visit-at-eol-starts-with-transcript-session (0.003466 sec)
+   passed  114/131  sidebar-working-directory-fallback-is-transcript-project (0.000731 sec)
+   passed  115/131  sidebar-zero-chunk-size-still-progresses (0.003476 sec)
+Deleted 0. Retained 1 mark(s): Transcript belongs to an open agent-shell: /var/folders/20/4zczrx1s3lq2fv0xmm0gj1fr0000gn/T/sidebar-torvalds-control-xtKqwZ/.agent-shell/transcripts/session.md
+CONTROL: exact-owner-path owned-file-exists=t retained-mark=delete
+   passed  116/131  torvalds-control-preserves-owned-transcript-at-exact-path (0.001189 sec)
+ALIAS: discovered=t same-file=t exact-owner-path-match=nil owner-listed=t
+Deleted 0. Retained 1 mark(s): Transcript belongs to an open agent-shell: /var/folders/20/4zczrx1s3lq2fv0xmm0gj1fr0000gn/T/sidebar-torvalds-alias-80Q8nh/alias/.agent-shell/transcripts/session.md
+DELETION: owned-file-exists=t retained-mark=delete
+   passed  117/131  torvalds-refuses-owned-transcript-through-project-path-alias (0.003801 sec)
+READABILITY: before=unreadable after=readable direct-parser-session="fixture-session" signature-unchanged=t
+RECOVERY: pending-after-refresh=1 cached-error-after-retry=nil
+   passed  118/131  torvalds-retries-header-after-read-permission-is-restored (0.001835 sec)
+WINDOW CONTROL: fallback created an ordinary target window and preserved both dedicated windows
+   passed  119/131  torvalds2-fallback-display-preserves-dedicated-document-and-sidebar (0.000221 sec)
+STARTUP CONTROL: real missing-command failure leaves no shell and restores caller directory/CWD function
+   passed  120/131  torvalds2-real-startup-rejects-missing-command-without-shell-leak (0.007493 sec)
+   passed  121/131  viewing-missing-and-unreadable-files-retain-readable-error (0.002869 sec)
+   passed  122/131  viewing-regular-transcript-retains-real-view-mode (0.003721 sec)
+   passed  123/131  viewing-rejects-nonregular-replacements-before-file-open (0.005398 sec)
+   passed  124/131  workflow-control-cancel-agent-selector-never-starts (0.000106 sec)
+   passed  125/131  workflow-control-cancel-deletion-retains-marks (0.000251 sec)
+   passed  126/131  workflow-control-discovery-retains-only-normal-md-fixture (0.001110 sec)
+   passed  127/131  workflow-control-mru-disabled-preserves-dedicated-window (0.000146 sec)
+   passed  128/131  workflow-control-two-window-points-survive-redraw (0.000376 sec)
+Disabled refresh: callback scans=0, rearmed=nil
+   passed  129/131  workflow-disable-refresh-before-pending-callback (0.000125 sec)
+FIFO probe: FIFO type=nil modes="prw-r--r--" regular=nil discovered=nil
+FIFO header=(:error "Not a regular transcript file: /var/folders/20/4zczrx1s3lq2fv0xmm0gj1fr0000gn/T/sidebar-workflow-fifo-m58711w9/.agent-shell/transcripts/pending.md")
+
+FIFO probe: timeout=nil elapsed=0.216
+   passed  130/131  workflow-nonregular-fifo-never-blocks-header-parsing (0.252787 sec)
+Ordinary-window toggle: error=nil side=nil windows=2
+   passed  131/131  workflow-toggle-works-after-sidebar-buffer-switched-to-normal-window (0.000529 sec)
+
+Ran 131 tests, 131 results as expected, 0 unexpected (2026-09-08 14:48:52-0700, 20.567725 sec)
+
+
+CW2 final source: /Users/ducnguyen/.emacs.d/lisp/agent-shell-sidebar.el
+CE2 SOURCE AFTER="/Users/ducnguyen/.emacs.d/lisp/agent-shell-sidebar.el"

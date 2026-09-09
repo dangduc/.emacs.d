@@ -1,0 +1,1 @@
+(:pid 3353 :emacs "31.1" :library "/Users/ducnguyen/.emacs.d/lisp/agent-shell-sidebar.elc" :compiled t :agent-version "0.74.3" :command t :menu-key hydra-submenu-agent-shell/agent-shell-sidebar-toggle-sidebar-and-exit :parsed 71 :pending 0 :elapsed 0.7593610286712646 :agent-buffers 0 :recursion-depth 0)

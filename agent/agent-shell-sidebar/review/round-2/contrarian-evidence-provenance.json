@@ -1,0 +1,11 @@
+{
+  "/Users/ducnguyen/.emacs.d/agent/agent-shell-sidebar/review/round-2/reviewed.el": "629a0b61dc25a1b9766936b34b655aea9e1775c57f0f2d98ebb9ef00fea1b6ed",
+  "/Users/ducnguyen/.emacs.d/agent/agent-shell-sidebar/review/round-2/contrarian-evidence-runner.py": "a0f999f422ebcb1053f99c8104fa98b839c11ea895e45eca3646ad5296ee1221",
+  "/Users/ducnguyen/.emacs.d/agent/agent-shell-sidebar/review/round-2/contrarian-evidence-probe.el": "20b9eb2d3654a3bef771c23d35c849435d7423b89995e3e85c233b24a71a193f",
+  "/Users/ducnguyen/.emacs.d/agent/agent-shell-sidebar/review/round-2/contrarian-evidence-mutations.py": "9718fabee358b5a2c9e6a991567842df2e2ecd135861ab8c99a9c81aa9a5268c",
+  "/Users/ducnguyen/.emacs.d/agent/agent-shell-sidebar/review/round-1/contrarian-workflow.el": "a72d03e8fbfa77453a1368dd993fcf3bca51978d27c1c87e97e53848346e6ffe",
+  "/Users/ducnguyen/.emacs.d/agent/agent-shell-sidebar/review/fixes/identity-tests.el": "604c85e92675966e9b816b5a61cf3be768f8e27140f4b305e0ba5d2472e9feeb",
+  "/Users/ducnguyen/.emacs.d/agent/agent-shell-sidebar/review/fixes/metadata-tests.el": "1d564104514c1fe900bbe38499201b7b684f35d444a39a01a6aff9d92ecd0940",
+  "/Users/ducnguyen/.emacs.d/agent/agent-shell-sidebar/review/fixes/scheduling-tests.el": "c7d7c32989b3c1d56b8e26ca8faaf7fc36f0241d0cedfc3a07b353ff724be464",
+  "/Users/ducnguyen/.emacs.d/agent/agent-shell-sidebar/tests/sidebar-tests.el": "379467804fa1f867deb3a7ff1904a83c289e8b82f135bf9f6cd1dae92f0b0d74"
+}

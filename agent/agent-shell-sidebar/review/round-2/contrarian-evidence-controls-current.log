@@ -1,0 +1,36 @@
+LANG=C.UTF-8 cannot be used, using en_US.UTF-8 instead.
+CE2 SOURCE BEFORE="/Users/ducnguyen/.emacs.d/agent/agent-shell-sidebar/review/round-2/reviewed.el"
+Running 4 tests (2026-09-08 13:32:14-0700, selector `t')
+   passed  1/4  ce2-bounded-read-excludes-late-field-without-any-boundary (0.001414 sec)
+CE2-MATRIX utf8=nil newline=nil continues=nil bytes=8191 header=(:session-id "intact")
+CE2-MATRIX utf8=nil newline=nil continues=nil bytes=8192 header=(:session-id "intact")
+CE2-MATRIX utf8=nil newline=nil continues=nil bytes=8193 header=(:error "Transcript metadata exceeds the 8192-byte read limit")
+CE2-MATRIX utf8=nil newline=nil continues=t bytes=8191 header=(:error "Transcript metadata exceeds the 8192-byte read limit")
+CE2-MATRIX utf8=nil newline=nil continues=t bytes=8192 header=(:error "Transcript metadata exceeds the 8192-byte read limit")
+CE2-MATRIX utf8=nil newline=nil continues=t bytes=8193 header=(:error "Transcript metadata exceeds the 8192-byte read limit")
+CE2-MATRIX utf8=nil newline=t continues=nil bytes=8191 header=(:session-id "intact")
+CE2-MATRIX utf8=nil newline=t continues=nil bytes=8192 header=(:session-id "intact")
+CE2-MATRIX utf8=nil newline=t continues=nil bytes=8193 header=(:error "Transcript metadata exceeds the 8192-byte read limit")
+CE2-MATRIX utf8=nil newline=t continues=t bytes=8191 header=(:session-id "intact" :error "Transcript metadata exceeds the 8192-byte read limit")
+CE2-MATRIX utf8=nil newline=t continues=t bytes=8192 header=(:session-id "intact" :error "Transcript metadata exceeds the 8192-byte read limit")
+CE2-MATRIX utf8=nil newline=t continues=t bytes=8193 header=(:error "Transcript metadata exceeds the 8192-byte read limit")
+CE2-MATRIX utf8=t newline=nil continues=nil bytes=8191 header=(:session-id "intact")
+CE2-MATRIX utf8=t newline=nil continues=nil bytes=8192 header=(:session-id "intact")
+CE2-MATRIX utf8=t newline=nil continues=nil bytes=8193 header=(:error "Transcript metadata exceeds the 8192-byte read limit")
+CE2-MATRIX utf8=t newline=nil continues=t bytes=8191 header=(:error "Transcript metadata exceeds the 8192-byte read limit")
+CE2-MATRIX utf8=t newline=nil continues=t bytes=8192 header=(:error "Transcript metadata exceeds the 8192-byte read limit")
+CE2-MATRIX utf8=t newline=nil continues=t bytes=8193 header=(:error "Transcript metadata exceeds the 8192-byte read limit")
+CE2-MATRIX utf8=t newline=t continues=nil bytes=8191 header=(:session-id "intact")
+CE2-MATRIX utf8=t newline=t continues=nil bytes=8192 header=(:session-id "intact")
+CE2-MATRIX utf8=t newline=t continues=nil bytes=8193 header=(:error "Transcript metadata exceeds the 8192-byte read limit")
+CE2-MATRIX utf8=t newline=t continues=t bytes=8191 header=(:session-id "intact" :error "Transcript metadata exceeds the 8192-byte read limit")
+CE2-MATRIX utf8=t newline=t continues=t bytes=8192 header=(:session-id "intact" :error "Transcript metadata exceeds the 8192-byte read limit")
+CE2-MATRIX utf8=t newline=t continues=t bytes=8193 header=(:error "Transcript metadata exceeds the 8192-byte read limit")
+   passed  2/4  ce2-cutoff-matrix-distinguishes-bytes-lines-and-eof (0.011593 sec)
+   passed  3/4  ce2-first-metadata-boundary-wins (0.001242 sec)
+Created .agent-shell/transcripts/fixture.md
+   passed  4/4  ce2-real-writer-keeps-tab-and-space-path-suffix (0.001295 sec)
+
+Ran 4 tests, 4 results as expected, 0 unexpected (2026-09-08 13:32:14-0700, 0.015835 sec)
+
+CE2 SOURCE AFTER="/Users/ducnguyen/.emacs.d/agent/agent-shell-sidebar/review/round-2/reviewed.el"

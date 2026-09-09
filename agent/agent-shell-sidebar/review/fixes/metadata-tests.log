@@ -1,0 +1,21 @@
+LANG=C.UTF-8 cannot be used, using en_US.UTF-8 instead.
+Running 12 tests (2026-09-08 13:05:27-0700, selector `t')
+   passed   1/12  metadata-bounded-preview-does-not-invalidate-complete-header (0.001405 sec)
+   passed   2/12  metadata-byte-limit-retains-only-complete-lines (0.002051 sec)
+   passed   3/12  metadata-cache-belongs-to-each-sidebar-snapshot (1.361097 sec)
+   passed   4/12  metadata-discovery-and-parser-reject-special-files (0.001799 sec)
+   passed   5/12  metadata-empty-directory-is-distinct-from-whitespace-directory (0.001229 sec)
+   passed   6/12  metadata-growth-during-read-does-not-complete-a-cutoff-field (0.001279 sec)
+   passed   7/12  metadata-parser-rechecks-after-activation-attributes-were-read (0.001904 sec)
+   passed   8/12  metadata-permission-errors-retry-on-refresh-and-activation (0.001591 sec)
+Created .agent-shell/transcripts/fixture.md
+Created .agent-shell/transcripts/fixture.md
+Created .agent-shell/transcripts/fixture.md
+Created .agent-shell/transcripts/fixture.md
+   passed   9/12  metadata-real-writer-preserves-directory-whitespace (0.002410 sec)
+   passed  10/12  metadata-rechecks-a-discovered-file-before-reading (0.002265 sec)
+   passed  11/12  metadata-true-eof-retains-an-unterminated-complete-field (0.001068 sec)
+   passed  12/12  metadata-truncated-activation-fields-never-start-a-session (0.003003 sec)
+
+Ran 12 tests, 12 results as expected, 0 unexpected (2026-09-08 13:05:29-0700, 1.393975 sec)
+

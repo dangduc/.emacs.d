@@ -1,0 +1,244 @@
+--- /Users/ducnguyen/.emacs.d/agent/agent-sidebar-merge/core.el
++++ /Users/ducnguyen/.emacs.d/lisp/agent-shell-sidebar.el
+@@ -210,6 +210,21 @@
+ 
+ (defvar agent-shell-sidebar--resetting-idle nil
+   "Non-nil while resetting timer delays for a new idle period.")
++
++;; Derived sidebar modes can share the queue, cache, and window lifecycle.
++(defvar-local agent-shell-sidebar--collect-function nil
++  "Optional discovery function returning groups and setting file attributes.")
++(defvar-local agent-shell-sidebar--parse-file-function nil
++  "Optional function that returns metadata for a queued file path.")
++(defvar-local agent-shell-sidebar--render-contents-function nil
++  "Optional function that inserts the current view without scanning files.")
++(defvar-local agent-shell-sidebar--render-snapshot-function nil
++  "Optional iterator factory accepting output buffer, groups, and names.")
++(defvar-local agent-shell-sidebar--owned-file-p-function nil
++  "Optional predicate for additional files owned by live session buffers.")
++(defvar-local agent-shell-sidebar--row-identity-properties
++  '(agent-shell-sidebar-file agent-shell-sidebar-agent agent-shell-sidebar-project)
++  "Text properties identifying actionable rows in this sidebar.")
+ 
+ ;;; Discovery
+ 
+@@ -385,7 +400,9 @@
+          (cached (and (agent-shell-sidebar--regular-file-attributes-p attrs)
+                       (agent-shell-sidebar--cached-header file attrs))))
+     (or (and cached (not (plist-get cached :error)) cached)
+-        (let ((header (agent-shell-sidebar--parse-header-from-file file)))
++        (let ((header (funcall (or agent-shell-sidebar--parse-file-function
++                                   #'agent-shell-sidebar--parse-header-from-file)
++                               file)))
+           ;; File hooks can refresh, replace the mode, or parse this file again.
+           ;; A completed obsolete read must not overwrite that newer state.
+           (when (and (buffer-live-p owner) (eq (current-buffer) owner)
+@@ -642,13 +659,13 @@
+        :prompt (if name (format "Agent for %s: " name) "Start with agent: "))
+       (user-error "No agent selected")))
+ 
+-(defun agent-shell-sidebar--start (directory config &optional session-id)
+-  "Start CONFIG in DIRECTORY, optionally resuming SESSION-ID."
++(defun agent-shell-sidebar--start (directory config &optional session-id strategy)
++  "Start CONFIG in DIRECTORY, optionally resuming SESSION-ID using STRATEGY."
+   (let* ((default-directory directory)
+          ;; agent-shell otherwise promotes a subdirectory to its project root.
+          (agent-shell-cwd-function (lambda () directory))
+          (buffer (agent-shell--start :config config :session-id session-id
+-                                     :session-strategy 'new :new-session t :no-focus t)))
++                                     :session-strategy (or strategy 'new) :new-session t :no-focus t)))
+     (with-current-buffer buffer
+       ;; ACP initialization continues after `agent-shell--start' returns.
+       (setq-local agent-shell-cwd-function (lambda () directory)))
+@@ -825,7 +842,7 @@
+            (lambda (property)
+              (when-let* ((value (get-text-property (line-beginning-position) property)))
+                (cons property value)))
+-           '(agent-shell-sidebar-file agent-shell-sidebar-agent agent-shell-sidebar-project))
++           agent-shell-sidebar--row-identity-properties)
+           (line-number-at-pos) (current-column))))
+ 
+ (defun agent-shell-sidebar--restore-location (location)
+@@ -863,38 +880,40 @@
+         (setq agent-shell-sidebar--marks (make-hash-table :test 'equal)))
+       (unless agent-shell-sidebar--collapsed
+         (setq agent-shell-sidebar--collapsed (make-hash-table :test 'equal)))
+-      (if (null groups)
+-          (insert (propertize "  (no transcripts found)\n"
+-                              'face 'agent-shell-sidebar-placeholder-face))
+-        (let ((names (agent-shell-sidebar--disambiguated-names
+-                      (mapcar #'car groups))))
+-          (setq agent-shell-sidebar--project-names names)
+-          (dolist (group groups)
+-            (let* ((root (car group))
+-                   (paths (seq-filter #'agent-shell-sidebar--matches-filter-p (cdr group)))
+-                   (project-collapsed
+-                    (gethash root agent-shell-sidebar--collapsed))
+-                   (name (or (gethash root names)
+-                             (file-name-nondirectory
+-                              (directory-file-name root)))))
+-              (when (or paths (string-empty-p agent-shell-sidebar--filter))
+-                (agent-shell-sidebar--render-project-header
+-                 root (length paths) project-collapsed name))
+-              (unless project-collapsed
+-                (dolist (agent-group
+-                         (agent-shell-sidebar--group-by-agent paths))
+-                  (let* ((agent (car agent-group))
+-                         (agent-paths (cdr agent-group))
+-                         (agent-key (cons root agent))
+-                         (agent-collapsed
+-                          (gethash agent-key
+-                                   agent-shell-sidebar--collapsed)))
+-                    (agent-shell-sidebar--render-agent-header
+-                     root agent (length agent-paths) agent-collapsed)
+-                    (unless agent-collapsed
+-                      (dolist (p agent-paths)
+-                        (agent-shell-sidebar--render-transcript-row
+-                         p (gethash p agent-shell-sidebar--marks)))))))))))
++      (if agent-shell-sidebar--render-contents-function
++          (funcall agent-shell-sidebar--render-contents-function)
++        (if (null groups)
++            (insert (propertize "  (no transcripts found)\n"
++                                'face 'agent-shell-sidebar-placeholder-face))
++          (let ((names (agent-shell-sidebar--disambiguated-names
++                        (mapcar #'car groups))))
++            (setq agent-shell-sidebar--project-names names)
++            (dolist (group groups)
++              (let* ((root (car group))
++                     (paths (seq-filter #'agent-shell-sidebar--matches-filter-p (cdr group)))
++                     (project-collapsed
++                      (gethash root agent-shell-sidebar--collapsed))
++                     (name (or (gethash root names)
++                               (file-name-nondirectory
++                                (directory-file-name root)))))
++                (when (or paths (string-empty-p agent-shell-sidebar--filter))
++                  (agent-shell-sidebar--render-project-header
++                   root (length paths) project-collapsed name))
++                (unless project-collapsed
++                  (dolist (agent-group
++                           (agent-shell-sidebar--group-by-agent paths))
++                    (let* ((agent (car agent-group))
++                           (agent-paths (cdr agent-group))
++                           (agent-key (cons root agent))
++                           (agent-collapsed
++                            (gethash agent-key
++                                     agent-shell-sidebar--collapsed)))
++                      (agent-shell-sidebar--render-agent-header
++                       root agent (length agent-paths) agent-collapsed)
++                      (unless agent-collapsed
++                        (dolist (p agent-paths)
++                          (agent-shell-sidebar--render-transcript-row
++                           p (gethash p agent-shell-sidebar--marks))))))))))))
+       (when (= (point-min) (point-max))
+         (insert "  (no matching transcripts)\n"))
+       (agent-shell-sidebar--update-header-line)
+@@ -1022,9 +1041,10 @@
+                   agent-shell-sidebar--render-buffer
+                   (generate-new-buffer " *agent-shell-sidebar render*")
+                   agent-shell-sidebar--render-iterator
+-                  (agent-shell-sidebar--render-snapshot
+-                   agent-shell-sidebar--render-buffer agent-shell-sidebar--groups
+-                   agent-shell-sidebar--project-names)))
++                  (funcall (or agent-shell-sidebar--render-snapshot-function
++                               #'agent-shell-sidebar--render-snapshot)
++                           agent-shell-sidebar--render-buffer agent-shell-sidebar--groups
++                           agent-shell-sidebar--project-names)))
+           (let ((n 0))
+             (while (and agent-shell-sidebar--render-iterator (< n 300)
+                         (not (input-pending-p)))
+@@ -1096,9 +1116,8 @@
+     (dotimes (_ (abs (or n 1)))
+       (let ((old (point)))
+         (forward-line step)
+-        (unless (or (get-text-property (point) 'agent-shell-sidebar-file)
+-                    (get-text-property (point) 'agent-shell-sidebar-agent)
+-                    (get-text-property (point) 'agent-shell-sidebar-project))
++        (unless (seq-some (lambda (property) (get-text-property (point) property))
++                          agent-shell-sidebar--row-identity-properties)
+           (goto-char old)))))
+   (beginning-of-line))
+ 
+@@ -1123,6 +1142,27 @@
+         (progn (set-window-buffer window buffer) (select-window window))
+       (pop-to-buffer buffer '((display-buffer-pop-up-window display-buffer-pop-up-frame))))))
+ 
++(defun agent-shell-sidebar--visit-header (file header &optional strategy)
++  "Visit FILE using validated HEADER and optional startup STRATEGY."
++  (when (plist-get header :error) (user-error "%s" (plist-get header :error)))
++  (let* ((session-id (plist-get header :session-id))
++         (name (plist-get header :agent))
++         (directory (agent-shell-sidebar--working-directory file header))
++         (existing (and name
++                        (agent-shell-sidebar--live-buffer-for-session
++                         session-id name directory)))
++         ;; A removed configuration must not prevent access to its live shell.
++         ;; Configured ambiguous matches still require explicit selection.
++         (unconfigured (and existing
++                            (null (agent-shell-sidebar--configs-for-agent-name name))))
++         (config (unless unconfigured (agent-shell-sidebar--select-config name)))
++         (live (if unconfigured existing
++                 (agent-shell-sidebar--live-buffer-for-session session-id name directory config))))
++    (agent-shell-sidebar--pop-to
++     (or live (if strategy
++                  (agent-shell-sidebar--start directory config session-id strategy)
++                (agent-shell-sidebar--start directory config session-id))))))
++
+ (defun agent-shell-sidebar-visit ()
+   "Toggle a header, reuse a session buffer, or resume the transcript at point."
+   (interactive)
+@@ -1133,22 +1173,7 @@
+    ((get-text-property (line-beginning-position) 'agent-shell-sidebar-file)
+     (let* ((file (get-text-property (line-beginning-position) 'agent-shell-sidebar-file))
+            (header (agent-shell-sidebar--ensure-parsed file)))
+-      (when (plist-get header :error) (user-error "%s" (plist-get header :error)))
+-      (let* ((session-id (plist-get header :session-id))
+-             (name (plist-get header :agent))
+-             (directory (agent-shell-sidebar--working-directory file header))
+-             (existing (and name
+-                            (agent-shell-sidebar--live-buffer-for-session
+-                             session-id name directory)))
+-             ;; A removed configuration must not prevent access to its live shell.
+-             ;; Configured ambiguous matches still require explicit selection.
+-             (unconfigured (and existing
+-                                (null (agent-shell-sidebar--configs-for-agent-name name))))
+-             (config (unless unconfigured (agent-shell-sidebar--select-config name)))
+-             (live (if unconfigured existing
+-                     (agent-shell-sidebar--live-buffer-for-session session-id name directory config))))
+-        (agent-shell-sidebar--pop-to
+-         (or live (agent-shell-sidebar--start directory config session-id))))))
++      (agent-shell-sidebar--visit-header file header)))
+    (t (user-error "No transcript at point"))))
+ 
+ (defun agent-shell-sidebar-new-session ()
+@@ -1245,6 +1270,9 @@
+                               (or (equal file owned) (file-equal-p file owned)))))
+                      (agent-shell-buffers))
+                 (user-error "Transcript belongs to an open agent-shell: %s" file))
++              (when (and agent-shell-sidebar--owned-file-p-function
++                         (funcall agent-shell-sidebar--owned-file-p-function file))
++                (user-error "Transcript belongs to an open session: %s" file))
+               (when (file-exists-p file) (delete-file file delete-by-moving-to-trash))
+               (cl-incf deleted)
+               (remhash file agent-shell-sidebar--parse-cache)
+@@ -1264,10 +1292,17 @@
+   (interactive)
+   (unless (derived-mode-p 'agent-shell-sidebar-mode)
+     (user-error "Not in an agent-shell sidebar"))
+-  (when (timerp agent-shell-sidebar--parse-timer)
+-    (cancel-timer agent-shell-sidebar--parse-timer))
+-  (setq agent-shell-sidebar--parse-timer nil
+-        agent-shell-sidebar--groups (agent-shell-sidebar--collect))
++  ;; Publish discovery only after it succeeds, preserving pending work on error.
++  (let* ((snapshot
++          (let ((agent-shell-sidebar--file-info nil))
++            (list (funcall (or agent-shell-sidebar--collect-function
++                               #'agent-shell-sidebar--collect))
++                  agent-shell-sidebar--file-info))))
++    (when (timerp agent-shell-sidebar--parse-timer)
++      (cancel-timer agent-shell-sidebar--parse-timer))
++    (setq agent-shell-sidebar--parse-timer nil
++          agent-shell-sidebar--groups (car snapshot)
++          agent-shell-sidebar--file-info (cadr snapshot)))
+   (agent-shell-sidebar--queue-uncached
+    (apply #'append (mapcar #'cdr agent-shell-sidebar--groups)))
+   (agent-shell-sidebar--redraw)

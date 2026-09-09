@@ -1,0 +1,59 @@
+{
+  "frontend": "ivy",
+  "mode": "queries",
+  "query": "alpha",
+  "error": null,
+  "child_status": 0,
+  "variant": "current",
+  "sent": [
+    {
+      "seconds": 0.906961958,
+      "query": "bravo"
+    },
+    {
+      "seconds": 1.810515291,
+      "query": "zzzznotfound"
+    },
+    {
+      "seconds": 2.706085208,
+      "query": "alpha"
+    },
+    {
+      "seconds": 3.604295875,
+      "query": ""
+    }
+  ],
+  "first_display": 0.0991671085357666,
+  "reader_done_at": 3.6169960498809814,
+  "visible_samples_before_eof": 111,
+  "queries": {
+    "alpha": {
+      "seconds": 2.6485681533813477,
+      "candidates": 10000,
+      "alpha": 10000,
+      "bravo": 0,
+      "display_has_records": true
+    },
+    "bravo": {
+      "seconds": 0.8552761077880859,
+      "candidates": 10000,
+      "alpha": 0,
+      "bravo": 10000,
+      "display_has_records": true
+    },
+    "zzzznotfound": {
+      "seconds": 1.747568130493164,
+      "candidates": 0,
+      "alpha": 0,
+      "bravo": 0,
+      "display_has_records": false
+    },
+    "": {
+      "seconds": 4.996986150741577,
+      "candidates": 10000,
+      "alpha": 5000,
+      "bravo": 5000,
+      "display_has_records": true
+    }
+  }
+}

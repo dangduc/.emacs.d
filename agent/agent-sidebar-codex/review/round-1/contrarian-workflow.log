@@ -1,0 +1,166 @@
+LANG=C.UTF-8 cannot be used, using en_US.UTF-8 instead.
+Running 5 tests (2026-09-08 15:29:42-0700, selector `"^review-workflow-"')
+ERROR ROW: result="/var/folders/20/4zczrx1s3lq2fv0xmm0gj1fr0000gn/T/agent-sidebar-merge-oLIivl/repo-with space/" launch="/var/folders/20/4zczrx1s3lq2fv0xmm0gj1fr0000gn/T/agent-sidebar-merge-oLIivl/repo-with space/"
+Test review-workflow-new-rejects-native-error-row backtrace:
+  ert-fail(((should (eq (car-safe result) 'user-error)) :form (eq nil 
+  (if (unwind-protect (setq value-952 (apply fn-950 args-951)) (setq f
+  (let (form-description-954) (if (unwind-protect (setq value-952 (app
+  (let ((value-952 'ert-form-evaluation-aborted-953)) (let (form-descr
+  (let* ((fn-950 #'eq) (args-951 (condition-case err (list (car-safe r
+  (let ((result (condition-case err (agent-sidebar-new-session) (user-
+  (progn (fset 'agent-sidebar--launch-terminal vnew) (fset 'agent-side
+  (unwind-protect (progn (fset 'agent-sidebar--launch-terminal vnew) (
+  (let* ((vnew #'(lambda (_name _program _args directory) (setq launch
+  (let* ((file (codex-test--write agent-sidebar-codex-home root "inval
+  (let ((agent-sidebar-codex-home (expand-file-name "codex/" temporary
+  (save-current-buffer (set-buffer buffer) (agent-sidebar-mode) (let (
+  (progn (fset 'input-pending-p vnew) (fset 'agent-shell-buffers vnew)
+  (unwind-protect (progn (fset 'input-pending-p vnew) (fset 'agent-she
+  (let* ((vnew #'(lambda nil nil)) (vnew #'(lambda nil nil)) (vnew #'(
+  (unwind-protect (let* ((vnew #'(lambda nil nil)) (vnew #'(lambda nil
+  (let* ((temporary (file-name-as-directory (make-temp-file "agent-sid
+  #f(lambda () [t] (let* ((temporary (file-name-as-directory ...)) (ro
+  #f(compiled-function () #<bytecode -0x168ba13fb0a320a6>)()
+  handler-bind-1(#f(compiled-function () #<bytecode -0x168ba13fb0a320a
+  ert--run-test-internal(#s(ert--test-execution-info :test ... :result
+  ert-run-test(#s(ert-test :name review-workflow-new-rejects-native-er
+  ert-run-or-rerun-test(#s(ert--stats :selector "^review-workflow-" :t
+  ert-run-tests("^review-workflow-" #f(compiled-function (event-type &
+  ert-run-tests-batch("^review-workflow-")
+  ert-run-tests-batch-and-exit("^review-workflow-")
+  eval((ert-run-tests-batch-and-exit '"^review-workflow-") t)
+  command-line-1(("-l" "jka-compr" "-L" "/private/tmp/sidebar-review-k
+  command-line()
+  normal-top-level()
+Test review-workflow-new-rejects-native-error-row condition:
+    (ert-test-failed
+     ((should (eq (car-safe result) 'user-error)) :form
+      (eq nil user-error) :value nil))
+   FAILED  1/5  review-workflow-new-rejects-native-error-row (0.370842 sec) at agent/agent-sidebar-codex/review/round-1/contrarian-workflow-tests.el:17
+MISSING CWD: result="/var/folders/20/4zczrx1s3lq2fv0xmm0gj1fr0000gn/T/agent-sidebar-merge-bOWO9F/repo-with space/" launch="/var/folders/20/4zczrx1s3lq2fv0xmm0gj1fr0000gn/T/agent-sidebar-merge-bOWO9F/repo-with space/"
+Test review-workflow-new-rejects-native-missing-cwd backtrace:
+  ert-fail(((should (eq (car-safe result) 'user-error)) :form (eq nil 
+  (if (unwind-protect (setq value-935 (apply fn-933 args-934)) (setq f
+  (let (form-description-937) (if (unwind-protect (setq value-935 (app
+  (let ((value-935 'ert-form-evaluation-aborted-936)) (let (form-descr
+  (let* ((fn-933 #'eq) (args-934 (condition-case err (list (car-safe r
+  (let ((result (condition-case err (agent-sidebar-new-session) (user-
+  (progn (fset 'agent-sidebar--launch-terminal vnew) (fset 'agent-side
+  (unwind-protect (progn (fset 'agent-sidebar--launch-terminal vnew) (
+  (let* ((vnew #'(lambda (_name _program _args directory) (setq launch
+  (let* ((file (codex-test--write agent-sidebar-codex-home nil)) (agen
+  (let ((agent-sidebar-codex-home (expand-file-name "codex/" temporary
+  (save-current-buffer (set-buffer buffer) (agent-sidebar-mode) (let (
+  (progn (fset 'input-pending-p vnew) (fset 'agent-shell-buffers vnew)
+  (unwind-protect (progn (fset 'input-pending-p vnew) (fset 'agent-she
+  (let* ((vnew #'(lambda nil nil)) (vnew #'(lambda nil nil)) (vnew #'(
+  (unwind-protect (let* ((vnew #'(lambda nil nil)) (vnew #'(lambda nil
+  (let* ((temporary (file-name-as-directory (make-temp-file "agent-sid
+  #f(lambda () [t] (let* ((temporary (file-name-as-directory ...)) (ro
+  #f(compiled-function () #<bytecode -0x168ba13fb0a320a6>)()
+  handler-bind-1(#f(compiled-function () #<bytecode -0x168ba13fb0a320a
+  ert--run-test-internal(#s(ert--test-execution-info :test ... :result
+  ert-run-test(#s(ert-test :name review-workflow-new-rejects-native-mi
+  ert-run-or-rerun-test(#s(ert--stats :selector "^review-workflow-" :t
+  ert-run-tests("^review-workflow-" #f(compiled-function (event-type &
+  ert-run-tests-batch("^review-workflow-")
+  ert-run-tests-batch-and-exit("^review-workflow-")
+  eval((ert-run-tests-batch-and-exit '"^review-workflow-") t)
+  command-line-1(("-l" "jka-compr" "-L" "/private/tmp/sidebar-review-k
+  command-line()
+  normal-top-level()
+Test review-workflow-new-rejects-native-missing-cwd condition:
+    (ert-test-failed
+     ((should (eq (car-safe result) 'user-error)) :form
+      (eq nil user-error) :value nil))
+   FAILED  2/5  review-workflow-new-rejects-native-missing-cwd (0.010890 sec) at agent/agent-sidebar-codex/review/round-1/contrarian-workflow-tests.el:4
+CHANGED CWD: expected="/var/folders/20/4zczrx1s3lq2fv0xmm0gj1fr0000gn/T/agent-sidebar-merge-aSJMUS/changed-existing-repository/" launch="/var/folders/20/4zczrx1s3lq2fv0xmm0gj1fr0000gn/T/agent-sidebar-merge-aSJMUS/repo-with space/"
+Test review-workflow-new-revalidates-changed-native-directory backtrace:
+  ert-fail(((should (equal launched new-root)) :form (equal "/var/fold
+  (if (unwind-protect (setq value-959 (apply fn-957 args-958)) (setq f
+  (let (form-description-961) (if (unwind-protect (setq value-959 (app
+  (let ((value-959 'ert-form-evaluation-aborted-960)) (let (form-descr
+  (let* ((fn-957 #'equal) (args-958 (condition-case err (list launched
+  (let* ((file (codex-test--write agent-sidebar-codex-home root)) (new
+  (let ((agent-sidebar-codex-home (expand-file-name "codex/" temporary
+  (save-current-buffer (set-buffer buffer) (agent-sidebar-mode) (let (
+  (progn (fset 'input-pending-p vnew) (fset 'agent-shell-buffers vnew)
+  (unwind-protect (progn (fset 'input-pending-p vnew) (fset 'agent-she
+  (let* ((vnew #'(lambda nil nil)) (vnew #'(lambda nil nil)) (vnew #'(
+  (unwind-protect (let* ((vnew #'(lambda nil nil)) (vnew #'(lambda nil
+  (let* ((temporary (file-name-as-directory (make-temp-file "agent-sid
+  #f(lambda () [t] (let* ((temporary (file-name-as-directory ...)) (ro
+  #f(compiled-function () #<bytecode -0x168ba13fb0a320a6>)()
+  handler-bind-1(#f(compiled-function () #<bytecode -0x168ba13fb0a320a
+  ert--run-test-internal(#s(ert--test-execution-info :test ... :result
+  ert-run-test(#s(ert-test :name review-workflow-new-revalidates-chang
+  ert-run-or-rerun-test(#s(ert--stats :selector "^review-workflow-" :t
+  ert-run-tests("^review-workflow-" #f(compiled-function (event-type &
+  ert-run-tests-batch("^review-workflow-")
+  ert-run-tests-batch-and-exit("^review-workflow-")
+  eval((ert-run-tests-batch-and-exit '"^review-workflow-") t)
+  command-line-1(("-l" "jka-compr" "-L" "/private/tmp/sidebar-review-k
+  command-line()
+  normal-top-level()
+Test review-workflow-new-revalidates-changed-native-directory condition:
+    (ert-test-failed
+     ((should (equal launched new-root)) :form
+      (equal
+       "/var/folders/20/4zczrx1s3lq2fv0xmm0gj1fr0000gn/T/agent-sidebar-merge-aSJMUS/repo-with space/"
+       "/var/folders/20/4zczrx1s3lq2fv0xmm0gj1fr0000gn/T/agent-sidebar-merge-aSJMUS/changed-existing-repository/")
+      :value nil :explanation
+      (arrays-of-different-length 92 104
+				  "/var/folders/20/4zczrx1s3lq2fv0xmm0gj1fr0000gn/T/agent-sidebar-merge-aSJMUS/repo-with space/"
+				  "/var/folders/20/4zczrx1s3lq2fv0xmm0gj1fr0000gn/T/agent-sidebar-merge-aSJMUS/changed-existing-repository/"
+				  first-mismatch-at 76)))
+   FAILED  3/5  review-workflow-new-revalidates-changed-native-directory (0.026239 sec) at agent/agent-sidebar-codex/review/round-1/contrarian-workflow-tests.el:32
+REPO-ONLY CODEX GROUP: calls=((agent-shell "/var/folders/20/4zczrx1s3lq2fv0xmm0gj1fr0000gn/T/agent-sidebar-merge-1NzULS/repo-with space/" (:name nil)))
+Test review-workflow-repo-only-group-keeps-unique-codex-provider backtrace:
+  ert-fail(((should (equal calls (list (list 'terminal "*codex-new*" r
+  (if (unwind-protect (setq value-969 (apply fn-967 args-968)) (setq f
+  (let (form-description-971) (if (unwind-protect (setq value-969 (app
+  (let ((value-969 'ert-form-evaluation-aborted-970)) (let (form-descr
+  (let* ((fn-967 #'equal) (args-968 (condition-case err (list calls (l
+  (let (calls) (let* ((vnew #'(lambda (name _program _args directory) 
+  (let ((agent-sidebar-codex-home (expand-file-name "codex/" temporary
+  (save-current-buffer (set-buffer buffer) (agent-sidebar-mode) (let (
+  (progn (fset 'input-pending-p vnew) (fset 'agent-shell-buffers vnew)
+  (unwind-protect (progn (fset 'input-pending-p vnew) (fset 'agent-she
+  (let* ((vnew #'(lambda nil nil)) (vnew #'(lambda nil nil)) (vnew #'(
+  (unwind-protect (let* ((vnew #'(lambda nil nil)) (vnew #'(lambda nil
+  (let* ((temporary (file-name-as-directory (make-temp-file "agent-sid
+  #f(lambda () [t] (let* ((temporary (file-name-as-directory ...)) (ro
+  #f(compiled-function () #<bytecode -0x168ba13fb0a320a6>)()
+  handler-bind-1(#f(compiled-function () #<bytecode -0x168ba13fb0a320a
+  ert--run-test-internal(#s(ert--test-execution-info :test #s(ert-test
+  ert-run-test(#s(ert-test :name review-workflow-repo-only-group-keeps
+  ert-run-or-rerun-test(#s(ert--stats :selector "^review-workflow-" :t
+  ert-run-tests("^review-workflow-" #f(compiled-function (event-type &
+  ert-run-tests-batch("^review-workflow-")
+  ert-run-tests-batch-and-exit("^review-workflow-")
+  eval((ert-run-tests-batch-and-exit '"^review-workflow-") t)
+  command-line-1(("-l" "jka-compr" "-L" "/private/tmp/sidebar-review-k
+  command-line()
+  normal-top-level()
+Test review-workflow-repo-only-group-keeps-unique-codex-provider condition:
+    (ert-test-failed
+     ((should (equal calls (list ...))) :form
+      (equal
+       ((agent-shell
+	 "/var/folders/20/4zczrx1s3lq2fv0xmm0gj1fr0000gn/T/agent-sidebar-merge-1NzULS/repo-with space/"
+	 ...))
+       ((terminal "*codex-new*"
+		  "/var/folders/20/4zczrx1s3lq2fv0xmm0gj1fr0000gn/T/agent-sidebar-merge-1NzULS/repo-with space/")))
+      :value nil :explanation
+      (list-elt 0 (list-elt 0 (different-atoms agent-shell terminal)))))
+   FAILED  4/5  review-workflow-repo-only-group-keeps-unique-codex-provider (0.028634 sec) at agent/agent-sidebar-codex/review/round-1/contrarian-workflow-tests.el:47
+   passed  5/5  review-workflow-ret-and-a-reject-native-missing-cwd-control (0.026433 sec)
+
+Ran 5 tests, 1 results as expected, 4 unexpected (2026-09-08 15:29:43-0700, 0.638274 sec)
+
+4 unexpected results:
+   FAILED  review-workflow-new-rejects-native-error-row
+   FAILED  review-workflow-new-rejects-native-missing-cwd
+   FAILED  review-workflow-new-revalidates-changed-native-directory
+   FAILED  review-workflow-repo-only-group-keeps-unique-codex-provider
+

@@ -1,0 +1,13 @@
+
+Error: file-missing ("Cannot open load file" "No such file or directory" "agent-shell-sidebar")
+  require(agent-shell-sidebar)
+  eval-buffer(#<buffer  *load*> nil "/private/tmp/agent-sidebar-rename-zx22fe87/agent-sidebar.el" nil t)
+  load-with-code-conversion("/private/tmp/agent-sidebar-rename-zx22fe87/agent-sidebar.el" "/private/tmp/agent-sidebar-rename-zx22fe87/agent-sidebar.el" nil t)
+  load("/private/tmp/agent-sidebar-rename-zx22fe87/agent-sidebar.el" nil t)
+  command-line-1(("-l" "jka-compr" "-L" "/private/tmp/agent-sidebar-rename-zx22fe87" "-L" "/Users/ducnguyen/.emacs.d/elpa/31/shell-maker-20260820.1245" "-L" "/Users/ducnguyen/.emacs.d/elpa/31/acp-20260821.1448" "-L" "/Users/ducnguyen/.emacs.d/elpa/31/agent-shell-20260823.1937" "-l" "/private/tmp/agent-sidebar-rename-zx22fe87/agent-sidebar.el" "-l" "/private/tmp/agent-sidebar-rename-zx22fe87/agent/agent-sidebar-codex/review/regressions.el" "-l" "/Users/ducnguyen/.emacs.d/agent/agent-sidebar-rename/rename-tests.el" "-f" "ert-run-tests-batch-and-exit"))
+  command-line()
+  normal-top-level()
+LANG=C.UTF-8 cannot be used, using en_US.UTF-8 instead.
+
+debug-early-backtrace...done
+Cannot open load file: No such file or directory, agent-shell-sidebar

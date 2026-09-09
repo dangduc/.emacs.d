@@ -1,0 +1,157 @@
+--- a/lisp/agent-shell-sidebar.el
++++ b/lisp/agent-shell-sidebar.el
+@@ -154,6 +154,9 @@
+ 
+ (defvar-local agent-shell-sidebar--parse-queue nil
+   "List of transcript paths awaiting header parse.")
++
++(defvar-local agent-shell-sidebar--parse-generation nil
++  "Identity of the current parse queue, invalidated by refresh or cleanup.")
+ 
+ (defvar-local agent-shell-sidebar--marks nil
+   "Hash table mapping transcript path -> mark symbol (e.g. `delete').")
+@@ -374,24 +377,35 @@
+   "Read FILE's metadata when changed or when a previous read failed."
+   (unless agent-shell-sidebar--parse-cache
+     (setq agent-shell-sidebar--parse-cache (make-hash-table :test 'equal)))
+-  (let* ((attrs (condition-case nil (file-attributes file) (file-error nil)))
++  (let* ((owner (current-buffer))
++         (generation agent-shell-sidebar--parse-generation)
++         (cache agent-shell-sidebar--parse-cache)
++         (entry (gethash file cache))
++         (attrs (condition-case nil (file-attributes file) (file-error nil)))
+          (cached (and (agent-shell-sidebar--regular-file-attributes-p attrs)
+                       (agent-shell-sidebar--cached-header file attrs))))
+     (or (and cached (not (plist-get cached :error)) cached)
+         (let ((header (agent-shell-sidebar--parse-header-from-file file)))
+-          (puthash file (list :schema agent-shell-sidebar--cache-schema
+-                              :signature (agent-shell-sidebar--signature attrs)
+-                              :header header)
+-                   agent-shell-sidebar--parse-cache)
+-          (when agent-shell-sidebar--file-info
+-            (puthash file attrs agent-shell-sidebar--file-info))
++          ;; File hooks can refresh, replace the mode, or parse this file again.
++          ;; A completed obsolete read must not overwrite that newer state.
++          (when (and (buffer-live-p owner) (eq (current-buffer) owner)
++                     (eq generation agent-shell-sidebar--parse-generation)
++                     (eq cache agent-shell-sidebar--parse-cache)
++                     (eq entry (gethash file cache)))
++            (puthash file (list :schema agent-shell-sidebar--cache-schema
++                                :signature (agent-shell-sidebar--signature attrs)
++                                :header header)
++                     cache)
++            (when agent-shell-sidebar--file-info
++              (puthash file attrs agent-shell-sidebar--file-info)))
+           header))))
+ 
+ ;;; Async parse loop
+ 
+ (defun agent-shell-sidebar--queue-uncached (paths)
+   "Queue PATHS missing successful cached metadata for this refresh."
+-  (setq agent-shell-sidebar--parse-queue
++  (setq agent-shell-sidebar--parse-generation (make-symbol "sidebar-parse")
++        agent-shell-sidebar--parse-queue
+         (seq-remove (lambda (file)
+                       (let ((header (agent-shell-sidebar--cached-header file)))
+                         (and header (not (plist-get header :error)))))
+@@ -419,6 +433,12 @@
+           (agent-shell-sidebar--idle-timer
+            agent-shell-sidebar-parse-idle-delay #'agent-shell-sidebar--parse-tick))))
+ 
++(defun agent-shell-sidebar--current-parse-p (owner generation)
++  "Return non-nil if OWNER still holds the sidebar work in GENERATION."
++  (and (buffer-live-p owner) (eq (current-buffer) owner)
++       (derived-mode-p 'agent-shell-sidebar-mode)
++       (eq generation agent-shell-sidebar--parse-generation)))
++
+ (defun agent-shell-sidebar--parse-tick (&optional buffer)
+   "Parse and render bounded portions of BUFFER without scanning projects."
+   (when (buffer-live-p (or buffer (current-buffer)))
+@@ -427,36 +447,49 @@
+         (when (timerp agent-shell-sidebar--parse-timer)
+           (cancel-timer agent-shell-sidebar--parse-timer))
+         (setq agent-shell-sidebar--parse-timer nil)
+-        (unwind-protect
+-            (let ((n 0) retry)
+-              (while (and agent-shell-sidebar--parse-queue (not retry)
+-                          (< n (max 1 agent-shell-sidebar-parse-chunk-size))
+-                          (not (input-pending-p)))
+-                (let ((file (car agent-shell-sidebar--parse-queue)))
+-                  (condition-case err
+-                      (agent-shell-sidebar--ensure-parsed file)
+-                    (error
+-                     (if (equal file agent-shell-sidebar--parse-retry-file)
+-                         (puthash
+-                          file
+-                          (list :schema agent-shell-sidebar--cache-schema
+-                                :signature (agent-shell-sidebar--signature
+-                                            (gethash file agent-shell-sidebar--file-info))
+-                                :header (list :error (error-message-string err)))
+-                          agent-shell-sidebar--parse-cache)
+-                       (setq agent-shell-sidebar--parse-retry-file file
+-                             retry t))))
+-                  ;; A quit also retains the head; cleanup below rearms work.
+-                  (unless retry
+-                    (pop agent-shell-sidebar--parse-queue)
+-                    (setq agent-shell-sidebar--parse-retry-file nil
+-                          agent-shell-sidebar--pending-count
+-                          (max 0 (1- agent-shell-sidebar--pending-count))
+-                          agent-shell-sidebar--render-dirty t)))
+-                (cl-incf n))
+-              (agent-shell-sidebar--render-tick)
+-              (agent-shell-sidebar--update-header-line))
+-          (agent-shell-sidebar--start-parse-timer))))))
++        (let ((owner (current-buffer))
++              (generation agent-shell-sidebar--parse-generation))
++          (unwind-protect
++              (let ((n 0) retry)
++                (while (and (agent-shell-sidebar--current-parse-p owner generation)
++                            agent-shell-sidebar--parse-queue (not retry)
++                            (< n (max 1 agent-shell-sidebar-parse-chunk-size))
++                            (not (input-pending-p)))
++                  (let* ((queue agent-shell-sidebar--parse-queue)
++                         (file (car queue)))
++                    (condition-case err
++                        (agent-shell-sidebar--ensure-parsed file)
++                      (error
++                       (when (and (agent-shell-sidebar--current-parse-p owner generation)
++                                  (eq queue agent-shell-sidebar--parse-queue))
++                         (if (equal file agent-shell-sidebar--parse-retry-file)
++                             (puthash
++                              file
++                              (list :schema agent-shell-sidebar--cache-schema
++                                    :signature (agent-shell-sidebar--signature
++                                                (gethash file agent-shell-sidebar--file-info))
++                                    :header (list :error (error-message-string err)))
++                              agent-shell-sidebar--parse-cache)
++                           (setq agent-shell-sidebar--parse-retry-file file
++                                 retry t)))))
++                    ;; The head remains pending if a hook replaced or advanced
++                    ;; the queue.  A quit also retains it and rearms work below.
++                    (when (and (not retry)
++                               (agent-shell-sidebar--current-parse-p owner generation)
++                               (eq queue agent-shell-sidebar--parse-queue))
++                      (pop agent-shell-sidebar--parse-queue)
++                      (setq agent-shell-sidebar--parse-retry-file nil
++                            agent-shell-sidebar--pending-count
++                            (max 0 (1- agent-shell-sidebar--pending-count))
++                            agent-shell-sidebar--render-dirty t)))
++                  (cl-incf n))
++                (when (agent-shell-sidebar--current-parse-p owner generation)
++                  (agent-shell-sidebar--render-tick)
++                  (agent-shell-sidebar--update-header-line)))
++            (when (buffer-live-p owner)
++              (with-current-buffer owner
++                (when (derived-mode-p 'agent-shell-sidebar-mode)
++                  (agent-shell-sidebar--start-parse-timer))))))))))
+ 
+ (defun agent-shell-sidebar--reset-idle-timers ()
+   "Restart pending timers after input anywhere in Emacs."
+@@ -498,6 +531,7 @@
+ 
+ (defun agent-shell-sidebar--cleanup ()
+   "Cancel this buffer's timers and pending work."
++  (setq agent-shell-sidebar--parse-generation nil)
+   (agent-shell-sidebar--cancel-render)
+   (setq agent-shell-sidebar--timer-buffers
+         (delq (current-buffer) agent-shell-sidebar--timer-buffers))

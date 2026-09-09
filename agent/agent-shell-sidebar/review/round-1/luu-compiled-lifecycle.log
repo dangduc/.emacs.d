@@ -1,0 +1,9 @@
+COMPILE LANG=C.UTF-8 cannot be used, using en_US.UTF-8 instead.
+
+CASE lifecycle files=120
+LUU {"kind":"environment","emacs":"31.1","system":"aarch64-apple-darwin22.6.0","compiled-sidebar":true,"gc-cons-threshold":800000,"gc-cons-percentage":1.0,"chunk-size":30,"method":"Direct synchronous callbacks; fresh metadata cache; OS cache not flushed; instrumented counts and timing; idle delays and display redisplay excluded"}
+LUU {"kind":"refresh-during-parse","remaining-before-refresh":90,"pending-after-drain":0,"directory-scans":2,"collections":2,"collect-ms":1.9347667694091797,"rows":720,"redraws":6,"redraw-ms":30.184268951416016,"file-attributes-calls":120,"header-reads":120,"parse-ms":18.0666446685791}
+LUU {"kind":"hidden-parse","visible":null,"timer-after-hide":true,"pending-before-hidden-tick":120,"pending-after-hidden-tick":90,"header-reads-while-hidden":30,"rows-rendered-while-hidden":120,"timer-after-hidden-tick":true}
+LUU {"kind":"idle-reset","refresh-interval-seconds":30,"continuous-idle-thresholds":[30.0,60.0,90.0,120.0,150.0,180.0,210.0,240.0,270.0,300.0,330.0],"new-idle-period-seconds":30,"stored-refresh-threshold-seconds":330.0,"eligible-in-new-idle-period":null,"method":"Real timer objects and timer-event-handler; mocked current-idle-time and post-command-hook input reset; no real keyboard or wall-clock wait"}
+LANG=C.UTF-8 cannot be used, using en_US.UTF-8 instead.
+

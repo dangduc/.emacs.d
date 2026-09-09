@@ -1,0 +1,14 @@
+{
+  "frontend": "ivy",
+  "mode": "flood",
+  "query": "alpha",
+  "layout": "multi",
+  "core_file": "/Users/ducnguyen/.emacs.d/vendor/fzfa/fzfa.elc",
+  "error": null,
+  "child_status": 0,
+  "variant": "current",
+  "sent": [],
+  "first_display": 0.21625208854675293,
+  "reader_done_at": 0.5484941005706787,
+  "visible_samples_before_eof": 14
+}

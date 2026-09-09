@@ -1,0 +1,45 @@
+LANG=C.UTF-8 cannot be used, using en_US.UTF-8 instead.
+Running 5 tests (2026-09-08 15:45:20-0700, selector `"^workflow-r2-"')
+   passed  1/5  workflow-r2-collapsed-codex-group-retains-new-session-context (0.439318 sec)
+   passed  2/5  workflow-r2-derived-mode-binds-actions-and-preserves-core-keys (0.000634 sec)
+MUTATION: erasing :agent lets an ambiguous agent-shell group start, as detected
+   passed  3/5  workflow-r2-erasing-agent-identity-mutation-is-detected (0.036447 sec)
+REMOTE CWD: action=agent-sidebar-visit remote-stat-calls=("/ssh:sidebar-review.invalid:/repo/") result=(user-error "Transcript has no existing working directory")
+REMOTE CWD: action=agent-sidebar-visit-in-agent-shell remote-stat-calls=nil result=(user-error "Codex rollout has no existing local working directory")
+REMOTE CWD: action=agent-sidebar-new-session remote-stat-calls=nil result=(user-error "Selected transcript has no existing working directory")
+Test workflow-r2-local-codex-actions-reject-remote-cwd-before-stat backtrace:
+  ert-fail(((should (cl-every (lambda (observation) (null (cdr observa
+  (if (unwind-protect (setq value-960 (apply fn-958 args-959)) (setq f
+  (let (form-description-962) (if (unwind-protect (setq value-960 (app
+  (let ((value-960 'ert-form-evaluation-aborted-961)) (let (form-descr
+  (let* ((fn-958 #'cl-every) (args-959 (condition-case err (list #'(la
+  (let (observations) (let ((tail '(agent-sidebar-visit agent-sidebar-
+  #f(lambda () [t] (let (observations) (let ((tail ...)) (while tail (
+  #f(compiled-function () #<bytecode -0xccbbe58f185d98e>)()
+  handler-bind-1(#f(compiled-function () #<bytecode -0xccbbe58f185d98e
+  ert--run-test-internal(#s(ert--test-execution-info :test #s(ert-test
+  ert-run-test(#s(ert-test :name workflow-r2-local-codex-actions-rejec
+  ert-run-or-rerun-test(#s(ert--stats :selector "^workflow-r2-" :tests
+  ert-run-tests("^workflow-r2-" #f(compiled-function (event-type &rest
+  ert-run-tests-batch("^workflow-r2-")
+  ert-run-tests-batch-and-exit("^workflow-r2-")
+  eval((ert-run-tests-batch-and-exit '"^workflow-r2-") t)
+  command-line-1(("-l" "jka-compr" "-L" "/private/tmp/sidebar-review-3
+  command-line()
+  normal-top-level()
+Test workflow-r2-local-codex-actions-reject-remote-cwd-before-stat condition:
+    (ert-test-failed
+     ((should (cl-every (lambda ... ...) observations)) :form
+      (cl-every #[(observation) (...) (t)]
+		((agent-sidebar-new-session)
+		 (agent-sidebar-visit-in-agent-shell)
+		 (agent-sidebar-visit "/ssh:sidebar-review.invalid:/repo/")))
+      :value nil))
+   FAILED  4/5  workflow-r2-local-codex-actions-reject-remote-cwd-before-stat (0.441746 sec) at agent/agent-sidebar-codex/review/round-2/contrarian-workflow-tests.el:47
+   passed  5/5  workflow-r2-mixed-agent-group-requires-row (0.015106 sec)
+
+Ran 5 tests, 4 results as expected, 1 unexpected (2026-09-08 15:45:21-0700, 0.989070 sec)
+
+1 unexpected results:
+   FAILED  workflow-r2-local-codex-actions-reject-remote-cwd-before-stat
+

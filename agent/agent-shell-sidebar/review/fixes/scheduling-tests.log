@@ -1,0 +1,19 @@
+LANG=C.UTF-8 cannot be used, using en_US.UTF-8 instead.
+Running 13 tests (2026-09-08 13:15:41-0700, selector `t')
+   passed   1/13  scheduling-disabled-refresh-skips-a-pending-callback (0.000454 sec)
+   passed   2/13  scheduling-idle-reset-rearms-both-timers-from-another-buffer (0.423029 sec)
+   passed   3/13  scheduling-input-and-mode-change-stop-staged-work (0.614702 sec)
+   passed   4/13  scheduling-persistent-hook-failure-is-bounded-and-visible (0.026418 sec)
+   passed   5/13  scheduling-publish-preserves-independent-window-views-and-marks (0.584721 sec)
+   passed   6/13  scheduling-quit-discards-a-partially-written-staging-row (0.605980 sec)
+   passed   7/13  scheduling-quit-retains-work-and-rearms (0.004125 sec)
+   passed   8/13  scheduling-refresh-cancels-snapshot-before-removing-a-file (0.612954 sec)
+Sidebar redraw failed: Injected render failure
+   passed   9/13  scheduling-render-error-stops-and-manual-refresh-recovers (0.349791 sec)
+   passed  10/13  scheduling-rendering-is-progressive-bounded-and-coherent (0.549378 sec)
+   passed  11/13  scheduling-snapshot-freezes-header-and-attribute-pair (0.652540 sec)
+   passed  12/13  scheduling-transient-standard-read-hook-retries-the-same-head (0.006620 sec)
+   passed  13/13  scheduling-user-redraw-invalidates-stale-filter-and-fold-snapshots (0.406270 sec)
+
+Ran 13 tests, 13 results as expected, 0 unexpected (2026-09-08 13:15:45-0700, 4.837667 sec)
+

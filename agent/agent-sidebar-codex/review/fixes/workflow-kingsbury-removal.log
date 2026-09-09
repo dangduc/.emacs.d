@@ -1,0 +1,7 @@
+LANG=C.UTF-8 cannot be used, using en_US.UTF-8 instead.
+Running 1 tests (2026-09-08 15:35:22-0700, selector `kingsbury-activation-aborts-after-reentrant-removal')
+REENTRANT action: removed=t current-entry=nil launches=0
+   passed  1/1  kingsbury-activation-aborts-after-reentrant-removal (0.595236 sec)
+
+Ran 1 tests, 1 results as expected, 0 unexpected (2026-09-08 15:35:22-0700, 0.595382 sec)
+

@@ -1,0 +1,46 @@
+{
+  "sha256": {
+    "/Users/ducnguyen/.emacs.d/agent/agent-sidebar-codex/README.md": "765bdb9e548eb3771f2e6d3ced1d256e423ebaaa17bab327f00ec573c16bda98",
+    "/Users/ducnguyen/.emacs.d/agent/agent-sidebar-codex/acp-fixture.py": "07a889ec77373207506c03eacf4b5ce2e254e773e8145ec45acddccaf817f688",
+    "/Users/ducnguyen/.emacs.d/agent/agent-sidebar-codex/adapter-smoke.json": "fca38b323f43d59cc8aca07b80f150e748d408e781894b6afba287505a95d2a7",
+    "/Users/ducnguyen/.emacs.d/agent/agent-sidebar-codex/adapter-smoke.py": "627f40d1977231397cf820808d9d57593f2888c4c4a37912acfd78a3d6654c63",
+    "/Users/ducnguyen/.emacs.d/agent/agent-sidebar-codex/before-0-agent-sidebar.el": "2e0e824b41f98c8d4f2ef5e7dd4bddf494491286535ff7d4ab4f58140e82ac88",
+    "/Users/ducnguyen/.emacs.d/agent/agent-sidebar-codex/before-1-agent-shell-sidebar.el": "074c42eed652357277685fd072a2bb7ecbb6af813076f4506e3045eea3fd8b9e",
+    "/Users/ducnguyen/.emacs.d/agent/agent-sidebar-codex/before-2-package-declarations.el": "d58ada5a64fb91e16de044e706610474962562421d97c2ef76987b5f6f20c075",
+    "/Users/ducnguyen/.emacs.d/agent/agent-sidebar-codex/before-3-agent-sidebar.el": "2e0e824b41f98c8d4f2ef5e7dd4bddf494491286535ff7d4ab4f58140e82ac88",
+    "/Users/ducnguyen/.emacs.d/agent/agent-sidebar-codex/before-4-agent-shell-sidebar.el": "074c42eed652357277685fd072a2bb7ecbb6af813076f4506e3045eea3fd8b9e",
+    "/Users/ducnguyen/.emacs.d/agent/agent-sidebar-codex/compile.log": "48db5afb3a1231f26ddf9dd3801df85bac968f41a3c0facd2343be0bf128ba61",
+    "/Users/ducnguyen/.emacs.d/agent/agent-sidebar-codex/config.patch": "075795a95d2a77e8f92f89645473824a59888f8be852159bfd293dc269d2db51",
+    "/Users/ducnguyen/.emacs.d/agent/agent-sidebar-codex/desktop-sync.json": "c87ac51b573ea89246c971c0568e934e4c2f0c42ed97f1c0e1c27bfe9787565a",
+    "/Users/ducnguyen/.emacs.d/agent/agent-sidebar-codex/final-compiled-tests.log": "a311f28a0dee85c31b5550f0ede503d1ca66b3e412128ffd26d333f0846e9032",
+    "/Users/ducnguyen/.emacs.d/agent/agent-sidebar-codex/final-emacs30-tests.log": "bacd3b39e788d12108d7dd7abbaf5d20210f4f2f7d160ab15746633e872073aa",
+    "/Users/ducnguyen/.emacs.d/agent/agent-sidebar-codex/final-source-tests.log": "a2f75be833b9b0d5514a78b8819d55790406dd5efd2eb1d68bf1389f76d2960a",
+    "/Users/ducnguyen/.emacs.d/agent/agent-sidebar-codex/ghostel-cli-fixture.py": "773ea6a0cc8ab3d816ca19633881f54751b728a1307c30fc75c733bc7c98f3c6",
+    "/Users/ducnguyen/.emacs.d/agent/agent-sidebar-codex/inputs.json": "5cba10c507536cf3f082b1fb6ae2d1b167d316b8c3fbf66f17008264da72f64a",
+    "/Users/ducnguyen/.emacs.d/agent/agent-sidebar-codex/live-check.el": "f8b960eec9b91a51d74803163158e4f0f7a51cfe13d6e3b686721418257155a9",
+    "/Users/ducnguyen/.emacs.d/agent/agent-sidebar-codex/live-check.eldata": "46151c366e3130339bb96a56e7714a526cd15433b33a0a6ceb9e19623551cde5",
+    "/Users/ducnguyen/.emacs.d/agent/agent-sidebar-codex/live-final.eldata": "e935576001d0dfe57fb2604ea956060301ac4c0858585d5aeffe4508e207565e",
+    "/Users/ducnguyen/.emacs.d/agent/agent-sidebar-codex/merge-regressions.log": "44a1953df53af3ad30ab3bbf3ef1fbc62036db85f3a063fd94dff273e8ece8f4",
+    "/Users/ducnguyen/.emacs.d/agent/agent-sidebar-codex/sidebar.patch": "2647588f0a39289bd53a5527cbce6d4c82eddf1b9a599da262aa23727cf200b1",
+    "/Users/ducnguyen/.emacs.d/agent/agent-sidebar-codex/sync-desktop.py": "df18ad8cd4d1f0762764a0b50b3c09ada03c9d1619742c53af057e5d12fcb926",
+    "/Users/ducnguyen/.emacs.d/agent/agent-sidebar-codex/tests.el": "f059e90962e835d1ab13bdb4478e5f232cc295d916020ff8e95c735732aca6bd",
+    "/Users/ducnguyen/.emacs.d/agent/agent-sidebar-codex/tests.log": "72ae7bd3bc08c99d0c8cffe27b5f8d90a455245666815205e8de4119ec8c15e0",
+    "/Users/ducnguyen/.emacs.d/lisp/agent-sidebar.el": "fe729bbdfe6c76c198611c4f347041d6983f080ed085e6fab739b7a6843739b0",
+    "/Users/ducnguyen/.emacs.d/lisp/agent-sidebar.elc": "8cd36a1c7ffa54ed26791e56d323da43f7c2558785ffc183242b8bf2279ad05e",
+    "/Users/ducnguyen/.emacs.d/lisp/package-declarations.el": "1ad4cc91a163ab62e3a71e8ec249b63ed2d04ceb7705f2d78b7c065a5ab2daa2"
+  },
+  "tests": {
+    "existing_merge": 22,
+    "codex": 9,
+    "total": 31,
+    "configurations": [
+      "Emacs 31.1 source",
+      "Emacs 31.1 bytecode",
+      "Emacs 30.2.50 with dependency sources"
+    ]
+  },
+  "installed_adapter": "@agentclientprotocol/codex-acp@1.10.0",
+  "running_emacs_pid": 3353,
+  "core_unchanged": true,
+  "desktop_matches": true
+}

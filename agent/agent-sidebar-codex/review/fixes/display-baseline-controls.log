@@ -1,0 +1,77 @@
+LANG=C.UTF-8 cannot be used, using en_US.UTF-8 instead.
+Running 4 tests (2026-09-08 15:45:41-0700, selector `"^display-fix-"')
+   passed  1/4  display-fix-existing-custom-buffer-error-and-quit-preserve-owner (0.003811 sec)
+   passed  2/4  display-fix-existing-session-reuse-preserves-running-child (0.002050 sec)
+Test display-fix-ghostel-dispatch-error-and-quit-clean-up backtrace:
+  ert-fail(((should-not (buffer-live-p target)) :form (buffer-live-p #
+  (if (not (unwind-protect (setq value-1151 (apply fn-1149 args-1150))
+  (let (form-description-1153) (if (not (unwind-protect (setq value-11
+  (let ((value-1151 'ert-form-evaluation-aborted-1152)) (let (form-des
+  (let* ((fn-1149 #'buffer-live-p) (args-1150 (condition-case err (lis
+  (let ((agent-sidebar-terminal-function nil) target child (expected (
+  (let ((condition (car tail))) (let ((agent-sidebar-terminal-function
+  (while tail (let ((condition (car tail))) (let ((agent-sidebar-termi
+  (let ((tail '(display-fix-error quit))) (while tail (let ((condition
+  (progn (let ((tail '(display-fix-error quit))) (while tail (let ((co
+  (unwind-protect (progn (let ((tail '(display-fix-error quit))) (whil
+  (let ((wconfig (current-window-configuration))) (unwind-protect (pro
+  (unwind-protect (let ((wconfig (current-window-configuration))) (unw
+  (let* ((temporary (make-temp-file "torvalds-r2-" t)) (directory (fil
+  #f(lambda () [t] (let* ((temporary (make-temp-file "torvalds-r2-" t)
+  #f(compiled-function () #<bytecode -0xebd8eacfc4269ea>)()
+  handler-bind-1(#f(compiled-function () #<bytecode -0xebd8eacfc4269ea
+  ert--run-test-internal(#s(ert--test-execution-info :test #s(ert-test
+  ert-run-test(#s(ert-test :name display-fix-ghostel-dispatch-error-an
+  ert-run-or-rerun-test(#s(ert--stats :selector "^display-fix-" :tests
+  ert-run-tests("^display-fix-" #f(compiled-function (event-type &rest
+  ert-run-tests-batch("^display-fix-")
+  ert-run-tests-batch-and-exit("^display-fix-")
+  eval((ert-run-tests-batch-and-exit '"^display-fix-") t)
+  command-line-1(("-l" "jka-compr" "-L" "/private/tmp/sidebar-review-9
+  command-line()
+  normal-top-level()
+Test display-fix-ghostel-dispatch-error-and-quit-clean-up condition:
+    (ert-test-failed
+     ((should-not (buffer-live-p target)) :form
+      (buffer-live-p #<killed buffer>) :value t))
+   FAILED  3/4  display-fix-ghostel-dispatch-error-and-quit-clean-up (0.001939 sec) at agent/agent-sidebar-codex/review/fixes/display-tests.el:59
+Test display-fix-new-custom-buffer-error-and-quit-clean-up backtrace:
+  ert-fail(((should-not (buffer-live-p target)) :form (buffer-live-p #
+  (if (not (unwind-protect (setq value-1107 (apply fn-1105 args-1106))
+  (let (form-description-1109) (if (not (unwind-protect (setq value-11
+  (let ((value-1107 'ert-form-evaluation-aborted-1108)) (let (form-des
+  (let* ((fn-1105 #'buffer-live-p) (args-1106 (condition-case err (lis
+  (let (target child queried (expected (list condition "original displ
+  (let ((condition (car tail))) (let (target child queried (expected (
+  (while tail (let ((condition (car tail))) (let (target child queried
+  (let ((tail '(display-fix-error quit))) (while tail (let ((condition
+  (progn (let ((tail '(display-fix-error quit))) (while tail (let ((co
+  (unwind-protect (progn (let ((tail '(display-fix-error quit))) (whil
+  (let ((wconfig (current-window-configuration))) (unwind-protect (pro
+  (unwind-protect (let ((wconfig (current-window-configuration))) (unw
+  (let* ((temporary (make-temp-file "torvalds-r2-" t)) (directory (fil
+  #f(lambda () [t] (let* ((temporary (make-temp-file "torvalds-r2-" t)
+  #f(compiled-function () #<bytecode -0xebd8eacfc4269ea>)()
+  handler-bind-1(#f(compiled-function () #<bytecode -0xebd8eacfc4269ea
+  ert--run-test-internal(#s(ert--test-execution-info :test #s(ert-test
+  ert-run-test(#s(ert-test :name display-fix-new-custom-buffer-error-a
+  ert-run-or-rerun-test(#s(ert--stats :selector "^display-fix-" :tests
+  ert-run-tests("^display-fix-" #f(compiled-function (event-type &rest
+  ert-run-tests-batch("^display-fix-")
+  ert-run-tests-batch-and-exit("^display-fix-")
+  eval((ert-run-tests-batch-and-exit '"^display-fix-") t)
+  command-line-1(("-l" "jka-compr" "-L" "/private/tmp/sidebar-review-9
+  command-line()
+  normal-top-level()
+Test display-fix-new-custom-buffer-error-and-quit-clean-up condition:
+    (ert-test-failed
+     ((should-not (buffer-live-p target)) :form
+      (buffer-live-p #<killed buffer>) :value t))
+   FAILED  4/4  display-fix-new-custom-buffer-error-and-quit-clean-up (0.003161 sec) at agent/agent-sidebar-codex/review/fixes/display-tests.el:11
+
+Ran 4 tests, 2 results as expected, 2 unexpected (2026-09-08 15:45:41-0700, 0.102164 sec)
+
+2 unexpected results:
+   FAILED  display-fix-ghostel-dispatch-error-and-quit-clean-up
+   FAILED  display-fix-new-custom-buffer-error-and-quit-clean-up
+

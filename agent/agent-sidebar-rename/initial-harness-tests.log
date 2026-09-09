@@ -1,0 +1,396 @@
+LANG=C.UTF-8 cannot be used, using en_US.UTF-8 instead.
+Running 127 tests (2026-09-08 16:35:12-0700, selector `t')
+   passed    1/127  acp-fix-actual-client-home-wins-over-stale-marker (0.850851 sec)
+   passed    2/127  acp-fix-deferred-client-keeps-home-and-other-environment (0.000508 sec)
+   passed    3/127  acp-fix-ordinary-client-with-explicit-home-is-reused (0.000602 sec)
+   passed    4/127  acp-fix-ordinary-client-with-unknown-home-is-not-guessed (0.000551 sec)
+   passed    5/127  acp-fix-reloaded-config-and-home-alias-are-reused (0.000898 sec)
+   passed    6/127  acp-fix-wrapper-does-not-mutate-shared-client-environment (0.000471 sec)
+   passed    7/127  ce-empty-native-records-do-not-consume-the-first-prompt-slot (0.001212 sec)
+   passed    8/127  ce-event-context-is-filtered-before-first-real-prompt (0.001205 sec)
+   passed    9/127  ce-event-first-history-and-duplicate-forms-keep-first-request (0.000912 sec)
+   passed   10/127  ce-event-only-history-is-supported (0.000807 sec)
+   passed   11/127  ce-first-prompt-survives-later-event-from-a-new-turn (0.000825 sec)
+   passed   12/127  ce-fork-identity-is-not-inherited-parent-identity (0.000861 sec)
+   passed   13/127  ce-inline-plugin-markup-is-user-text (0.000658 sec)
+   passed   14/127  ce-leading-context-wrappers-keep-a-request-after-the-last-close (0.000542 sec)
+   passed   15/127  ce-many-leading-context-wrappers-retain-the-final-request (0.000889 sec)
+   passed   16/127  ce-mutation-control-kills-disabled-context-filter (0.001399 sec)
+   passed   17/127  ce-plugin-inventory-is-context-not-the-first-prompt (0.000906 sec)
+   passed   18/127  ce-plugin-wrapper-keeps-a-request-in-its-suffix (0.000672 sec)
+   passed   19/127  ce-standalone-and-incomplete-context-blocks-do-not-win-preview (0.000665 sec)
+   passed   20/127  ce-unknown-tags-and-quoted-leading-tags-remain-user-text (0.001267 sec)
+   passed   21/127  ce2-completing-a-native-record-invalidates-a-successful-empty-preview-cache (0.001355 sec)
+   passed   22/127  ce2-multibyte-record-crossing-byte-prefix-does-not-leak-partial-preview (0.011272 sec)
+   passed   23/127  ce2-mutation-control-rejects-disabling-preview-bound-at-parser-dispatch (0.001497 sec)
+   passed   24/127  ce2-preview-bound-survives-cache-and-activation-path (0.001051 sec)
+   passed   25/127  ce2-unexpected-claude-content-shape-does-not-poison-valid-session (0.000612 sec)
+   passed   26/127  ce2-unexpected-codex-content-shape-does-not-poison-valid-session (0.000676 sec)
+   passed   27/127  codex-bounded-records-and-malformed-session-id (0.005216 sec)
+   passed   28/127  codex-cli-ghostel-resume-argv-home-and-reuse (0.048361 sec)
+   passed   29/127  codex-discovery-ignores-archives-symlinks-pipes-and-unrelated-folders (0.005046 sec)
+   passed   30/127  codex-discovery-metadata-and-existing-providers (0.050776 sec)
+   passed   31/127  codex-fork-keeps-first-session-meta-and-first-user-preview (0.001860 sec)
+   passed   32/127  codex-markdown-agent-shell-uses-codex-config (0.011550 sec)
+   passed   33/127  codex-native-agent-shell-rejects-missing-cwd-before-start (0.011871 sec)
+Test codex-native-real-agent-shell-client-load-new-reuse-and-ownership backtrace:
+  ert-fail(((should (equal codex-test--id (map-nested-elt (buffer-loca
+  (if (unwind-protect (setq value-790 (apply fn-788 args-789)) (setq f
+  (let (form-description-792) (if (unwind-protect (setq value-790 (app
+  (let ((value-790 'ert-form-evaluation-aborted-791)) (let (form-descr
+  (let* ((fn-788 #'equal) (args-789 (condition-case err (list codex-te
+  (progn (fset 'agent-sidebar--pop-to vnew) (agent-sidebar-refresh) (m
+  (unwind-protect (progn (fset 'agent-sidebar--pop-to vnew) (agent-sid
+  (let* ((vnew #'(lambda (target) (setq shown target))) (old (symbol-f
+  (unwind-protect (let* ((vnew #'(lambda (target) (setq shown target))
+  (let* ((file (codex-test--write agent-sidebar-codex-home root)) (log
+  (let ((agent-sidebar-codex-home (expand-file-name "codex/" temporary
+  (save-current-buffer (set-buffer buffer) (agent-sidebar-mode) (let (
+  (progn (fset 'input-pending-p vnew) (fset 'agent-shell-buffers vnew)
+  (unwind-protect (progn (fset 'input-pending-p vnew) (fset 'agent-she
+  (let* ((vnew #'(lambda nil nil)) (vnew #'(lambda nil nil)) (vnew #'(
+  (unwind-protect (let* ((vnew #'(lambda nil nil)) (vnew #'(lambda nil
+  (let* ((temporary (file-name-as-directory (make-temp-file "agent-sid
+  #f(lambda () [t] (let* ((temporary (file-name-as-directory ...)) (ro
+  #f(compiled-function () #<bytecode -0x130fd270e115a680>)()
+  handler-bind-1(#f(compiled-function () #<bytecode -0x130fd270e115a68
+  ert--run-test-internal(#s(ert--test-execution-info :test ... :result
+  ert-run-test(#s(ert-test :name codex-native-real-agent-shell-client-
+  ert-run-or-rerun-test(#s(ert--stats :selector t :tests ... :test-map
+  ert-run-tests(t #f(compiled-function (event-type &rest event-args) #
+  ert-run-tests-batch(nil)
+  ert-run-tests-batch-and-exit()
+  command-line-1(("-l" "jka-compr" "-L" "/private/tmp/agent-sidebar-re
+  command-line()
+  normal-top-level()
+Test codex-native-real-agent-shell-client-load-new-reuse-and-ownership condition:
+    (ert-test-failed
+     ((should (equal codex-test--id (map-nested-elt ... ...))) :form
+      (equal "12345678-1234-7123-8123-123456789abc" nil) :value nil
+      :explanation
+      (different-types "12345678-1234-7123-8123-123456789abc" nil)))
+   FAILED   34/127  codex-native-real-agent-shell-client-load-new-reuse-and-ownership (8.076750 sec) at ../../../private/tmp/agent-sidebar-rename-6nmskem_/agent/agent-sidebar-codex/tests.el:165
+   passed   35/127  codex-new-cli-and-prefix-agent-shell-select-codex (0.035605 sec)
+   passed   36/127  display-fix-existing-custom-buffer-error-and-quit-preserve-owner (0.003042 sec)
+   passed   37/127  display-fix-existing-session-reuse-preserves-running-child (0.003058 sec)
+   passed   38/127  display-fix-ghostel-dispatch-error-and-quit-clean-up (0.004734 sec)
+   passed   39/127  display-fix-new-custom-buffer-error-and-quit-clean-up (0.004048 sec)
+   passed   40/127  fix-group-changed-filter-membership-aborts (0.020966 sec)
+   passed   41/127  fix-group-changed-model-membership-aborts (0.016582 sec)
+EARLY AMBIGUITY: 20 discovered entries, 2 parser calls
+   passed   42/127  fix-group-stops-at-second-distinct-context (0.016319 sec)
+   passed   43/127  fix-group-warm-one-context-keeps-cache-and-discovery (0.048986 sec)
+   passed   44/127  fix-local-cwd-direct-launch-rejects-remote-before-stat (0.401141 sec)
+Warning (emacs): Redefining `expand-file-name' might break native compilation of trampolines.
+Warning (emacs): Redefining `expand-file-name' might break native compilation of trampolines.
+Warning (emacs): Redefining `expand-file-name' might break native compilation of trampolines.
+Warning (emacs): Redefining `expand-file-name' might break native compilation of trampolines.
+   passed   45/127  fix-local-cwd-invalid-values-rejected-before-expansion (0.405663 sec)
+   passed   46/127  fix-workflow-actions-abort-on-reentrant-provider-replacement (0.033150 sec)
+   passed   47/127  fix-workflow-agent-shell-group-keeps-codex-agent (0.020255 sec)
+   passed   48/127  fix-workflow-group-keeps-captured-home-and-prefix-codex-agent (0.039893 sec)
+   passed   49/127  fix-workflow-group-with-multiple-codex-homes-requires-row (0.016098 sec)
+   passed   50/127  fix-workflow-mixed-provider-group-requires-row (0.021136 sec)
+   passed   51/127  fix-workflow-new-aborts-on-reentrant-owner-change (0.006440 sec)
+   passed   52/127  fix-workflow-new-rejects-removed-display-entry (0.033953 sec)
+REENTRANT action: removed=t current-entry=nil launches=0
+   passed   53/127  kingsbury-activation-aborts-after-reentrant-removal (0.008811 sec)
+   passed   54/127  kingsbury-existing-resume-path-owner-control (0.001587 sec)
+NEW ACP ownership: active-id="23456789-1234-7123-8123-123456789abc" native-marker=nil owned=("/private/var/folders/20/4zczrx1s3lq2fv0xmm0gj1fr0000gn/T/agent-sidebar-merge-bnyMFK/codex/")
+Deleted 0. Retained 1 mark(s): Transcript belongs to an open session: /var/folders/20/4zczrx1s3lq2fv0xmm0gj1fr0000gn/T/agent-sidebar-merge-bnyMFK/codex/sessions/2026/09/08/rollout-2026-09-08T12-00-00-23456789-1234-7123-8123-123456789abc.jsonl
+NEW ACP after delete: exists=t retained-mark=delete active-id="23456789-1234-7123-8123-123456789abc"
+   passed   55/127  kingsbury-new-acp-session-protects-its-later-rollout (0.503653 sec)
+Deleted 1 transcript(s)
+MUTATION CONTROL: disabling native guard deletes the active fixture file
+   passed   56/127  kingsbury-r2-mutation-disabled-native-guard-exposes-deletion (0.017003 sec)
+Test kingsbury-r2-reload-during-file-read-retains-active-rollout backtrace:
+  ert-fail(((should (equal codex-test--id (map-nested-elt (buffer-loca
+  (if (unwind-protect (setq value-1267 (apply fn-1265 args-1266)) (set
+  (let (form-description-1269) (if (unwind-protect (setq value-1267 (a
+  (let ((value-1267 'ert-form-evaluation-aborted-1268)) (let (form-des
+  (let* ((fn-1265 #'equal) (args-1266 (condition-case err (list codex-
+  ownership--wait-session(#<killed buffer>)
+  (let* ((file (codex-test--write agent-sidebar-codex-home root)) (she
+  (progn (fset 'agent-shell--display-buffer #'ignore) (fset 'agent-she
+  (unwind-protect (progn (fset 'agent-shell--display-buffer #'ignore) 
+  (let* ((vnew #'(lambda (&rest args) (let ((shell ...)) (setq shells 
+  (unwind-protect (let* ((vnew #'(lambda (&rest args) (let (...) (setq
+  (let* ((log (expand-file-name "acp.jsonl" temporary)) (agent-shell-o
+  (let ((agent-sidebar-codex-home (expand-file-name "codex/" temporary
+  (save-current-buffer (set-buffer buffer) (agent-sidebar-mode) (let (
+  (progn (fset 'input-pending-p vnew) (fset 'agent-shell-buffers vnew)
+  (unwind-protect (progn (fset 'input-pending-p vnew) (fset 'agent-she
+  (let* ((vnew #'(lambda nil nil)) (vnew #'(lambda nil nil)) (vnew #'(
+  (unwind-protect (let* ((vnew #'(lambda nil nil)) (vnew #'(lambda nil
+  (let* ((temporary (file-name-as-directory (make-temp-file "agent-sid
+  #f(lambda () [t] (let* ((temporary (file-name-as-directory ...)) (ro
+  #f(compiled-function () #<bytecode -0x130fd270e115a680>)()
+  handler-bind-1(#f(compiled-function () #<bytecode -0x130fd270e115a68
+  ert--run-test-internal(#s(ert--test-execution-info :test ... :result
+  ert-run-test(#s(ert-test :name kingsbury-r2-reload-during-file-read-
+  ert-run-or-rerun-test(#s(ert--stats :selector t :tests ... :test-map
+  ert-run-tests(t #f(compiled-function (event-type &rest event-args) #
+  ert-run-tests-batch(nil)
+  ert-run-tests-batch-and-exit()
+  command-line-1(("-l" "jka-compr" "-L" "/private/tmp/agent-sidebar-re
+  command-line()
+  normal-top-level()
+Test kingsbury-r2-reload-during-file-read-retains-active-rollout condition:
+    (ert-test-failed
+     ((should (equal codex-test--id (map-nested-elt ... ...))) :form
+      (equal "12345678-1234-7123-8123-123456789abc" nil) :value nil
+      :explanation
+      (different-types "12345678-1234-7123-8123-123456789abc" nil)))
+   FAILED   57/127  kingsbury-r2-reload-during-file-read-retains-active-rollout (8.027360 sec) at ../../../private/tmp/agent-sidebar-rename-6nmskem_/agent/agent-sidebar-codex/review/round-2/kingsbury-tests.el:4
+   passed   58/127  kingsbury-r2-state-switch-to-other-home-is-not-an-owner (0.003958 sec)
+LUU-R2-WARM (:files 300 :elapsed 0.01154 :parses 0 :discoveries 0)
+   passed   59/127  luu-r2-warm-unambiguous-group-reuses-metadata-at-300-sessions (0.437752 sec)
+   passed   60/127  merge-buffer-isolation-and-legacy-buffer-upgrade (0.033754 sec)
+   passed   61/127  merge-cache-rechecks-size-and-recovers-read-permissions (0.021149 sec)
+   passed   62/127  merge-claude-directory-is-confirmed-not-guessed (0.011443 sec)
+   passed   63/127  merge-flat-date-filter-and-fold-preserve-marks (0.062236 sec)
+   passed   64/127  merge-ghostel-dispatch-and-failed-start-cleanup (0.000470 sec)
+   passed   65/127  merge-jsonl-nonregular-and-read-errors-are-explicit (0.003096 sec)
+   passed   66/127  merge-jsonl-read-is-bounded-and-preserves-complete-records (0.002069 sec)
+   passed   67/127  merge-jsonl-skips-meta-and-tools-and-reads-later-model (0.001145 sec)
+   passed   68/127  merge-jsonl-wrong-record-shapes-do-not-hide-valid-records (0.001015 sec)
+Provider tree: 420 reads, 1 scan, progressive publication observed
+   passed   69/127  merge-progressive-tree-does-not-rediscover-and-bounds-rows (0.454030 sec)
+   passed   70/127  merge-provider-collision-does-not-publish-partial-discovery (0.010889 sec)
+   passed   71/127  merge-provider-error-keeps-old-snapshot-and-work (0.011336 sec)
+   passed   72/127  merge-provider-replacement-invalidates-cached-metadata (0.044628 sec)
+   passed   73/127  merge-real-term-process-receives-exact-argv-and-cwd (0.038250 sec)
+   passed   74/127  merge-reentrant-refresh-does-not-lose-provider-entry (0.025312 sec)
+   passed   75/127  merge-session-id-recovery-is-unambiguous-and-invalidates (0.005040 sec)
+   passed   76/127  merge-shell-activation-uses-recovery-or-session-picker (0.013238 sec)
+   passed   77/127  merge-term-fallback-preserves-argv-with-metacharacters (0.000329 sec)
+   passed   78/127  merge-terminal-arguments-directory-and-reuse (0.015081 sec)
+Deleted 0. Retained 1 mark(s): Transcript belongs to an open session: /var/folders/20/4zczrx1s3lq2fv0xmm0gj1fr0000gn/T/agent-sidebar-merge-FfBZZ2/claude/-var-folders-20-4zczrx1s3lq2fv0xmm0gj1fr0000gn-T-agent-sidebar-merge-FfBZZ2-repo-with-space/owned.jsonl
+Deleted 1 transcript(s)
+   passed   79/127  merge-terminal-ownership-prevents-delete-until-process-exits (0.054922 sec)
+   passed   80/127  merge-two-providers-metadata-model-and-nesting (0.017144 sec)
+   passed   81/127  merge-vterm-launch-keeps-dedicated-sidebar-and-quotes-argv (0.000703 sec)
+Mutation control: ignoring membership filter produced ambiguity, as detected
+   passed   82/127  ousterhout-r2-filter-membership-mutation-is-detected (0.056740 sec)
+   passed   83/127  ousterhout-r2-filtered-group-resolves-visible-provider (0.032473 sec)
+Stale group: selected=/var/folders/20/4zczrx1s3lq2fv0xmm0gj1fr0000gn/T/agent-sidebar-merge-BtXabj/repo-with space/ current-cwd=/var/folders/20/4zczrx1s3lq2fv0xmm0gj1fr0000gn/T/agent-sidebar-merge-BtXabj/changed-repository-longer-name/ launched=nil result=(user-error "Group changed while reading; refresh or select a transcript row")
+   passed   84/127  ousterhout-r2-new-on-stale-repo-group-does-not-launch-another-repo (0.015927 sec)
+Test ousterhout-reload-preserves-selected-home backtrace:
+  ert-fail(((should (equal codex-test--id (map-nested-elt (buffer-loca
+  (if (unwind-protect (setq value-835 (apply fn-833 args-834)) (setq f
+  (let (form-description-837) (if (unwind-protect (setq value-835 (app
+  (let ((value-835 'ert-form-evaluation-aborted-836)) (let (form-descr
+  (let* ((fn-833 #'equal) (args-834 (condition-case err (list codex-te
+  ousterhout--wait-session(#<killed buffer>)
+  (let* ((process-environment (cons (concat "CODEX_HOME=" (expand-file
+  (progn (fset 'agent-shell--display-buffer #'ignore) (fset 'agent-she
+  (unwind-protect (progn (fset 'agent-shell--display-buffer #'ignore) 
+  (let* ((vnew #'(lambda (&rest args) (let ((shell ...)) (setq shells 
+  (unwind-protect (let* ((vnew #'(lambda (&rest args) (let (...) (setq
+  (let* ((log (expand-file-name "acp.jsonl" temporary)) (agent-shell-o
+  (let ((agent-sidebar-codex-home (expand-file-name "codex/" temporary
+  (save-current-buffer (set-buffer buffer) (agent-sidebar-mode) (let (
+  (progn (fset 'input-pending-p vnew) (fset 'agent-shell-buffers vnew)
+  (unwind-protect (progn (fset 'input-pending-p vnew) (fset 'agent-she
+  (let* ((vnew #'(lambda nil nil)) (vnew #'(lambda nil nil)) (vnew #'(
+  (unwind-protect (let* ((vnew #'(lambda nil nil)) (vnew #'(lambda nil
+  (let* ((temporary (file-name-as-directory (make-temp-file "agent-sid
+  #f(lambda () [t] (let* ((temporary (file-name-as-directory ...)) (ro
+  #f(compiled-function () #<bytecode -0x130fd270e115a680>)()
+  handler-bind-1(#f(compiled-function () #<bytecode -0x130fd270e115a68
+  ert--run-test-internal(#s(ert--test-execution-info :test ... :result
+  ert-run-test(#s(ert-test :name ousterhout-reload-preserves-selected-
+  ert-run-or-rerun-test(#s(ert--stats :selector t :tests ... :test-map
+  ert-run-tests(t #f(compiled-function (event-type &rest event-args) #
+  ert-run-tests-batch(nil)
+  ert-run-tests-batch-and-exit()
+  command-line-1(("-l" "jka-compr" "-L" "/private/tmp/agent-sidebar-re
+  command-line()
+  normal-top-level()
+Test ousterhout-reload-preserves-selected-home condition:
+    (ert-test-failed
+     ((should (equal codex-test--id (map-nested-elt ... ...))) :form
+      (equal "12345678-1234-7123-8123-123456789abc" nil) :value nil
+      :explanation
+      (different-types "12345678-1234-7123-8123-123456789abc" nil)))
+   FAILED   85/127  ousterhout-reload-preserves-selected-home (8.037044 sec) at ../../../private/tmp/agent-sidebar-rename-6nmskem_/agent/agent-sidebar-codex/review/round-1/ousterhout-tests.el:65
+Multi-home reuse probe: returned= *right home* starts=0
+   passed   86/127  ousterhout-reuse-searches-all-matching-home-candidates (0.001244 sec)
+Test ousterhout-selected-home-overrides-configured-acp-home backtrace:
+  ert-fail(((should (equal codex-test--id (map-nested-elt (buffer-loca
+  (if (unwind-protect (setq value-835 (apply fn-833 args-834)) (setq f
+  (let (form-description-837) (if (unwind-protect (setq value-835 (app
+  (let ((value-835 'ert-form-evaluation-aborted-836)) (let (form-descr
+  (let* ((fn-833 #'equal) (args-834 (condition-case err (list codex-te
+  ousterhout--wait-session(#<killed buffer>)
+  (let* ((other-home (expand-file-name "other-codex/" temporary)) (age
+  (progn (fset 'agent-shell--display-buffer #'ignore) (fset 'agent-she
+  (unwind-protect (progn (fset 'agent-shell--display-buffer #'ignore) 
+  (let* ((vnew #'(lambda (&rest args) (let ((shell ...)) (setq shells 
+  (unwind-protect (let* ((vnew #'(lambda (&rest args) (let (...) (setq
+  (let* ((log (expand-file-name "acp.jsonl" temporary)) (agent-shell-o
+  (let ((agent-sidebar-codex-home (expand-file-name "codex/" temporary
+  (save-current-buffer (set-buffer buffer) (agent-sidebar-mode) (let (
+  (progn (fset 'input-pending-p vnew) (fset 'agent-shell-buffers vnew)
+  (unwind-protect (progn (fset 'input-pending-p vnew) (fset 'agent-she
+  (let* ((vnew #'(lambda nil nil)) (vnew #'(lambda nil nil)) (vnew #'(
+  (unwind-protect (let* ((vnew #'(lambda nil nil)) (vnew #'(lambda nil
+  (let* ((temporary (file-name-as-directory (make-temp-file "agent-sid
+  #f(lambda () [t] (let* ((temporary (file-name-as-directory ...)) (ro
+  #f(compiled-function () #<bytecode -0x130fd270e115a680>)()
+  handler-bind-1(#f(compiled-function () #<bytecode -0x130fd270e115a68
+  ert--run-test-internal(#s(ert--test-execution-info :test ... :result
+  ert-run-test(#s(ert-test :name ousterhout-selected-home-overrides-co
+  ert-run-or-rerun-test(#s(ert--stats :selector t :tests ... :test-map
+  ert-run-tests(t #f(compiled-function (event-type &rest event-args) #
+  ert-run-tests-batch(nil)
+  ert-run-tests-batch-and-exit()
+  command-line-1(("-l" "jka-compr" "-L" "/private/tmp/agent-sidebar-re
+  command-line()
+  normal-top-level()
+Test ousterhout-selected-home-overrides-configured-acp-home condition:
+    (ert-test-failed
+     ((should (equal codex-test--id (map-nested-elt ... ...))) :form
+      (equal "12345678-1234-7123-8123-123456789abc" nil) :value nil
+      :explanation
+      (different-types "12345678-1234-7123-8123-123456789abc" nil)))
+   FAILED   87/127  ousterhout-selected-home-overrides-configured-acp-home (8.033923 sec) at ../../../private/tmp/agent-sidebar-rename-6nmskem_/agent/agent-sidebar-codex/review/round-1/ousterhout-tests.el:50
+Deleted 1 transcript(s)
+   passed   88/127  ownership-absent-file-does-not-retain-stale-mark (0.010373 sec)
+   passed   89/127  ownership-active-id-precedes-pending-and-transitions (0.002592 sec)
+   passed   90/127  ownership-check-reads-only-selected-file-and-refreshes-metadata (0.040672 sec)
+   passed   91/127  ownership-existing-marker-and-file-alias-control (0.001594 sec)
+   passed   92/127  ownership-home-config-and-session-controls (0.004337 sec)
+Deleted 0. Retained 1 mark(s): Cannot verify open Codex session ownership: No valid Codex thread id in rollout prefix
+   passed   93/127  ownership-malformed-prefix-retains-deletion-mark (0.012114 sec)
+NEW ACP ownership: active-id="23456789-1234-7123-8123-123456789abc" native-marker=nil owned=("/private/var/folders/20/4zczrx1s3lq2fv0xmm0gj1fr0000gn/T/agent-sidebar-merge-KgVBvN/codex/")
+Deleted 0. Retained 1 mark(s): Transcript belongs to an open session: /var/folders/20/4zczrx1s3lq2fv0xmm0gj1fr0000gn/T/agent-sidebar-merge-KgVBvN/codex/sessions/2026/09/08/rollout-2026-09-08T12-00-00-23456789-1234-7123-8123-123456789abc.jsonl
+NEW ACP after delete: exists=t retained-mark=delete active-id="23456789-1234-7123-8123-123456789abc"
+   passed   94/127  ownership-new-session-real-acp (0.081860 sec)
+   passed   95/127  ownership-rechecks-live-state-after-reading (0.002207 sec)
+Test ownership-reload-uses-session-without-native-path-marker backtrace:
+  ert-fail(((should (equal codex-test--id (map-nested-elt (buffer-loca
+  (if (unwind-protect (setq value-1267 (apply fn-1265 args-1266)) (set
+  (let (form-description-1269) (if (unwind-protect (setq value-1267 (a
+  (let ((value-1267 'ert-form-evaluation-aborted-1268)) (let (form-des
+  (let* ((fn-1265 #'equal) (args-1266 (condition-case err (list codex-
+  ownership--wait-session(#<killed buffer>)
+  (let* ((file (codex-test--write agent-sidebar-codex-home root)) (she
+  (progn (fset 'agent-shell--display-buffer #'ignore) (fset 'agent-she
+  (unwind-protect (progn (fset 'agent-shell--display-buffer #'ignore) 
+  (let* ((vnew #'(lambda (&rest args) (let ((shell ...)) (setq shells 
+  (unwind-protect (let* ((vnew #'(lambda (&rest args) (let (...) (setq
+  (let* ((log (expand-file-name "acp.jsonl" temporary)) (agent-shell-o
+  (let ((agent-sidebar-codex-home (expand-file-name "codex/" temporary
+  (save-current-buffer (set-buffer buffer) (agent-sidebar-mode) (let (
+  (progn (fset 'input-pending-p vnew) (fset 'agent-shell-buffers vnew)
+  (unwind-protect (progn (fset 'input-pending-p vnew) (fset 'agent-she
+  (let* ((vnew #'(lambda nil nil)) (vnew #'(lambda nil nil)) (vnew #'(
+  (unwind-protect (let* ((vnew #'(lambda nil nil)) (vnew #'(lambda nil
+  (let* ((temporary (file-name-as-directory (make-temp-file "agent-sid
+  #f(lambda () [t] (let* ((temporary (file-name-as-directory ...)) (ro
+  #f(compiled-function () #<bytecode -0x130fd270e115a680>)()
+  handler-bind-1(#f(compiled-function () #<bytecode -0x130fd270e115a68
+  ert--run-test-internal(#s(ert--test-execution-info :test ... :result
+  ert-run-test(#s(ert-test :name ownership-reload-uses-session-without
+  ert-run-or-rerun-test(#s(ert--stats :selector t :tests ... :test-map
+  ert-run-tests(t #f(compiled-function (event-type &rest event-args) #
+  ert-run-tests-batch(nil)
+  ert-run-tests-batch-and-exit()
+  command-line-1(("-l" "jka-compr" "-L" "/private/tmp/agent-sidebar-re
+  command-line()
+  normal-top-level()
+Test ownership-reload-uses-session-without-native-path-marker condition:
+    (ert-test-failed
+     ((should (equal codex-test--id (map-nested-elt ... ...))) :form
+      (equal "12345678-1234-7123-8123-123456789abc" nil) :value nil
+      :explanation
+      (different-types "12345678-1234-7123-8123-123456789abc" nil)))
+   FAILED   96/127  ownership-reload-uses-session-without-native-path-marker (8.055380 sec) at ../../../private/tmp/agent-sidebar-rename-6nmskem_/agent/agent-sidebar-codex/review/fixes/ownership-tests.el:61
+Replacement matrix: same-session ownership=t reads=1
+Replacement matrix: other-session ownership=nil reads=1
+Replacement matrix: other-home ownership=nil reads=1
+   passed   97/127  ownership-transition-replacement-matrix-reads-file-once (0.006050 sec)
+PERFORMANCE-FIX (:sessions 300 :buffer-characters 67270 :warm-refresh 0.022884 :filter-seconds 0.018727 :parser-calls 300)
+   passed   98/127  performance-300-long-previews-bounded-cache-and-full-transcript (1.811916 sec)
+   passed   99/127  performance-preview-bound-applies-to-three-built-in-providers (0.061056 sec)
+   passed  100/127  performance-preview-boundary-unicode-and-provider-contract (0.001250 sec)
+   passed  101/127  rename-buffer-state-and-timers-are-owned-and-cleaned (0.000097 sec)
+Test rename-custom-buffer-name-and-width-drive-window backtrace:
+  ert-fail(((should (= (window-width window) 37)) :form (= 36 37) :val
+  (if (unwind-protect (setq value-2175 (apply fn-2173 args-2174)) (set
+  (let (form-description-2177) (if (unwind-protect (setq value-2175 (a
+  (let ((value-2175 'ert-form-evaluation-aborted-2176)) (let (form-des
+  (let* ((fn-2173 #'=) (args-2174 (condition-case err (list (window-wi
+  (let ((window (agent-sidebar--sidebar-window))) (let* ((fn-2163 #'wi
+  (progn (agent-sidebar-show-sidebar) (let ((window (agent-sidebar--si
+  (unwind-protect (progn (agent-sidebar-show-sidebar) (let ((window (a
+  (let ((wconfig (current-window-configuration))) (unwind-protect (pro
+  (unwind-protect (let ((wconfig (current-window-configuration))) (unw
+  (let ((agent-sidebar-name " *renamed sidebar custom name*") (agent-s
+  #f(lambda () [t] (let ((agent-sidebar-name " *renamed sidebar custom
+  #f(compiled-function () #<bytecode -0x130fd270e115a680>)()
+  handler-bind-1(#f(compiled-function () #<bytecode -0x130fd270e115a68
+  ert--run-test-internal(#s(ert--test-execution-info :test #s(ert-test
+  ert-run-test(#s(ert-test :name rename-custom-buffer-name-and-width-d
+  ert-run-or-rerun-test(#s(ert--stats :selector t :tests ... :test-map
+  ert-run-tests(t #f(compiled-function (event-type &rest event-args) #
+  ert-run-tests-batch(nil)
+  ert-run-tests-batch-and-exit()
+  command-line-1(("-l" "jka-compr" "-L" "/private/tmp/agent-sidebar-re
+  command-line()
+  normal-top-level()
+Test rename-custom-buffer-name-and-width-drive-window condition:
+    (ert-test-failed
+     ((should (= (window-width window) 37)) :form (= 36 37) :value nil))
+   FAILED  102/127  rename-custom-buffer-name-and-width-drive-window (0.003004 sec) at agent/agent-sidebar-rename/rename-tests.el:16
+   passed  103/127  rename-keymap-contains-only-new-sidebar-commands (0.000085 sec)
+   passed  104/127  rename-loads-without-old-library-or-aliases (0.007962 sec)
+NEW PENDING ROW: expected="/var/folders/20/4zczrx1s3lq2fv0xmm0gj1fr0000gn/T/agent-sidebar-merge-aEHBUW/different recorded repo/" actual="/var/folders/20/4zczrx1s3lq2fv0xmm0gj1fr0000gn/T/agent-sidebar-merge-aEHBUW/different recorded repo/"
+   passed  105/127  review-root-new-session-pending-row-uses-recorded-directory (0.007359 sec)
+ERROR ROW: result=(user-error "No valid Codex thread id in rollout prefix") launch=nil
+   passed  106/127  review-workflow-new-rejects-native-error-row (0.035189 sec)
+MISSING CWD: result=(user-error "Selected transcript has no existing working directory") launch=nil
+   passed  107/127  review-workflow-new-rejects-native-missing-cwd (0.011574 sec)
+CHANGED CWD: expected="/var/folders/20/4zczrx1s3lq2fv0xmm0gj1fr0000gn/T/agent-sidebar-merge-dGkfH0/changed-existing-repository/" launch="/var/folders/20/4zczrx1s3lq2fv0xmm0gj1fr0000gn/T/agent-sidebar-merge-dGkfH0/changed-existing-repository/"
+   passed  108/127  review-workflow-new-revalidates-changed-native-directory (0.012408 sec)
+REPO-ONLY CODEX GROUP: calls=((terminal "*codex-new*" "/var/folders/20/4zczrx1s3lq2fv0xmm0gj1fr0000gn/T/agent-sidebar-merge-OPhTVh/repo-with space/"))
+   passed  109/127  review-workflow-repo-only-group-keeps-unique-codex-provider (0.016258 sec)
+   passed  110/127  review-workflow-ret-and-a-reject-native-missing-cwd-control (0.035007 sec)
+   passed  111/127  schema-claude-string-content-remains-supported (0.000545 sec)
+   passed  112/127  schema-claude-valid-block-objects-in-arrays-retain-identity-and-cwd (0.000440 sec)
+   passed  113/127  schema-codex-unsupported-content-object-does-not-discard-earlier-cwd (0.000530 sec)
+   passed  114/127  schema-codex-valid-block-objects-in-arrays-retain-identity-and-cwd (0.000574 sec)
+   passed  115/127  terminal-fix-cleanup-after-child-start-does-not-query (0.004301 sec)
+   passed  116/127  terminal-fix-cleanup-before-child-start-preserves-existing-buffer (0.000762 sec)
+   passed  117/127  terminal-fix-cleanup-on-quit (0.000535 sec)
+TRAILING-SLASH: starts=1, live-children=1, both homes equal by file-equal-p=t
+   passed  118/127  torvalds-codex-home-trailing-slash-reuses-process (0.004386 sec)
+DISPLAY-FAILURE: failed activations=2, live children=0, session markers=(nil nil)
+   passed  119/127  torvalds-r2-display-error-does-not-leave-unowned-terminal-children (0.008158 sec)
+ACP-INTERLEAVE: two real children kept distinct selected homes and inherited unrelated configuration
+   passed  120/127  torvalds-r2-interleaved-wrappers-preserve-home-at-os-boundary (0.051929 sec)
+TERM-COLLISION: same-buffer=nil, same-process=nil, child-command=("/bin/sh" "-c" "stty -nl echo rows 22 columns 79 sane 2>/dev/null;if [ $1 = .. ]; then shift; fi; exec \"$@\"" ".." "/bin/sh" "-c" "exec sleep 30" "fixture" "12345678-2222-7222-8222-222222222222"), recorded-session=(claude-cli "12345678-2222-7222-8222-222222222222" "/var/folders/20/4zczrx1s3lq2fv0xmm0gj1fr0000gn/T/sidebar-torvalds-R7NdnD/repo/")
+   passed  121/127  torvalds-term-fallback-distinguishes-resume-id-prefix-collision (0.006128 sec)
+TERM-NEW: same-buffer=nil, same-process=nil
+   passed  122/127  torvalds-term-new-session-really-starts-new-process (0.004431 sec)
+   passed  123/127  workflow-r2-collapsed-codex-group-retains-new-session-context (0.021167 sec)
+   passed  124/127  workflow-r2-derived-mode-binds-actions-and-preserves-core-keys (0.000534 sec)
+MUTATION: erasing :agent lets an ambiguous agent-shell group start, as detected
+   passed  125/127  workflow-r2-erasing-agent-identity-mutation-is-detected (0.016596 sec)
+REMOTE CWD: action=agent-sidebar-visit remote-stat-calls=nil result=(user-error "Transcript has no existing local working directory")
+REMOTE CWD: action=agent-sidebar-visit-in-agent-shell remote-stat-calls=nil result=(user-error "Codex rollout has no existing local working directory")
+REMOTE CWD: action=agent-sidebar-new-session remote-stat-calls=nil result=(user-error "Selected transcript has no existing working directory")
+   passed  126/127  workflow-r2-local-codex-actions-reject-remote-cwd-before-stat (0.061182 sec)
+   passed  127/127  workflow-r2-mixed-agent-group-requires-row (0.014762 sec)
+
+Ran 127 tests, 121 results as expected, 6 unexpected (2026-09-08 16:35:59-0700, 47.125248 sec)
+
+6 unexpected results:
+   FAILED  codex-native-real-agent-shell-client-load-new-reuse-and-ownership
+   FAILED  kingsbury-r2-reload-during-file-read-retains-active-rollout
+   FAILED  ousterhout-reload-preserves-selected-home
+   FAILED  ousterhout-selected-home-overrides-configured-acp-home
+   FAILED  ownership-reload-uses-session-without-native-path-marker
+   FAILED  rename-custom-buffer-name-and-width-drive-window
+

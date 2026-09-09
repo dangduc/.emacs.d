@@ -1,0 +1,248 @@
+LANG=C.UTF-8 cannot be used, using en_US.UTF-8 instead.
+Running 7 tests (2026-09-08 12:30:30-0700, selector `(tag regression)')
+Test sidebar-ambiguous-config-name-never-selects-first backtrace:
+  ert-fail(((should-not (agent-shell-sidebar--config-for-agent-name "C
+  (if (not (unwind-protect (setq value-49 (apply fn-47 args-48)) (setq
+  (let (form-description-51) (if (not (unwind-protect (setq value-49 (
+  (let ((value-49 'ert-form-evaluation-aborted-50)) (let (form-descrip
+  (let* ((fn-47 #'agent-shell-sidebar--config-for-agent-name) (args-48
+  (let ((agent-shell-agent-configs '(((:mode-line-name . "Claude One")
+  #f(lambda () [t] (let ((agent-shell-agent-configs '...)) (let* ((fn-
+  #f(compiled-function () #<bytecode 0x1bda4a561dd0865b>)()
+  handler-bind-1(#f(compiled-function () #<bytecode 0x1bda4a561dd0865b
+  ert--run-test-internal(#s(ert--test-execution-info :test #s(ert-test
+  ert-run-test(#s(ert-test :name sidebar-ambiguous-config-name-never-s
+  ert-run-or-rerun-test(#s(ert--stats :selector (tag regression) :test
+  ert-run-tests((tag regression) #f(compiled-function (event-type &res
+  ert-run-tests-batch((tag regression))
+  ert-run-tests-batch-and-exit((tag regression))
+  eval((ert-run-tests-batch-and-exit '(tag regression)) t)
+  command-line-1(("-l" "jka-compr" "-L" "/Users/ducnguyen/.emacs.d/elp
+  command-line()
+  normal-top-level()
+Test sidebar-ambiguous-config-name-never-selects-first condition:
+    (ert-test-failed
+     ((should-not (agent-shell-sidebar--config-for-agent-name "Claude"))
+      :form (agent-shell-sidebar--config-for-agent-name "Claude") :value
+      ((:mode-line-name . "Claude One") (:buffer-name . "One"))))
+   FAILED  1/7  sidebar-ambiguous-config-name-never-selects-first (0.000158 sec) at agent/agent-shell-sidebar/tests/sidebar-tests.el:74
+Test sidebar-draw-and-fold-do-not-rescan backtrace:
+  ert-fail("Redraw rescanned projects")
+  agent-shell-sidebar--collect()
+  (let* ((prev-file (get-text-property (point) 'agent-shell-sidebar-fi
+  (progn (let* ((prev-file (get-text-property (point) 'agent-shell-sid
+  (if (derived-mode-p 'agent-shell-sidebar-mode) (progn (let* ((prev-f
+  agent-shell-sidebar--redraw()
+  (progn (fset 'file-attributes vnew) (fset 'agent-shell-sidebar--coll
+  (unwind-protect (progn (fset 'file-attributes vnew) (fset 'agent-she
+  (let* ((vnew #'(lambda nil (ert-fail "Redraw rescanned projects"))) 
+  (progn (agent-shell-sidebar-mode) (sidebar-test--write root "one") (
+  (unwind-protect (progn (agent-shell-sidebar-mode) (sidebar-test--wri
+  (save-current-buffer (set-buffer temp-buffer) (unwind-protect (progn
+  (let ((temp-buffer (generate-new-buffer " *temp*" t))) (save-current
+  (progn (fset 'agent-shell-buffers vnew) (fset 'project-known-project
+  (unwind-protect (progn (fset 'agent-shell-buffers vnew) (fset 'proje
+  (let* ((vnew #'(lambda nil nil)) (vnew #'(lambda nil nil)) (old (sym
+  (unwind-protect (let* ((vnew #'(lambda nil nil)) (vnew #'(lambda nil
+  (let* ((root (file-name-as-directory (make-temp-file "sidebar-test-"
+  #f(lambda () [t] (let* ((root (file-name-as-directory ...)) (default
+  #f(compiled-function () #<bytecode 0x1bda4a561dd0865b>)()
+  handler-bind-1(#f(compiled-function () #<bytecode 0x1bda4a561dd0865b
+  ert--run-test-internal(#s(ert--test-execution-info :test #s(ert-test
+  ert-run-test(#s(ert-test :name sidebar-draw-and-fold-do-not-rescan :
+  ert-run-or-rerun-test(#s(ert--stats :selector ... :tests ... :test-m
+  ert-run-tests((tag regression) #f(compiled-function (event-type &res
+  ert-run-tests-batch((tag regression))
+  ert-run-tests-batch-and-exit((tag regression))
+  eval((ert-run-tests-batch-and-exit '(tag regression)) t)
+  command-line-1(("-l" "jka-compr" "-L" "/Users/ducnguyen/.emacs.d/elp
+  command-line()
+  normal-top-level()
+Test sidebar-draw-and-fold-do-not-rescan condition:
+    (ert-test-failed "Redraw rescanned projects")
+   FAILED  2/7  sidebar-draw-and-fold-do-not-rescan (1.052068 sec) at agent/agent-shell-sidebar/tests/sidebar-tests.el:93
+Test sidebar-empty-config-name-never-matches backtrace:
+  ert-fail(((should-not (agent-shell-sidebar--config-for-agent-name "C
+  (if (not (unwind-protect (setq value-44 (apply fn-42 args-43)) (setq
+  (let (form-description-46) (if (not (unwind-protect (setq value-44 (
+  (let ((value-44 'ert-form-evaluation-aborted-45)) (let (form-descrip
+  (let* ((fn-42 #'agent-shell-sidebar--config-for-agent-name) (args-43
+  (let ((agent-shell-agent-configs '(((:mode-line-name . "Other"))))) 
+  #f(lambda () [t] (let ((agent-shell-agent-configs '...)) (let* ((fn-
+  #f(compiled-function () #<bytecode 0x1bda4a561dd0865b>)()
+  handler-bind-1(#f(compiled-function () #<bytecode 0x1bda4a561dd0865b
+  ert--run-test-internal(#s(ert--test-execution-info :test #s(ert-test
+  ert-run-test(#s(ert-test :name sidebar-empty-config-name-never-match
+  ert-run-or-rerun-test(#s(ert--stats :selector ... :tests ... :test-m
+  ert-run-tests((tag regression) #f(compiled-function (event-type &res
+  ert-run-tests-batch((tag regression))
+  ert-run-tests-batch-and-exit((tag regression))
+  eval((ert-run-tests-batch-and-exit '(tag regression)) t)
+  command-line-1(("-l" "jka-compr" "-L" "/Users/ducnguyen/.emacs.d/elp
+  command-line()
+  normal-top-level()
+Test sidebar-empty-config-name-never-matches condition:
+    (ert-test-failed
+     ((should-not (agent-shell-sidebar--config-for-agent-name "Claude"))
+      :form (agent-shell-sidebar--config-for-agent-name "Claude") :value
+      ((:mode-line-name . "Other"))))
+   FAILED  3/7  sidebar-empty-config-name-never-matches (0.000126 sec) at agent/agent-shell-sidebar/tests/sidebar-tests.el:69
+Test sidebar-empty-prompt-does-not-preview-agent-message backtrace:
+  ert-fail(((should-not (plist-get (agent-shell-sidebar--parse-header-
+  (if (not (unwind-protect (setq value-29 (apply fn-27 args-28)) (setq
+  (let (form-description-31) (if (not (unwind-protect (setq value-29 (
+  (let ((value-29 'ert-form-evaluation-aborted-30)) (let (form-descrip
+  (let* ((fn-27 #'plist-get) (args-28 (condition-case err (list (agent
+  (let ((file (sidebar-test--write root "empty" "# Agent Shell Transcr
+  (progn (agent-shell-sidebar-mode) (let ((file (sidebar-test--write r
+  (unwind-protect (progn (agent-shell-sidebar-mode) (let ((file (sideb
+  (save-current-buffer (set-buffer temp-buffer) (unwind-protect (progn
+  (let ((temp-buffer (generate-new-buffer " *temp*" t))) (save-current
+  (progn (fset 'agent-shell-buffers vnew) (fset 'project-known-project
+  (unwind-protect (progn (fset 'agent-shell-buffers vnew) (fset 'proje
+  (let* ((vnew #'(lambda nil nil)) (vnew #'(lambda nil nil)) (old (sym
+  (unwind-protect (let* ((vnew #'(lambda nil nil)) (vnew #'(lambda nil
+  (let* ((root (file-name-as-directory (make-temp-file "sidebar-test-"
+  #f(lambda () [t] (let* ((root (file-name-as-directory ...)) (default
+  #f(compiled-function () #<bytecode 0x1bda4a561dd0865b>)()
+  handler-bind-1(#f(compiled-function () #<bytecode 0x1bda4a561dd0865b
+  ert--run-test-internal(#s(ert--test-execution-info :test #s(ert-test
+  ert-run-test(#s(ert-test :name sidebar-empty-prompt-does-not-preview
+  ert-run-or-rerun-test(#s(ert--stats :selector ... :tests ... :test-m
+  ert-run-tests((tag regression) #f(compiled-function (event-type &res
+  ert-run-tests-batch((tag regression))
+  ert-run-tests-batch-and-exit((tag regression))
+  eval((ert-run-tests-batch-and-exit '(tag regression)) t)
+  command-line-1(("-l" "jka-compr" "-L" "/Users/ducnguyen/.emacs.d/elp
+  command-line()
+  normal-top-level()
+Test sidebar-empty-prompt-does-not-preview-agent-message condition:
+    (ert-test-failed
+     ((should-not
+       (plist-get (agent-shell-sidebar--parse-header-from-file file)
+		  :preview))
+      :form
+      (plist-get
+       (:agent nil :started nil :session-id nil :model nil :cwd nil ...)
+       :preview)
+      :value "## Agent (today)"))
+   FAILED  4/7  sidebar-empty-prompt-does-not-preview-agent-message (0.001629 sec) at agent/agent-shell-sidebar/tests/sidebar-tests.el:54
+Test sidebar-idle-chunks-rearm-after-elapsed-idle backtrace:
+  ert-fail(((should (> (float-time (car args)) 30)) :form (> 0.1 30) :
+  (if (unwind-protect (setq value-66 (apply fn-64 args-65)) (setq form
+  (let (form-description-68) (if (unwind-protect (setq value-66 (apply
+  (let ((value-66 'ert-form-evaluation-aborted-67)) (let (form-descrip
+  (let* ((fn-64 #'>) (args-65 (condition-case err (list (float-time (c
+  (let ((agent-shell-sidebar--parse-queue '("pending")) (agent-shell-s
+  (progn (agent-shell-sidebar-mode) (let ((agent-shell-sidebar--parse-
+  (unwind-protect (progn (agent-shell-sidebar-mode) (let ((agent-shell
+  (save-current-buffer (set-buffer temp-buffer) (unwind-protect (progn
+  (let ((temp-buffer (generate-new-buffer " *temp*" t))) (save-current
+  (progn (fset 'agent-shell-buffers vnew) (fset 'project-known-project
+  (unwind-protect (progn (fset 'agent-shell-buffers vnew) (fset 'proje
+  (let* ((vnew #'(lambda nil nil)) (vnew #'(lambda nil nil)) (old (sym
+  (unwind-protect (let* ((vnew #'(lambda nil nil)) (vnew #'(lambda nil
+  (let* ((root (file-name-as-directory (make-temp-file "sidebar-test-"
+  #f(lambda () [t] (let* ((root (file-name-as-directory ...)) (default
+  #f(compiled-function () #<bytecode 0x1bda4a561dd0865b>)()
+  handler-bind-1(#f(compiled-function () #<bytecode 0x1bda4a561dd0865b
+  ert--run-test-internal(#s(ert--test-execution-info :test #s(ert-test
+  ert-run-test(#s(ert-test :name sidebar-idle-chunks-rearm-after-elaps
+  ert-run-or-rerun-test(#s(ert--stats :selector ... :tests ... :test-m
+  ert-run-tests((tag regression) #f(compiled-function (event-type &res
+  ert-run-tests-batch((tag regression))
+  ert-run-tests-batch-and-exit((tag regression))
+  eval((ert-run-tests-batch-and-exit '(tag regression)) t)
+  command-line-1(("-l" "jka-compr" "-L" "/Users/ducnguyen/.emacs.d/elp
+  command-line()
+  normal-top-level()
+Test sidebar-idle-chunks-rearm-after-elapsed-idle condition:
+    (ert-test-failed
+     ((should (> (float-time ...) 30)) :form (> 0.1 30) :value nil))
+   FAILED  5/7  sidebar-idle-chunks-rearm-after-elapsed-idle (0.442398 sec) at agent/agent-shell-sidebar/tests/sidebar-tests.el:105
+Test sidebar-metadata-is-confined-to-header backtrace:
+  ert-fail(((should-not (plist-get header :session-id)) :form (plist-g
+  (if (not (unwind-protect (setq value-14 (apply fn-12 args-13)) (setq
+  (let (form-description-16) (if (not (unwind-protect (setq value-14 (
+  (let ((value-14 'ert-form-evaluation-aborted-15)) (let (form-descrip
+  (let* ((fn-12 #'plist-get) (args-13 (condition-case err (list header
+  (let* ((file (sidebar-test--write root "header" "# Agent Shell Trans
+  (progn (agent-shell-sidebar-mode) (let* ((file (sidebar-test--write 
+  (unwind-protect (progn (agent-shell-sidebar-mode) (let* ((file (side
+  (save-current-buffer (set-buffer temp-buffer) (unwind-protect (progn
+  (let ((temp-buffer (generate-new-buffer " *temp*" t))) (save-current
+  (progn (fset 'agent-shell-buffers vnew) (fset 'project-known-project
+  (unwind-protect (progn (fset 'agent-shell-buffers vnew) (fset 'proje
+  (let* ((vnew #'(lambda nil nil)) (vnew #'(lambda nil nil)) (old (sym
+  (unwind-protect (let* ((vnew #'(lambda nil nil)) (vnew #'(lambda nil
+  (let* ((root (file-name-as-directory (make-temp-file "sidebar-test-"
+  #f(lambda () [t] (let* ((root (file-name-as-directory ...)) (default
+  #f(compiled-function () #<bytecode 0x1bda4a561dd0865b>)()
+  handler-bind-1(#f(compiled-function () #<bytecode 0x1bda4a561dd0865b
+  ert--run-test-internal(#s(ert--test-execution-info :test #s(ert-test
+  ert-run-test(#s(ert-test :name sidebar-metadata-is-confined-to-heade
+  ert-run-or-rerun-test(#s(ert--stats :selector ... :tests ... :test-m
+  ert-run-tests((tag regression) #f(compiled-function (event-type &res
+  ert-run-tests-batch((tag regression))
+  ert-run-tests-batch-and-exit((tag regression))
+  eval((ert-run-tests-batch-and-exit '(tag regression)) t)
+  command-line-1(("-l" "jka-compr" "-L" "/Users/ducnguyen/.emacs.d/elp
+  command-line()
+  normal-top-level()
+Test sidebar-metadata-is-confined-to-header condition:
+    (ert-test-failed
+     ((should-not (plist-get header :session-id)) :form
+      (plist-get
+       (:agent "Claude" :started nil :session-id "" :model "wrong" :cwd
+	       "/wrong/" ...)
+       :session-id)
+      :value ""))
+   FAILED  6/7  sidebar-metadata-is-confined-to-header (0.001561 sec) at agent/agent-shell-sidebar/tests/sidebar-tests.el:43
+Test sidebar-open-transcript-really-uses-view-mode backtrace:
+  ert-fail(((should (buffer-local-value 'view-mode opened)) :form (buf
+  (if (unwind-protect (setq value-247 (apply fn-245 args-246)) (setq f
+  (let (form-description-249) (if (unwind-protect (setq value-247 (app
+  (let ((value-247 'ert-form-evaluation-aborted-248)) (let (form-descr
+  (let* ((fn-245 #'buffer-local-value) (args-246 (condition-case err (
+  (progn (agent-shell-sidebar-refresh) (sidebar-test--goto-file file) 
+  (unwind-protect (progn (agent-shell-sidebar-refresh) (sidebar-test--
+  (let ((file (sidebar-test--write root "one")) opened) (unwind-protec
+  (progn (agent-shell-sidebar-mode) (let ((file (sidebar-test--write r
+  (unwind-protect (progn (agent-shell-sidebar-mode) (let ((file (sideb
+  (save-current-buffer (set-buffer temp-buffer) (unwind-protect (progn
+  (let ((temp-buffer (generate-new-buffer " *temp*" t))) (save-current
+  (progn (fset 'agent-shell-buffers vnew) (fset 'project-known-project
+  (unwind-protect (progn (fset 'agent-shell-buffers vnew) (fset 'proje
+  (let* ((vnew #'(lambda nil nil)) (vnew #'(lambda nil nil)) (old (sym
+  (unwind-protect (let* ((vnew #'(lambda nil nil)) (vnew #'(lambda nil
+  (let* ((root (file-name-as-directory (make-temp-file "sidebar-test-"
+  #f(lambda () [t] (let* ((root (file-name-as-directory ...)) (default
+  #f(compiled-function () #<bytecode 0x1bda4a561dd0865b>)()
+  handler-bind-1(#f(compiled-function () #<bytecode 0x1bda4a561dd0865b
+  ert--run-test-internal(#s(ert--test-execution-info :test #s(ert-test
+  ert-run-test(#s(ert-test :name sidebar-open-transcript-really-uses-v
+  ert-run-or-rerun-test(#s(ert--stats :selector ... :tests ... :test-m
+  ert-run-tests((tag regression) #f(compiled-function (event-type &res
+  ert-run-tests-batch((tag regression))
+  ert-run-tests-batch-and-exit((tag regression))
+  eval((ert-run-tests-batch-and-exit '(tag regression)) t)
+  command-line-1(("-l" "jka-compr" "-L" "/Users/ducnguyen/.emacs.d/elp
+  command-line()
+  normal-top-level()
+Test sidebar-open-transcript-really-uses-view-mode condition:
+    (ert-test-failed
+     ((should (buffer-local-value 'view-mode opened)) :form
+      (buffer-local-value view-mode #<killed buffer>) :value nil))
+   FAILED  7/7  sidebar-open-transcript-really-uses-view-mode (0.004920 sec) at agent/agent-shell-sidebar/tests/sidebar-tests.el:292
+
+Ran 7 tests, 0 results as expected, 7 unexpected (2026-09-08 12:30:31-0700, 1.853335 sec)
+
+7 unexpected results:
+   FAILED  sidebar-ambiguous-config-name-never-selects-first
+   FAILED  sidebar-draw-and-fold-do-not-rescan
+   FAILED  sidebar-empty-config-name-never-matches
+   FAILED  sidebar-empty-prompt-does-not-preview-agent-message
+   FAILED  sidebar-idle-chunks-rearm-after-elapsed-idle
+   FAILED  sidebar-metadata-is-confined-to-header
+   FAILED  sidebar-open-transcript-really-uses-view-mode
+

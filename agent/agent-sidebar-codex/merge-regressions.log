@@ -1,0 +1,30 @@
+LANG=C.UTF-8 cannot be used, using en_US.UTF-8 instead.
+Running 22 tests (2026-09-08 15:04:41-0700, selector `t')
+   passed   1/22  merge-buffer-isolation-and-legacy-buffer-upgrade (0.445631 sec)
+   passed   2/22  merge-cache-rechecks-size-and-recovers-read-permissions (0.047744 sec)
+   passed   3/22  merge-claude-directory-is-confirmed-not-guessed (0.011490 sec)
+   passed   4/22  merge-flat-date-filter-and-fold-preserve-marks (0.068910 sec)
+   passed   5/22  merge-ghostel-dispatch-and-failed-start-cleanup (0.000497 sec)
+   passed   6/22  merge-jsonl-nonregular-and-read-errors-are-explicit (0.004125 sec)
+   passed   7/22  merge-jsonl-read-is-bounded-and-preserves-complete-records (0.002460 sec)
+   passed   8/22  merge-jsonl-skips-meta-and-tools-and-reads-later-model (0.001110 sec)
+   passed   9/22  merge-jsonl-wrong-record-shapes-do-not-hide-valid-records (0.001053 sec)
+Provider tree: 420 reads, 1 scan, progressive publication observed
+   passed  10/22  merge-progressive-tree-does-not-rediscover-and-bounds-rows (0.502444 sec)
+   passed  11/22  merge-provider-collision-does-not-publish-partial-discovery (0.030250 sec)
+   passed  12/22  merge-provider-error-keeps-old-snapshot-and-work (0.010866 sec)
+   passed  13/22  merge-provider-replacement-invalidates-cached-metadata (0.037646 sec)
+   passed  14/22  merge-real-term-process-receives-exact-argv-and-cwd (0.039811 sec)
+   passed  15/22  merge-reentrant-refresh-does-not-lose-provider-entry (0.041386 sec)
+   passed  16/22  merge-session-id-recovery-is-unambiguous-and-invalidates (0.005208 sec)
+   passed  17/22  merge-shell-activation-uses-recovery-or-session-picker (0.012275 sec)
+   passed  18/22  merge-term-fallback-preserves-argv-with-metacharacters (0.000592 sec)
+   passed  19/22  merge-terminal-arguments-directory-and-reuse (0.030364 sec)
+Deleted 0. Retained 1 mark(s): Transcript belongs to an open session: /var/folders/20/4zczrx1s3lq2fv0xmm0gj1fr0000gn/T/agent-sidebar-merge-4MhCbM/claude/-var-folders-20-4zczrx1s3lq2fv0xmm0gj1fr0000gn-T-agent-sidebar-merge-4MhCbM-repo-with-space/owned.jsonl
+Deleted 1 transcript(s)
+   passed  20/22  merge-terminal-ownership-prevents-delete-until-process-exits (0.435199 sec)
+   passed  21/22  merge-two-providers-metadata-model-and-nesting (0.021403 sec)
+   passed  22/22  merge-vterm-launch-keeps-dedicated-sidebar-and-quotes-argv (0.000721 sec)
+
+Ran 22 tests, 22 results as expected, 0 unexpected (2026-09-08 15:04:43-0700, 1.752111 sec)
+

@@ -1,0 +1,31 @@
+LANG=C.UTF-8 cannot be used, using en_US.UTF-8 instead.
+Running 13 tests (2026-09-08 15:49:42-0700, selector `(or "^ownership-" "^kingsbury-r2-")')
+   passed   1/13  kingsbury-r2-state-switch-to-other-home-is-not-an-owner (0.775930 sec)
+Deleted 0. Retained 1 mark(s): Transcript belongs to an open session: /var/folders/20/4zczrx1s3lq2fv0xmm0gj1fr0000gn/T/agent-sidebar-merge-1SURrD/codex/sessions/2026/09/08/rollout-2026-09-08T12-00-00-12345678-1234-7123-8123-123456789abc.jsonl
+RELOAD DURING READ: old-live=nil new-live=t file-exists=t retained-mark=delete
+   passed   2/13  kingsbury-r2-reload-during-file-read-retains-active-rollout (0.578333 sec)
+Deleted 1 transcript(s)
+MUTATION CONTROL: disabling native guard deletes the active fixture file
+   passed   3/13  kingsbury-r2-mutation-disabled-native-guard-exposes-deletion (0.015015 sec)
+Deleted 1 transcript(s)
+   passed   4/13  ownership-absent-file-does-not-retain-stale-mark (0.009540 sec)
+   passed   5/13  ownership-active-id-precedes-pending-and-transitions (0.002438 sec)
+   passed   6/13  ownership-check-reads-only-selected-file-and-refreshes-metadata (0.031460 sec)
+   passed   7/13  ownership-existing-marker-and-file-alias-control (0.001553 sec)
+   passed   8/13  ownership-home-config-and-session-controls (0.004412 sec)
+Deleted 0. Retained 1 mark(s): Cannot verify open Codex session ownership: No valid Codex thread id in rollout prefix
+   passed   9/13  ownership-malformed-prefix-retains-deletion-mark (0.011906 sec)
+NEW ACP ownership: active-id="23456789-1234-7123-8123-123456789abc" native-marker=nil owned=("/private/var/folders/20/4zczrx1s3lq2fv0xmm0gj1fr0000gn/T/agent-sidebar-merge-3hS6kc/codex/")
+Deleted 0. Retained 1 mark(s): Transcript belongs to an open session: /var/folders/20/4zczrx1s3lq2fv0xmm0gj1fr0000gn/T/agent-sidebar-merge-3hS6kc/codex/sessions/2026/09/08/rollout-2026-09-08T12-00-00-23456789-1234-7123-8123-123456789abc.jsonl
+NEW ACP after delete: exists=t retained-mark=delete active-id="23456789-1234-7123-8123-123456789abc"
+   passed  10/13  ownership-new-session-real-acp (0.099566 sec)
+   passed  11/13  ownership-rechecks-live-state-after-reading (0.002068 sec)
+Ownership survives actual ACP reload with both legacy markers absent
+   passed  12/13  ownership-reload-uses-session-without-native-path-marker (0.094592 sec)
+Replacement matrix: same-session ownership=t reads=1
+Replacement matrix: other-session ownership=nil reads=1
+Replacement matrix: other-home ownership=nil reads=1
+   passed  13/13  ownership-transition-replacement-matrix-reads-file-once (0.006120 sec)
+
+Ran 13 tests, 13 results as expected, 0 unexpected (2026-09-08 15:49:43-0700, 1.633530 sec)
+

@@ -1,0 +1,41 @@
+{
+  "sha256": {
+    "/Users/ducnguyen/.emacs.d/agent/agent-sidebar-merge/README.md": "c4dc280a4b65a945f4274c9eb8957a0aedc5d55235492ff0f1dbb930c3395593",
+    "/Users/ducnguyen/.emacs.d/agent/agent-sidebar-merge/compile.log": "48db5afb3a1231f26ddf9dd3801df85bac968f41a3c0facd2343be0bf128ba61",
+    "/Users/ducnguyen/.emacs.d/agent/agent-sidebar-merge/config.patch": "e89b115b016bab3126f517672748ed42fa4377990cedd24807e575fb54a4992b",
+    "/Users/ducnguyen/.emacs.d/agent/agent-sidebar-merge/core-compiled-tests.log": "fea43e39b58cf6bfb61ceab109d04f42f9657e01b090357de049324d4dcc487d",
+    "/Users/ducnguyen/.emacs.d/agent/agent-sidebar-merge/core-emacs30-tests.log": "00db2f8ef6d7111d1f60e3993fea00381e9c02a5f7c929b0da6ab87abba7da57",
+    "/Users/ducnguyen/.emacs.d/agent/agent-sidebar-merge/core-regressions.log": "04a4cc40e1165f0c53ffa312b43fc4436523fa37d8445b69f45f774be35f25c5",
+    "/Users/ducnguyen/.emacs.d/agent/agent-sidebar-merge/core.patch": "adf1703799b365d8c6c0e543282a9a8405d35e304a909b0e3d4339c4f784ebdb",
+    "/Users/ducnguyen/.emacs.d/agent/agent-sidebar-merge/desktop-sync.json": "df1bfb6f2aab6011275da14e08bea4b9be246d71fc0ef0cbc349b926317d683d",
+    "/Users/ducnguyen/.emacs.d/agent/agent-sidebar-merge/final-compiled-tests.log": "25b437392403ead41d78d558c3c4433627d1db87a60a4ee1aa1fb7cb1e7cb1bd",
+    "/Users/ducnguyen/.emacs.d/agent/agent-sidebar-merge/final-emacs30-tests.log": "b6fe430115ee63498ba52a7b1ca748357d51c5ca2b095ac8fa4794cf0fafc6ff",
+    "/Users/ducnguyen/.emacs.d/agent/agent-sidebar-merge/final-source-tests.log": "ac46e39a8872136e89b4914c63294eb60bc33739f9a63bcd31a5f13e06660a06",
+    "/Users/ducnguyen/.emacs.d/agent/agent-sidebar-merge/incoming.patch": "7e675aec332435c75ad89531ccd0791f38c1a7a20336df093eaf1908cc40e977",
+    "/Users/ducnguyen/.emacs.d/agent/agent-sidebar-merge/inputs.json": "7077e7ac2aaf3657718da6a5152f1656b3981d36a51670f047f982dcc16ebb06",
+    "/Users/ducnguyen/.emacs.d/agent/agent-sidebar-merge/live-check.eldata": "a1fbe735269b1710a99c7359f273e6d18e41f7e6d031e01dbd9dc59ddcf5978d",
+    "/Users/ducnguyen/.emacs.d/agent/agent-sidebar-merge/live-final.eldata": "49d578755397216475043c7b11681a69d686ade7d485f75178ac72103e0492fb",
+    "/Users/ducnguyen/.emacs.d/agent/agent-sidebar-merge/scale.log": "dbd05df9b47be5416c0b6c57cadfcf8d6d6219b8ce8b195213e48abcce5bc44f",
+    "/Users/ducnguyen/.emacs.d/agent/agent-sidebar-merge/tests.log": "dc9ff7cb1d02cfd5c13592801605a768621d781f402c855a99ca449efa494211",
+    "/Users/ducnguyen/.emacs.d/lisp/agent-shell-sidebar.el": "074c42eed652357277685fd072a2bb7ecbb6af813076f4506e3045eea3fd8b9e",
+    "/Users/ducnguyen/.emacs.d/lisp/agent-shell-sidebar.elc": "3a770fc265d1ca7b4cfaa70ffddd77c8ff522508a19432b48aa7817cb7ac945a",
+    "/Users/ducnguyen/.emacs.d/lisp/agent-sidebar.el": "2e0e824b41f98c8d4f2ef5e7dd4bddf494491286535ff7d4ab4f58140e82ac88",
+    "/Users/ducnguyen/.emacs.d/lisp/agent-sidebar.elc": "b607181fa852e09874e8d9e559fa51e2c695e45ecfb3d2b5e868e66126ee1014",
+    "/Users/ducnguyen/.emacs.d/lisp/package-declarations.el": "d58ada5a64fb91e16de044e706610474962562421d97c2ef76987b5f6f20c075"
+  },
+  "tests": {
+    "core": 131,
+    "merge": 22,
+    "configurations": [
+      "Emacs 31.1 source",
+      "Emacs 31.1 bytecode",
+      "Emacs 30.2.50 with source dependencies"
+    ]
+  },
+  "runtime": {
+    "pid": 3353,
+    "fixtures_parsed": 72,
+    "fixtures_rendered": 72
+  },
+  "source_formatting": "Final formatting restores unchanged core forms and changes indentation; normalize-core-format.el checks Lisp form equality."
+}

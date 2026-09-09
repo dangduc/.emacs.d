@@ -1,0 +1,88 @@
+LANG=C.UTF-8 cannot be used, using en_US.UTF-8 instead.
+Running 3 tests (2026-09-08 15:28:44-0700, selector `"^kingsbury-"')
+REENTRANT action: removed=t current-entry=nil launches=1
+Test kingsbury-activation-aborts-after-reentrant-removal backtrace:
+  ert-fail(((should-not calls) :form calls :value (("*codex-resume: 12
+  (if (not (unwind-protect (setq value-965 calls) (setq form-descripti
+  (let (form-description-966) (if (not (unwind-protect (setq value-965
+  (let ((value-965 (gensym "ert-form-evaluation-aborted-"))) (let (for
+  (let* ((file (codex-test--write agent-sidebar-codex-home root)) (ori
+  (let ((agent-sidebar-codex-home (expand-file-name "codex/" temporary
+  (save-current-buffer (set-buffer buffer) (agent-sidebar-mode) (let (
+  (progn (fset 'input-pending-p vnew) (fset 'agent-shell-buffers vnew)
+  (unwind-protect (progn (fset 'input-pending-p vnew) (fset 'agent-she
+  (let* ((vnew #'(lambda nil nil)) (vnew #'(lambda nil nil)) (vnew #'(
+  (unwind-protect (let* ((vnew #'(lambda nil nil)) (vnew #'(lambda nil
+  (let* ((temporary (file-name-as-directory (make-temp-file "agent-sid
+  #f(lambda () [t] (let* ((temporary (file-name-as-directory ...)) (ro
+  #f(compiled-function () #<bytecode 0x6815b937b807d5e>)()
+  handler-bind-1(#f(compiled-function () #<bytecode 0x6815b937b807d5e>
+  ert--run-test-internal(#s(ert--test-execution-info :test #s(ert-test
+  ert-run-test(#s(ert-test :name kingsbury-activation-aborts-after-ree
+  ert-run-or-rerun-test(#s(ert--stats :selector "^kingsbury-" :tests .
+  ert-run-tests("^kingsbury-" #f(compiled-function (event-type &rest e
+  ert-run-tests-batch("^kingsbury-")
+  ert-run-tests-batch-and-exit("^kingsbury-")
+  eval((ert-run-tests-batch-and-exit '"^kingsbury-") t)
+  command-line-1(("-l" "jka-compr" "-L" "/private/tmp/sidebar-review-c
+  command-line()
+  normal-top-level()
+Test kingsbury-activation-aborts-after-reentrant-removal condition:
+    (ert-test-failed
+     ((should-not calls) :form calls :value
+      (("*codex-resume: 12345678*" "codex"
+	("resume" "12345678-1234-7123-8123-123456789abc")
+	"/var/folders/20/4zczrx1s3lq2fv0xmm0gj1fr0000gn/T/agent-sidebar-merge-HyV4v4/repo-with space/"))))
+   FAILED  1/3  kingsbury-activation-aborts-after-reentrant-removal (0.376390 sec) at agent/agent-sidebar-codex/review/round-1/kingsbury-tests.el:55
+   passed  2/3  kingsbury-existing-resume-path-owner-control (0.001610 sec)
+NEW ACP ownership: active-id="23456789-1234-7123-8123-123456789abc" native-marker=nil owned=nil
+Deleted 1 transcript(s)
+NEW ACP after delete: exists=nil retained-mark=nil active-id="23456789-1234-7123-8123-123456789abc"
+Test kingsbury-new-acp-session-protects-its-later-rollout backtrace:
+  ert-fail(((should (file-exists-p live-file)) :form (file-exists-p "/
+  (if (unwind-protect (setq value-950 (apply fn-948 args-949)) (setq f
+  (let (form-description-952) (if (unwind-protect (setq value-950 (app
+  (let ((value-950 'ert-form-evaluation-aborted-951)) (let (form-descr
+  (let* ((fn-948 #'file-exists-p) (args-949 (condition-case err (list 
+  (progn (fset 'agent-shell-buffers vnew) (agent-sidebar-refresh) (mer
+  (unwind-protect (progn (fset 'agent-shell-buffers vnew) (agent-sideb
+  (let* ((vnew #'(lambda nil (list shown))) (old (symbol-function 'age
+  (progn (fset 'agent-shell-sidebar--pop-to vnew) (agent-sidebar-refre
+  (unwind-protect (progn (fset 'agent-shell-sidebar--pop-to vnew) (age
+  (let* ((vnew #'(lambda (target) (setq shown target))) (old (symbol-f
+  (unwind-protect (let* ((vnew #'(lambda (target) (setq shown target))
+  (let* ((seed (codex-test--write agent-sidebar-codex-home root)) (log
+  (let ((agent-sidebar-codex-home (expand-file-name "codex/" temporary
+  (save-current-buffer (set-buffer buffer) (agent-sidebar-mode) (let (
+  (progn (fset 'input-pending-p vnew) (fset 'agent-shell-buffers vnew)
+  (unwind-protect (progn (fset 'input-pending-p vnew) (fset 'agent-she
+  (let* ((vnew #'(lambda nil nil)) (vnew #'(lambda nil nil)) (vnew #'(
+  (unwind-protect (let* ((vnew #'(lambda nil nil)) (vnew #'(lambda nil
+  (let* ((temporary (file-name-as-directory (make-temp-file "agent-sid
+  #f(lambda () [t] (let* ((temporary (file-name-as-directory ...)) (ro
+  #f(compiled-function () #<bytecode 0x6815b937b807d5e>)()
+  handler-bind-1(#f(compiled-function () #<bytecode 0x6815b937b807d5e>
+  ert--run-test-internal(#s(ert--test-execution-info :test ... :result
+  ert-run-test(#s(ert-test :name kingsbury-new-acp-session-protects-it
+  ert-run-or-rerun-test(#s(ert--stats :selector "^kingsbury-" :tests .
+  ert-run-tests("^kingsbury-" #f(compiled-function (event-type &rest e
+  ert-run-tests-batch("^kingsbury-")
+  ert-run-tests-batch-and-exit("^kingsbury-")
+  eval((ert-run-tests-batch-and-exit '"^kingsbury-") t)
+  command-line-1(("-l" "jka-compr" "-L" "/private/tmp/sidebar-review-c
+  command-line()
+  normal-top-level()
+Test kingsbury-new-acp-session-protects-its-later-rollout condition:
+    (ert-test-failed
+     ((should (file-exists-p live-file)) :form
+      (file-exists-p
+       "/var/folders/20/4zczrx1s3lq2fv0xmm0gj1fr0000gn/T/agent-sidebar-merge-XVLwA7/codex/sessions/2026/09/08/rollout-2026-09-08T12-00-00-23456789-1234-7123-8123-123456789abc.jsonl")
+      :value nil))
+   FAILED  3/3  kingsbury-new-acp-session-protects-its-later-rollout (0.478232 sec) at agent/agent-sidebar-codex/review/round-1/kingsbury-tests.el:6
+
+Ran 3 tests, 1 results as expected, 2 unexpected (2026-09-08 15:28:45-0700, 0.958063 sec)
+
+2 unexpected results:
+   FAILED  kingsbury-activation-aborts-after-reentrant-removal
+   FAILED  kingsbury-new-acp-session-protects-its-later-rollout
+

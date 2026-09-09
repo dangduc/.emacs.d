@@ -1,0 +1,6 @@
+COMPILE
+LANG=C.UTF-8 cannot be used, using en_US.UTF-8 instead.
+
+FILES 3000
+SCHEDULING {"files":3000,"emacs":"31.1","publication-function":"agent-shell-sidebar--publish-render","displayed-window":null,"compiled":true,"initial-refresh-ms":227.78987884521484,"callbacks":126,"callback-median-ms":6.52003288269043,"callback-p95-ms":24.126052856445312,"callback-max-ms":45.407772064208984,"total-work-ms":1842.470645904541,"publish-total-ms":28.748750686645508,"publish-max-ms":22.16792106628418,"rows":21000,"max-callback-rows":300,"headers":3000,"max-callback-headers":30,"collections":1,"publications":6,"progressive-publications":4,"gc-count":4,"gc-ms":73.878,"method":"Real timer-event-handler dispatch until both parsing and staging finish; all callbacks timed including native publication; idle delays and screen redisplay excluded; fresh metadata cache; OS cache not flushed"}
+LANG=C.UTF-8 cannot be used, using en_US.UTF-8 instead.

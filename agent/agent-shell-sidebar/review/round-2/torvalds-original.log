@@ -1,0 +1,16 @@
+LANG=C.UTF-8 cannot be used, using en_US.UTF-8 instead.
+PROBE ENVIRONMENT: Emacs 31.1; agent-shell 0.74.3
+Running 3 tests (2026-09-08 13:24:33-0700, selector `t')
+Deleted 0. Retained 1 mark(s): Transcript belongs to an open agent-shell: /var/folders/20/4zczrx1s3lq2fv0xmm0gj1fr0000gn/T/sidebar-torvalds-control-SGoyz4/.agent-shell/transcripts/session.md
+CONTROL: exact-owner-path owned-file-exists=t retained-mark=delete
+   passed  1/3  torvalds-control-preserves-owned-transcript-at-exact-path (0.395601 sec)
+ALIAS: discovered=t same-file=t exact-owner-path-match=nil owner-listed=t
+Deleted 0. Retained 1 mark(s): Transcript belongs to an open agent-shell: /var/folders/20/4zczrx1s3lq2fv0xmm0gj1fr0000gn/T/sidebar-torvalds-alias-MjMYD3/alias/.agent-shell/transcripts/session.md
+DELETION: owned-file-exists=t retained-mark=delete
+   passed  2/3  torvalds-refuses-owned-transcript-through-project-path-alias (0.007828 sec)
+READABILITY: before=unreadable after=readable direct-parser-session="fixture-session" signature-unchanged=t
+RECOVERY: pending-after-refresh=1 cached-error-after-retry=nil
+   passed  3/3  torvalds-retries-header-after-read-permission-is-restored (0.003539 sec)
+
+Ran 3 tests, 3 results as expected, 0 unexpected (2026-09-08 13:24:33-0700, 0.407278 sec)
+

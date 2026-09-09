@@ -1,0 +1,8 @@
+LANG=C.UTF-8 cannot be used, using en_US.UTF-8 instead.
+Verified autoload and definition: /Users/ducnguyen/.emacs.d/vendor/vegeta/vegeta.el
+Running 2 tests (2026-09-08 16:59:09-0700, selector `"^gap-common-"')
+   passed  1/2  gap-common-claude-metadata-and-date-group (0.003047 sec)
+   passed  2/2  gap-common-mode-and-navigation-bindings (0.000162 sec)
+
+Ran 2 tests, 2 results as expected, 0 unexpected (2026-09-08 16:59:09-0700, 0.003434 sec)
+

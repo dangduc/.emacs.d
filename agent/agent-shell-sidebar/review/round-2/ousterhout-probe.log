@@ -1,0 +1,13 @@
+LANG=C.UTF-8 cannot be used, using en_US.UTF-8 instead.
+Running 4 tests (2026-09-08 13:23:04-0700, selector `t')
+R2 ownership control: isolated caches, independent folds/filter/mark, 91 + 180 final rows, 46 remaining ticks
+   passed  1/4  ousterhout2-interleaved-buffers-preserve-final-snapshot-ownership (1.974393 sec)
+R2 lifecycle control: killing one owner cancels only its staging buffer/timer; surviving view has 360 rows
+   passed  2/4  ousterhout2-killing-one-owner-leaves-other-staging-work-live (0.949261 sec)
+R2 mode reset control: old cache/staging/timer released, one registry entry, both reconstructed views have 360 rows
+   passed  3/4  ousterhout2-reinitialization-releases-old-generator-and-local-cache (1.541624 sec)
+R2 retry control: failed owner retained its head; other owner advanced independently; final rows 20 + 40
+   passed  4/4  ousterhout2-transient-read-failure-does-not-cross-owner-queues (0.112188 sec)
+
+Ran 4 tests, 4 results as expected, 0 unexpected (2026-09-08 13:23:08-0700, 4.577770 sec)
+

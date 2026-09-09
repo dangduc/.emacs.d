@@ -1,0 +1,59 @@
+LANG=C.UTF-8 cannot be used, using en_US.UTF-8 instead.
+CE2 SOURCE BEFORE="/Users/ducnguyen/.emacs.d/agent/agent-shell-sidebar/review/round-2/contrarian-evidence-mutant-partial-lines.el"
+Running 4 tests (2026-09-08 13:32:15-0700, selector `t')
+   passed  1/4  ce2-bounded-read-excludes-late-field-without-any-boundary (0.001495 sec)
+CE2-MATRIX utf8=nil newline=nil continues=nil bytes=8191 header=(:session-id "intact")
+CE2-MATRIX utf8=nil newline=nil continues=nil bytes=8192 header=(:session-id "intact")
+CE2-MATRIX utf8=nil newline=nil continues=nil bytes=8193 header=(:session-id "intac" :error "Transcript metadata exceeds the 8192-byte read limit")
+Test ce2-cutoff-matrix-distinguishes-bytes-lines-and-eof backtrace:
+  ert-fail(((should (equal (plist-get header :session-id) (when comple
+  (if (unwind-protect (setq value-107 (apply fn-105 args-106)) (setq f
+  (let (form-description-109) (if (unwind-protect (setq value-107 (app
+  (let ((value-107 'ert-form-evaluation-aborted-108)) (let (form-descr
+  (let* ((fn-105 #'equal) (args-106 (condition-case err (list (plist-g
+  (let* ((header (agent-shell-sidebar--parse-header-from-file file)) (
+  (let* ((tail (concat "\n**Session ID:** intact" (if newline (progn "
+  (let ((length (car tail))) (let* ((tail (concat "\n**Session ID:** i
+  (while tail (let ((length (car tail))) (let* ((tail (concat "\n**Ses
+  (let ((tail '(8191 8192 8193))) (while tail (let ((length (car tail)
+  (let ((file-continues (car tail))) (let ((tail '(8191 8192 8193))) (
+  (while tail (let ((file-continues (car tail))) (let ((tail '(8191 81
+  (let ((tail '(nil t))) (while tail (let ((file-continues (car tail))
+  (let ((newline (car tail))) (let ((tail '(nil t))) (while tail (let 
+  (while tail (let ((newline (car tail))) (let ((tail '(nil t))) (whil
+  (let ((tail '(nil t))) (while tail (let ((newline (car tail))) (let 
+  (let ((multibyte (car tail))) (let ((tail '(nil t))) (while tail (le
+  (while tail (let ((multibyte (car tail))) (let ((tail '(nil t))) (wh
+  (let ((tail '(nil t))) (while tail (let ((multibyte (car tail))) (le
+  (progn (make-directory (file-name-directory file) t) (let ((tail '(n
+  (unwind-protect (progn (make-directory (file-name-directory file) t)
+  (let* ((root (file-name-as-directory (make-temp-file "sidebar-ce2-" 
+  #f(lambda () [t] (let* ((root (file-name-as-directory ...)) (file (e
+  #f(compiled-function () #<bytecode 0x723bf18c57e297b>)()
+  handler-bind-1(#f(compiled-function () #<bytecode 0x723bf18c57e297b>
+  ert--run-test-internal(#s(ert--test-execution-info :test ... :result
+  ert-run-test(#s(ert-test :name ce2-cutoff-matrix-distinguishes-bytes
+  ert-run-or-rerun-test(#s(ert--stats :selector t :tests ... :test-map
+  ert-run-tests(t #f(compiled-function (event-type &rest event-args) #
+  ert-run-tests-batch(nil)
+  ert-run-tests-batch-and-exit()
+  command-line-1(("-l" "jka-compr" "-L" "/Users/ducnguyen/.emacs.d/elp
+  command-line()
+  normal-top-level()
+Test ce2-cutoff-matrix-distinguishes-bytes-lines-and-eof condition:
+    (ert-test-failed
+     ((should
+       (equal (plist-get header :session-id) (when complete "intact")))
+      :form (equal "intac" nil) :value nil :explanation
+      (different-types "intac" nil)))
+   FAILED  2/4  ce2-cutoff-matrix-distinguishes-bytes-lines-and-eof (0.002177 sec) at agent/agent-shell-sidebar/review/round-2/contrarian-evidence-probe.el:20
+   passed  3/4  ce2-first-metadata-boundary-wins (0.001670 sec)
+Created .agent-shell/transcripts/fixture.md
+   passed  4/4  ce2-real-writer-keeps-tab-and-space-path-suffix (0.000997 sec)
+
+Ran 4 tests, 3 results as expected, 1 unexpected (2026-09-08 13:32:15-0700, 0.067589 sec)
+
+1 unexpected results:
+   FAILED  ce2-cutoff-matrix-distinguishes-bytes-lines-and-eof
+
+CE2 SOURCE AFTER="/Users/ducnguyen/.emacs.d/agent/agent-shell-sidebar/review/round-2/contrarian-evidence-mutant-partial-lines.el"

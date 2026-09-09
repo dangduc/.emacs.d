@@ -1,0 +1,31 @@
+LANG=C.UTF-8 cannot be used, using en_US.UTF-8 instead.
+Running 19 tests (2026-09-08 15:45:12-0700, selector `(or "^display-fix-" "^torvalds-" "^terminal-fix-" "^merge-terminal-" "^merge-term-" "^merge-real-term-" "^merge-vterm-" "^merge-ghostel-" "^codex-cli-ghostel-")')
+   passed   1/19  display-fix-new-custom-buffer-error-and-quit-clean-up (0.005343 sec)
+   passed   2/19  display-fix-ghostel-dispatch-error-and-quit-clean-up (0.003743 sec)
+   passed   3/19  display-fix-existing-session-reuse-preserves-running-child (0.002218 sec)
+   passed   4/19  display-fix-existing-custom-buffer-error-and-quit-preserve-owner (0.001794 sec)
+TERM-NEW: same-buffer=nil, same-process=nil
+   passed   5/19  torvalds-term-new-session-really-starts-new-process (0.006063 sec)
+TERM-COLLISION: same-buffer=nil, same-process=nil, child-command=("/bin/sh" "-c" "stty -nl echo rows 22 columns 79 sane 2>/dev/null;if [ $1 = .. ]; then shift; fi; exec \"$@\"" ".." "/bin/sh" "-c" "exec sleep 30" "fixture" "12345678-2222-7222-8222-222222222222"), recorded-session=(claude-cli "12345678-2222-7222-8222-222222222222" "/var/folders/20/4zczrx1s3lq2fv0xmm0gj1fr0000gn/T/sidebar-torvalds-kXJiB5/repo/")
+   passed   6/19  torvalds-term-fallback-distinguishes-resume-id-prefix-collision (0.004189 sec)
+ACP-INTERLEAVE: two real children kept distinct selected homes and inherited unrelated configuration
+   passed   7/19  torvalds-r2-interleaved-wrappers-preserve-home-at-os-boundary (0.052300 sec)
+DISPLAY-FAILURE: failed activations=2, live children=0, session markers=(nil nil)
+   passed   8/19  torvalds-r2-display-error-does-not-leave-unowned-terminal-children (0.004025 sec)
+TRAILING-SLASH: starts=1, live-children=1, both homes equal by file-equal-p=t
+   passed   9/19  torvalds-codex-home-trailing-slash-reuses-process (0.003090 sec)
+   passed  10/19  terminal-fix-cleanup-on-quit (0.000649 sec)
+   passed  11/19  terminal-fix-cleanup-before-child-start-preserves-existing-buffer (0.000609 sec)
+   passed  12/19  terminal-fix-cleanup-after-child-start-does-not-query (0.002432 sec)
+Deleted 0. Retained 1 mark(s): Transcript belongs to an open session: /var/folders/20/4zczrx1s3lq2fv0xmm0gj1fr0000gn/T/agent-sidebar-merge-FMTcTI/claude/-var-folders-20-4zczrx1s3lq2fv0xmm0gj1fr0000gn-T-agent-sidebar-merge-FMTcTI-repo-with-space/owned.jsonl
+Deleted 1 transcript(s)
+   passed  13/19  merge-terminal-ownership-prevents-delete-until-process-exits (0.790221 sec)
+   passed  14/19  merge-terminal-arguments-directory-and-reuse (0.014890 sec)
+   passed  15/19  merge-term-fallback-preserves-argv-with-metacharacters (0.000435 sec)
+   passed  16/19  merge-real-term-process-receives-exact-argv-and-cwd (0.039350 sec)
+   passed  17/19  merge-vterm-launch-keeps-dedicated-sidebar-and-quotes-argv (0.000829 sec)
+   passed  18/19  codex-cli-ghostel-resume-argv-home-and-reuse (0.046550 sec)
+   passed  19/19  merge-ghostel-dispatch-and-failed-start-cleanup (0.000523 sec)
+
+Ran 19 tests, 19 results as expected, 0 unexpected (2026-09-08 15:45:13-0700, 0.980214 sec)
+

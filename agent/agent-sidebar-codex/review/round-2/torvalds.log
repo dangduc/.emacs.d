@@ -1,0 +1,45 @@
+LANG=C.UTF-8 cannot be used, using en_US.UTF-8 instead.
+Running 2 tests (2026-09-08 15:42:10-0700, selector `t')
+DISPLAY-FAILURE: failed activations=2, live children=2, session markers=(nil nil)
+Test torvalds-r2-display-error-does-not-leave-unowned-terminal-children backtrace:
+  ert-fail(((should-not live) :form live :value (#<process *review-res
+  (if (not (unwind-protect (setq value-306 live) (setq form-descriptio
+  (let (form-description-307) (if (not (unwind-protect (setq value-306
+  (let ((value-306 (gensym "ert-form-evaluation-aborted-"))) (let (for
+  (let ((live (seq-filter #'process-live-p processes))) (message "DISP
+  (progn (fset 'make-term vnew) (fset 'agent-shell-sidebar--pop-to vne
+  (unwind-protect (progn (fset 'make-term vnew) (fset 'agent-shell-sid
+  (let* ((vnew #'(lambda (_) meta)) (vnew #'(lambda (_) (error "Inject
+  (let* ((agent-sidebar-terminal-function nil) (entry (list :provider 
+  (progn (let* ((agent-sidebar-terminal-function nil) (entry (list :pr
+  (unwind-protect (progn (let* ((agent-sidebar-terminal-function nil) 
+  (let ((wconfig (current-window-configuration))) (unwind-protect (pro
+  (unwind-protect (let ((wconfig (current-window-configuration))) (unw
+  (let* ((temporary (make-temp-file "torvalds-r2-" t)) (directory (fil
+  #f(lambda () [t] (let* ((temporary (make-temp-file "torvalds-r2-" t)
+  #f(compiled-function () #<bytecode -0x16e71c6c121a35b8>)()
+  handler-bind-1(#f(compiled-function () #<bytecode -0x16e71c6c121a35b
+  ert--run-test-internal(#s(ert--test-execution-info :test #s(ert-test
+  ert-run-test(#s(ert-test :name torvalds-r2-display-error-does-not-le
+  ert-run-or-rerun-test(#s(ert--stats :selector t :tests ... :test-map
+  ert-run-tests(t #f(compiled-function (event-type &rest event-args) #
+  ert-run-tests-batch(t)
+  ert-run-tests-batch-and-exit(t)
+  eval((ert-run-tests-batch-and-exit 't) t)
+  command-line-1(("-l" "jka-compr" "-L" "/private/tmp/sidebar-review-w
+  command-line()
+  normal-top-level()
+Test torvalds-r2-display-error-does-not-leave-unowned-terminal-children condition:
+    (ert-test-failed
+     ((should-not live) :form live :value
+      (#<process *review-resume: 12345678*<1>> #<process *review-resume:
+		 12345678*>)))
+   FAILED  1/2  torvalds-r2-display-error-does-not-leave-unowned-terminal-children (0.007092 sec) at agent/agent-sidebar-codex/review/round-2/torvalds-tests.el:70
+ACP-INTERLEAVE: two real children kept distinct selected homes and inherited unrelated configuration
+   passed  2/2  torvalds-r2-interleaved-wrappers-preserve-home-at-os-boundary (0.051537 sec)
+
+Ran 2 tests, 1 results as expected, 1 unexpected (2026-09-08 15:42:10-0700, 0.118036 sec)
+
+1 unexpected results:
+   FAILED  torvalds-r2-display-error-does-not-leave-unowned-terminal-children
+

@@ -1,0 +1,141 @@
+--- a/lisp/agent-shell-sidebar.el
++++ b/lisp/agent-shell-sidebar.el
+@@ -394,9 +394,9 @@
+   (seq-filter (lambda (name) (and (stringp name) (not (string-empty-p name))))
+               (list (map-elt config :mode-line-name) (map-elt config :buffer-name))))
+ 
+-(defun agent-shell-sidebar--config-for-agent-name (name)
+-  "Return an unambiguous configuration matching NAME.
+-Prefer case-insensitive exact names.  Accept a unique substring match.
++(defun agent-shell-sidebar--configs-for-agent-name (name)
++  "Return configurations matching NAME, preferring exact names to substrings.
++Compare names case-insensitively.
+ Never match an empty configuration name."
+   (when (and (stringp name) (not (string-empty-p name)))
+     (let* ((configs (agent-shell--resolved-agent-configs))
+@@ -416,25 +416,46 @@
+                                     (string-search candidate folded))))
+                             (agent-shell-sidebar--config-names config)))
+                          configs))))
+-      (when (= (length matches) 1) (car matches)))))
+-
+-(defun agent-shell-sidebar--live-buffer-for-session (session-id &optional agent-name cwd)
+-  "Find an existing or connecting SESSION-ID for AGENT-NAME in CWD."
++      matches)))
++
++(defun agent-shell-sidebar--config-for-agent-name (name)
++  "Return an unambiguous configuration matching NAME."
++  (let ((matches (agent-shell-sidebar--configs-for-agent-name name)))
++    (when (= (length matches) 1) (car matches))))
++
++(defun agent-shell-sidebar--live-buffer-for-session (session-id &optional agent-name cwd config)
++  "Find an existing or connecting SESSION-ID for AGENT-NAME in CWD.
++When CONFIG is supplied, match that resolved configuration instead of
++AGENT-NAME.  An active session ID takes precedence over a pending resume ID.
++Without CONFIG, refuse ambiguous matches across different configurations."
+   (when (and (stringp session-id) (not (string-empty-p session-id)))
+-    (seq-find
+-     (lambda (buffer)
+-       (with-current-buffer buffer
+-         (and (or (equal session-id (map-nested-elt agent-shell--state '(:session :id)))
+-                  (equal session-id (map-elt agent-shell--state :resume-session-id)))
+-              (or (null agent-name)
+-                  (member (downcase agent-name)
+-                          (mapcar #'downcase
+-                                  (agent-shell-sidebar--config-names
+-                                   (map-elt agent-shell--state :agent-config)))))
+-              (or (null cwd)
+-                  (equal (file-name-as-directory (expand-file-name cwd))
+-                         (file-name-as-directory (expand-file-name default-directory)))))))
+-     (agent-shell-buffers))))
++    (let ((matches
++           (seq-filter
++            (lambda (buffer)
++              (with-current-buffer buffer
++                (let ((active-id (map-nested-elt agent-shell--state '(:session :id))))
++                  (and (equal session-id
++                              (if (and (stringp active-id) (not (string-empty-p active-id)))
++                                  active-id
++                                (map-elt agent-shell--state :resume-session-id)))
++                       (if config
++                           (equal config (map-elt agent-shell--state :agent-config))
++                         (or (null agent-name)
++                             (member (downcase agent-name)
++                                     (mapcar #'downcase
++                                             (agent-shell-sidebar--config-names
++                                              (map-elt agent-shell--state :agent-config))))))
++                       (or (null cwd)
++                           (equal (file-name-as-directory (expand-file-name cwd))
++                                  (file-name-as-directory (expand-file-name default-directory))))))))
++            (agent-shell-buffers))))
++      (when (or config
++                (= 1 (length (delete-dups
++                              (mapcar (lambda (buffer)
++                                        (map-elt (buffer-local-value 'agent-shell--state buffer)
++                                                 :agent-config))
++                                      matches)))))
++        (car matches)))))
+ 
+ (defun agent-shell-sidebar--root-for-file (file)
+   "Return FILE's discovered project root, or infer its transcript layout."
+@@ -818,10 +839,18 @@
+       (let* ((session-id (plist-get header :session-id))
+              (name (plist-get header :agent))
+              (directory (agent-shell-sidebar--working-directory file header))
+-             (live (agent-shell-sidebar--live-buffer-for-session session-id name directory)))
++             (existing (and name
++                            (agent-shell-sidebar--live-buffer-for-session
++                             session-id name directory)))
++             ;; A removed configuration must not prevent access to its live shell.
++             ;; Configured ambiguous matches still require explicit selection.
++             (unconfigured (and existing
++                                (null (agent-shell-sidebar--configs-for-agent-name name))))
++             (config (unless unconfigured (agent-shell-sidebar--select-config name)))
++             (live (if unconfigured existing
++                     (agent-shell-sidebar--live-buffer-for-session session-id name directory config))))
+         (agent-shell-sidebar--pop-to
+-         (or live (agent-shell-sidebar--start
+-                   directory (agent-shell-sidebar--select-config name) session-id))))))
++         (or live (agent-shell-sidebar--start directory config session-id))))))
+    (t (user-error "No transcript at point"))))
+ 
+ (defun agent-shell-sidebar-new-session ()
+@@ -911,7 +940,9 @@
+             (progn
+               (when (seq-some
+                      (lambda (buffer)
+-                       (equal file (buffer-local-value 'agent-shell--transcript-file buffer)))
++                       (let ((owned (buffer-local-value 'agent-shell--transcript-file buffer)))
++                         (and (stringp owned) (not (string-empty-p owned))
++                              (or (equal file owned) (file-equal-p file owned)))))
+                      (agent-shell-buffers))
+                 (user-error "Transcript belongs to an open agent-shell: %s" file))
+               (when (file-exists-p file) (delete-file file delete-by-moving-to-trash))
+@@ -947,8 +978,9 @@
+ (defun agent-shell-sidebar--sidebar-buffer (&optional frame)
+   "Return a sidebar window in FRAME, or the selected frame when nil."
+   (seq-find (lambda (window)
+-              (with-current-buffer (window-buffer window)
+-                (derived-mode-p 'agent-shell-sidebar-mode)))
++              (and (window-parameter window 'window-side)
++                   (with-current-buffer (window-buffer window)
++                     (derived-mode-p 'agent-shell-sidebar-mode))))
+             (window-list frame 'no-minibuffer)))
+ 
+ (defun agent-shell-sidebar-showing-sidebar-p ()
+@@ -984,9 +1016,12 @@
+          (project (unless (file-remote-p directory) (project-current nil)))
+          (roots (delq nil (list directory (and project (project-root project)))))
+          (buffer (agent-shell-sidebar--get-or-create-buffer))
+-         (window (display-buffer-in-side-window
+-                  buffer (append agent-shell-sidebar-display-alist
+-                                 `((window-width . ,agent-shell-sidebar-width))))))
++         (window (with-current-buffer buffer
++                   ;; An ordinary view of this buffer must permit the side split.
++                   (let ((window-size-fixed nil))
++                     (display-buffer-in-side-window
++                      buffer (append agent-shell-sidebar-display-alist
++                                     `((window-width . ,agent-shell-sidebar-width))))))))
+     (with-current-buffer buffer
+       (setq agent-shell-sidebar--context-roots
+             (delete-dups (append roots agent-shell-sidebar--context-roots)))

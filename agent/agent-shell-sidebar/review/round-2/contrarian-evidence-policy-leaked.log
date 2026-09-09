@@ -1,0 +1,51 @@
+Agent for Claude: LANG=C.UTF-8 cannot be used, using en_US.UTF-8 instead.
+POLICY before=t after=nil selector-native=t source="/Users/ducnguyen/.emacs.d/agent/agent-shell-sidebar/review/round-2/reviewed.el"
+Running 1 tests (2026-09-08 13:28:11-0700, selector `identity-ambiguous-alias-obeys-explicit-selection-on-every-visit')
+Test identity-ambiguous-alias-obeys-explicit-selection-on-every-visit backtrace:
+  read-from-minibuffer("Agent for Claude: " nil (keymap (10 . minibuff
+  completing-read-default("Agent for Claude: " #f(compiled-function (s
+  agent-shell-select-config(:prompt "Agent for Claude: ")
+  (or (agent-shell-sidebar--config-for-agent-name name) (and (null nam
+  agent-shell-sidebar--select-config("Claude")
+  (if unconfigured nil (agent-shell-sidebar--select-config name))
+  (let* ((session-id (plist-get header :session-id)) (name (plist-get 
+  (let* ((file (get-text-property (line-beginning-position) 'agent-she
+  (cond ((or (get-text-property (line-beginning-position) 'agent-shell
+  agent-shell-sidebar-visit()
+  (progn (fset 'agent-shell-sidebar--pop-to vnew) (fset 'agent-shell-s
+  (unwind-protect (progn (fset 'agent-shell-sidebar--pop-to vnew) (fse
+  (let* ((vnew #'(lambda (&rest _) (setq prompts (+ prompts 1)) choice
+  (let* ((file (identity-test--write root "Claude")) (personal '((:ide
+  (progn (agent-shell-sidebar-mode) (let* ((file (identity-test--write
+  (unwind-protect (progn (agent-shell-sidebar-mode) (let* ((file (iden
+  (save-current-buffer (set-buffer temp-buffer) (unwind-protect (progn
+  (let ((temp-buffer (generate-new-buffer " *temp*" t))) (save-current
+  (progn (fset 'project-known-project-roots vnew) (let ((temp-buffer (
+  (unwind-protect (progn (fset 'project-known-project-roots vnew) (let
+  (let* ((vnew #'(lambda nil nil)) (old (symbol-function 'project-know
+  (unwind-protect (let* ((vnew #'(lambda nil nil)) (old (symbol-functi
+  (let* ((root (file-name-as-directory (make-temp-file "sidebar-identi
+  #f(lambda () [t] (let* ((root (file-name-as-directory ...)) (default
+  #f(compiled-function () #<bytecode -0x162d78355e4ade62>)()
+  handler-bind-1(#f(compiled-function () #<bytecode -0x162d78355e4ade6
+  ert--run-test-internal(#s(ert--test-execution-info :test #s(ert-test
+  ert-run-test(#s(ert-test :name identity-ambiguous-alias-obeys-explic
+  ert-run-or-rerun-test(#s(ert--stats :selector identity-ambiguous-ali
+  ert-run-tests(identity-ambiguous-alias-obeys-explicit-selection-on-e
+  ert-run-tests-batch(identity-ambiguous-alias-obeys-explicit-selectio
+  ert-run-tests-batch-and-exit(identity-ambiguous-alias-obeys-explicit
+  eval-buffer(#<buffer  *load*> nil "/Users/ducnguyen/.emacs.d/agent/a
+  load-with-code-conversion("/Users/ducnguyen/.emacs.d/agent/agent-she
+  load("/Users/ducnguyen/.emacs.d/agent/agent-shell-sidebar/review/rou
+  command-line-1(("-l" "jka-compr" "-L" "/Users/ducnguyen/.emacs.d/elp
+  command-line()
+  normal-top-level()
+Test identity-ambiguous-alias-obeys-explicit-selection-on-every-visit condition:
+    (end-of-file "Error reading from stdin")
+   FAILED  1/1  identity-ambiguous-alias-obeys-explicit-selection-on-every-visit (0.001766 sec) at agent/agent-shell-sidebar/review/fixes/identity-tests.el:113
+
+Ran 1 tests, 0 results as expected, 1 unexpected (2026-09-08 13:28:11-0700, 0.066274 sec)
+
+1 unexpected results:
+   FAILED  identity-ambiguous-alias-obeys-explicit-selection-on-every-visit
+

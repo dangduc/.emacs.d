@@ -1,0 +1,5 @@
+{
+  "lisp/agent-shell-sidebar.el": "ef3848084626c7ede22c2947bfdb16b1901e6201bab735bc96caba84356973a7",
+  "lisp/package-declarations.el": "acb35a36ef6fe1499ee8218255d23f95fb411a9a12089331d681c176d3aa7508",
+  "agent/agent-shell-sidebar/tests/sidebar-tests.el": "faaed3fe6657d0f13aec51b88751095847e0297deb97728f4938f1b264ca7ea8"
+}

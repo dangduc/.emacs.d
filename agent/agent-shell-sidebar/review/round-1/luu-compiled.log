@@ -1,0 +1,35 @@
+COMPILE LANG=C.UTF-8 cannot be used, using en_US.UTF-8 instead.
+
+CASE scale files=300
+LUU {"kind":"environment","emacs":"31.1","system":"aarch64-apple-darwin22.6.0","compiled-sidebar":true,"gc-cons-threshold":800000,"gc-cons-percentage":1.0,"chunk-size":30,"method":"Direct synchronous callbacks; fresh metadata cache; OS cache not flushed; instrumented counts and timing; idle delays and display redisplay excluded"}
+LUU {"kind":"scale-cold","files":300,"initial-refresh-ms":39.51597213745117,"elapsed-ms":173.1278896331787,"tick-count":10,"tick-total-ms":133.59832763671875,"tick-median-ms":11.94906234741211,"tick-p95-ms":25.78902244567871,"tick-max-ms":25.78902244567871,"gc-count":0,"gc-ms":0.0,"conses-allocated":267654,"directory-scans":1,"collections":1,"collect-ms":2.7129650115966797,"rows":3300,"redraws":11,"redraw-ms":149.92284774780273,"file-attributes-calls":300,"header-reads":300,"parse-ms":16.857385635375977}
+LUU {"kind":"scale-warm","files":300,"repeat":0,"elapsed-ms":18.72706413269043,"directory-scans":1,"collections":1,"collect-ms":16.407012939453125,"rows":300,"redraws":1,"redraw-ms":2.2170543670654297}
+LUU {"kind":"scale-warm","files":300,"repeat":1,"elapsed-ms":4.785060882568359,"directory-scans":1,"collections":1,"collect-ms":2.5510787963867188,"rows":300,"redraws":1,"redraw-ms":2.1419525146484375}
+LUU {"kind":"scale-warm","files":300,"repeat":2,"elapsed-ms":4.516839981079102,"directory-scans":1,"collections":1,"collect-ms":2.2249221801757812,"rows":300,"redraws":1,"redraw-ms":2.2089481353759766}
+LANG=C.UTF-8 cannot be used, using en_US.UTF-8 instead.
+
+
+CASE scale files=1200
+LUU {"kind":"environment","emacs":"31.1","system":"aarch64-apple-darwin22.6.0","compiled-sidebar":true,"gc-cons-threshold":800000,"gc-cons-percentage":1.0,"chunk-size":30,"method":"Direct synchronous callbacks; fresh metadata cache; OS cache not flushed; instrumented counts and timing; idle delays and display redisplay excluded"}
+LUU {"kind":"scale-cold","files":1200,"initial-refresh-ms":94.64597702026367,"elapsed-ms":2068.176031112671,"tick-count":40,"tick-total-ms":1973.4880924224854,"tick-median-ms":48.29096794128418,"tick-p95-ms":83.35494995117188,"tick-max-ms":93.79100799560547,"gc-count":6,"gc-ms":87.60600000000002,"conses-allocated":3590070,"directory-scans":1,"collections":1,"collect-ms":11.753082275390625,"rows":49200,"redraws":41,"redraw-ms":1981.9819927215576,"file-attributes-calls":1200,"header-reads":1200,"parse-ms":60.68229675292969}
+LUU {"kind":"scale-warm","files":1200,"repeat":0,"elapsed-ms":21.69203758239746,"directory-scans":1,"collections":1,"collect-ms":11.625051498413086,"rows":1200,"redraws":1,"redraw-ms":9.540081024169922}
+LUU {"kind":"scale-warm","files":1200,"repeat":1,"elapsed-ms":38.15007209777832,"directory-scans":1,"collections":1,"collect-ms":28.139114379882812,"rows":1200,"redraws":1,"redraw-ms":9.551048278808594}
+LUU {"kind":"scale-warm","files":1200,"repeat":2,"elapsed-ms":21.90113067626953,"directory-scans":1,"collections":1,"collect-ms":11.7340087890625,"rows":1200,"redraws":1,"redraw-ms":9.718894958496094}
+LANG=C.UTF-8 cannot be used, using en_US.UTF-8 instead.
+
+
+CASE scale files=3000
+LUU {"kind":"environment","emacs":"31.1","system":"aarch64-apple-darwin22.6.0","compiled-sidebar":true,"gc-cons-threshold":800000,"gc-cons-percentage":1.0,"chunk-size":30,"method":"Direct synchronous callbacks; fresh metadata cache; OS cache not flushed; instrumented counts and timing; idle delays and display redisplay excluded"}
+LUU {"kind":"scale-cold","files":3000,"initial-refresh-ms":240.63801765441895,"elapsed-ms":12463.748931884766,"tick-count":100,"tick-total-ms":12222.976922988892,"tick-median-ms":119.62389945983887,"tick-p95-ms":203.05705070495605,"tick-max-ms":223.55103492736816,"gc-count":29,"gc-ms":483.17,"conses-allocated":21574913,"directory-scans":1,"collections":1,"collect-ms":32.91606903076172,"rows":303000,"redraws":101,"redraw-ms":12214.731216430664,"file-attributes-calls":3000,"header-reads":3000,"parse-ms":179.4743537902832}
+LUU {"kind":"scale-warm","files":3000,"repeat":0,"elapsed-ms":58.06303024291992,"directory-scans":1,"collections":1,"collect-ms":31.567811965942383,"rows":3000,"redraws":1,"redraw-ms":25.23016929626465}
+LUU {"kind":"scale-warm","files":3000,"repeat":1,"elapsed-ms":77.8350830078125,"directory-scans":1,"collections":1,"collect-ms":31.175851821899414,"rows":3000,"redraws":1,"redraw-ms":45.47595977783203}
+LUU {"kind":"scale-warm","files":3000,"repeat":2,"elapsed-ms":57.971954345703125,"directory-scans":1,"collections":1,"collect-ms":31.19516372680664,"rows":3000,"redraws":1,"redraw-ms":25.460004806518555}
+LANG=C.UTF-8 cannot be used, using en_US.UTF-8 instead.
+
+
+CASE lifecycle files=120
+LUU {"kind":"environment","emacs":"31.1","system":"aarch64-apple-darwin22.6.0","compiled-sidebar":true,"gc-cons-threshold":800000,"gc-cons-percentage":1.0,"chunk-size":30,"method":"Direct synchronous callbacks; fresh metadata cache; OS cache not flushed; instrumented counts and timing; idle delays and display redisplay excluded"}
+LUU {"kind":"refresh-during-parse","remaining-before-refresh":90,"pending-after-drain":0,"directory-scans":2,"collections":2,"collect-ms":1.936197280883789,"rows":720,"redraws":6,"redraw-ms":30.16948699951172,"file-attributes-calls":120,"header-reads":120,"parse-ms":6.054878234863281}
+LUU {"kind":"hidden-parse","visible":null,"timer-after-hide":true,"pending-before-hidden-tick":120,"pending-after-hidden-tick":90,"header-reads-while-hidden":30,"rows-rendered-while-hidden":120,"timer-after-hidden-tick":true}
+LANG=C.UTF-8 cannot be used, using en_US.UTF-8 instead.
+

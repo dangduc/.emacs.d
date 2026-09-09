@@ -1,0 +1,7 @@
+LANG=C.UTF-8 cannot be used, using en_US.UTF-8 instead.
+Running 1 tests (2026-09-08 14:50:19-0700, selector `t')
+MERGE-SCALE (:files 3000 :reads 3000 :scans 1 :rows-built 21000 :callbacks 126 :publications 6 :publications-while-parsing 4 :initial-refresh-ms 311.6898536682129 :all-callback-work-ms 1149.1973400115967 :total-work-ms 1460.8871936798096 :max-callback-ms 59.26704406738281)
+   passed  1/1  merge-scale-3000-mixed-provider-files (2.886425 sec)
+
+Ran 1 tests, 1 results as expected, 0 unexpected (2026-09-08 14:50:22-0700, 2.886611 sec)
+

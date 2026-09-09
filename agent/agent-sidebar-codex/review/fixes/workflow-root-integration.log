@@ -1,0 +1,7 @@
+LANG=C.UTF-8 cannot be used, using en_US.UTF-8 instead.
+Running 1 tests (2026-09-08 15:35:22-0700, selector `review-root-new-session-pending-row-uses-recorded-directory')
+NEW PENDING ROW: expected="/var/folders/20/4zczrx1s3lq2fv0xmm0gj1fr0000gn/T/agent-sidebar-merge-CIH0He/different recorded repo/" actual="/var/folders/20/4zczrx1s3lq2fv0xmm0gj1fr0000gn/T/agent-sidebar-merge-CIH0He/different recorded repo/"
+   passed  1/1  review-root-new-session-pending-row-uses-recorded-directory (0.432569 sec)
+
+Ran 1 tests, 1 results as expected, 0 unexpected (2026-09-08 15:35:22-0700, 0.432749 sec)
+

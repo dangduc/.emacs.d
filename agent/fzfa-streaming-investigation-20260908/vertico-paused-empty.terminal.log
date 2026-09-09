@@ -1,0 +1,89 @@
+LANG=C.UTF-8 cannot be used, using en_US.UTF-8 instead.
+[?1049h[?12;25h[?1h=[H[2J[40d[K[?1l>[?12l[?25h[?1049l[39;49m[?1049h[?12;25h[?1h=[>0c[H[2J[40d[K[H[?25l[7mFile Edit Options Buffers Tools Lisp-Interaction Help                                                                                       [0m[39;49m[27m
+[A
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[30m[48;5;250m-UUU:--- F1  [39;49m[1m[30m[48;5;250m*scratch*   [0m[39;49m[30m[48;5;250m   All L1     (Lisp Interaction ElDoc) ----------------------------------------------------------------------------[39;49m
+[A[?12l[?25h[?12;25h[2d[c[>0q[?2004h[?1004h[40d[?25lFor information about GNU Emacs and the GNU system, type [38;5;18m[48;5;255mC-h C-a[39;49m.[?12l[?25h[?12;25h[H
+[40d[?25lFor information about GNU Emacs and the GNU system, type [38;5;18m[48;5;255mC-h C-a[39;49m.[K[H[7mFile Edit Options Buffers Tools Lisp-Interaction Help                                                                                       [0m[39;49m[27m
+[A
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[K
+[30m[48;5;250m-UUU:--- F1  [39;49m[1m[30m[48;5;250m*scratch*   [0m[39;49m[30m[48;5;250m   All L1     (Lisp Interaction ElDoc) ----------------------------------------------------------------------------[39;49m
+[A[?12l[?25h[?12;25h[2d[40d[?25l[38;5;20mStreaming probe: ~/.emacs.d/ 1/[0](2) [39;49m[K[1;33H[7mMinibuf Help         [0m[39;49m[27m[?12l[?25h[?12;25h[40;39H[1;39r[37;1H[2M[1;40r[40;1H[?25ldoc-0000001.txt:1:alpha[K[38;1H[38;5;20mStreaming probe: ~/.emacs.d/ 1/[2](2) [39;49m[K
+[48;5;157mdoc-0000000.txt:1:alpha                                                                                                                     [39;49m
+[A[?12l[?25h[?12;25h[38;39H[1;40r[38;1H[1M[1;40r[40;1H[?25ldoc-0000002.txt:1:alpha[K[36;1H[30m[48;5;250m-UUU:--- F1  [39;49m[1m[30m[48;5;250m*scratch*   [0m[39;49m[30m[48;5;250m   All L1     (Lisp Interaction ElDoc) ----------------------------------------------------------------------------[39;49m
+[38;5;20mStreaming probe: ~/.emacs.d/ 1/[3](3) [39;49m[K[?12l[?25h[?12;25h
+
+
+[K[?1004l[?2004l[?1l>[?12l[?25h[?1049l[39;49m

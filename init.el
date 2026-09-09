@@ -256,7 +256,7 @@
         clojure-mode consult diminish dired-sidebar doom-themes
         ereader esh-autosuggest evil-collection evil-ghostel
         exec-path-from-shell flatland-black-theme fussy geiser-mit
-        general ghostel habamax-theme ibuffer-projectile
+        general ghostel habamax-theme helm ibuffer-projectile
         ibuffer-sidebar jq-mode kotlin-mode leetcode lispyville
         lua-mode macrostep magit marginalia markdown-mode mindre-theme
         modus-themes orderless org-download org-fc org-ql org-roam-ui

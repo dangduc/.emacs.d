@@ -1,0 +1,36 @@
+LANG=C.UTF-8 cannot be used, using en_US.UTF-8 instead.
+Running 1 tests (2026-09-08 15:35:49-0700, selector `ce-first-prompt-survives-later-event-from-a-new-turn')
+Test ce-first-prompt-survives-later-event-from-a-new-turn backtrace:
+  ert-fail(((should (equal (plist-get meta :preview) expected)) :form 
+  (if (unwind-protect (setq value-281 (apply fn-279 args-280)) (setq f
+  (let (form-description-283) (if (unwind-protect (setq value-281 (app
+  (let ((value-281 'ert-form-evaluation-aborted-282)) (let (form-descr
+  (let* ((fn-279 #'equal) (args-280 (condition-case err (list (plist-g
+  (let ((meta (apply #'ce--parse records))) (let* ((fn-269 #'plist-get
+  ce--expect-preview("FIRST REQUEST" ((type . "response_item") (payloa
+  #f(lambda () [t] (ce--expect-preview "FIRST REQUEST" (ce--user "FIRS
+  #f(compiled-function () #<bytecode -0x105f41d6bf0b0fee>)()
+  handler-bind-1(#f(compiled-function () #<bytecode -0x105f41d6bf0b0fe
+  ert--run-test-internal(#s(ert--test-execution-info :test #s(ert-test
+  ert-run-test(#s(ert-test :name ce-first-prompt-survives-later-event-
+  ert-run-or-rerun-test(#s(ert--stats :selector ce-first-prompt-surviv
+  ert-run-tests(ce-first-prompt-survives-later-event-from-a-new-turn #
+  ert-run-tests-batch(ce-first-prompt-survives-later-event-from-a-new-
+  ert-run-tests-batch-and-exit(ce-first-prompt-survives-later-event-fr
+  eval((ert-run-tests-batch-and-exit 'ce-first-prompt-survives-later-e
+  command-line-1(("-l" "jka-compr" "-L" "/private/tmp/sidebar-review-b
+  command-line()
+  normal-top-level()
+Test ce-first-prompt-survives-later-event-from-a-new-turn condition:
+    (ert-test-failed
+     ((should (equal (plist-get meta :preview) expected)) :form
+      (equal "SECOND REQUEST" "FIRST REQUEST") :value nil :explanation
+      (arrays-of-different-length 14 13 "SECOND REQUEST" "FIRST REQUEST"
+				  first-mismatch-at 0)))
+   FAILED  1/1  ce-first-prompt-survives-later-event-from-a-new-turn (0.001183 sec) at agent/agent-sidebar-codex/review/round-1/contrarian-evidence-tests.el:30
+
+Ran 1 tests, 0 results as expected, 1 unexpected (2026-09-08 15:35:50-0700, 0.045371 sec)
+
+1 unexpected results:
+   FAILED  ce-first-prompt-survives-later-event-from-a-new-turn
+

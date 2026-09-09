@@ -1,0 +1,13 @@
+LANG=C.UTF-8 cannot be used, using en_US.UTF-8 instead.
+Running 8 tests (2026-09-08 13:41:11-0700, selector `t')
+   passed  1/8  reentrancy-ensure-parsed-still-caches-outside-sidebar-mode (0.002139 sec)
+   passed  2/8  reentrancy-error-after-refresh-does-not-charge-new-retry-budget (0.480025 sec)
+   passed  3/8  reentrancy-inner-read-cache-result-survives-outer-read (0.057363 sec)
+   passed  4/8  reentrancy-mode-change-during-read-cannot-recreate-work (0.004969 sec)
+   passed  5/8  reentrancy-mode-reinitialization-keeps-replacement-work (0.072937 sec)
+   passed  6/8  reentrancy-nested-timer-cannot-consume-a-second-head (0.056342 sec)
+   passed  7/8  reentrancy-owner-kill-during-read-cannot-schedule-another-buffer (0.005522 sec)
+   passed  8/8  reentrancy-refresh-retains-old-head-for-new-generation (0.071069 sec)
+
+Ran 8 tests, 8 results as expected, 0 unexpected (2026-09-08 13:41:12-0700, 0.750789 sec)
+

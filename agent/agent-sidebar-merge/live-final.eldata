@@ -1,0 +1,1 @@
+(:pid 3353 :depth 0 :core-library "/Users/ducnguyen/.emacs.d/lisp/agent-shell-sidebar.elc" :provider-library "/Users/ducnguyen/.emacs.d/lisp/agent-sidebar.elc" :compiled t :menu hydra-submenu-agent-shell/agent-sidebar-toggle-sidebar-and-exit :fixture-buffers nil :timer-buffers nil)

@@ -1,0 +1,1 @@
+(:pid 1115 :emacs-version "31.1" :module "/private/tmp/fzf-melpa-validation-20260906/source-pr/installed/fzf-native-20260907.242/source-built/fzf-native-module.so" :total 168 :unexpected 0 :skipped 0 :score (41))

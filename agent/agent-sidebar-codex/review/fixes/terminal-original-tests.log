@@ -1,0 +1,50 @@
+LANG=C.UTF-8 cannot be used, using en_US.UTF-8 instead.
+Running 3 tests (2026-09-08 15:36:13-0700, selector `t')
+TRAILING-SLASH: starts=1, live-children=1, both homes equal by file-equal-p=t
+   passed  1/3  torvalds-codex-home-trailing-slash-reuses-process (0.004287 sec)
+TERM-COLLISION: same-buffer=nil, same-process=nil, child-command=("/bin/sh" "-c" "stty -nl echo rows 22 columns 79 sane 2>/dev/null;if [ $1 = .. ]; then shift; fi; exec \"$@\"" ".." "/bin/sh" "-c" "exec sleep 30" "fixture" "12345678-2222-7222-8222-222222222222"), recorded-session=(claude-cli "12345678-2222-7222-8222-222222222222" "/var/folders/20/4zczrx1s3lq2fv0xmm0gj1fr0000gn/T/sidebar-torvalds-gp6oSp/repo/")
+   passed  2/3  torvalds-term-fallback-distinguishes-resume-id-prefix-collision (0.005417 sec)
+Test torvalds-term-new-session-really-starts-new-process backtrace:
+  gethash(nil nil)
+  (and displayed (gethash (plist-get displayed :id) agent-sidebar--ent
+  (let* ((displayed (get-text-property (line-beginning-position) 'agen
+  agent-sidebar--current-entry()
+  (agent-sidebar--new-context-for-entry (agent-sidebar--current-entry)
+  (cond ((get-text-property (line-beginning-position) 'agent-sidebar-e
+  (let* ((crumb (get-text-property (line-beginning-position) 'agent-si
+  agent-sidebar-new-session()
+  (progn (fset 'agent-shell-sidebar--pop-to vnew) (fset 'vterm nil) (f
+  (unwind-protect (progn (fset 'agent-shell-sidebar--pop-to vnew) (fse
+  (let* ((vnew #'(lambda (buffer) (setq shown buffer))) (old (symbol-f
+  (progn (insert (propertize "fixture row\n" 'agent-sidebar-entry (lis
+  (unwind-protect (progn (insert (propertize "fixture row\n" 'agent-si
+  (save-current-buffer (set-buffer temp-buffer) (unwind-protect (progn
+  (let ((temp-buffer (generate-new-buffer " *temp*" t))) (save-current
+  (let ((agent-sidebar-claude-cli-command "/bin/cat") shown first-buff
+  (progn (let ((agent-sidebar-claude-cli-command "/bin/cat") shown fir
+  (unwind-protect (progn (let ((agent-sidebar-claude-cli-command "/bin
+  (let ((wconfig (current-window-configuration))) (unwind-protect (pro
+  (unwind-protect (let ((wconfig (current-window-configuration))) (unw
+  (let* ((temporary (make-temp-file "sidebar-torvalds-" t)) (directory
+  #f(lambda () [t] (let* ((temporary (make-temp-file "sidebar-torvalds
+  #f(compiled-function () #<bytecode 0xa8ceb6d786dec67>)()
+  handler-bind-1(#f(compiled-function () #<bytecode 0xa8ceb6d786dec67>
+  ert--run-test-internal(#s(ert--test-execution-info :test #s(ert-test
+  ert-run-test(#s(ert-test :name torvalds-term-new-session-really-star
+  ert-run-or-rerun-test(#s(ert--stats :selector t :tests ... :test-map
+  ert-run-tests(t #f(compiled-function (event-type &rest event-args) #
+  ert-run-tests-batch(t)
+  ert-run-tests-batch-and-exit(t)
+  eval((ert-run-tests-batch-and-exit 't) t)
+  command-line-1(("-l" "jka-compr" "-L" "/private/tmp/sidebar-review-w
+  command-line()
+  normal-top-level()
+Test torvalds-term-new-session-really-starts-new-process condition:
+    (wrong-type-argument hash-table-p nil)
+   FAILED  3/3  torvalds-term-new-session-really-starts-new-process (0.000509 sec) at agent/agent-sidebar-codex/review/round-1/torvalds-tests.el:89
+
+Ran 3 tests, 2 results as expected, 1 unexpected (2026-09-08 15:36:13-0700, 0.067935 sec)
+
+1 unexpected results:
+   FAILED  torvalds-term-new-session-really-starts-new-process
+

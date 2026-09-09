@@ -1,0 +1,73 @@
+LANG=C.UTF-8 cannot be used, using en_US.UTF-8 instead.
+CE2 SOURCE BEFORE="/Users/ducnguyen/.emacs.d/agent/agent-shell-sidebar/review/round-2/contrarian-evidence-mutant-trim-directory.el"
+Running 4 tests (2026-09-08 13:32:15-0700, selector `t')
+   passed  1/4  ce2-bounded-read-excludes-late-field-without-any-boundary (0.001424 sec)
+CE2-MATRIX utf8=nil newline=nil continues=nil bytes=8191 header=(:session-id "intact")
+CE2-MATRIX utf8=nil newline=nil continues=nil bytes=8192 header=(:session-id "intact")
+CE2-MATRIX utf8=nil newline=nil continues=nil bytes=8193 header=(:error "Transcript metadata exceeds the 8192-byte read limit")
+CE2-MATRIX utf8=nil newline=nil continues=t bytes=8191 header=(:error "Transcript metadata exceeds the 8192-byte read limit")
+CE2-MATRIX utf8=nil newline=nil continues=t bytes=8192 header=(:error "Transcript metadata exceeds the 8192-byte read limit")
+CE2-MATRIX utf8=nil newline=nil continues=t bytes=8193 header=(:error "Transcript metadata exceeds the 8192-byte read limit")
+CE2-MATRIX utf8=nil newline=t continues=nil bytes=8191 header=(:session-id "intact")
+CE2-MATRIX utf8=nil newline=t continues=nil bytes=8192 header=(:session-id "intact")
+CE2-MATRIX utf8=nil newline=t continues=nil bytes=8193 header=(:error "Transcript metadata exceeds the 8192-byte read limit")
+CE2-MATRIX utf8=nil newline=t continues=t bytes=8191 header=(:session-id "intact" :error "Transcript metadata exceeds the 8192-byte read limit")
+CE2-MATRIX utf8=nil newline=t continues=t bytes=8192 header=(:session-id "intact" :error "Transcript metadata exceeds the 8192-byte read limit")
+CE2-MATRIX utf8=nil newline=t continues=t bytes=8193 header=(:error "Transcript metadata exceeds the 8192-byte read limit")
+CE2-MATRIX utf8=t newline=nil continues=nil bytes=8191 header=(:session-id "intact")
+CE2-MATRIX utf8=t newline=nil continues=nil bytes=8192 header=(:session-id "intact")
+CE2-MATRIX utf8=t newline=nil continues=nil bytes=8193 header=(:error "Transcript metadata exceeds the 8192-byte read limit")
+CE2-MATRIX utf8=t newline=nil continues=t bytes=8191 header=(:error "Transcript metadata exceeds the 8192-byte read limit")
+CE2-MATRIX utf8=t newline=nil continues=t bytes=8192 header=(:error "Transcript metadata exceeds the 8192-byte read limit")
+CE2-MATRIX utf8=t newline=nil continues=t bytes=8193 header=(:error "Transcript metadata exceeds the 8192-byte read limit")
+CE2-MATRIX utf8=t newline=t continues=nil bytes=8191 header=(:session-id "intact")
+CE2-MATRIX utf8=t newline=t continues=nil bytes=8192 header=(:session-id "intact")
+CE2-MATRIX utf8=t newline=t continues=nil bytes=8193 header=(:error "Transcript metadata exceeds the 8192-byte read limit")
+CE2-MATRIX utf8=t newline=t continues=t bytes=8191 header=(:session-id "intact" :error "Transcript metadata exceeds the 8192-byte read limit")
+CE2-MATRIX utf8=t newline=t continues=t bytes=8192 header=(:session-id "intact" :error "Transcript metadata exceeds the 8192-byte read limit")
+CE2-MATRIX utf8=t newline=t continues=t bytes=8193 header=(:error "Transcript metadata exceeds the 8192-byte read limit")
+   passed  2/4  ce2-cutoff-matrix-distinguishes-bytes-lines-and-eof (0.011824 sec)
+   passed  3/4  ce2-first-metadata-boundary-wins (0.001287 sec)
+Created .agent-shell/transcripts/fixture.md
+Test ce2-real-writer-keeps-tab-and-space-path-suffix backtrace:
+  ert-fail(((should (equal (plist-get header :cwd) directory)) :form (
+  (if (unwind-protect (setq value-152 (apply fn-150 args-151)) (setq f
+  (let (form-description-154) (if (unwind-protect (setq value-152 (app
+  (let ((value-152 'ert-form-evaluation-aborted-153)) (let (form-descr
+  (let* ((fn-150 #'equal) (args-151 (condition-case err (list (plist-g
+  (let ((header (agent-shell-sidebar--parse-header-from-file file))) (
+  (let* ((directory (expand-file-name "project\11 " root)) (trimmed (e
+  (progn (make-directory (file-name-directory file) t) (let* ((directo
+  (unwind-protect (progn (make-directory (file-name-directory file) t)
+  (let* ((root (file-name-as-directory (make-temp-file "sidebar-ce2-" 
+  #f(lambda () [t] (let* ((root (file-name-as-directory ...)) (file (e
+  #f(compiled-function () #<bytecode 0x183145d065a341e8>)()
+  handler-bind-1(#f(compiled-function () #<bytecode 0x183145d065a341e8
+  ert--run-test-internal(#s(ert--test-execution-info :test #s(ert-test
+  ert-run-test(#s(ert-test :name ce2-real-writer-keeps-tab-and-space-p
+  ert-run-or-rerun-test(#s(ert--stats :selector t :tests ... :test-map
+  ert-run-tests(t #f(compiled-function (event-type &rest event-args) #
+  ert-run-tests-batch(nil)
+  ert-run-tests-batch-and-exit()
+  command-line-1(("-l" "jka-compr" "-L" "/Users/ducnguyen/.emacs.d/elp
+  command-line()
+  normal-top-level()
+Test ce2-real-writer-keeps-tab-and-space-path-suffix condition:
+    (ert-test-failed
+     ((should (equal (plist-get header :cwd) directory)) :form
+      (equal
+       "/var/folders/20/4zczrx1s3lq2fv0xmm0gj1fr0000gn/T/sidebar-ce2-CL4EWQ/project"
+       "/var/folders/20/4zczrx1s3lq2fv0xmm0gj1fr0000gn/T/sidebar-ce2-CL4EWQ/project\11 ")
+      :value nil :explanation
+      (arrays-of-different-length 75 77
+				  "/var/folders/20/4zczrx1s3lq2fv0xmm0gj1fr0000gn/T/sidebar-ce2-CL4EWQ/project"
+				  "/var/folders/20/4zczrx1s3lq2fv0xmm0gj1fr0000gn/T/sidebar-ce2-CL4EWQ/project\11 "
+				  first-mismatch-at 75)))
+   FAILED  4/4  ce2-real-writer-keeps-tab-and-space-path-suffix (0.001042 sec) at agent/agent-shell-sidebar/review/round-2/contrarian-evidence-probe.el:60
+
+Ran 4 tests, 3 results as expected, 1 unexpected (2026-09-08 13:32:15-0700, 0.068344 sec)
+
+1 unexpected results:
+   FAILED  ce2-real-writer-keeps-tab-and-space-path-suffix
+
+CE2 SOURCE AFTER="/Users/ducnguyen/.emacs.d/agent/agent-shell-sidebar/review/round-2/contrarian-evidence-mutant-trim-directory.el"

@@ -1,0 +1,15 @@
+[submodule "vendor/auto-compile"]
+	path = vendor/auto-compile
+	url = git@github.com:emacscollective/auto-compile.git
+[submodule "vendor/packed"]
+	path = vendor/packed
+	url = git@github.com:emacscollective/packed.git
+[submodule "vendor/pulsar"]
+	path = vendor/pulsar
+	url = https://gitlab.com/protesilaos/pulsar.git
+[submodule "vendor/fzf-native"]
+	path = vendor/fzf-native
+	url = https://github.com/dangduc/fzf-native.git
+[submodule "vendor/fzfa"]
+	path = vendor/fzfa
+	url = https://github.com/jojojames/fzfa

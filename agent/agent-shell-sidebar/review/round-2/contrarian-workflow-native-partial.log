@@ -1,0 +1,13 @@
+LANG=C.UTF-8 cannot be used, using en_US.UTF-8 instead.
+Loading /Users/ducnguyen/.emacs.d/agent/agent-shell-sidebar/review/round-2/contrarian-workflow.el (source)...
+CW2 reviewed source: /Users/ducnguyen/.emacs.d/agent/agent-shell-sidebar/review/integration/lisp/agent-shell-sidebar.el
+CW2 native policy before ERT: t
+Running 1 tests (2026-09-08 13:46:20-0700, selector `"^cw2-delete-partial-success-retains-failed-visible-mark$"')
+Deleted 1. Retained 1 mark(s): Fixture deletion denied
+CW2 partial deletion: actual file deleted; failed file retained with visible D
+   passed  1/1  cw2-delete-partial-success-retains-failed-visible-mark (0.420982 sec)
+
+Ran 1 tests, 1 results as expected, 0 unexpected (2026-09-08 13:46:20-0700, 0.421186 sec)
+
+CW2 native policy after ERT: t
+CW2 final source: /Users/ducnguyen/.emacs.d/agent/agent-shell-sidebar/review/integration/lisp/agent-shell-sidebar.el

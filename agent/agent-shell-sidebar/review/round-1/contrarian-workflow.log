@@ -1,0 +1,102 @@
+LANG=C.UTF-8 cannot be used, using en_US.UTF-8 instead.
+Running 8 tests (2026-09-08 12:59:08-0700, selector `t')
+   passed  1/8  workflow-control-cancel-agent-selector-never-starts (0.000105 sec)
+   passed  2/8  workflow-control-cancel-deletion-retains-marks (0.001150 sec)
+   passed  3/8  workflow-control-discovery-retains-only-normal-md-fixture (0.001453 sec)
+   passed  4/8  workflow-control-mru-disabled-preserves-dedicated-window (0.000132 sec)
+   passed  5/8  workflow-control-two-window-points-survive-redraw (0.000388 sec)
+Disabled refresh: callback scans=1, rearmed=nil
+Test workflow-disable-refresh-before-pending-callback backtrace:
+  ert-fail(((should (= calls 0)) :form (= 1 0) :value nil))
+  (if (unwind-protect (setq value-21 (apply fn-19 args-20)) (setq form
+  (let (form-description-23) (if (unwind-protect (setq value-21 (apply
+  (let ((value-21 'ert-form-evaluation-aborted-22)) (let (form-descrip
+  (let* ((fn-19 #'=) (args-20 (condition-case err (list calls 0) (erro
+  (progn (setq agent-shell-sidebar-refresh-timer nil) (let* ((vnew #'(
+  (unwind-protect (progn (setq agent-shell-sidebar-refresh-timer nil) 
+  (let ((pending agent-shell-sidebar--refresh-timer-object)) (unwind-p
+  (let ((calls 0) (owner (current-buffer)) (agent-shell-sidebar-refres
+  (progn (agent-shell-sidebar-mode) (let ((calls 0) (owner (current-bu
+  (unwind-protect (progn (agent-shell-sidebar-mode) (let ((calls 0) (o
+  (save-current-buffer (set-buffer temp-buffer) (unwind-protect (progn
+  (let ((temp-buffer (generate-new-buffer " *temp*" t))) (save-current
+  (let ((agent-shell-sidebar-refresh-timer nil) (agent-shell-sidebar--
+  #f(lambda () [t] (let ((agent-shell-sidebar-refresh-timer nil) (agen
+  #f(compiled-function () #<bytecode -0xbe350614440c685>)()
+  handler-bind-1(#f(compiled-function () #<bytecode -0xbe350614440c685
+  ert--run-test-internal(#s(ert--test-execution-info :test #s(ert-test
+  ert-run-test(#s(ert-test :name workflow-disable-refresh-before-pendi
+  ert-run-or-rerun-test(#s(ert--stats :selector t :tests ... :test-map
+  ert-run-tests(t #f(compiled-function (event-type &rest event-args) #
+  ert-run-tests-batch(nil)
+  ert-run-tests-batch-and-exit()
+  command-line-1(("-l" "jka-compr" "-L" "/Users/ducnguyen/.emacs.d/elp
+  command-line()
+  normal-top-level()
+Test workflow-disable-refresh-before-pending-callback condition:
+    (ert-test-failed ((should (= calls 0)) :form (= 1 0) :value nil))
+   FAILED  6/8  workflow-disable-refresh-before-pending-callback (0.000126 sec) at agent/agent-shell-sidebar/review/round-1/contrarian-workflow.el:49
+FIFO probe: FIFO type=nil modes="prw-r--r--" regular=nil discovered=("/var/folders/20/4zczrx1s3lq2fv0xmm0gj1fr0000gn/T/sidebar-workflow-fifo-lywm43m4/.agent-shell/transcripts/pending.md")
+
+FIFO probe: timeout=t elapsed=3.006
+Test workflow-nonregular-fifo-never-blocks-header-parsing backtrace:
+  ert-fail(((should-not blocked) :form blocked :value t))
+  (if (not (unwind-protect (setq value-5 blocked) (setq form-descripti
+  (let (form-description-6) (if (not (unwind-protect (setq value-5 blo
+  (let ((value-5 (gensym "ert-form-evaluation-aborted-"))) (let (form-
+  (let* ((result (let ((temp-buffer (generate-new-buffer " *temp*" t))
+  #f(lambda () [t] (let* ((result (let ... ...)) (blocked (alist-get .
+  #f(compiled-function () #<bytecode -0xbe350614440c685>)()
+  handler-bind-1(#f(compiled-function () #<bytecode -0xbe350614440c685
+  ert--run-test-internal(#s(ert--test-execution-info :test #s(ert-test
+  ert-run-test(#s(ert-test :name workflow-nonregular-fifo-never-blocks
+  ert-run-or-rerun-test(#s(ert--stats :selector t :tests ... :test-map
+  ert-run-tests(t #f(compiled-function (event-type &rest event-args) #
+  ert-run-tests-batch(nil)
+  ert-run-tests-batch-and-exit()
+  command-line-1(("-l" "jka-compr" "-L" "/Users/ducnguyen/.emacs.d/elp
+  command-line()
+  normal-top-level()
+Test workflow-nonregular-fifo-never-blocks-header-parsing condition:
+    (ert-test-failed ((should-not blocked) :form blocked :value t))
+   FAILED  7/8  workflow-nonregular-fifo-never-blocks-header-parsing (3.043742 sec) at agent/agent-shell-sidebar/review/round-1/contrarian-workflow.el:20
+Ordinary-window toggle: error="Attempt to delete minibuffer or sole ordinary window" side=nil windows=1
+Test workflow-toggle-works-after-sidebar-buffer-switched-to-normal-window backtrace:
+  ert-fail(((should-not error-message) :form error-message :value "Att
+  (if (not (unwind-protect (setq value-59 error-message) (setq form-de
+  (let (form-description-60) (if (not (unwind-protect (setq value-59 e
+  (let ((value-59 (gensym "ert-form-evaluation-aborted-"))) (let (form
+  (let ((agent-shell-sidebar-name (buffer-name)) (agent-shell-sidebar-
+  (progn (agent-shell-sidebar-mode) (set-window-buffer (selected-windo
+  (unwind-protect (progn (agent-shell-sidebar-mode) (set-window-buffer
+  (save-current-buffer (set-buffer temp-buffer) (unwind-protect (progn
+  (let ((temp-buffer (generate-new-buffer " *temp*" t))) (save-current
+  (let ((agent-shell-sidebar-refresh-timer nil) (agent-shell-sidebar--
+  (progn (delete-other-windows) (let ((agent-shell-sidebar-refresh-tim
+  (unwind-protect (progn (delete-other-windows) (let ((agent-shell-sid
+  (let ((wconfig (current-window-configuration))) (unwind-protect (pro
+  #f(lambda () [t] (let ((wconfig (current-window-configuration))) (un
+  #f(compiled-function () #<bytecode -0xbe350614440c685>)()
+  handler-bind-1(#f(compiled-function () #<bytecode -0xbe350614440c685
+  ert--run-test-internal(#s(ert--test-execution-info :test #s(ert-test
+  ert-run-test(#s(ert-test :name workflow-toggle-works-after-sidebar-b
+  ert-run-or-rerun-test(#s(ert--stats :selector t :tests ... :test-map
+  ert-run-tests(t #f(compiled-function (event-type &rest event-args) #
+  ert-run-tests-batch(nil)
+  ert-run-tests-batch-and-exit()
+  command-line-1(("-l" "jka-compr" "-L" "/Users/ducnguyen/.emacs.d/elp
+  command-line()
+  normal-top-level()
+Test workflow-toggle-works-after-sidebar-buffer-switched-to-normal-window condition:
+    (ert-test-failed
+     ((should-not error-message) :form error-message :value
+      "Attempt to delete minibuffer or sole ordinary window"))
+   FAILED  8/8  workflow-toggle-works-after-sidebar-buffer-switched-to-normal-window (0.000163 sec) at agent/agent-shell-sidebar/review/round-1/contrarian-workflow.el:143
+
+Ran 8 tests, 5 results as expected, 3 unexpected (2026-09-08 12:59:11-0700, 3.149993 sec)
+
+3 unexpected results:
+   FAILED  workflow-disable-refresh-before-pending-callback
+   FAILED  workflow-nonregular-fifo-never-blocks-header-parsing
+   FAILED  workflow-toggle-works-after-sidebar-buffer-switched-to-normal-window
+

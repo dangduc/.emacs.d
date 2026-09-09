@@ -1,0 +1,12 @@
+{
+  "frontend": "helm",
+  "mode": "flood",
+  "query": "alpha",
+  "error": null,
+  "child_status": 0,
+  "variant": "current",
+  "sent": [],
+  "first_display": 0.16035890579223633,
+  "reader_done_at": 0.5329170227050781,
+  "visible_samples_before_eof": 16
+}

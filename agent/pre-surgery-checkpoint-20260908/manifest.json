@@ -1,0 +1,49 @@
+{
+  "created_at": "2026-09-09T00:08:56.065772+00:00",
+  "root_branch": "migrate-emacs30",
+  "root_parent": "553ce38f7efebcf6e9cd865193d0ae0baa4f650d",
+  "scope": "All non-ignored changes in the root repository and initialized submodules. Existing ignored files remain on disk and outside this checkpoint.",
+  "submodule_checkpoints": [
+    {
+      "path": "vendor/fzf-native",
+      "original_branch": "main",
+      "original_head": "0c971fd76969cbd66e78183d510c05f77199fdcb",
+      "checkpoint_branch": "codex/checkpoint-before-emacs-surgery-20260908",
+      "checkpoint_head": "acd36a8739d668a3b96b0b180394e08254d6531b",
+      "git_directory": "/Users/ducnguyen/.emacs.d/vendor/fzf-native/.git"
+    },
+    {
+      "path": "vendor/fzfa",
+      "original_branch": "fix-candidate-not-streaming",
+      "original_head": "938d035d051006c491c783032f946a7e4a45fca6",
+      "checkpoint_branch": "codex/checkpoint-before-emacs-surgery-20260908",
+      "checkpoint_head": "24799c887d3d929817026499c3cfd3ac4b9561f5",
+      "git_directory": "/Users/ducnguyen/.emacs.d/.git/modules/vendor/fzfa"
+    }
+  ],
+  "registered_repositories": [
+    {
+      "path": "fruity-theme",
+      "url": "https://github.com/jojojames/fruity-theme.git",
+      "head": "1745fe534574dbefb2f4ff866ecd47da3e9e8dcb",
+      "git_directory": "/Users/ducnguyen/.emacs.d/.git/modules/fruity-theme"
+    },
+    {
+      "path": "melpa",
+      "url": "https://github.com/dangduc/melpa",
+      "head": "763d737b2d7a618750e7074707cde6030cc38fd4",
+      "git_directory": "/Users/ducnguyen/.emacs.d/.git/modules/melpa"
+    },
+    {
+      "path": "agent/vegeta-gap-2026-09-08/vegeta",
+      "url": "https://github.com/dangduc/vegeta.git",
+      "head": "8f20c25212ffe56db8ae3e9d177102b44655e4eb",
+      "git_directory": "/Users/ducnguyen/.emacs.d/.git/modules/agent/vegeta-gap-2026-09-08/vegeta"
+    }
+  ],
+  "fzf_native_recovery_bundle": {
+    "path": "/Users/ducnguyen/.emacs.d/.git/checkpoints/fzf-native-before-emacs-surgery-20260908.bundle",
+    "bytes": 7832687,
+    "reason": "The existing linked worktree prevents Git from absorbing this object database into the parent repository."
+  }
+}

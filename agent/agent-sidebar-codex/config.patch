@@ -1,0 +1,26 @@
+--- /Users/ducnguyen/.emacs.d/agent/agent-sidebar-codex/before-2-package-declarations.el
++++ /Users/ducnguyen/.emacs.d/lisp/package-declarations.el
+@@ -489,11 +489,13 @@
+ ^agent-shell^
+ ^^^^^^^^----------------------------
+   _c_: start Claude agent
++  _x_: start Codex agent
+   _s_: agent-shell (any agent)
+   _b_: chat sidebar
+   _r_: restart agent
+   _h_: help menu "
+     ("c" agent-shell-anthropic-start-claude-code)
++    ("x" agent-shell-openai-start-codex)
+     ("s" agent-shell)
+     ("b" agent-sidebar-toggle-sidebar)
+     ("r" agent-shell-restart)
+@@ -1497,7 +1499,8 @@
+ (use-package agent-shell
+   :commands (agent-shell
+              agent-shell-help-menu
+-             agent-shell-anthropic-start-claude-code)
++             agent-shell-anthropic-start-claude-code
++             agent-shell-openai-start-codex)
+   :config
+   (require 'cl-lib)
+   (require 'map)

@@ -1,0 +1,70 @@
+LANG=C.UTF-8 cannot be used, using en_US.UTF-8 instead.
+Running 6 tests (2026-09-08 15:31:02-0700, selector `t')
+   passed  1/6  ce-event-only-history-is-supported (0.001027 sec)
+Test ce-first-prompt-survives-later-event-from-a-new-turn backtrace:
+  ert-fail(((should (equal (plist-get meta :preview) expected)) :form 
+  (if (unwind-protect (setq value-281 (apply fn-279 args-280)) (setq f
+  (let (form-description-283) (if (unwind-protect (setq value-281 (app
+  (let ((value-281 'ert-form-evaluation-aborted-282)) (let (form-descr
+  (let* ((fn-279 #'equal) (args-280 (condition-case err (list (plist-g
+  (let ((meta (apply #'ce--parse records))) (let* ((fn-269 #'plist-get
+  ce--expect-preview("FIRST REQUEST" ((type . "response_item") (payloa
+  #f(lambda () [t] (ce--expect-preview "FIRST REQUEST" (ce--user "FIRS
+  #f(compiled-function () #<bytecode 0x730d2cb314e2358>)()
+  handler-bind-1(#f(compiled-function () #<bytecode 0x730d2cb314e2358>
+  ert--run-test-internal(#s(ert--test-execution-info :test #s(ert-test
+  ert-run-test(#s(ert-test :name ce-first-prompt-survives-later-event-
+  ert-run-or-rerun-test(#s(ert--stats :selector t :tests [... ... ... 
+  ert-run-tests(t #f(compiled-function (event-type &rest event-args) #
+  ert-run-tests-batch(t)
+  ert-run-tests-batch-and-exit(t)
+  eval((ert-run-tests-batch-and-exit 't) t)
+  command-line-1(("-l" "jka-compr" "-L" "/private/tmp/sidebar-review-o
+  command-line()
+  normal-top-level()
+Test ce-first-prompt-survives-later-event-from-a-new-turn condition:
+    (ert-test-failed
+     ((should (equal (plist-get meta :preview) expected)) :form
+      (equal "SECOND REQUEST" "FIRST REQUEST") :value nil :explanation
+      (arrays-of-different-length 14 13 "SECOND REQUEST" "FIRST REQUEST"
+				  first-mismatch-at 0)))
+   FAILED  2/6  ce-first-prompt-survives-later-event-from-a-new-turn (0.000523 sec) at agent/agent-sidebar-codex/review/round-1/contrarian-evidence-tests.el:30
+   passed  3/6  ce-fork-identity-is-not-inherited-parent-identity (0.000660 sec)
+   passed  4/6  ce-inline-plugin-markup-is-user-text (0.000446 sec)
+   passed  5/6  ce-mutation-control-kills-disabled-context-filter (0.000843 sec)
+Test ce-plugin-inventory-is-context-not-the-first-prompt backtrace:
+  ert-fail(((should (equal (plist-get meta :preview) expected)) :form 
+  (if (unwind-protect (setq value-281 (apply fn-279 args-280)) (setq f
+  (let (form-description-283) (if (unwind-protect (setq value-281 (app
+  (let ((value-281 'ert-form-evaluation-aborted-282)) (let (form-descr
+  (let* ((fn-279 #'equal) (args-280 (condition-case err (list (plist-g
+  (let ((meta (apply #'ce--parse records))) (let* ((fn-269 #'plist-get
+  ce--expect-preview("FIRST REQUEST" ((type . "response_item") (payloa
+  #f(lambda () [t] (ce--expect-preview "FIRST REQUEST" (ce--user "<rec
+  #f(compiled-function () #<bytecode 0x730d2cb314e2358>)()
+  handler-bind-1(#f(compiled-function () #<bytecode 0x730d2cb314e2358>
+  ert--run-test-internal(#s(ert--test-execution-info :test #s(ert-test
+  ert-run-test(#s(ert-test :name ce-plugin-inventory-is-context-not-th
+  ert-run-or-rerun-test(#s(ert--stats :selector t :tests ... :test-map
+  ert-run-tests(t #f(compiled-function (event-type &rest event-args) #
+  ert-run-tests-batch(t)
+  ert-run-tests-batch-and-exit(t)
+  eval((ert-run-tests-batch-and-exit 't) t)
+  command-line-1(("-l" "jka-compr" "-L" "/private/tmp/sidebar-review-o
+  command-line()
+  normal-top-level()
+Test ce-plugin-inventory-is-context-not-the-first-prompt condition:
+    (ert-test-failed
+     ((should (equal (plist-get meta :preview) expected)) :form
+      (equal "<recommended_plugins>" "FIRST REQUEST") :value nil
+      :explanation
+      (arrays-of-different-length 21 13 "<recommended_plugins>"
+				  "FIRST REQUEST" first-mismatch-at 0)))
+   FAILED  6/6  ce-plugin-inventory-is-context-not-the-first-prompt (0.000483 sec) at agent/agent-sidebar-codex/review/round-1/contrarian-evidence-tests.el:39
+
+Ran 6 tests, 4 results as expected, 2 unexpected (2026-09-08 15:31:02-0700, 0.070133 sec)
+
+2 unexpected results:
+   FAILED  ce-first-prompt-survives-later-event-from-a-new-turn
+   FAILED  ce-plugin-inventory-is-context-not-the-first-prompt
+

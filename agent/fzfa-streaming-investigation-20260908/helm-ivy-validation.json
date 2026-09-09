@@ -1,0 +1,30 @@
+{
+  "helm": {
+    "single": {
+      "first_display": 0.16035890579223633,
+      "reader_done_at": 0.5329170227050781,
+      "visible_samples_before_eof": 16
+    },
+    "multi": {
+      "first_display": 0.043118953704833984,
+      "reader_done_at": 0.6002998352050781,
+      "visible_samples_before_eof": 23
+    },
+    "partial_display_samples": 23,
+    "query_changes": "alpha, bravo, no matches, alpha, empty input passed"
+  },
+  "ivy": {
+    "single": {
+      "first_display": 0.2570478916168213,
+      "reader_done_at": 0.6237618923187256,
+      "visible_samples_before_eof": 16
+    },
+    "multi": {
+      "first_display": 0.21625208854675293,
+      "reader_done_at": 0.5484941005706787,
+      "visible_samples_before_eof": 14
+    },
+    "partial_display_samples": 14,
+    "query_changes": "alpha, bravo, no matches, alpha, empty input passed"
+  }
+}

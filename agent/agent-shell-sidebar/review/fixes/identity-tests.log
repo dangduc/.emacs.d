@@ -1,0 +1,24 @@
+LANG=C.UTF-8 cannot be used, using en_US.UTF-8 instead.
+Running 13 tests (2026-09-08 13:08:57-0700, selector `t')
+   passed   1/13  identity-active-session-replaces-pending-identity (0.000501 sec)
+   passed   2/13  identity-ambiguous-alias-obeys-explicit-selection-on-every-visit (0.408052 sec)
+Deleted 1 transcript(s)
+   passed   3/13  identity-deletion-ignores-absent-owner-paths (0.367754 sec)
+Deleted 0. Retained 1 mark(s): Transcript belongs to an open agent-shell: /var/folders/20/4zczrx1s3lq2fv0xmm0gj1fr0000gn/T/sidebar-identity-QBaW9b/alias/.agent-shell/transcripts/session.md
+Deleted 0. Retained 1 mark(s): Transcript belongs to an open agent-shell: /var/folders/20/4zczrx1s3lq2fv0xmm0gj1fr0000gn/T/sidebar-identity-QBaW9b/real/.agent-shell/transcripts/session.md
+   passed   4/13  identity-deletion-protects-directory-alias-in-both-directions (0.002363 sec)
+Deleted 1. Retained 1 mark(s): Transcript belongs to an open agent-shell: /var/folders/20/4zczrx1s3lq2fv0xmm0gj1fr0000gn/T/sidebar-identity-qiMjGg/hard-link.md
+   passed   5/13  identity-deletion-protects-hard-links-and-removes-distinct-copy (0.015939 sec)
+Deleted 0. Retained 1 mark(s): Fixture stat failure
+   passed   6/13  identity-deletion-retains-mark-when-ownership-stat-fails (0.001863 sec)
+   passed   7/13  identity-missing-agent-uses-selected-config-before-reuse (0.001286 sec)
+Installed Claude maker: fresh-alists=t equivalent=t visits=2 starts=1
+   passed   8/13  identity-real-config-maker-reuses-across-fresh-resolutions (0.001455 sec)
+   passed   9/13  identity-removed-config-retains-exact-live-session-access (0.001182 sec)
+   passed  10/13  identity-same-names-do-not-cross-config-directory-or-session (0.001844 sec)
+   passed  11/13  identity-substring-alias-reuses-connecting-and-active-shell (0.001695 sec)
+   passed  12/13  identity-toggle-preserves-ordinary-view-and-removes-only-side-window (0.002553 sec)
+   passed  13/13  identity-unconfigured-exact-name-still-refuses-multiple-configs (0.000240 sec)
+
+Ran 13 tests, 13 results as expected, 0 unexpected (2026-09-08 13:08:58-0700, 0.807231 sec)
+

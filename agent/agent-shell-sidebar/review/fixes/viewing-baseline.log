@@ -1,0 +1,54 @@
+LANG=C.UTF-8 cannot be used, using en_US.UTF-8 instead.
+Running 3 tests (2026-09-08 13:30:54-0700, selector `t')
+   passed  1/3  viewing-missing-and-unreadable-files-retain-readable-error (0.002717 sec)
+   passed  2/3  viewing-regular-transcript-retains-real-view-mode (0.002482 sec)
+Test viewing-rejects-nonregular-replacements-before-file-open backtrace:
+  ert-fail(((should-error (agent-shell-sidebar-open-transcript) :type 
+  ert--should-error-handle-error(#f(lambda () [(form-description-159 (
+  (condition-case -condition- (unwind-protect (setq value-157 (apply f
+  (let ((errorp160 nil) (form-description-fn-161 #'(lambda nil form-de
+  (let (form-description-159) (let ((errorp160 nil) (form-description-
+  (let ((value-157 'ert-form-evaluation-aborted-158)) (let (form-descr
+  (let* ((fn-155 #'agent-shell-sidebar-open-transcript) (args-156 (con
+  (let ((err (let* ((fn-155 #'agent-shell-sidebar-open-transcript) (ar
+  (progn (fset 'find-file-noselect vnew) (let ((err (let* ((fn-155 #'a
+  (unwind-protect (progn (fset 'find-file-noselect vnew) (let ((err (l
+  (let* ((vnew #'(lambda (&rest _) (ert-fail "Nonregular path reached 
+  (progn (agent-shell-sidebar-mode) (agent-shell-sidebar-refresh) (got
+  (unwind-protect (progn (agent-shell-sidebar-mode) (agent-shell-sideb
+  (save-current-buffer (set-buffer temp-buffer) (unwind-protect (progn
+  (let ((temp-buffer (generate-new-buffer " *temp*" t))) (save-current
+  (progn (fset 'agent-shell-sidebar--pop-to vnew) (fset 'agent-shell-b
+  (unwind-protect (progn (fset 'agent-shell-sidebar--pop-to vnew) (fse
+  (let* ((vnew #'(lambda nil nil)) (vnew #'(lambda nil nil)) (vnew #'(
+  (unwind-protect (let* ((vnew #'(lambda nil nil)) (vnew #'(lambda nil
+  (let* ((root (file-name-as-directory (make-temp-file "sidebar-viewin
+  (let ((kind (car tail))) (let* ((root (file-name-as-directory (make-
+  (while tail (let ((kind (car tail))) (let* ((root (file-name-as-dire
+  (let ((tail '(fifo directory symlink))) (while tail (let ((kind (car
+  #f(lambda () [t] (let ((tail '...)) (while tail (let (...) (let* ...
+  #f(compiled-function () #<bytecode -0x1c00de2e31e7528d>)()
+  handler-bind-1(#f(compiled-function () #<bytecode -0x1c00de2e31e7528
+  ert--run-test-internal(#s(ert--test-execution-info :test ... :result
+  ert-run-test(#s(ert-test :name viewing-rejects-nonregular-replacemen
+  ert-run-or-rerun-test(#s(ert--stats :selector t :tests ... :test-map
+  ert-run-tests(t #f(compiled-function (event-type &rest event-args) #
+  ert-run-tests-batch(nil)
+  ert-run-tests-batch-and-exit()
+  command-line-1(("-l" "jka-compr" "-L" "/Users/ducnguyen/.emacs.d/elp
+  command-line()
+  normal-top-level()
+Test viewing-rejects-nonregular-replacements-before-file-open condition:
+    (ert-test-failed
+     ((should-error (agent-shell-sidebar-open-transcript) :type
+		    'user-error)
+      :form (agent-shell-sidebar-open-transcript) :condition
+      (ert-test-failed "Nonregular path reached file open") :fail-reason
+      "the error signaled did not have the expected type"))
+   FAILED  3/3  viewing-rejects-nonregular-replacements-before-file-open (0.002457 sec) at agent/agent-shell-sidebar/review/fixes/viewing-tests.el:57
+
+Ran 3 tests, 2 results as expected, 1 unexpected (2026-09-08 13:30:54-0700, 0.074873 sec)
+
+1 unexpected results:
+   FAILED  viewing-rejects-nonregular-replacements-before-file-open
+

@@ -1,0 +1,16 @@
+
+Running 8 tests (2026-09-06 19:48:01-0700, selector ‘(member fzf-native-score-with-default-slab-test fzf-native-score-case-mode-smart-test fzf-native-utf8-exact-match-test fzf-native-utf8-fuzzy-match-test fzf-native-utf8-case-ignore-length-changing-fold-test fzf-native-utf8-normalization-test fzf-native-utf8-position-test fzf-native-utf8-score-all-test)’)
+   passed  1/8  fzf-native-score-with-default-slab-test (0.000182 sec)
+   passed  2/8  fzf-native-score-case-mode-smart-test (0.000043 sec)
+   passed  3/8  fzf-native-utf8-exact-match-test (0.000108 sec)
+   passed  4/8  fzf-native-utf8-fuzzy-match-test (0.000048 sec)
+   passed  5/8  fzf-native-utf8-case-ignore-length-changing-fold-test (0.000071 sec)
+   passed  6/8  fzf-native-utf8-normalization-test (0.000044 sec)
+   passed  7/8  fzf-native-utf8-position-test (0.000384 sec)
+   passed  8/8  fzf-native-utf8-score-all-test (0.000196 sec)
+
+Ran 8 tests, 8 results as expected, 0 unexpected (2026-09-06 19:48:01-0700, 0.001259 sec)
+
+Installed=/private/tmp/fzf-melpa-validation-20260906/stable/installed/fzf-native-2.8
+Module=bundled
+Emacs=31.1 PID=37172

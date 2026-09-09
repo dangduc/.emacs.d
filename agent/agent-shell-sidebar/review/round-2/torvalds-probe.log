@@ -1,0 +1,9 @@
+LANG=C.UTF-8 cannot be used, using en_US.UTF-8 instead.
+Running 2 tests (2026-09-08 13:28:38-0700, selector `t')
+WINDOW CONTROL: fallback created an ordinary target window and preserved both dedicated windows
+   passed  1/2  torvalds2-fallback-display-preserves-dedicated-document-and-sidebar (0.000333 sec)
+STARTUP CONTROL: real missing-command failure leaves no shell and restores caller directory/CWD function
+   passed  2/2  torvalds2-real-startup-rejects-missing-command-without-shell-leak (0.005904 sec)
+
+Ran 2 tests, 2 results as expected, 0 unexpected (2026-09-08 13:28:38-0700, 0.006518 sec)
+

@@ -1,0 +1,141 @@
+LANG=C.UTF-8 cannot be used, using en_US.UTF-8 instead.
+PROBE ENVIRONMENT: Emacs 31.1; agent-shell 0.74.3
+Running 94 tests (2026-09-08 13:28:28-0700, selector `t')
+   passed   1/94  contrarian-evidence-byte-limit-is-independent-of-boundary (0.001560 sec)
+   passed   2/94  contrarian-evidence-complete-id-at-byte-limit-is-retained (0.000917 sec)
+   passed   3/94  contrarian-evidence-first-message-is-a-boundary-without-separator (0.000838 sec)
+Created .agent-shell/transcripts/fixture.md
+Real writer: recorded="/var/folders/20/4zczrx1s3lq2fv0xmm0gj1fr0000gn/T/sidebar-evidence-6uvsp9/project " parsed="/var/folders/20/4zczrx1s3lq2fv0xmm0gj1fr0000gn/T/sidebar-evidence-6uvsp9/project " resolved="/var/folders/20/4zczrx1s3lq2fv0xmm0gj1fr0000gn/T/sidebar-evidence-6uvsp9/project /"
+   passed   4/94  contrarian-evidence-real-writer-preserves-directory-ending-in-space (0.001112 sec)
+Cutoff: complete="complete-session-identifier" parsed=nil start-session=nil file-bytes=8220 visit-error=(user-error "Transcript metadata exceeds the 8192-byte read limit")
+   passed   5/94  contrarian-evidence-session-id-cut-by-byte-limit-is-not-used (0.001048 sec)
+   passed   6/94  identity-active-session-replaces-pending-identity (0.000344 sec)
+   passed   7/94  identity-ambiguous-alias-obeys-explicit-selection-on-every-visit (0.389869 sec)
+Deleted 1 transcript(s)
+   passed   8/94  identity-deletion-ignores-absent-owner-paths (0.402415 sec)
+Deleted 0. Retained 1 mark(s): Transcript belongs to an open agent-shell: /var/folders/20/4zczrx1s3lq2fv0xmm0gj1fr0000gn/T/sidebar-identity-XJoAen/alias/.agent-shell/transcripts/session.md
+Deleted 0. Retained 1 mark(s): Transcript belongs to an open agent-shell: /var/folders/20/4zczrx1s3lq2fv0xmm0gj1fr0000gn/T/sidebar-identity-XJoAen/real/.agent-shell/transcripts/session.md
+   passed   9/94  identity-deletion-protects-directory-alias-in-both-directions (0.002038 sec)
+Deleted 1. Retained 1 mark(s): Transcript belongs to an open agent-shell: /var/folders/20/4zczrx1s3lq2fv0xmm0gj1fr0000gn/T/sidebar-identity-wjThIr/hard-link.md
+   passed  10/94  identity-deletion-protects-hard-links-and-removes-distinct-copy (0.002060 sec)
+Deleted 0. Retained 1 mark(s): Fixture stat failure
+   passed  11/94  identity-deletion-retains-mark-when-ownership-stat-fails (0.001752 sec)
+   passed  12/94  identity-missing-agent-uses-selected-config-before-reuse (0.001597 sec)
+Installed Claude maker: fresh-alists=t equivalent=t visits=2 starts=1
+   passed  13/94  identity-real-config-maker-reuses-across-fresh-resolutions (0.001609 sec)
+   passed  14/94  identity-removed-config-retains-exact-live-session-access (0.001401 sec)
+   passed  15/94  identity-same-names-do-not-cross-config-directory-or-session (0.001776 sec)
+   passed  16/94  identity-substring-alias-reuses-connecting-and-active-shell (0.001613 sec)
+   passed  17/94  identity-toggle-preserves-ordinary-view-and-removes-only-side-window (0.003079 sec)
+   passed  18/94  identity-unconfigured-exact-name-still-refuses-multiple-configs (0.000322 sec)
+Cancelled timer: no callback, no cache write, no queue or timer.
+   passed  19/94  kingsbury-cancelled-timer-does-not-run (0.001155 sec)
+Mode change: ready timer cancelled without a cache write.
+   passed  20/94  kingsbury-mode-change-cancels-ready-timer (0.000963 sec)
+Read race: next activation repaired the old signature and retained the new session.
+   passed  21/94  kingsbury-read-race-is-rechecked-on-next-activation (0.392505 sec)
+Transient hook error: first file cached=nil, queued=t; remaining=("one.md" "two.md"); timer=[nil 0 0 100000 nil agent-shell-sidebar--parse-tick (#<buffer  *temp*-213507>) idle 0 nil]
+   passed  22/94  kingsbury-transient-read-hook-error-keeps-work-scheduled (0.003595 sec)
+   passed  23/94  metadata-bounded-preview-does-not-invalidate-complete-header (0.002194 sec)
+   passed  24/94  metadata-byte-limit-retains-only-complete-lines (0.002711 sec)
+   passed  25/94  metadata-cache-belongs-to-each-sidebar-snapshot (0.390237 sec)
+   passed  26/94  metadata-discovery-and-parser-reject-special-files (0.001749 sec)
+   passed  27/94  metadata-empty-directory-is-distinct-from-whitespace-directory (0.001876 sec)
+   passed  28/94  metadata-growth-during-read-does-not-complete-a-cutoff-field (0.001555 sec)
+   passed  29/94  metadata-parser-rechecks-after-activation-attributes-were-read (0.003763 sec)
+   passed  30/94  metadata-permission-errors-retry-on-refresh-and-activation (0.003782 sec)
+Created .agent-shell/transcripts/fixture.md
+Created .agent-shell/transcripts/fixture.md
+Created .agent-shell/transcripts/fixture.md
+Created .agent-shell/transcripts/fixture.md
+   passed  31/94  metadata-real-writer-preserves-directory-whitespace (0.004434 sec)
+   passed  32/94  metadata-rechecks-a-discovered-file-before-reading (0.004175 sec)
+   passed  33/94  metadata-true-eof-retains-an-unterminated-complete-field (0.001266 sec)
+   passed  34/94  metadata-truncated-activation-fields-never-start-a-session (0.004223 sec)
+OUSTERHOUT-2: first-sidebar="▾ ousterhout-sidebar-mW1z0B (1)
+  ▾ Claude (1)
+      09-08 13:28: First prompt
+" pending=nil timer=nil
+   passed  35/94  ousterhout-global-cache-preserves-other-buffer-metadata (0.403991 sec)
+Resuming unsupported by agent. Starting new session.
+OUSTERHOUT-1: actual-session="new-session" retained-request="old-session" old-row-reuses-new=nil
+   passed  36/94  ousterhout-live-request-id-is-not-current-after-fallback (0.000590 sec)
+OUSTERHOUT-3: recorded-agent=Claude Code resolved-agent=Claude visits=2 starts=1
+   passed  37/94  ousterhout-substring-agent-resolution-reuses-started-session (0.006513 sec)
+   passed  38/94  scheduling-disabled-refresh-skips-a-pending-callback (0.000406 sec)
+   passed  39/94  scheduling-idle-reset-rearms-both-timers-from-another-buffer (0.433653 sec)
+   passed  40/94  scheduling-input-and-mode-change-stop-staged-work (0.253167 sec)
+   passed  41/94  scheduling-persistent-hook-failure-is-bounded-and-visible (0.006629 sec)
+   passed  42/94  scheduling-publish-preserves-independent-window-views-and-marks (0.603367 sec)
+   passed  43/94  scheduling-quit-discards-a-partially-written-staging-row (0.573232 sec)
+   passed  44/94  scheduling-quit-retains-work-and-rearms (0.003752 sec)
+   passed  45/94  scheduling-refresh-cancels-snapshot-before-removing-a-file (0.626644 sec)
+Sidebar redraw failed: Injected render failure
+   passed  46/94  scheduling-render-error-stops-and-manual-refresh-recovers (0.357242 sec)
+   passed  47/94  scheduling-rendering-is-progressive-bounded-and-coherent (0.574953 sec)
+   passed  48/94  scheduling-snapshot-freezes-header-and-attribute-pair (0.657119 sec)
+   passed  49/94  scheduling-transient-standard-read-hook-retries-the-same-head (0.025222 sec)
+   passed  50/94  scheduling-user-redraw-invalidates-stale-filter-and-fold-snapshots (0.405005 sec)
+   passed  51/94  sidebar-ambiguous-config-name-never-selects-first (0.000109 sec)
+   passed  52/94  sidebar-cache-detects-size-change-with-identical-mtime (0.001445 sec)
+   passed  53/94  sidebar-chunks-are-bounded-and-preserve-selection (0.008903 sec)
+Deleted 1. Retained 2 mark(s): Transcript belongs to an open agent-shell: /var/folders/20/4zczrx1s3lq2fv0xmm0gj1fr0000gn/T/sidebar-test-uzBq2B/.agent-shell/transcripts/live.md; denied
+   passed  54/94  sidebar-delete-keeps-failed-and-live-transcript-marks (0.002410 sec)
+   passed  55/94  sidebar-discovery-skips-directories-and-remote-roots (0.035053 sec)
+   passed  56/94  sidebar-draw-and-fold-do-not-rescan (0.003717 sec)
+   passed  57/94  sidebar-empty-config-name-never-matches (0.000086 sec)
+   passed  58/94  sidebar-empty-prompt-does-not-preview-agent-message (0.001187 sec)
+   passed  59/94  sidebar-exact-config-beats-substring (0.000066 sec)
+   passed  60/94  sidebar-filter-preserves-marks-and-folds (0.004072 sec)
+   passed  61/94  sidebar-idle-chunks-rearm-after-elapsed-idle (0.000183 sec)
+   passed  62/94  sidebar-input-pending-yields-with-queue-intact (0.001119 sec)
+   passed  63/94  sidebar-jump-selects-window-even-when-toggle-does-not (0.002633 sec)
+   passed  64/94  sidebar-kill-and-mode-change-cancel-both-timers (0.000082 sec)
+   passed  65/94  sidebar-live-session-reuse-is-scoped-and-includes-connecting (0.000142 sec)
+300 transcripts: refresh 26.4 ms, max callback 22.8 ms, 1 scan, 300 reads, 10 parse chunks, 12 total callbacks
+   passed  66/94  sidebar-many-transcripts-use-one-scan-and-bounded-chunks (0.236688 sec)
+   passed  67/94  sidebar-metadata-is-confined-to-header (0.001404 sec)
+   passed  68/94  sidebar-missing-file-is-not-a-stale-cache-hit (0.003590 sec)
+   passed  69/94  sidebar-next-line-stays-on-final-row (0.001486 sec)
+   passed  70/94  sidebar-open-transcript-really-uses-view-mode (0.003679 sec)
+   passed  71/94  sidebar-parser-is-bounded-and-strips-quote (0.001095 sec)
+   passed  72/94  sidebar-pop-to-preserves-dedicated-sidebar (0.000129 sec)
+ACP fixture: session/load + session/new used recorded subdirectory; RET reused existing shell
+   passed  73/94  sidebar-real-acp-start-resume-and-reuse (0.081246 sec)
+   passed  74/94  sidebar-recorded-subdirectory-survives-agent-project-detection (0.000382 sec)
+   passed  75/94  sidebar-redraw-preserves-scroll-position (0.055932 sec)
+   passed  76/94  sidebar-refresh-scans-once-and-discards-obsolete-queue (0.001290 sec)
+   passed  77/94  sidebar-refuses-to-overwrite-non-sidebar-buffer (0.000040 sec)
+   passed  78/94  sidebar-root-labels-are-distinct (0.000135 sec)
+   passed  79/94  sidebar-timers-belong-to-their-buffer (0.000994 sec)
+   passed  80/94  sidebar-unknown-recorded-agent-does-not-use-preferred-agent (0.000042 sec)
+   passed  81/94  sidebar-visit-at-eol-starts-with-transcript-session (0.003376 sec)
+   passed  82/94  sidebar-working-directory-fallback-is-transcript-project (0.000817 sec)
+   passed  83/94  sidebar-zero-chunk-size-still-progresses (0.003352 sec)
+Deleted 0. Retained 1 mark(s): Transcript belongs to an open agent-shell: /var/folders/20/4zczrx1s3lq2fv0xmm0gj1fr0000gn/T/sidebar-torvalds-control-MyN8JV/.agent-shell/transcripts/session.md
+CONTROL: exact-owner-path owned-file-exists=t retained-mark=delete
+   passed  84/94  torvalds-control-preserves-owned-transcript-at-exact-path (0.001276 sec)
+ALIAS: discovered=t same-file=t exact-owner-path-match=nil owner-listed=t
+Deleted 0. Retained 1 mark(s): Transcript belongs to an open agent-shell: /var/folders/20/4zczrx1s3lq2fv0xmm0gj1fr0000gn/T/sidebar-torvalds-alias-nRiAOw/alias/.agent-shell/transcripts/session.md
+DELETION: owned-file-exists=t retained-mark=delete
+   passed  85/94  torvalds-refuses-owned-transcript-through-project-path-alias (0.003778 sec)
+READABILITY: before=unreadable after=readable direct-parser-session="fixture-session" signature-unchanged=t
+RECOVERY: pending-after-refresh=1 cached-error-after-retry=nil
+   passed  86/94  torvalds-retries-header-after-read-permission-is-restored (0.001757 sec)
+   passed  87/94  workflow-control-cancel-agent-selector-never-starts (0.000118 sec)
+   passed  88/94  workflow-control-cancel-deletion-retains-marks (0.000395 sec)
+   passed  89/94  workflow-control-discovery-retains-only-normal-md-fixture (0.001229 sec)
+   passed  90/94  workflow-control-mru-disabled-preserves-dedicated-window (0.000147 sec)
+   passed  91/94  workflow-control-two-window-points-survive-redraw (0.000397 sec)
+Disabled refresh: callback scans=0, rearmed=nil
+   passed  92/94  workflow-disable-refresh-before-pending-callback (0.384760 sec)
+FIFO probe: FIFO type=nil modes="prw-r--r--" regular=nil discovered=nil
+FIFO header=(:error "Not a regular transcript file: /var/folders/20/4zczrx1s3lq2fv0xmm0gj1fr0000gn/T/sidebar-workflow-fifo-hfyeg9s2/.agent-shell/transcripts/pending.md")
+
+FIFO probe: timeout=nil elapsed=0.217
+   passed  93/94  workflow-nonregular-fifo-never-blocks-header-parsing (0.267871 sec)
+Ordinary-window toggle: error=nil side=nil windows=2
+   passed  94/94  workflow-toggle-works-after-sidebar-buffer-switched-to-normal-window (0.000459 sec)
+
+Ran 94 tests, 94 results as expected, 0 unexpected (2026-09-08 13:28:35-0700, 7.689205 sec)
+

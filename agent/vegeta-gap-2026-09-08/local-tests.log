@@ -1,0 +1,21 @@
+LANG=C.UTF-8 cannot be used, using en_US.UTF-8 instead.
+Running 13 tests (2026-09-08 16:52:05-0700, selector `t')
+   passed   1/13  gap-ambiguous-claude-recovery-does-not-guess (0.003372 sec)
+   passed   2/13  gap-cache-rechecks-file-on-action (0.019633 sec)
+   passed   3/13  gap-codex-provider-and-commands (0.000028 sec)
+   passed   4/13  gap-common-claude-metadata-and-date-group (0.006670 sec)
+   passed   5/13  gap-common-mode-and-navigation-bindings (0.000146 sec)
+Deleted 0. Retained 1 mark(s): Transcript belongs to an open agent-shell: /var/folders/20/4zczrx1s3lq2fv0xmm0gj1fr0000gn/T/vegeta-gap-1tXfBs/11111111-1111-4111-8111-111111111111.jsonl
+   passed   6/13  gap-delete-preserves-open-transcript (0.426297 sec)
+   passed   7/13  gap-open-transcript-uses-view-mode (0.033729 sec)
+   passed   8/13  gap-parse-state-is-buffer-local (0.000133 sec)
+   passed   9/13  gap-parser-model-after-user (0.007032 sec)
+   passed  10/13  gap-preview-storage-bound (0.007161 sec)
+GAP redraw discovery calls: 0
+   passed  11/13  gap-redraw-does-not-rediscover (0.036761 sec)
+GAP terminal launch calls: 1
+   passed  12/13  gap-repeated-claude-visit-reuses-terminal (0.006311 sec)
+   passed  13/13  gap-text-after-tool-result (0.005900 sec)
+
+Ran 13 tests, 13 results as expected, 0 unexpected (2026-09-08 16:52:06-0700, 0.553758 sec)
+

@@ -1,0 +1,430 @@
+LANG=C.UTF-8 cannot be used, using en_US.UTF-8 instead.
+Running 13 tests (2026-09-08 13:08:57-0700, selector `t')
+Test identity-active-session-replaces-pending-identity backtrace:
+  ert-fail(((should-not (agent-shell-sidebar--live-buffer-for-session 
+  (if (not (unwind-protect (setq value-27 (apply fn-25 args-26)) (setq
+  (let (form-description-29) (if (not (unwind-protect (setq value-27 (
+  (let ((value-27 'ert-form-evaluation-aborted-28)) (let (form-descrip
+  (let* ((fn-25 #'agent-shell-sidebar--live-buffer-for-session) (args-
+  (let* ((config '((:mode-line-name . "Claude"))) (owner (identity-tes
+  (progn (agent-shell-sidebar-mode) (let* ((config '((:mode-line-name 
+  (unwind-protect (progn (agent-shell-sidebar-mode) (let* ((config '((
+  (save-current-buffer (set-buffer temp-buffer) (unwind-protect (progn
+  (let ((temp-buffer (generate-new-buffer " *temp*" t))) (save-current
+  (progn (fset 'project-known-project-roots vnew) (let ((temp-buffer (
+  (unwind-protect (progn (fset 'project-known-project-roots vnew) (let
+  (let* ((vnew #'(lambda nil nil)) (old (symbol-function 'project-know
+  (unwind-protect (let* ((vnew #'(lambda nil nil)) (old (symbol-functi
+  (let* ((root (file-name-as-directory (make-temp-file "sidebar-identi
+  #f(lambda () [t] (let* ((root (file-name-as-directory ...)) (default
+  #f(compiled-function () #<bytecode -0x1a615dfdafd68e51>)()
+  handler-bind-1(#f(compiled-function () #<bytecode -0x1a615dfdafd68e5
+  ert--run-test-internal(#s(ert--test-execution-info :test #s(ert-test
+  ert-run-test(#s(ert-test :name identity-active-session-replaces-pend
+  ert-run-or-rerun-test(#s(ert--stats :selector t :tests ... :test-map
+  ert-run-tests(t #f(compiled-function (event-type &rest event-args) #
+  ert-run-tests-batch(nil)
+  ert-run-tests-batch-and-exit()
+  command-line-1(("-l" "jka-compr" "-L" "/Users/ducnguyen/.emacs.d/elp
+  command-line()
+  normal-top-level()
+Test identity-active-session-replaces-pending-identity condition:
+    (ert-test-failed
+     ((should-not
+       (agent-shell-sidebar--live-buffer-for-session "pending" "Claude"
+						     root))
+      :form
+      (agent-shell-sidebar--live-buffer-for-session "pending" "Claude"
+						    "/var/folders/20/4zczrx1s3lq2fv0xmm0gj1fr0000gn/T/sidebar-identity-dLPTwU/")
+      :value #<killed buffer>))
+   FAILED   1/13  identity-active-session-replaces-pending-identity (0.000484 sec) at agent/agent-shell-sidebar/review/fixes/identity-tests.el:58
+Test identity-ambiguous-alias-obeys-explicit-selection-on-every-visit backtrace:
+  ert-fail(((should (eq first shown)) :form (eq #<killed buffer> #<kil
+  (if (unwind-protect (setq value-82 (apply fn-80 args-81)) (setq form
+  (let (form-description-84) (if (unwind-protect (setq value-82 (apply
+  (let ((value-82 'ert-form-evaluation-aborted-83)) (let (form-descrip
+  (let* ((fn-80 #'eq) (args-81 (condition-case err (list first shown) 
+  (let ((first shown)) (let* ((fn-75 #'equal) (args-76 (condition-case
+  (progn (fset 'agent-shell-sidebar--pop-to vnew) (fset 'agent-shell-s
+  (unwind-protect (progn (fset 'agent-shell-sidebar--pop-to vnew) (fse
+  (let* ((vnew #'(lambda (&rest _) (setq prompts (+ prompts 1)) choice
+  (let* ((file (identity-test--write root "Claude")) (personal '((:ide
+  (progn (agent-shell-sidebar-mode) (let* ((file (identity-test--write
+  (unwind-protect (progn (agent-shell-sidebar-mode) (let* ((file (iden
+  (save-current-buffer (set-buffer temp-buffer) (unwind-protect (progn
+  (let ((temp-buffer (generate-new-buffer " *temp*" t))) (save-current
+  (progn (fset 'project-known-project-roots vnew) (let ((temp-buffer (
+  (unwind-protect (progn (fset 'project-known-project-roots vnew) (let
+  (let* ((vnew #'(lambda nil nil)) (old (symbol-function 'project-know
+  (unwind-protect (let* ((vnew #'(lambda nil nil)) (old (symbol-functi
+  (let* ((root (file-name-as-directory (make-temp-file "sidebar-identi
+  #f(lambda () [t] (let* ((root (file-name-as-directory ...)) (default
+  #f(compiled-function () #<bytecode -0x1a615dfdafd68e51>)()
+  handler-bind-1(#f(compiled-function () #<bytecode -0x1a615dfdafd68e5
+  ert--run-test-internal(#s(ert--test-execution-info :test ... :result
+  ert-run-test(#s(ert-test :name identity-ambiguous-alias-obeys-explic
+  ert-run-or-rerun-test(#s(ert--stats :selector t :tests ... :test-map
+  ert-run-tests(t #f(compiled-function (event-type &rest event-args) #
+  ert-run-tests-batch(nil)
+  ert-run-tests-batch-and-exit()
+  command-line-1(("-l" "jka-compr" "-L" "/Users/ducnguyen/.emacs.d/elp
+  command-line()
+  normal-top-level()
+Test identity-ambiguous-alias-obeys-explicit-selection-on-every-visit condition:
+    (ert-test-failed
+     ((should (eq first shown)) :form
+      (eq #<killed buffer> #<killed buffer>) :value nil))
+   FAILED   2/13  identity-ambiguous-alias-obeys-explicit-selection-on-every-visit (0.536764 sec) at agent/agent-shell-sidebar/review/fixes/identity-tests.el:113
+Deleted 1 transcript(s)
+   passed   3/13  identity-deletion-ignores-absent-owner-paths (0.359927 sec)
+Deleted 1 transcript(s)
+Test identity-deletion-protects-directory-alias-in-both-directions backtrace:
+  ert-fail(((should (file-exists-p file)) :form (file-exists-p "/var/f
+  (if (unwind-protect (setq value-147 (apply fn-145 args-146)) (setq f
+  (let (form-description-149) (if (unwind-protect (setq value-147 (app
+  (let ((value-147 'ert-form-evaluation-aborted-148)) (let (form-descr
+  (let* ((fn-145 #'file-exists-p) (args-146 (condition-case err (list 
+  (let ((owner (identity-test--shell real nil nil (car paths)))) (puth
+  (let ((paths (car tail))) (let ((owner (identity-test--shell real ni
+  (while tail (let ((paths (car tail))) (let ((owner (identity-test--s
+  (let ((tail (list (cons file alias-file) (cons alias-file file)))) (
+  (let* ((real (expand-file-name "real/" root)) (alias (expand-file-na
+  (progn (agent-shell-sidebar-mode) (let* ((real (expand-file-name "re
+  (unwind-protect (progn (agent-shell-sidebar-mode) (let* ((real (expa
+  (save-current-buffer (set-buffer temp-buffer) (unwind-protect (progn
+  (let ((temp-buffer (generate-new-buffer " *temp*" t))) (save-current
+  (progn (fset 'project-known-project-roots vnew) (let ((temp-buffer (
+  (unwind-protect (progn (fset 'project-known-project-roots vnew) (let
+  (let* ((vnew #'(lambda nil nil)) (old (symbol-function 'project-know
+  (unwind-protect (let* ((vnew #'(lambda nil nil)) (old (symbol-functi
+  (let* ((root (file-name-as-directory (make-temp-file "sidebar-identi
+  #f(lambda () [t] (let* ((root (file-name-as-directory ...)) (default
+  #f(compiled-function () #<bytecode -0x1a615dfdafd68e51>)()
+  handler-bind-1(#f(compiled-function () #<bytecode -0x1a615dfdafd68e5
+  ert--run-test-internal(#s(ert--test-execution-info :test ... :result
+  ert-run-test(#s(ert-test :name identity-deletion-protects-directory-
+  ert-run-or-rerun-test(#s(ert--stats :selector t :tests ... :test-map
+  ert-run-tests(t #f(compiled-function (event-type &rest event-args) #
+  ert-run-tests-batch(nil)
+  ert-run-tests-batch-and-exit()
+  command-line-1(("-l" "jka-compr" "-L" "/Users/ducnguyen/.emacs.d/elp
+  command-line()
+  normal-top-level()
+Test identity-deletion-protects-directory-alias-in-both-directions condition:
+    (ert-test-failed
+     ((should (file-exists-p file)) :form
+      (file-exists-p
+       "/var/folders/20/4zczrx1s3lq2fv0xmm0gj1fr0000gn/T/sidebar-identity-TCl7NP/real/.agent-shell/transcripts/session.md")
+      :value nil))
+   FAILED   4/13  identity-deletion-protects-directory-alias-in-both-directions (0.001872 sec) at agent/agent-shell-sidebar/review/fixes/identity-tests.el:204
+Deleted 2 transcript(s)
+Test identity-deletion-protects-hard-links-and-removes-distinct-copy backtrace:
+  ert-fail(((should (file-exists-p link)) :form (file-exists-p "/var/f
+  (if (unwind-protect (setq value-172 (apply fn-170 args-171)) (setq f
+  (let (form-description-174) (if (unwind-protect (setq value-172 (app
+  (let ((value-172 'ert-form-evaluation-aborted-173)) (let (form-descr
+  (let* ((fn-170 #'file-exists-p) (args-171 (condition-case err (list 
+  (let* ((file (identity-test--write root "Claude")) (link (expand-fil
+  (progn (agent-shell-sidebar-mode) (let* ((file (identity-test--write
+  (unwind-protect (progn (agent-shell-sidebar-mode) (let* ((file (iden
+  (save-current-buffer (set-buffer temp-buffer) (unwind-protect (progn
+  (let ((temp-buffer (generate-new-buffer " *temp*" t))) (save-current
+  (progn (fset 'project-known-project-roots vnew) (let ((temp-buffer (
+  (unwind-protect (progn (fset 'project-known-project-roots vnew) (let
+  (let* ((vnew #'(lambda nil nil)) (old (symbol-function 'project-know
+  (unwind-protect (let* ((vnew #'(lambda nil nil)) (old (symbol-functi
+  (let* ((root (file-name-as-directory (make-temp-file "sidebar-identi
+  #f(lambda () [t] (let* ((root (file-name-as-directory ...)) (default
+  #f(compiled-function () #<bytecode -0x1a615dfdafd68e51>)()
+  handler-bind-1(#f(compiled-function () #<bytecode -0x1a615dfdafd68e5
+  ert--run-test-internal(#s(ert--test-execution-info :test #s(ert-test
+  ert-run-test(#s(ert-test :name identity-deletion-protects-hard-links
+  ert-run-or-rerun-test(#s(ert--stats :selector t :tests ... :test-map
+  ert-run-tests(t #f(compiled-function (event-type &rest event-args) #
+  ert-run-tests-batch(nil)
+  ert-run-tests-batch-and-exit()
+  command-line-1(("-l" "jka-compr" "-L" "/Users/ducnguyen/.emacs.d/elp
+  command-line()
+  normal-top-level()
+Test identity-deletion-protects-hard-links-and-removes-distinct-copy condition:
+    (ert-test-failed
+     ((should (file-exists-p link)) :form
+      (file-exists-p
+       "/var/folders/20/4zczrx1s3lq2fv0xmm0gj1fr0000gn/T/sidebar-identity-pskUSw/hard-link.md")
+      :value nil))
+   FAILED   5/13  identity-deletion-protects-hard-links-and-removes-distinct-copy (0.002346 sec) at agent/agent-shell-sidebar/review/fixes/identity-tests.el:222
+Deleted 1 transcript(s)
+Test identity-deletion-retains-mark-when-ownership-stat-fails backtrace:
+  ert-fail(((should (file-exists-p file)) :form (file-exists-p "/var/f
+  (if (unwind-protect (setq value-202 (apply fn-200 args-201)) (setq f
+  (let (form-description-204) (if (unwind-protect (setq value-202 (app
+  (let ((value-202 'ert-form-evaluation-aborted-203)) (let (form-descr
+  (let* ((fn-200 #'file-exists-p) (args-201 (condition-case err (list 
+  (let ((file (identity-test--write root "Claude")) (owned (identity-t
+  (progn (agent-shell-sidebar-mode) (let ((file (identity-test--write 
+  (unwind-protect (progn (agent-shell-sidebar-mode) (let ((file (ident
+  (save-current-buffer (set-buffer temp-buffer) (unwind-protect (progn
+  (let ((temp-buffer (generate-new-buffer " *temp*" t))) (save-current
+  (progn (fset 'project-known-project-roots vnew) (let ((temp-buffer (
+  (unwind-protect (progn (fset 'project-known-project-roots vnew) (let
+  (let* ((vnew #'(lambda nil nil)) (old (symbol-function 'project-know
+  (unwind-protect (let* ((vnew #'(lambda nil nil)) (old (symbol-functi
+  (let* ((root (file-name-as-directory (make-temp-file "sidebar-identi
+  #f(lambda () [t] (let* ((root (file-name-as-directory ...)) (default
+  #f(compiled-function () #<bytecode -0x1a615dfdafd68e51>)()
+  handler-bind-1(#f(compiled-function () #<bytecode -0x1a615dfdafd68e5
+  ert--run-test-internal(#s(ert--test-execution-info :test #s(ert-test
+  ert-run-test(#s(ert-test :name identity-deletion-retains-mark-when-o
+  ert-run-or-rerun-test(#s(ert--stats :selector t :tests ... :test-map
+  ert-run-tests(t #f(compiled-function (event-type &rest event-args) #
+  ert-run-tests-batch(nil)
+  ert-run-tests-batch-and-exit()
+  command-line-1(("-l" "jka-compr" "-L" "/Users/ducnguyen/.emacs.d/elp
+  command-line()
+  normal-top-level()
+Test identity-deletion-retains-mark-when-ownership-stat-fails condition:
+    (ert-test-failed
+     ((should (file-exists-p file)) :form
+      (file-exists-p
+       "/var/folders/20/4zczrx1s3lq2fv0xmm0gj1fr0000gn/T/sidebar-identity-yub3BA/.agent-shell/transcripts/session.md")
+      :value nil))
+   FAILED   6/13  identity-deletion-retains-mark-when-ownership-stat-fails (0.001691 sec) at agent/agent-shell-sidebar/review/fixes/identity-tests.el:254
+Test identity-missing-agent-uses-selected-config-before-reuse backtrace:
+  ert-fail(((should-not (eq wrong shown)) :form (eq #<killed buffer> #
+  (if (not (unwind-protect (setq value-137 (apply fn-135 args-136)) (s
+  (let (form-description-139) (if (not (unwind-protect (setq value-137
+  (let ((value-137 'ert-form-evaluation-aborted-138)) (let (form-descr
+  (let* ((fn-135 #'eq) (args-136 (condition-case err (list wrong shown
+  (progn (fset 'agent-shell-sidebar--pop-to vnew) (fset 'agent-shell-s
+  (unwind-protect (progn (fset 'agent-shell-sidebar--pop-to vnew) (fse
+  (let* ((vnew #'(lambda (&rest args) (setq starts (+ starts 1)) (appl
+  (let* ((file (identity-test--write root)) (config '((:identifier . p
+  (progn (agent-shell-sidebar-mode) (let* ((file (identity-test--write
+  (unwind-protect (progn (agent-shell-sidebar-mode) (let* ((file (iden
+  (save-current-buffer (set-buffer temp-buffer) (unwind-protect (progn
+  (let ((temp-buffer (generate-new-buffer " *temp*" t))) (save-current
+  (progn (fset 'project-known-project-roots vnew) (let ((temp-buffer (
+  (unwind-protect (progn (fset 'project-known-project-roots vnew) (let
+  (let* ((vnew #'(lambda nil nil)) (old (symbol-function 'project-know
+  (unwind-protect (let* ((vnew #'(lambda nil nil)) (old (symbol-functi
+  (let* ((root (file-name-as-directory (make-temp-file "sidebar-identi
+  #f(lambda () [t] (let* ((root (file-name-as-directory ...)) (default
+  #f(compiled-function () #<bytecode -0x1a615dfdafd68e51>)()
+  handler-bind-1(#f(compiled-function () #<bytecode -0x1a615dfdafd68e5
+  ert--run-test-internal(#s(ert--test-execution-info :test #s(ert-test
+  ert-run-test(#s(ert-test :name identity-missing-agent-uses-selected-
+  ert-run-or-rerun-test(#s(ert--stats :selector t :tests ... :test-map
+  ert-run-tests(t #f(compiled-function (event-type &rest event-args) #
+  ert-run-tests-batch(nil)
+  ert-run-tests-batch-and-exit()
+  command-line-1(("-l" "jka-compr" "-L" "/Users/ducnguyen/.emacs.d/elp
+  command-line()
+  normal-top-level()
+Test identity-missing-agent-uses-selected-config-before-reuse condition:
+    (ert-test-failed
+     ((should-not (eq wrong shown)) :form
+      (eq #<killed buffer> #<killed buffer>) :value t))
+   FAILED   7/13  identity-missing-agent-uses-selected-config-before-reuse (0.001937 sec) at agent/agent-shell-sidebar/review/fixes/identity-tests.el:187
+Installed Claude maker: fresh-alists=t equivalent=t visits=2 starts=2
+Test identity-real-config-maker-reuses-across-fresh-resolutions backtrace:
+  ert-fail(((should (= starts 1)) :form (= 2 1) :value nil))
+  (if (unwind-protect (setq value-67 (apply fn-65 args-66)) (setq form
+  (let (form-description-69) (if (unwind-protect (setq value-67 (apply
+  (let ((value-67 'ert-form-evaluation-aborted-68)) (let (form-descrip
+  (let* ((fn-65 #'=) (args-66 (condition-case err (list starts 1) (err
+  (let* ((file (identity-test--write root "Claude Code")) (agent-shell
+  (progn (agent-shell-sidebar-mode) (let* ((file (identity-test--write
+  (unwind-protect (progn (agent-shell-sidebar-mode) (let* ((file (iden
+  (save-current-buffer (set-buffer temp-buffer) (unwind-protect (progn
+  (let ((temp-buffer (generate-new-buffer " *temp*" t))) (save-current
+  (progn (fset 'project-known-project-roots vnew) (let ((temp-buffer (
+  (unwind-protect (progn (fset 'project-known-project-roots vnew) (let
+  (let* ((vnew #'(lambda nil nil)) (old (symbol-function 'project-know
+  (unwind-protect (let* ((vnew #'(lambda nil nil)) (old (symbol-functi
+  (let* ((root (file-name-as-directory (make-temp-file "sidebar-identi
+  #f(lambda () [t] (let* ((root (file-name-as-directory ...)) (default
+  #f(compiled-function () #<bytecode -0x1a615dfdafd68e51>)()
+  handler-bind-1(#f(compiled-function () #<bytecode -0x1a615dfdafd68e5
+  ert--run-test-internal(#s(ert--test-execution-info :test #s(ert-test
+  ert-run-test(#s(ert-test :name identity-real-config-maker-reuses-acr
+  ert-run-or-rerun-test(#s(ert--stats :selector t :tests ... :test-map
+  ert-run-tests(t #f(compiled-function (event-type &rest event-args) #
+  ert-run-tests-batch(nil)
+  ert-run-tests-batch-and-exit()
+  command-line-1(("-l" "jka-compr" "-L" "/Users/ducnguyen/.emacs.d/elp
+  command-line()
+  normal-top-level()
+Test identity-real-config-maker-reuses-across-fresh-resolutions condition:
+    (ert-test-failed ((should (= starts 1)) :form (= 2 1) :value nil))
+   FAILED   8/13  identity-real-config-maker-reuses-across-fresh-resolutions (0.001610 sec) at agent/agent-shell-sidebar/review/fixes/identity-tests.el:93
+   passed   9/13  identity-removed-config-retains-exact-live-session-access (0.001452 sec)
+Test identity-same-names-do-not-cross-config-directory-or-session backtrace:
+  ert-fail(((should (equal config (map-elt (buffer-local-value 'agent-
+  (if (unwind-protect (setq value-117 (apply fn-115 args-116)) (setq f
+  (let (form-description-119) (if (unwind-protect (setq value-117 (app
+  (let ((value-117 'ert-form-evaluation-aborted-118)) (let (form-descr
+  (let* ((fn-115 #'equal) (args-116 (condition-case err (list config (
+  (let ((first shown)) (agent-shell-sidebar-visit) (let* ((fn-105 #'eq
+  (progn (fset 'agent-shell-sidebar--pop-to vnew) (fset 'agent-shell-s
+  (unwind-protect (progn (fset 'agent-shell-sidebar--pop-to vnew) (fse
+  (let* ((vnew #'(lambda (&rest args) (setq starts (+ starts 1)) (appl
+  (let* ((file (identity-test--write root "Claude")) (config '((:ident
+  (progn (agent-shell-sidebar-mode) (let* ((file (identity-test--write
+  (unwind-protect (progn (agent-shell-sidebar-mode) (let* ((file (iden
+  (save-current-buffer (set-buffer temp-buffer) (unwind-protect (progn
+  (let ((temp-buffer (generate-new-buffer " *temp*" t))) (save-current
+  (progn (fset 'project-known-project-roots vnew) (let ((temp-buffer (
+  (unwind-protect (progn (fset 'project-known-project-roots vnew) (let
+  (let* ((vnew #'(lambda nil nil)) (old (symbol-function 'project-know
+  (unwind-protect (let* ((vnew #'(lambda nil nil)) (old (symbol-functi
+  (let* ((root (file-name-as-directory (make-temp-file "sidebar-identi
+  #f(lambda () [t] (let* ((root (file-name-as-directory ...)) (default
+  #f(compiled-function () #<bytecode -0x1a615dfdafd68e51>)()
+  handler-bind-1(#f(compiled-function () #<bytecode -0x1a615dfdafd68e5
+  ert--run-test-internal(#s(ert--test-execution-info :test ... :result
+  ert-run-test(#s(ert-test :name identity-same-names-do-not-cross-conf
+  ert-run-or-rerun-test(#s(ert--stats :selector t :tests ... :test-map
+  ert-run-tests(t #f(compiled-function (event-type &rest event-args) #
+  ert-run-tests-batch(nil)
+  ert-run-tests-batch-and-exit()
+  command-line-1(("-l" "jka-compr" "-L" "/Users/ducnguyen/.emacs.d/elp
+  command-line()
+  normal-top-level()
+Test identity-same-names-do-not-cross-config-directory-or-session condition:
+    (ert-test-failed
+     ((should (equal config (map-elt ... :agent-config))) :form
+      (equal
+       ((:identifier . claude) (:mode-line-name . "Claude")
+	(:profile . work))
+       ((:identifier . claude) (:mode-line-name . "Claude")
+	(:profile . personal)))
+      :value nil :explanation
+      (list-elt 2 (cdr (different-atoms work personal)))))
+   FAILED  10/13  identity-same-names-do-not-cross-config-directory-or-session (0.001309 sec) at agent/agent-shell-sidebar/review/fixes/identity-tests.el:142
+Test identity-substring-alias-reuses-connecting-and-active-shell backtrace:
+  ert-fail(((should (eq first shown)) :form (eq #<killed buffer> #<kil
+  (if (unwind-protect (setq value-42 (apply fn-40 args-41)) (setq form
+  (let (form-description-44) (if (unwind-protect (setq value-42 (apply
+  (let ((value-42 'ert-form-evaluation-aborted-43)) (let (form-descrip
+  (let* ((fn-40 #'eq) (args-41 (condition-case err (list first shown) 
+  (let ((first shown)) (agent-shell-sidebar-visit) (let* ((fn-40 #'eq)
+  (progn (fset 'agent-shell-sidebar--pop-to vnew) (fset 'agent-shell-s
+  (unwind-protect (progn (fset 'agent-shell-sidebar--pop-to vnew) (fse
+  (let* ((vnew #'(lambda (&rest args) (setq starts (+ starts 1)) (appl
+  (let* ((file (identity-test--write root "Claude Code")) (config '((:
+  (progn (agent-shell-sidebar-mode) (let* ((file (identity-test--write
+  (unwind-protect (progn (agent-shell-sidebar-mode) (let* ((file (iden
+  (save-current-buffer (set-buffer temp-buffer) (unwind-protect (progn
+  (let ((temp-buffer (generate-new-buffer " *temp*" t))) (save-current
+  (progn (fset 'project-known-project-roots vnew) (let ((temp-buffer (
+  (unwind-protect (progn (fset 'project-known-project-roots vnew) (let
+  (let* ((vnew #'(lambda nil nil)) (old (symbol-function 'project-know
+  (unwind-protect (let* ((vnew #'(lambda nil nil)) (old (symbol-functi
+  (let* ((root (file-name-as-directory (make-temp-file "sidebar-identi
+  #f(lambda () [t] (let* ((root (file-name-as-directory ...)) (default
+  #f(compiled-function () #<bytecode -0x1a615dfdafd68e51>)()
+  handler-bind-1(#f(compiled-function () #<bytecode -0x1a615dfdafd68e5
+  ert--run-test-internal(#s(ert--test-execution-info :test #s(ert-test
+  ert-run-test(#s(ert-test :name identity-substring-alias-reuses-conne
+  ert-run-or-rerun-test(#s(ert--stats :selector t :tests ... :test-map
+  ert-run-tests(t #f(compiled-function (event-type &rest event-args) #
+  ert-run-tests-batch(nil)
+  ert-run-tests-batch-and-exit()
+  command-line-1(("-l" "jka-compr" "-L" "/Users/ducnguyen/.emacs.d/elp
+  command-line()
+  normal-top-level()
+Test identity-substring-alias-reuses-connecting-and-active-shell condition:
+    (ert-test-failed
+     ((should (eq first shown)) :form
+      (eq #<killed buffer> #<killed buffer>) :value nil))
+   FAILED  11/13  identity-substring-alias-reuses-connecting-and-active-shell (0.001576 sec) at agent/agent-shell-sidebar/review/fixes/identity-tests.el:73
+Test identity-toggle-preserves-ordinary-view-and-removes-only-side-window backtrace:
+  ert-fail(((should-not (agent-shell-sidebar-showing-sidebar-p)) :form
+  (if (not (unwind-protect (setq value-212 (apply fn-210 args-211)) (s
+  (let (form-description-214) (if (not (unwind-protect (setq value-212
+  (let ((value-212 'ert-form-evaluation-aborted-213)) (let (form-descr
+  (let* ((fn-210 #'agent-shell-sidebar-showing-sidebar-p) (args-211 (c
+  (let ((ordinary (selected-window)) (buffer (current-buffer)) (agent-
+  (progn (agent-shell-sidebar-mode) (let ((ordinary (selected-window))
+  (unwind-protect (progn (agent-shell-sidebar-mode) (let ((ordinary (s
+  (save-current-buffer (set-buffer temp-buffer) (unwind-protect (progn
+  (let ((temp-buffer (generate-new-buffer " *temp*" t))) (save-current
+  (progn (fset 'project-known-project-roots vnew) (let ((temp-buffer (
+  (unwind-protect (progn (fset 'project-known-project-roots vnew) (let
+  (let* ((vnew #'(lambda nil nil)) (old (symbol-function 'project-know
+  (unwind-protect (let* ((vnew #'(lambda nil nil)) (old (symbol-functi
+  (let* ((root (file-name-as-directory (make-temp-file "sidebar-identi
+  (progn (delete-other-windows) (let* ((root (file-name-as-directory (
+  (unwind-protect (progn (delete-other-windows) (let* ((root (file-nam
+  (let ((wconfig (current-window-configuration))) (unwind-protect (pro
+  #f(lambda () [t] (let ((wconfig (current-window-configuration))) (un
+  #f(compiled-function () #<bytecode -0x1a615dfdafd68e51>)()
+  handler-bind-1(#f(compiled-function () #<bytecode -0x1a615dfdafd68e5
+  ert--run-test-internal(#s(ert--test-execution-info :test #s(ert-test
+  ert-run-test(#s(ert-test :name identity-toggle-preserves-ordinary-vi
+  ert-run-or-rerun-test(#s(ert--stats :selector t :tests ... :test-map
+  ert-run-tests(t #f(compiled-function (event-type &rest event-args) #
+  ert-run-tests-batch(nil)
+  ert-run-tests-batch-and-exit()
+  command-line-1(("-l" "jka-compr" "-L" "/Users/ducnguyen/.emacs.d/elp
+  command-line()
+  normal-top-level()
+Test identity-toggle-preserves-ordinary-view-and-removes-only-side-window condition:
+    (ert-test-failed
+     ((should-not (agent-shell-sidebar-showing-sidebar-p)) :form
+      (agent-shell-sidebar-showing-sidebar-p) :value #<window 1 on
+      *scratch*>))
+   FAILED  12/13  identity-toggle-preserves-ordinary-view-and-removes-only-side-window (0.000333 sec) at agent/agent-shell-sidebar/review/fixes/identity-tests.el:267
+Test identity-unconfigured-exact-name-still-refuses-multiple-configs backtrace:
+  ert-fail(((should-not (agent-shell-sidebar--live-buffer-for-session 
+  (if (not (unwind-protect (setq value-132 (apply fn-130 args-131)) (s
+  (let (form-description-134) (if (not (unwind-protect (setq value-132
+  (let ((value-132 'ert-form-evaluation-aborted-133)) (let (form-descr
+  (let* ((fn-130 #'agent-shell-sidebar--live-buffer-for-session) (args
+  (progn (agent-shell-sidebar-mode) (identity-test--shell root '((:mod
+  (unwind-protect (progn (agent-shell-sidebar-mode) (identity-test--sh
+  (save-current-buffer (set-buffer temp-buffer) (unwind-protect (progn
+  (let ((temp-buffer (generate-new-buffer " *temp*" t))) (save-current
+  (progn (fset 'project-known-project-roots vnew) (let ((temp-buffer (
+  (unwind-protect (progn (fset 'project-known-project-roots vnew) (let
+  (let* ((vnew #'(lambda nil nil)) (old (symbol-function 'project-know
+  (unwind-protect (let* ((vnew #'(lambda nil nil)) (old (symbol-functi
+  (let* ((root (file-name-as-directory (make-temp-file "sidebar-identi
+  #f(lambda () [t] (let* ((root (file-name-as-directory ...)) (default
+  #f(compiled-function () #<bytecode -0x1a615dfdafd68e51>)()
+  handler-bind-1(#f(compiled-function () #<bytecode -0x1a615dfdafd68e5
+  ert--run-test-internal(#s(ert--test-execution-info :test #s(ert-test
+  ert-run-test(#s(ert-test :name identity-unconfigured-exact-name-stil
+  ert-run-or-rerun-test(#s(ert--stats :selector t :tests ... :test-map
+  ert-run-tests(t #f(compiled-function (event-type &rest event-args) #
+  ert-run-tests-batch(nil)
+  ert-run-tests-batch-and-exit()
+  command-line-1(("-l" "jka-compr" "-L" "/Users/ducnguyen/.emacs.d/elp
+  command-line()
+  normal-top-level()
+Test identity-unconfigured-exact-name-still-refuses-multiple-configs condition:
+    (ert-test-failed
+     ((should-not
+       (agent-shell-sidebar--live-buffer-for-session "session" "Claude"
+						     root))
+      :form
+      (agent-shell-sidebar--live-buffer-for-session "session" "Claude"
+						    "/var/folders/20/4zczrx1s3lq2fv0xmm0gj1fr0000gn/T/sidebar-identity-g6kCWh/")
+      :value #<killed buffer>))
+   FAILED  13/13  identity-unconfigured-exact-name-still-refuses-multiple-configs (0.000394 sec) at agent/agent-shell-sidebar/review/fixes/identity-tests.el:181
+
+Ran 13 tests, 2 results as expected, 11 unexpected (2026-09-08 13:08:59-0700, 1.529133 sec)
+
+11 unexpected results:
+   FAILED  identity-active-session-replaces-pending-identity
+   FAILED  identity-ambiguous-alias-obeys-explicit-selection-on-every-visit
+   FAILED  identity-deletion-protects-directory-alias-in-both-directions
+   FAILED  identity-deletion-protects-hard-links-and-removes-distinct-copy
+   FAILED  identity-deletion-retains-mark-when-ownership-stat-fails
+   FAILED  identity-missing-agent-uses-selected-config-before-reuse
+   FAILED  identity-real-config-maker-reuses-across-fresh-resolutions
+   FAILED  identity-same-names-do-not-cross-config-directory-or-session
+   FAILED  identity-substring-alias-reuses-connecting-and-active-shell
+   FAILED  identity-toggle-preserves-ordinary-view-and-removes-only-side-window
+   FAILED  identity-unconfigured-exact-name-still-refuses-multiple-configs
+

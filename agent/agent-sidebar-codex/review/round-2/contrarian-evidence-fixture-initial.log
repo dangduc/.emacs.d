@@ -1,0 +1,176 @@
+LANG=C.UTF-8 cannot be used, using en_US.UTF-8 instead.
+Running 6 tests (2026-09-08 15:50:58-0700, selector `t')
+   passed  1/6  ce2-completing-a-native-record-invalidates-a-successful-empty-preview-cache (0.001708 sec)
+   passed  2/6  ce2-multibyte-record-crossing-byte-prefix-does-not-leak-partial-preview (0.030283 sec)
+Test ce2-mutation-control-rejects-disabling-preview-bound-at-parser-dispatch backtrace:
+  ert-fail(((should (eq meta (agent-sidebar--cached-meta entry))) :for
+  (if (unwind-protect (setq value-361 (apply fn-359 args-360)) (setq f
+  (let (form-description-363) (if (unwind-protect (setq value-361 (app
+  (let ((value-361 'ert-form-evaluation-aborted-362)) (let (form-descr
+  (let* ((fn-359 #'eq) (args-360 (condition-case err (list meta (agent
+  (let ((meta (agent-sidebar--ensure-parsed entry))) (let* ((fn-344 #'
+  (let ((entry (list :id file :provider 'codex-cli))) (puthash file en
+  (progn (agent-sidebar-mode) (let ((entry (list :id file :provider 'c
+  (unwind-protect (progn (agent-sidebar-mode) (let ((entry (list :id f
+  (save-current-buffer (set-buffer temp-buffer) (unwind-protect (progn
+  (let ((temp-buffer (generate-new-buffer " *temp*" t))) (save-current
+  ce2--check-cache-preview-bound("/var/folders/20/4zczrx1s3lq2fv0xmm0g
+  (progn (ce2--write file (list (ce2--codex-meta) (ce2--codex-user (ve
+  (unwind-protect (progn (ce2--write file (list (ce2--codex-meta) (ce2
+  (let ((file (make-temp-file "ce2-schema-" nil ".jsonl"))) (unwind-pr
+  #f(lambda () [t] (let ((file (make-temp-file "ce2-schema-" nil ".jso
+  #f(compiled-function () #<bytecode 0x1ac56d031dd28c3e>)()
+  handler-bind-1(#f(compiled-function () #<bytecode 0x1ac56d031dd28c3e
+  ert--run-test-internal(#s(ert--test-execution-info :test #s(ert-test
+  ert-run-test(#s(ert-test :name ce2-mutation-control-rejects-disablin
+  ert-run-or-rerun-test(#s(ert--stats :selector t :tests ... :test-map
+  ert-run-tests(t #f(compiled-function (event-type &rest event-args) #
+  ert-run-tests-batch(t)
+  ert-run-tests-batch-and-exit(t)
+  eval((ert-run-tests-batch-and-exit 't) t)
+  command-line-1(("-l" "jka-compr" "-L" "/private/tmp/sidebar-review-7
+  command-line()
+  normal-top-level()
+Test ce2-mutation-control-rejects-disabling-preview-bound-at-parser-dispatch condition:
+    (ert-test-failed
+     ((should (eq meta (agent-sidebar--cached-meta entry))) :form
+      (eq
+       (:agent "Codex" :session-id "33333333-3333-7333-8333-333333333333"
+	       :cwd "/var/folders/20/4zczrx1s3lq2fv0xmm0gj1fr0000gn/T/"
+	       :timestamp nil :model nil ...)
+       nil)
+      :value nil))
+   FAILED  3/6  ce2-mutation-control-rejects-disabling-preview-bound-at-parser-dispatch (0.000976 sec) at agent/agent-sidebar-codex/review/round-2/contrarian-evidence-tests.el:90
+Test ce2-preview-bound-survives-cache-and-activation-path backtrace:
+  ert-fail(((should (eq meta (agent-sidebar--cached-meta entry))) :for
+  (if (unwind-protect (setq value-361 (apply fn-359 args-360)) (setq f
+  (let (form-description-363) (if (unwind-protect (setq value-361 (app
+  (let ((value-361 'ert-form-evaluation-aborted-362)) (let (form-descr
+  (let* ((fn-359 #'eq) (args-360 (condition-case err (list meta (agent
+  (let ((meta (agent-sidebar--ensure-parsed entry))) (let* ((fn-344 #'
+  (let ((entry (list :id file :provider 'codex-cli))) (puthash file en
+  (progn (agent-sidebar-mode) (let ((entry (list :id file :provider 'c
+  (unwind-protect (progn (agent-sidebar-mode) (let ((entry (list :id f
+  (save-current-buffer (set-buffer temp-buffer) (unwind-protect (progn
+  (let ((temp-buffer (generate-new-buffer " *temp*" t))) (save-current
+  ce2--check-cache-preview-bound("/var/folders/20/4zczrx1s3lq2fv0xmm0g
+  (progn (ce2--write file (list (ce2--codex-meta) (ce2--codex-user (ve
+  (unwind-protect (progn (ce2--write file (list (ce2--codex-meta) (ce2
+  (let ((file (make-temp-file "ce2-schema-" nil ".jsonl"))) (unwind-pr
+  #f(lambda () [t] (let ((file (make-temp-file "ce2-schema-" nil ".jso
+  #f(compiled-function () #<bytecode 0x1ac56d031dd28c3e>)()
+  handler-bind-1(#f(compiled-function () #<bytecode 0x1ac56d031dd28c3e
+  ert--run-test-internal(#s(ert--test-execution-info :test #s(ert-test
+  ert-run-test(#s(ert-test :name ce2-preview-bound-survives-cache-and-
+  ert-run-or-rerun-test(#s(ert--stats :selector t :tests ... :test-map
+  ert-run-tests(t #f(compiled-function (event-type &rest event-args) #
+  ert-run-tests-batch(t)
+  ert-run-tests-batch-and-exit(t)
+  eval((ert-run-tests-batch-and-exit 't) t)
+  command-line-1(("-l" "jka-compr" "-L" "/private/tmp/sidebar-review-7
+  command-line()
+  normal-top-level()
+Test ce2-preview-bound-survives-cache-and-activation-path condition:
+    (ert-test-failed
+     ((should (eq meta (agent-sidebar--cached-meta entry))) :form
+      (eq
+       (:agent "Codex" :session-id "33333333-3333-7333-8333-333333333333"
+	       :cwd "/var/folders/20/4zczrx1s3lq2fv0xmm0gj1fr0000gn/T/"
+	       :timestamp nil :model nil ...)
+       nil)
+      :value nil))
+   FAILED  4/6  ce2-preview-bound-survives-cache-and-activation-path (0.001103 sec) at agent/agent-sidebar-codex/review/round-2/contrarian-evidence-tests.el:84
+Test ce2-unexpected-claude-content-shape-does-not-poison-valid-session backtrace:
+  alist-get(type (type . "text"))
+  (equal (alist-get 'type block) "text")
+  (and (listp block) (equal (alist-get 'type block) "text") (stringp (
+  (if (and (listp block) (equal (alist-get 'type block) "text") (strin
+  #f(lambda (block) [t] (if (and (listp block) (equal (alist-get ... b
+  #f(compiled-function (elt) #<bytecode 0xde37379303206b>)((type . "te
+  mapc(#f(compiled-function (elt) #<bytecode 0xde37379303206b>) ((type
+  seq-do(#f(compiled-function (elt) #<bytecode 0xde37379303206b>) ((ty
+  seq-some(#f(lambda (block) [t] (if (and (listp block) (equal (alist-
+  (cond ((stringp content) content) ((listp content) (seq-some #'(lamb
+  agent-sidebar--content-text(((type . "text") (text . "INVALID OBJECT
+  (let* ((value (alist-get 'message object)) (message (and (listp valu
+  (let ((object (car tail))) (let* ((value (alist-get 'message object)
+  (while tail (let ((object (car tail))) (let* ((value (alist-get 'mes
+  (let ((tail (agent-sidebar--read-jsonl (plist-get entry :id) 65536))
+  (let ((session-id (or (plist-get (plist-get entry :extras) :session-
+  (condition-case err (let ((session-id (or (plist-get (plist-get entr
+  agent-sidebar--claude-parse((:id "/var/folders/20/4zczrx1s3lq2fv0xmm
+  (let ((meta (agent-sidebar--claude-parse (list :id file :extras (lis
+  (progn (ce2--write file (list (ce2--claude-user '((type . "text") (t
+  (unwind-protect (progn (ce2--write file (list (ce2--claude-user '((t
+  (let ((file (make-temp-file "ce2-schema-" nil ".jsonl"))) (unwind-pr
+  #f(lambda () [t] (let ((file (make-temp-file "ce2-schema-" nil ".jso
+  #f(compiled-function () #<bytecode 0x1ac56d031dd28c3e>)()
+  handler-bind-1(#f(compiled-function () #<bytecode 0x1ac56d031dd28c3e
+  ert--run-test-internal(#s(ert--test-execution-info :test #s(ert-test
+  ert-run-test(#s(ert-test :name ce2-unexpected-claude-content-shape-d
+  ert-run-or-rerun-test(#s(ert--stats :selector t :tests ... :test-map
+  ert-run-tests(t #f(compiled-function (event-type &rest event-args) #
+  ert-run-tests-batch(t)
+  ert-run-tests-batch-and-exit(t)
+  eval((ert-run-tests-batch-and-exit 't) t)
+  command-line-1(("-l" "jka-compr" "-L" "/private/tmp/sidebar-review-7
+  command-line()
+  normal-top-level()
+Test ce2-unexpected-claude-content-shape-does-not-poison-valid-session condition:
+    (wrong-type-argument listp (type . "text"))
+   FAILED  5/6  ce2-unexpected-claude-content-shape-does-not-poison-valid-session (0.000725 sec) at agent/agent-sidebar-codex/review/round-2/contrarian-evidence-tests.el:32
+Test ce2-unexpected-codex-content-shape-does-not-poison-valid-session backtrace:
+  alist-get(type (type . "input_text"))
+  (equal (alist-get 'type block) "input_text")
+  (and (listp block) (equal (alist-get 'type block) "input_text") (ali
+  (let ((text (and (listp block) (equal (alist-get 'type block) "input
+  #f(lambda (block) [t] (let ((text (and ... ... ...))) (if (stringp t
+  #f(compiled-function (elt) #<bytecode 0xde37379303206b>)((type . "in
+  mapc(#f(compiled-function (elt) #<bytecode 0xde37379303206b>) ((type
+  seq-do(#f(compiled-function (elt) #<bytecode 0xde37379303206b>) ((ty
+  seq-some(#f(lambda (block) [t] (let ((text (and (listp block) (equal
+  agent-sidebar--codex-user-text(((type . "input_text") (text . "INVAL
+  (setq preview (agent-sidebar--codex-user-text (alist-get 'content pa
+  (progn (setq preview (agent-sidebar--codex-user-text (alist-get 'con
+  (if (and (null preview) (equal (alist-get 'type payload) "message") 
+  (let nil (if (and (null preview) (equal (alist-get 'type payload) "m
+  (cond ((equal val '"session_meta") (let nil (if session nil (let ((i
+  (let* ((val (alist-get 'type object))) (cond ((equal val '"session_m
+  (progn (let* ((val (alist-get 'type object))) (cond ((equal val '"se
+  (if (listp payload) (progn (let* ((val (alist-get 'type object))) (c
+  (let ((payload (alist-get 'payload object))) (if (listp payload) (pr
+  (let ((object (car tail))) (let ((payload (alist-get 'payload object
+  (while tail (let ((object (car tail))) (let ((payload (alist-get 'pa
+  (let ((tail (agent-sidebar--read-jsonl (plist-get entry :id) 262144)
+  (let (session cwd timestamp model preview) (let ((tail (agent-sideba
+  (condition-case err (let (session cwd timestamp model preview) (let 
+  agent-sidebar--codex-parse((:id "/var/folders/20/4zczrx1s3lq2fv0xmm0
+  (let ((meta (agent-sidebar--codex-parse (list :id file)))) (let* ((f
+  (progn (ce2--write file (list (ce2--codex-meta) (ce2--codex-user '((
+  (unwind-protect (progn (ce2--write file (list (ce2--codex-meta) (ce2
+  (let ((file (make-temp-file "ce2-schema-" nil ".jsonl"))) (unwind-pr
+  #f(lambda () [t] (let ((file (make-temp-file "ce2-schema-" nil ".jso
+  #f(compiled-function () #<bytecode 0x1ac56d031dd28c3e>)()
+  handler-bind-1(#f(compiled-function () #<bytecode 0x1ac56d031dd28c3e
+  ert--run-test-internal(#s(ert--test-execution-info :test #s(ert-test
+  ert-run-test(#s(ert-test :name ce2-unexpected-codex-content-shape-do
+  ert-run-or-rerun-test(#s(ert--stats :selector t :tests ... :test-map
+  ert-run-tests(t #f(compiled-function (event-type &rest event-args) #
+  ert-run-tests-batch(t)
+  ert-run-tests-batch-and-exit(t)
+  eval((ert-run-tests-batch-and-exit 't) t)
+  command-line-1(("-l" "jka-compr" "-L" "/private/tmp/sidebar-review-7
+  command-line()
+  normal-top-level()
+Test ce2-unexpected-codex-content-shape-does-not-poison-valid-session condition:
+    (wrong-type-argument listp (type . "input_text"))
+   FAILED  6/6  ce2-unexpected-codex-content-shape-does-not-poison-valid-session (0.000710 sec) at agent/agent-sidebar-codex/review/round-2/contrarian-evidence-tests.el:21
+
+Ran 6 tests, 2 results as expected, 4 unexpected (2026-09-08 15:50:58-0700, 0.198624 sec)
+
+4 unexpected results:
+   FAILED  ce2-mutation-control-rejects-disabling-preview-bound-at-parser-dispatch
+   FAILED  ce2-preview-bound-survives-cache-and-activation-path
+   FAILED  ce2-unexpected-claude-content-shape-does-not-poison-valid-session
+   FAILED  ce2-unexpected-codex-content-shape-does-not-poison-valid-session
+

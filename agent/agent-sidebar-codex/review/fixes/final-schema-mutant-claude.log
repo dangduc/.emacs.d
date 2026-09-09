@@ -1,0 +1,49 @@
+LANG=C.UTF-8 cannot be used, using en_US.UTF-8 instead.
+Running 1 tests (2026-09-08 15:56:23-0700, selector `ce2-unexpected-claude-content-shape-does-not-poison-valid-session')
+Test ce2-unexpected-claude-content-shape-does-not-poison-valid-session backtrace:
+  alist-get(type (type . "text"))
+  (equal (alist-get 'type block) "text")
+  (and (listp block) (equal (alist-get 'type block) "text") (stringp (
+  (if (and (listp block) (equal (alist-get 'type block) "text") (strin
+  #f(lambda (block) [t] (if (and (listp block) (equal (alist-get ... b
+  #f(compiled-function (elt) #<bytecode 0xde37379303206b>)((type . "te
+  mapc(#f(compiled-function (elt) #<bytecode 0xde37379303206b>) ((type
+  seq-do(#f(compiled-function (elt) #<bytecode 0xde37379303206b>) ((ty
+  #f(compiled-function (pred sequence) #<bytecode -0x2c92fbccd94d562>)
+  apply(#f(compiled-function (pred sequence) #<bytecode -0x2c92fbccd94
+  seq-some(#f(lambda (block) [t] (if (and (listp block) (equal (alist-
+  (cond ((stringp content) content) ((listp content) (seq-some #'(lamb
+  agent-sidebar--content-text(((type . "text") (text . "INVALID OBJECT
+  (let* ((value (alist-get 'message object)) (message (and (listp valu
+  (let ((object (car tail))) (let* ((value (alist-get 'message object)
+  (while tail (let ((object (car tail))) (let* ((value (alist-get 'mes
+  (let ((tail (agent-sidebar--read-jsonl (plist-get entry :id) 65536))
+  (let ((session-id (or (plist-get (plist-get entry :extras) :session-
+  (condition-case err (let ((session-id (or (plist-get (plist-get entr
+  agent-sidebar--claude-parse((:id "/var/folders/20/4zczrx1s3lq2fv0xmm
+  (let ((meta (agent-sidebar--claude-parse (list :id file :extras (lis
+  (progn (ce2--write file (list (ce2--claude-user '((type . "text") (t
+  (unwind-protect (progn (ce2--write file (list (ce2--claude-user '((t
+  (let ((file (make-temp-file "ce2-schema-" nil ".jsonl"))) (unwind-pr
+  #f(lambda () [t] (let ((file (make-temp-file "ce2-schema-" nil ".jso
+  #f(compiled-function () #<bytecode -0x13e7cb01af2c9117>)()
+  handler-bind-1(#f(compiled-function () #<bytecode -0x13e7cb01af2c911
+  ert--run-test-internal(#s(ert--test-execution-info :test #s(ert-test
+  ert-run-test(#s(ert-test :name ce2-unexpected-claude-content-shape-d
+  ert-run-or-rerun-test(#s(ert--stats :selector ce2-unexpected-claude-
+  ert-run-tests(ce2-unexpected-claude-content-shape-does-not-poison-va
+  ert-run-tests-batch(ce2-unexpected-claude-content-shape-does-not-poi
+  ert-run-tests-batch-and-exit(ce2-unexpected-claude-content-shape-doe
+  eval((ert-run-tests-batch-and-exit 'ce2-unexpected-claude-content-sh
+  command-line-1(("-l" "jka-compr" "-L" "/private/tmp/sidebar-review-y
+  command-line()
+  normal-top-level()
+Test ce2-unexpected-claude-content-shape-does-not-poison-valid-session condition:
+    (wrong-type-argument listp (type . "text"))
+   FAILED  1/1  ce2-unexpected-claude-content-shape-does-not-poison-valid-session (0.001115 sec) at agent/agent-sidebar-codex/review/round-2/contrarian-evidence-tests.el:32
+
+Ran 1 tests, 0 results as expected, 1 unexpected (2026-09-08 15:56:23-0700, 0.070038 sec)
+
+1 unexpected results:
+   FAILED  ce2-unexpected-claude-content-shape-does-not-poison-valid-session
+

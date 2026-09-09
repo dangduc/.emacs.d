@@ -1,0 +1,19 @@
+LANG=C.UTF-8 cannot be used, using en_US.UTF-8 instead.
+Running 14 tests (2026-09-08 15:34:54-0700, selector `t')
+   passed   1/14  ce-empty-native-records-do-not-consume-the-first-prompt-slot (0.000807 sec)
+   passed   2/14  ce-event-context-is-filtered-before-first-real-prompt (0.000564 sec)
+   passed   3/14  ce-event-first-history-and-duplicate-forms-keep-first-request (0.000492 sec)
+   passed   4/14  ce-event-only-history-is-supported (0.000437 sec)
+   passed   5/14  ce-first-prompt-survives-later-event-from-a-new-turn (0.000484 sec)
+   passed   6/14  ce-fork-identity-is-not-inherited-parent-identity (0.000466 sec)
+   passed   7/14  ce-inline-plugin-markup-is-user-text (0.011984 sec)
+   passed   8/14  ce-leading-context-wrappers-keep-a-request-after-the-last-close (0.000553 sec)
+   passed   9/14  ce-many-leading-context-wrappers-retain-the-final-request (0.000827 sec)
+   passed  10/14  ce-mutation-control-kills-disabled-context-filter (0.000851 sec)
+   passed  11/14  ce-plugin-inventory-is-context-not-the-first-prompt (0.000558 sec)
+   passed  12/14  ce-plugin-wrapper-keeps-a-request-in-its-suffix (0.000440 sec)
+   passed  13/14  ce-standalone-and-incomplete-context-blocks-do-not-win-preview (0.000459 sec)
+   passed  14/14  ce-unknown-tags-and-quoted-leading-tags-remain-user-text (0.001033 sec)
+
+Ran 14 tests, 14 results as expected, 0 unexpected (2026-09-08 15:34:54-0700, 0.020340 sec)
+

@@ -1,0 +1,1 @@
+{"case": "completed-command-control", "startup_error": "Emacs did not arm the pending timer:  terminal=b'emacs: Could not open file: /dev/tty\\r\\n'", "conclusion": "Input schedule not reached"}

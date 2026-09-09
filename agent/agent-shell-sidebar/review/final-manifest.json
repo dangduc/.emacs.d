@@ -1,0 +1,38 @@
+{
+  "source_sha256": "4c2e73058c39fe01215d879ffc882005cb980f06f05d4a4e0f72c0461a7546b3",
+  "product_findings_fixed": 15,
+  "review_rounds": 2,
+  "perspectives_per_round": 6,
+  "files": {
+    "/Users/ducnguyen/.emacs.d/lisp/agent-shell-sidebar.el": "4c2e73058c39fe01215d879ffc882005cb980f06f05d4a4e0f72c0461a7546b3",
+    "/Users/ducnguyen/.emacs.d/lisp/agent-shell-sidebar.elc": "9c3fea454fdfbf4d5959c4135372b50159105aeb719e9598f45039c50f4b62cc",
+    "/Users/ducnguyen/Desktop/agent-shell-sidebar.el": "4c2e73058c39fe01215d879ffc882005cb980f06f05d4a4e0f72c0461a7546b3",
+    "/Users/ducnguyen/.emacs.d/lisp/package-declarations.el": "acb35a36ef6fe1499ee8218255d23f95fb411a9a12089331d681c176d3aa7508",
+    "/Users/ducnguyen/.emacs.d/agent/agent-shell-sidebar/tests/sidebar-tests.el": "379467804fa1f867deb3a7ff1904a83c289e8b82f135bf9f6cd1dae92f0b0d74",
+    "/Users/ducnguyen/.emacs.d/agent/agent-shell-sidebar/review/round-2/contrarian-workflow.el": "427f3b5ed0e4eae843dd08c04cbd75811f0a2bbc067ae0604de8b33e83b0c811"
+  },
+  "validation": {
+    "source": {
+      "tests": 131,
+      "passed": 131,
+      "log": "final-source-tests.log"
+    },
+    "compiled": {
+      "tests": 131,
+      "passed": 131,
+      "log": "final-compiled-tests.log"
+    },
+    "emacs30": {
+      "tests": 131,
+      "passed": 131,
+      "log": "final-emacs30-tests.log"
+    }
+  },
+  "compile_warnings_are_errors": true,
+  "whitespace_check": "passed",
+  "live_pid": 3353,
+  "live_parsed": 71,
+  "live_rendered": 71,
+  "live_cleanup": "no fixture/staging buffers or timer registrations",
+  "config_unchanged_since_review_start": true
+}

@@ -1,0 +1,20 @@
+LANG=C.UTF-8 cannot be used, using en_US.UTF-8 instead.
+Running 7 tests (2026-09-08 15:50:42-0700, selector `(or "^fix-local-cwd-" "^workflow-r2-")')
+Warning (emacs): Redefining `expand-file-name' might break native compilation of trampolines.
+Warning (emacs): Redefining `expand-file-name' might break native compilation of trampolines.
+Warning (emacs): Redefining `expand-file-name' might break native compilation of trampolines.
+Warning (emacs): Redefining `expand-file-name' might break native compilation of trampolines.
+   passed  1/7  fix-local-cwd-invalid-values-rejected-before-expansion (0.765307 sec)
+   passed  2/7  fix-local-cwd-direct-launch-rejects-remote-before-stat (0.000048 sec)
+   passed  3/7  workflow-r2-collapsed-codex-group-retains-new-session-context (0.390923 sec)
+   passed  4/7  workflow-r2-derived-mode-binds-actions-and-preserves-core-keys (0.000616 sec)
+MUTATION: erasing :agent lets an ambiguous agent-shell group start, as detected
+   passed  5/7  workflow-r2-erasing-agent-identity-mutation-is-detected (0.033775 sec)
+REMOTE CWD: action=agent-sidebar-visit remote-stat-calls=nil result=(user-error "Transcript has no existing local working directory")
+REMOTE CWD: action=agent-sidebar-visit-in-agent-shell remote-stat-calls=nil result=(user-error "Codex rollout has no existing local working directory")
+REMOTE CWD: action=agent-sidebar-new-session remote-stat-calls=nil result=(user-error "Selected transcript has no existing working directory")
+   passed  6/7  workflow-r2-local-codex-actions-reject-remote-cwd-before-stat (0.048902 sec)
+   passed  7/7  workflow-r2-mixed-agent-group-requires-row (0.029223 sec)
+
+Ran 7 tests, 7 results as expected, 0 unexpected (2026-09-08 15:50:44-0700, 1.269191 sec)
+

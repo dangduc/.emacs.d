@@ -1,0 +1,1 @@
+(:pid 58644 :depth 0 :library "/Users/ducnguyen/.emacs.d/lisp/agent-sidebar.elc" :name-target agent-sidebar-name :mode-parent special-mode :old-feature nil :old-library nil :old-command nil :providers (agent-shell claude-cli codex-cli) :refresh-key agent-sidebar-refresh :fixture-buffers nil)

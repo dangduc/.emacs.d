@@ -1,0 +1,62 @@
+{
+  "source": "/Users/ducnguyen/.emacs.d/agent/agent-shell-sidebar/review/round-2/reviewed.el",
+  "source_sha256": "629a0b61dc25a1b9766936b34b655aea9e1775c57f0f2d98ebb9ef00fea1b6ed",
+  "command_prefix": [
+    "/Applications/Emacs.app/Contents/MacOS/Emacs",
+    "-Q",
+    "--batch",
+    "-l",
+    "jka-compr",
+    "-L",
+    "/Users/ducnguyen/.emacs.d/elpa/31/shell-maker-20260820.1245",
+    "-L",
+    "/Users/ducnguyen/.emacs.d/elpa/31/acp-20260821.1448",
+    "-L",
+    "/Users/ducnguyen/.emacs.d/elpa/31/agent-shell-20260823.1937",
+    "-l",
+    "/Users/ducnguyen/.emacs.d/agent/agent-shell-sidebar/review/round-2/reviewed.el"
+  ],
+  "results": [
+    {
+      "scenario": "regular",
+      "timeout": false,
+      "returncode": 0,
+      "output": "LANG=C.UTF-8 cannot be used, using en_US.UTF-8 instead.\nDISCOVERED regular=t source=\"/Users/ducnguyen/.emacs.d/agent/agent-shell-sidebar/review/round-2/reviewed.el\" scenario=\"regular\"\nRESULT opened=t view=t contents=\"**Agent:** Fixture\n---\noriginal contents\n\"\n",
+      "elapsed_seconds": 0.218
+    },
+    {
+      "scenario": "rewritten-regular",
+      "timeout": false,
+      "returncode": 0,
+      "output": "LANG=C.UTF-8 cannot be used, using en_US.UTF-8 instead.\nDISCOVERED regular=t source=\"/Users/ducnguyen/.emacs.d/agent/agent-shell-sidebar/review/round-2/reviewed.el\" scenario=\"rewritten-regular\"\nRESULT opened=t view=t contents=\"rewritten contents\n\"\n",
+      "elapsed_seconds": 0.217
+    },
+    {
+      "scenario": "missing",
+      "timeout": false,
+      "returncode": 0,
+      "output": "LANG=C.UTF-8 cannot be used, using en_US.UTF-8 instead.\nDISCOVERED regular=t source=\"/Users/ducnguyen/.emacs.d/agent/agent-shell-sidebar/review/round-2/reviewed.el\" scenario=\"missing\"\nRESULT error=user-error text=\"Cannot read transcript: /private/tmp/sidebar-cw2-view-rsrs42wz/.agent-shell/transcripts/fixture.md\"\n",
+      "elapsed_seconds": 0.215
+    },
+    {
+      "scenario": "directory",
+      "timeout": false,
+      "returncode": 0,
+      "output": "LANG=C.UTF-8 cannot be used, using en_US.UTF-8 instead.\nDISCOVERED regular=t source=\"/Users/ducnguyen/.emacs.d/agent/agent-shell-sidebar/review/round-2/reviewed.el\" scenario=\"directory\"\nls does not support --dired -N; see `dired-use-ls-dired' for more details.\nRESULT opened=t view=t contents=#(\"  /private/tmp/sidebar-cw2-view-zjuq6yg5/.agent-shell/transcripts/fixture.md:\n  drwxr-xr-x@ 2 ducnguyen  wheel  64 Sep  8 13:33 .\n  drwxr-xr-x  3 ducnguyen  wheel  96 Sep  8 13:33 ..\n\" 3 10 (keymap (keymap (13 . #[0 \"\\302\\300\t\\\"\\203\u000b\u0000\\303\\300!\\207\\304\\300!\\203\u0015\u0000\\305\\300!\\207\\306\\300!\\207\" [\"/private/\" dired-subdir-alist assoc dired-goto-subdir insert-directory-wildcard-in-dir-p dired dired--find-possibly-alternative-file] 3 nil nil]) (follow-link . mouse-face) (mouse-2 . #[0 \"\\302\\300\t\\\"\\203\u000b\u0000\\303\\300!\\207\\304\\300!\\203\u0015\u0000\\305\\300!\\207\\306\\300!\\207\" [\"/private/\" dired-subdir-alist assoc dired-goto-subdir insert-directory-wildcard-in-dir-p dired dired--find-possibly-alternative-file] 3 nil nil])) help-echo \"mouse-1: goto this directory\" mouse-face highlight) 11 14 (keymap (keymap (13 . #[0 \"\\302\\300\t\\\"\\203\u000b\u0000\\303\\300!\\207\\304\\300!\\203\u0015\u0000\\305\\300!\\207\\306\\300!\\207\" [\"/private/tmp/\" dired-subdir-alist assoc dired-goto-subdir insert-directory-wildcard-in-dir-p dired dired--find-possibly-alternative-file] 3 nil nil]) (follow-link . mouse-face) (mouse-2 . #[0 \"\\302\\300\t\\\"\\203\u000b\u0000\\303\\300!\\207\\304\\300!\\203\u0015\u0000\\305\\300!\\207\\306\\300!\\207\" [\"/private/tmp/\" dired-subdir-alist assoc dired-goto-subdir insert-directory-wildcard-in-dir-p dired dired--find-possibly-alternative-file] 3 nil nil])) help-echo \"mouse-1: goto this directory\" mouse-face highlight) 15 40 (keymap (keymap (13 . #[0 \"\\302\\300\t\\\"\\203\u000b\u0000\\303\\300!\\207\\304\\300!\\203\u0015\u0000\\305\\300!\\207\\306\\300!\\207\" [\"/private/tmp/sidebar-cw2-view-zjuq6yg5/\" dired-subdir-alist assoc dired-goto-subdir insert-directory-wildcard-in-dir-p dired dired--find-possibly-alternative-file] 3 nil nil]) (follow-link . mouse-face) (mouse-2 . #[0 \"\\302\\300\t\\\"\\203\u000b\u0000\\303\\300!\\207\\304\\300!\\203\u0015\u0000\\305\\300!\\207\\306\\300!\\207\" [\"/private/tmp/sidebar-cw2-view-zjuq6yg5/\" dired-subdir-alist assoc dired-goto-subdir insert-directory-wildcard-in-dir-p dired dired--find-possibly-alternative-file] 3 nil nil])) help-echo \"mouse-1: goto this directory\" mouse-face highlight) 41 53 (keymap (keymap (13 . #[0 \"\\302\\300\t\\\"\\203\u000b\u0000\\303\\300!\\207\\304\\300!\\203\u0015\u0000\\305\\300!\\207\\306\\300!\\207\" [\"/private/tmp/sidebar-cw2-view-zjuq6yg5/.agent-shell/\" dired-subdir-alist assoc dired-goto-subdir insert-directory-wildcard-in-dir-p dired dired--find-possibly-alternative-file] 3 nil nil]) (follow-link . mouse-face) (mouse-2 . #[0 \"\\302\\300\t\\\"\\203\u000b\u0000\\303\\300!\\207\\304\\300!\\203\u0015\u0000\\305\\300!\\207\\306\\300!\\207\" [\"/private/tmp/sidebar-cw2-view-zjuq6yg5/.agent-shell/\" dired-subdir-alist assoc dired-goto-subdir insert-directory-wildcard-in-dir-p dired dired--find-possibly-alternative-file] 3 nil nil])) help-echo \"mouse-1: goto this directory\" mouse-face highlight) 54 65 (keymap (keymap (13 . #[0 \"\\302\\300\t\\\"\\203\u000b\u0000\\303\\300!\\207\\304\\300!\\203\u0015\u0000\\305\\300!\\207\\306\\300!\\207\" [\"/private/tmp/sidebar-cw2-view-zjuq6yg5/.agent-shell/transcripts/\" dired-subdir-alist assoc dired-goto-subdir insert-directory-wildcard-in-dir-p dired dired--find-possibly-alternative-file] 3 nil nil]) (follow-link . mouse-face) (mouse-2 . #[0 \"\\302\\300\t\\\"\\203\u000b\u0000\\303\\300!\\207\\304\\300!\\203\u0015\u0000\\305\\300!\\207\\306\\300!\\207\" [\"/private/tmp/sidebar-cw2-view-zjuq6yg5/.agent-shell/transcripts/\" dired-subdir-alist assoc dired-goto-subdir insert-directory-wildcard-in-dir-p dired dired--find-possibly-alternative-file] 3 nil nil])) help-echo \"mouse-1: goto this directory\" mouse-face highlight) 66 76 (keymap (keymap (13 . revert-buffer) (follow-link . mouse-face) (mouse-2 . #<subr F616e6f6e796d6f75732d6c616d626461_anonymous_lambda_60>)) help-echo \"mouse-1: re-read this buffer's directory\" mouse-face highlight) 76 77 (display \": (435 GiB available)\") 79 127 (invisible dired-hide-details-detail) 128 129 (help-echo \"mouse-2: visit this file in other window\" dired-filename t mouse-face highlight) 131 179 (invisible dired-hide-details-detail) 180 182 (help-echo \"mouse-2: visit this file in other window\" dired-filename t mouse-face highlight))\n",
+      "elapsed_seconds": 0.267
+    },
+    {
+      "scenario": "symlink",
+      "timeout": false,
+      "returncode": 0,
+      "output": "LANG=C.UTF-8 cannot be used, using en_US.UTF-8 instead.\nDISCOVERED regular=t source=\"/Users/ducnguyen/.emacs.d/agent/agent-shell-sidebar/review/round-2/reviewed.el\" scenario=\"symlink\"\nRESULT opened=t view=t contents=\"symlink target\n\"\n",
+      "elapsed_seconds": 0.222
+    },
+    {
+      "scenario": "fifo",
+      "timeout": true,
+      "output": "LANG=C.UTF-8 cannot be used, using en_US.UTF-8 instead.\nDISCOVERED regular=t source=\"/Users/ducnguyen/.emacs.d/agent/agent-shell-sidebar/review/round-2/reviewed.el\" scenario=\"fifo\"\n",
+      "elapsed_seconds": 3.005
+    }
+  ]
+}

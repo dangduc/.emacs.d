@@ -1,0 +1,22 @@
+SOURCE=/Users/ducnguyen/.emacs.d/agent/agent-shell-sidebar/review/fixes/reentrancy.el
+DISCOVERY-ERROR pending=319 stage-live=t parse-timer=nil automatic-retry-owned=([nil 0 30 0 nil agent-shell-sidebar--refresh-tick (#<buffer  *Independent sidebar owner*>) idle 0 nil])
+DISCOVERY-RECOVERY all headers and staging completed; stale timer had no effect.
+NAME-REUSE old parse and refresh callbacks left the replacement owner unchanged.
+AFTER-READ-REFRESH new metadata and preview published; pending=0.
+READ-REFRESH old-head="/var/folders/20/4zczrx1s3lq2fv0xmm0gj1fr0000gn/T/sidebar-ki2-PCEZCs/.agent-shell/transcripts/0000.md" new-head="/var/folders/20/4zczrx1s3lq2fv0xmm0gj1fr0000gn/T/sidebar-ki2-PCEZCs/.agent-shell/transcripts/fresh.md" new-file-retained=("/var/folders/20/4zczrx1s3lq2fv0xmm0gj1fr0000gn/T/sidebar-ki2-PCEZCs/.agent-shell/transcripts/fresh.md" "/var/folders/20/4zczrx1s3lq2fv0xmm0gj1fr0000gn/T/sidebar-ki2-PCEZCs/.agent-shell/transcripts/0000.md" "/var/folders/20/4zczrx1s3lq2fv0xmm0gj1fr0000gn/T/sidebar-ki2-PCEZCs/.agent-shell/transcripts/0001.md" "/var/folders/20/4zczrx1s3lq2fv0xmm0gj1fr0000gn/T/sidebar-ki2-PCEZCs/.agent-shell/transcripts/0002.md" "/var/folders/20/4zczrx1s3lq2fv0xmm0gj1fr0000gn/T/sidebar-ki2-PCEZCs/.agent-shell/transcripts/0003.md" "/var/folders/20/4zczrx1s3lq2fv0xmm0gj1fr0000gn/T/sidebar-ki2-PCEZCs/.agent-shell/transcripts/0004.md" "/var/folders/20/4zczrx1s3lq2fv0xmm0gj1fr0000gn/T/sidebar-ki2-PCEZCs/.agent-shell/transcripts/0005.md" "/var/folders/20/4zczrx1s3lq2fv0xmm0gj1fr0000gn/T/sidebar-ki2-PCEZCs/.agent-shell/transcripts/0006.md" "/var/folders/20/4zczrx1s3lq2fv0xmm0gj1fr0000gn/T/sidebar-ki2-PCEZCs/.agent-shell/transcripts/0007.md" "/var/folders/20/4zczrx1s3lq2fv0xmm0gj1fr0000gn/T/sidebar-ki2-PCEZCs/.agent-shell/transcripts/0008.md" "/var/folders/20/4zczrx1s3lq2fv0xmm0gj1fr0000gn/T/sidebar-ki2-PCEZCs/.agent-shell/transcripts/0009.md" "/var/folders/20/4zczrx1s3lq2fv0xmm0gj1fr0000gn/T/sidebar-ki2-PCEZCs/.agent-shell/transcripts/0010.md" "/var/folders/20/4zczrx1s3lq2fv0xmm0gj1fr0000gn/T/sidebar-ki2-PCEZCs/.agent-shell/transcripts/0011.md") parsed-new=(:agent "Fresh" :preview "Freshly discovered row") pending=0 visible-new=59
+SOURCE-AFTER=/Users/ducnguyen/.emacs.d/agent/agent-shell-sidebar/review/fixes/reentrancy.el
+LANG=C.UTF-8 cannot be used, using en_US.UTF-8 instead.
+
+Running 4 tests (2026-09-08 13:43:03-0700, selector `t')
+Error running timer `agent-shell-sidebar--refresh-tick': (error "Injected transient discovery error")
+
+   passed  1/4  ki2-discovery-error-preserves-stage-until-next-refresh-recovers (4.535987 sec)
+
+   passed  2/4  ki2-recreated-buffer-name-does-not-transfer-old-timer-ownership (0.006965 sec)
+
+   passed  3/4  ki2-refresh-after-read-retains-newly-discovered-work (0.084724 sec)
+
+   passed  4/4  ki2-refresh-during-read-retains-newly-discovered-work (0.067683 sec)
+
+Ran 4 tests, 4 results as expected, 0 unexpected (2026-09-08 13:43:07-0700, 4.695630 sec)
+

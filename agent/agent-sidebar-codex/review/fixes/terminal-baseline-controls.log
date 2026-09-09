@@ -1,0 +1,114 @@
+LANG=C.UTF-8 cannot be used, using en_US.UTF-8 instead.
+Running 3 tests (2026-09-08 15:38:30-0700, selector `"^torvalds-"')
+TRAILING-SLASH: starts=2, live-children=2, both homes equal by file-equal-p=t
+Test torvalds-codex-home-trailing-slash-reuses-process backtrace:
+  ert-fail(((should (= starts 1)) :form (= 2 1) :value nil))
+  (if (unwind-protect (setq value-286 (apply fn-284 args-285)) (setq f
+  (let (form-description-288) (if (unwind-protect (setq value-286 (app
+  (let ((value-286 'ert-form-evaluation-aborted-287)) (let (form-descr
+  (let* ((fn-284 #'=) (args-285 (condition-case err (list starts 1) (e
+  (progn (fset 'ghostel-exec vnew) (fset 'agent-shell-sidebar--pop-to 
+  (unwind-protect (progn (fset 'ghostel-exec vnew) (fset 'agent-shell-
+  (let* ((vnew #'(lambda (_) meta)) (vnew #'(lambda (buffer program ar
+  (let* ((agent-sidebar-codex-cli-command "/bin/cat") (id "12345678-12
+  (progn (let* ((agent-sidebar-codex-cli-command "/bin/cat") (id "1234
+  (unwind-protect (progn (let* ((agent-sidebar-codex-cli-command "/bin
+  (let ((wconfig (current-window-configuration))) (unwind-protect (pro
+  (unwind-protect (let ((wconfig (current-window-configuration))) (unw
+  (let* ((temporary (make-temp-file "sidebar-torvalds-" t)) (directory
+  #f(lambda () [t] (let* ((temporary (make-temp-file "sidebar-torvalds
+  #f(compiled-function () #<bytecode -0x12ed57b89bcf3ed9>)()
+  handler-bind-1(#f(compiled-function () #<bytecode -0x12ed57b89bcf3ed
+  ert--run-test-internal(#s(ert--test-execution-info :test ... :result
+  ert-run-test(#s(ert-test :name torvalds-codex-home-trailing-slash-re
+  ert-run-or-rerun-test(#s(ert--stats :selector "^torvalds-" :tests ..
+  ert-run-tests("^torvalds-" #f(compiled-function (event-type &rest ev
+  ert-run-tests-batch("^torvalds-")
+  ert-run-tests-batch-and-exit("^torvalds-")
+  eval((ert-run-tests-batch-and-exit '"^torvalds-") t)
+  command-line-1(("-l" "jka-compr" "-L" "/private/tmp/sidebar-review-7
+  command-line()
+  normal-top-level()
+Test torvalds-codex-home-trailing-slash-reuses-process condition:
+    (ert-test-failed ((should (= starts 1)) :form (= 2 1) :value nil))
+   FAILED  1/3  torvalds-codex-home-trailing-slash-reuses-process (0.005578 sec) at agent/agent-sidebar-codex/review/round-1/torvalds-tests.el:31
+TERM-COLLISION: same-buffer=t, same-process=t, child-command=("/bin/sh" "-c" "stty -nl echo rows 22 columns 79 sane 2>/dev/null;if [ $1 = .. ]; then shift; fi; exec \"$@\"" ".." "/bin/sh" "-c" "exec sleep 30" "fixture" "12345678-1111-7111-8111-111111111111"), recorded-session=(claude-cli "12345678-2222-7222-8222-222222222222" "/var/folders/20/4zczrx1s3lq2fv0xmm0gj1fr0000gn/T/sidebar-torvalds-Mb9bQY/repo/")
+Test torvalds-term-fallback-distinguishes-resume-id-prefix-collision backtrace:
+  ert-fail(((should-not (eq first-buffer second-buffer)) :form (eq #<k
+  (if (not (unwind-protect (setq value-301 (apply fn-299 args-300)) (s
+  (let (form-description-303) (if (not (unwind-protect (setq value-301
+  (let ((value-301 'ert-form-evaluation-aborted-302)) (let (form-descr
+  (let* ((fn-299 #'eq) (args-300 (condition-case err (list first-buffe
+  (progn (fset 'agent-sidebar--ensure-parsed vnew) (fset 'agent-shell-
+  (unwind-protect (progn (fset 'agent-sidebar--ensure-parsed vnew) (fs
+  (let* ((vnew #'(lambda (buffer) (setq shown buffer))) (vnew #'(lambd
+  (let* ((first "12345678-1111-7111-8111-111111111111") (second "12345
+  (progn (let* ((first "12345678-1111-7111-8111-111111111111") (second
+  (unwind-protect (progn (let* ((first "12345678-1111-7111-8111-111111
+  (let ((wconfig (current-window-configuration))) (unwind-protect (pro
+  (unwind-protect (let ((wconfig (current-window-configuration))) (unw
+  (let* ((temporary (make-temp-file "sidebar-torvalds-" t)) (directory
+  #f(lambda () [t] (let* ((temporary (make-temp-file "sidebar-torvalds
+  #f(compiled-function () #<bytecode -0x12ed57b89bcf3ed9>)()
+  handler-bind-1(#f(compiled-function () #<bytecode -0x12ed57b89bcf3ed
+  ert--run-test-internal(#s(ert--test-execution-info :test ... :result
+  ert-run-test(#s(ert-test :name torvalds-term-fallback-distinguishes-
+  ert-run-or-rerun-test(#s(ert--stats :selector "^torvalds-" :tests ..
+  ert-run-tests("^torvalds-" #f(compiled-function (event-type &rest ev
+  ert-run-tests-batch("^torvalds-")
+  ert-run-tests-batch-and-exit("^torvalds-")
+  eval((ert-run-tests-batch-and-exit '"^torvalds-") t)
+  command-line-1(("-l" "jka-compr" "-L" "/private/tmp/sidebar-review-7
+  command-line()
+  normal-top-level()
+Test torvalds-term-fallback-distinguishes-resume-id-prefix-collision condition:
+    (ert-test-failed
+     ((should-not (eq first-buffer second-buffer)) :form
+      (eq #<killed buffer> #<killed buffer>) :value t))
+   FAILED  2/3  torvalds-term-fallback-distinguishes-resume-id-prefix-collision (0.003845 sec) at agent/agent-sidebar-codex/review/round-1/torvalds-tests.el:60
+TERM-NEW: same-buffer=t, same-process=t
+Test torvalds-term-new-session-really-starts-new-process backtrace:
+  ert-fail(((should-not (eq first-buffer shown)) :form (eq #<killed bu
+  (if (not (unwind-protect (setq value-990 (apply fn-988 args-989)) (s
+  (let (form-description-992) (if (not (unwind-protect (setq value-990
+  (let ((value-990 'ert-form-evaluation-aborted-991)) (let (form-descr
+  (let* ((fn-988 #'eq) (args-989 (condition-case err (list first-buffe
+  (progn (fset 'agent-shell-sidebar--pop-to vnew) (fset 'agent-sidebar
+  (unwind-protect (progn (fset 'agent-shell-sidebar--pop-to vnew) (fse
+  (let* ((vnew #'(lambda (_) (list :cwd directory :agent "Claude"))) (
+  (progn (agent-sidebar-mode) (let ((entry (list :provider 'claude-cli
+  (unwind-protect (progn (agent-sidebar-mode) (let ((entry (list :prov
+  (save-current-buffer (set-buffer temp-buffer) (unwind-protect (progn
+  (let ((temp-buffer (generate-new-buffer " *temp*" t))) (save-current
+  (let ((agent-sidebar-claude-cli-command "/bin/cat") shown first-buff
+  (progn (let ((agent-sidebar-claude-cli-command "/bin/cat") shown fir
+  (unwind-protect (progn (let ((agent-sidebar-claude-cli-command "/bin
+  (let ((wconfig (current-window-configuration))) (unwind-protect (pro
+  (unwind-protect (let ((wconfig (current-window-configuration))) (unw
+  (let* ((temporary (make-temp-file "sidebar-torvalds-" t)) (directory
+  #f(lambda () [t] (let* ((temporary (make-temp-file "sidebar-torvalds
+  #f(compiled-function () #<bytecode -0x12ed57b89bcf3ed9>)()
+  handler-bind-1(#f(compiled-function () #<bytecode -0x12ed57b89bcf3ed
+  ert--run-test-internal(#s(ert--test-execution-info :test #s(ert-test
+  ert-run-test(#s(ert-test :name torvalds-term-new-session-really-star
+  ert-run-or-rerun-test(#s(ert--stats :selector "^torvalds-" :tests ..
+  ert-run-tests("^torvalds-" #f(compiled-function (event-type &rest ev
+  ert-run-tests-batch("^torvalds-")
+  ert-run-tests-batch-and-exit("^torvalds-")
+  eval((ert-run-tests-batch-and-exit '"^torvalds-") t)
+  command-line-1(("-l" "jka-compr" "-L" "/private/tmp/sidebar-review-7
+  command-line()
+  normal-top-level()
+Test torvalds-term-new-session-really-starts-new-process condition:
+    (ert-test-failed
+     ((should-not (eq first-buffer shown)) :form
+      (eq #<killed buffer> #<killed buffer>) :value t))
+   FAILED  3/3  torvalds-term-new-session-really-starts-new-process (0.004468 sec) at agent/agent-sidebar-codex/review/fixes/terminal-tests.el:8
+
+Ran 3 tests, 0 results as expected, 3 unexpected (2026-09-08 15:38:30-0700, 0.157110 sec)
+
+3 unexpected results:
+   FAILED  torvalds-codex-home-trailing-slash-reuses-process
+   FAILED  torvalds-term-fallback-distinguishes-resume-id-prefix-collision
+   FAILED  torvalds-term-new-session-really-starts-new-process
+

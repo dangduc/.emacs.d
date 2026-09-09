@@ -1,0 +1,15 @@
+{
+  "files": 100,
+  "max_bytes_per_file": 262144,
+  "first_fallback_categories": {
+    "other": 81,
+    "recommended_plugins": 14
+  },
+  "plugin_block_shapes": {
+    "closed": 14,
+    "empty_suffix": 14
+  },
+  "paired_first_lines": {
+    "equal": 8
+  }
+}

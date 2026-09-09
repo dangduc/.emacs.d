@@ -1,0 +1,177 @@
+LANG=C.UTF-8 cannot be used, using en_US.UTF-8 instead.
+Running 123 tests (2026-09-08 15:54:58-0700, selector `t')
+   passed    1/123  acp-fix-actual-client-home-wins-over-stale-marker (0.377626 sec)
+   passed    2/123  acp-fix-deferred-client-keeps-home-and-other-environment (0.000524 sec)
+   passed    3/123  acp-fix-ordinary-client-with-explicit-home-is-reused (0.000609 sec)
+   passed    4/123  acp-fix-ordinary-client-with-unknown-home-is-not-guessed (0.000578 sec)
+   passed    5/123  acp-fix-reloaded-config-and-home-alias-are-reused (0.000747 sec)
+   passed    6/123  acp-fix-wrapper-does-not-mutate-shared-client-environment (0.000389 sec)
+   passed    7/123  ce-empty-native-records-do-not-consume-the-first-prompt-slot (0.001066 sec)
+   passed    8/123  ce-event-context-is-filtered-before-first-real-prompt (0.000747 sec)
+   passed    9/123  ce-event-first-history-and-duplicate-forms-keep-first-request (0.000540 sec)
+   passed   10/123  ce-event-only-history-is-supported (0.000460 sec)
+   passed   11/123  ce-first-prompt-survives-later-event-from-a-new-turn (0.000506 sec)
+   passed   12/123  ce-fork-identity-is-not-inherited-parent-identity (0.000515 sec)
+   passed   13/123  ce-inline-plugin-markup-is-user-text (0.000723 sec)
+   passed   14/123  ce-leading-context-wrappers-keep-a-request-after-the-last-close (0.000636 sec)
+   passed   15/123  ce-many-leading-context-wrappers-retain-the-final-request (0.000990 sec)
+   passed   16/123  ce-mutation-control-kills-disabled-context-filter (0.000918 sec)
+   passed   17/123  ce-plugin-inventory-is-context-not-the-first-prompt (0.000568 sec)
+   passed   18/123  ce-plugin-wrapper-keeps-a-request-in-its-suffix (0.000456 sec)
+   passed   19/123  ce-standalone-and-incomplete-context-blocks-do-not-win-preview (0.000450 sec)
+   passed   20/123  ce-unknown-tags-and-quoted-leading-tags-remain-user-text (0.000861 sec)
+   passed   21/123  ce2-completing-a-native-record-invalidates-a-successful-empty-preview-cache (0.000944 sec)
+   passed   22/123  ce2-multibyte-record-crossing-byte-prefix-does-not-leak-partial-preview (0.017471 sec)
+   passed   23/123  ce2-mutation-control-rejects-disabling-preview-bound-at-parser-dispatch (0.001288 sec)
+   passed   24/123  ce2-preview-bound-survives-cache-and-activation-path (0.001132 sec)
+   passed   25/123  ce2-unexpected-claude-content-shape-does-not-poison-valid-session (0.000491 sec)
+   passed   26/123  ce2-unexpected-codex-content-shape-does-not-poison-valid-session (0.000523 sec)
+   passed   27/123  codex-bounded-records-and-malformed-session-id (0.004498 sec)
+   passed   28/123  codex-cli-ghostel-resume-argv-home-and-reuse (0.050924 sec)
+   passed   29/123  codex-discovery-ignores-archives-symlinks-pipes-and-unrelated-folders (0.003904 sec)
+   passed   30/123  codex-discovery-metadata-and-existing-providers (0.056620 sec)
+   passed   31/123  codex-fork-keeps-first-session-meta-and-first-user-preview (0.001912 sec)
+   passed   32/123  codex-markdown-agent-shell-uses-codex-config (0.012123 sec)
+   passed   33/123  codex-native-agent-shell-rejects-missing-cwd-before-start (0.012898 sec)
+Deleted 0. Retained 1 mark(s): Transcript belongs to an open session: /var/folders/20/4zczrx1s3lq2fv0xmm0gj1fr0000gn/T/agent-sidebar-merge-MDG2cL/codex/sessions/2026/09/08/rollout-2026-09-08T12-00-00-12345678-1234-7123-8123-123456789abc.jsonl
+Codex agent-shell client: session/load, session/new, reuse, cwd, and native-rollout ownership passed
+   passed   34/123  codex-native-real-agent-shell-client-load-new-reuse-and-ownership (0.622206 sec)
+   passed   35/123  codex-new-cli-and-prefix-agent-shell-select-codex (0.012746 sec)
+   passed   36/123  display-fix-existing-custom-buffer-error-and-quit-preserve-owner (0.002974 sec)
+   passed   37/123  display-fix-existing-session-reuse-preserves-running-child (0.002088 sec)
+   passed   38/123  display-fix-ghostel-dispatch-error-and-quit-clean-up (0.004063 sec)
+   passed   39/123  display-fix-new-custom-buffer-error-and-quit-clean-up (0.003954 sec)
+   passed   40/123  fix-group-changed-filter-membership-aborts (0.045761 sec)
+   passed   41/123  fix-group-changed-model-membership-aborts (0.016844 sec)
+EARLY AMBIGUITY: 20 discovered entries, 2 parser calls
+   passed   42/123  fix-group-stops-at-second-distinct-context (0.016248 sec)
+   passed   43/123  fix-group-warm-one-context-keeps-cache-and-discovery (0.025397 sec)
+   passed   44/123  fix-local-cwd-direct-launch-rejects-remote-before-stat (0.359072 sec)
+Warning (emacs): Redefining `expand-file-name' might break native compilation of trampolines.
+Warning (emacs): Redefining `expand-file-name' might break native compilation of trampolines.
+Warning (emacs): Redefining `expand-file-name' might break native compilation of trampolines.
+Warning (emacs): Redefining `expand-file-name' might break native compilation of trampolines.
+   passed   45/123  fix-local-cwd-invalid-values-rejected-before-expansion (0.356940 sec)
+   passed   46/123  fix-workflow-actions-abort-on-reentrant-provider-replacement (0.044154 sec)
+   passed   47/123  fix-workflow-agent-shell-group-keeps-codex-agent (0.016158 sec)
+   passed   48/123  fix-workflow-group-keeps-captured-home-and-prefix-codex-agent (0.016825 sec)
+   passed   49/123  fix-workflow-group-with-multiple-codex-homes-requires-row (0.039121 sec)
+   passed   50/123  fix-workflow-mixed-provider-group-requires-row (0.022938 sec)
+   passed   51/123  fix-workflow-new-aborts-on-reentrant-owner-change (0.007575 sec)
+   passed   52/123  fix-workflow-new-rejects-removed-display-entry (0.036076 sec)
+REENTRANT action: removed=t current-entry=nil launches=0
+   passed   53/123  kingsbury-activation-aborts-after-reentrant-removal (0.010441 sec)
+   passed   54/123  kingsbury-existing-resume-path-owner-control (0.001868 sec)
+NEW ACP ownership: active-id="23456789-1234-7123-8123-123456789abc" native-marker=nil owned=("/private/var/folders/20/4zczrx1s3lq2fv0xmm0gj1fr0000gn/T/agent-sidebar-merge-Bw9Qun/codex/")
+Deleted 0. Retained 1 mark(s): Transcript belongs to an open session: /var/folders/20/4zczrx1s3lq2fv0xmm0gj1fr0000gn/T/agent-sidebar-merge-Bw9Qun/codex/sessions/2026/09/08/rollout-2026-09-08T12-00-00-23456789-1234-7123-8123-123456789abc.jsonl
+NEW ACP after delete: exists=t retained-mark=delete active-id="23456789-1234-7123-8123-123456789abc"
+   passed   55/123  kingsbury-new-acp-session-protects-its-later-rollout (0.140902 sec)
+Deleted 1 transcript(s)
+MUTATION CONTROL: disabling native guard deletes the active fixture file
+   passed   56/123  kingsbury-r2-mutation-disabled-native-guard-exposes-deletion (0.015964 sec)
+Deleted 0. Retained 1 mark(s): Transcript belongs to an open session: /var/folders/20/4zczrx1s3lq2fv0xmm0gj1fr0000gn/T/agent-sidebar-merge-SdbG46/codex/sessions/2026/09/08/rollout-2026-09-08T12-00-00-12345678-1234-7123-8123-123456789abc.jsonl
+RELOAD DURING READ: old-live=nil new-live=t file-exists=t retained-mark=delete
+   passed   57/123  kingsbury-r2-reload-during-file-read-retains-active-rollout (0.169022 sec)
+   passed   58/123  kingsbury-r2-state-switch-to-other-home-is-not-an-owner (0.002339 sec)
+LUU-R2-WARM (:files 300 :elapsed 0.013135 :parses 0 :discoveries 0)
+   passed   59/123  luu-r2-warm-unambiguous-group-reuses-metadata-at-300-sessions (0.467331 sec)
+   passed   60/123  merge-buffer-isolation-and-legacy-buffer-upgrade (0.011429 sec)
+   passed   61/123  merge-cache-rechecks-size-and-recovers-read-permissions (0.047018 sec)
+   passed   62/123  merge-claude-directory-is-confirmed-not-guessed (0.011748 sec)
+   passed   63/123  merge-flat-date-filter-and-fold-preserve-marks (0.067919 sec)
+   passed   64/123  merge-ghostel-dispatch-and-failed-start-cleanup (0.000522 sec)
+   passed   65/123  merge-jsonl-nonregular-and-read-errors-are-explicit (0.002740 sec)
+   passed   66/123  merge-jsonl-read-is-bounded-and-preserves-complete-records (0.002384 sec)
+   passed   67/123  merge-jsonl-skips-meta-and-tools-and-reads-later-model (0.001500 sec)
+   passed   68/123  merge-jsonl-wrong-record-shapes-do-not-hide-valid-records (0.001373 sec)
+Provider tree: 420 reads, 1 scan, progressive publication observed
+   passed   69/123  merge-progressive-tree-does-not-rediscover-and-bounds-rows (0.479543 sec)
+   passed   70/123  merge-provider-collision-does-not-publish-partial-discovery (0.011624 sec)
+   passed   71/123  merge-provider-error-keeps-old-snapshot-and-work (0.011703 sec)
+   passed   72/123  merge-provider-replacement-invalidates-cached-metadata (0.021966 sec)
+   passed   73/123  merge-real-term-process-receives-exact-argv-and-cwd (0.037875 sec)
+   passed   74/123  merge-reentrant-refresh-does-not-lose-provider-entry (0.052392 sec)
+   passed   75/123  merge-session-id-recovery-is-unambiguous-and-invalidates (0.006716 sec)
+   passed   76/123  merge-shell-activation-uses-recovery-or-session-picker (0.013058 sec)
+   passed   77/123  merge-term-fallback-preserves-argv-with-metacharacters (0.000377 sec)
+   passed   78/123  merge-terminal-arguments-directory-and-reuse (0.015497 sec)
+Deleted 0. Retained 1 mark(s): Transcript belongs to an open session: /var/folders/20/4zczrx1s3lq2fv0xmm0gj1fr0000gn/T/agent-sidebar-merge-zhPxTY/claude/-var-folders-20-4zczrx1s3lq2fv0xmm0gj1fr0000gn-T-agent-sidebar-merge-zhPxTY-repo-with-space/owned.jsonl
+Deleted 1 transcript(s)
+   passed   79/123  merge-terminal-ownership-prevents-delete-until-process-exits (0.055189 sec)
+   passed   80/123  merge-two-providers-metadata-model-and-nesting (0.018427 sec)
+   passed   81/123  merge-vterm-launch-keeps-dedicated-sidebar-and-quotes-argv (0.000611 sec)
+Mutation control: ignoring membership filter produced ambiguity, as detected
+   passed   82/123  ousterhout-r2-filter-membership-mutation-is-detected (0.049179 sec)
+   passed   83/123  ousterhout-r2-filtered-group-resolves-visible-provider (0.025051 sec)
+Stale group: selected=/var/folders/20/4zczrx1s3lq2fv0xmm0gj1fr0000gn/T/agent-sidebar-merge-M3PLYd/repo-with space/ current-cwd=/var/folders/20/4zczrx1s3lq2fv0xmm0gj1fr0000gn/T/agent-sidebar-merge-M3PLYd/changed-repository-longer-name/ launched=nil result=(user-error "Group changed while reading; refresh or select a transcript row")
+   passed   84/123  ousterhout-r2-new-on-stale-repo-group-does-not-launch-another-repo (0.039686 sec)
+Reload home probe: selected=/var/folders/20/4zczrx1s3lq2fv0xmm0gj1fr0000gn/T/agent-sidebar-merge-gVEvE5/codex/ children=("/var/folders/20/4zczrx1s3lq2fv0xmm0gj1fr0000gn/T/agent-sidebar-merge-gVEvE5/codex/" "/var/folders/20/4zczrx1s3lq2fv0xmm0gj1fr0000gn/T/agent-sidebar-merge-gVEvE5/codex/")
+   passed   85/123  ousterhout-reload-preserves-selected-home (0.147004 sec)
+Multi-home reuse probe: returned= *right home* starts=0
+   passed   86/123  ousterhout-reuse-searches-all-matching-home-candidates (0.000871 sec)
+ACP client explicit CODEX_HOME entries=("CODEX_HOME=/var/folders/20/4zczrx1s3lq2fv0xmm0gj1fr0000gn/T/agent-sidebar-merge-UIbG7i/codex/")
+Configured home probe: selected=/var/folders/20/4zczrx1s3lq2fv0xmm0gj1fr0000gn/T/agent-sidebar-merge-UIbG7i/codex/ child=("/var/folders/20/4zczrx1s3lq2fv0xmm0gj1fr0000gn/T/agent-sidebar-merge-UIbG7i/codex/")
+   passed   87/123  ousterhout-selected-home-overrides-configured-acp-home (0.071943 sec)
+Deleted 1 transcript(s)
+   passed   88/123  ownership-absent-file-does-not-retain-stale-mark (0.014479 sec)
+   passed   89/123  ownership-active-id-precedes-pending-and-transitions (0.006399 sec)
+   passed   90/123  ownership-check-reads-only-selected-file-and-refreshes-metadata (0.014871 sec)
+   passed   91/123  ownership-existing-marker-and-file-alias-control (0.001596 sec)
+   passed   92/123  ownership-home-config-and-session-controls (0.004731 sec)
+Deleted 0. Retained 1 mark(s): Cannot verify open Codex session ownership: No valid Codex thread id in rollout prefix
+   passed   93/123  ownership-malformed-prefix-retains-deletion-mark (0.038449 sec)
+NEW ACP ownership: active-id="23456789-1234-7123-8123-123456789abc" native-marker=nil owned=("/private/var/folders/20/4zczrx1s3lq2fv0xmm0gj1fr0000gn/T/agent-sidebar-merge-TY2CEv/codex/")
+Deleted 0. Retained 1 mark(s): Transcript belongs to an open session: /var/folders/20/4zczrx1s3lq2fv0xmm0gj1fr0000gn/T/agent-sidebar-merge-TY2CEv/codex/sessions/2026/09/08/rollout-2026-09-08T12-00-00-23456789-1234-7123-8123-123456789abc.jsonl
+NEW ACP after delete: exists=t retained-mark=delete active-id="23456789-1234-7123-8123-123456789abc"
+   passed   94/123  ownership-new-session-real-acp (0.107375 sec)
+   passed   95/123  ownership-rechecks-live-state-after-reading (0.010380 sec)
+Ownership survives actual ACP reload with both legacy markers absent
+   passed   96/123  ownership-reload-uses-session-without-native-path-marker (0.174985 sec)
+Replacement matrix: same-session ownership=t reads=1
+Replacement matrix: other-session ownership=nil reads=1
+Replacement matrix: other-home ownership=nil reads=1
+   passed   97/123  ownership-transition-replacement-matrix-reads-file-once (0.005293 sec)
+PERFORMANCE-FIX (:sessions 300 :buffer-characters 67270 :warm-refresh 0.022896 :filter-seconds 0.019189 :parser-calls 300)
+   passed   98/123  performance-300-long-previews-bounded-cache-and-full-transcript (1.839649 sec)
+   passed   99/123  performance-preview-bound-applies-to-three-built-in-providers (0.040254 sec)
+   passed  100/123  performance-preview-boundary-unicode-and-provider-contract (0.001065 sec)
+NEW PENDING ROW: expected="/var/folders/20/4zczrx1s3lq2fv0xmm0gj1fr0000gn/T/agent-sidebar-merge-xROtbX/different recorded repo/" actual="/var/folders/20/4zczrx1s3lq2fv0xmm0gj1fr0000gn/T/agent-sidebar-merge-xROtbX/different recorded repo/"
+   passed  101/123  review-root-new-session-pending-row-uses-recorded-directory (0.007535 sec)
+ERROR ROW: result=(user-error "No valid Codex thread id in rollout prefix") launch=nil
+   passed  102/123  review-workflow-new-rejects-native-error-row (0.036351 sec)
+MISSING CWD: result=(user-error "Selected transcript has no existing working directory") launch=nil
+   passed  103/123  review-workflow-new-rejects-native-missing-cwd (0.011770 sec)
+CHANGED CWD: expected="/var/folders/20/4zczrx1s3lq2fv0xmm0gj1fr0000gn/T/agent-sidebar-merge-qmmknP/changed-existing-repository/" launch="/var/folders/20/4zczrx1s3lq2fv0xmm0gj1fr0000gn/T/agent-sidebar-merge-qmmknP/changed-existing-repository/"
+   passed  104/123  review-workflow-new-revalidates-changed-native-directory (0.012675 sec)
+REPO-ONLY CODEX GROUP: calls=((terminal "*codex-new*" "/var/folders/20/4zczrx1s3lq2fv0xmm0gj1fr0000gn/T/agent-sidebar-merge-Ezs9UZ/repo-with space/"))
+   passed  105/123  review-workflow-repo-only-group-keeps-unique-codex-provider (0.016082 sec)
+   passed  106/123  review-workflow-ret-and-a-reject-native-missing-cwd-control (0.035882 sec)
+   passed  107/123  schema-claude-string-content-remains-supported (0.000545 sec)
+   passed  108/123  schema-claude-valid-block-objects-in-arrays-retain-identity-and-cwd (0.000442 sec)
+   passed  109/123  schema-codex-unsupported-content-object-does-not-discard-earlier-cwd (0.000475 sec)
+   passed  110/123  schema-codex-valid-block-objects-in-arrays-retain-identity-and-cwd (0.000464 sec)
+   passed  111/123  terminal-fix-cleanup-after-child-start-does-not-query (0.003759 sec)
+   passed  112/123  terminal-fix-cleanup-before-child-start-preserves-existing-buffer (0.000687 sec)
+   passed  113/123  terminal-fix-cleanup-on-quit (0.000508 sec)
+TRAILING-SLASH: starts=1, live-children=1, both homes equal by file-equal-p=t
+   passed  114/123  torvalds-codex-home-trailing-slash-reuses-process (0.003483 sec)
+DISPLAY-FAILURE: failed activations=2, live children=0, session markers=(nil nil)
+   passed  115/123  torvalds-r2-display-error-does-not-leave-unowned-terminal-children (0.004418 sec)
+ACP-INTERLEAVE: two real children kept distinct selected homes and inherited unrelated configuration
+   passed  116/123  torvalds-r2-interleaved-wrappers-preserve-home-at-os-boundary (0.065752 sec)
+TERM-COLLISION: same-buffer=nil, same-process=nil, child-command=("/bin/sh" "-c" "stty -nl echo rows 22 columns 79 sane 2>/dev/null;if [ $1 = .. ]; then shift; fi; exec \"$@\"" ".." "/bin/sh" "-c" "exec sleep 30" "fixture" "12345678-2222-7222-8222-222222222222"), recorded-session=(claude-cli "12345678-2222-7222-8222-222222222222" "/var/folders/20/4zczrx1s3lq2fv0xmm0gj1fr0000gn/T/sidebar-torvalds-xjSDSv/repo/")
+   passed  117/123  torvalds-term-fallback-distinguishes-resume-id-prefix-collision (0.006050 sec)
+TERM-NEW: same-buffer=nil, same-process=nil
+   passed  118/123  torvalds-term-new-session-really-starts-new-process (0.005729 sec)
+   passed  119/123  workflow-r2-collapsed-codex-group-retains-new-session-context (0.022369 sec)
+   passed  120/123  workflow-r2-derived-mode-binds-actions-and-preserves-core-keys (0.000505 sec)
+MUTATION: erasing :agent lets an ambiguous agent-shell group start, as detected
+   passed  121/123  workflow-r2-erasing-agent-identity-mutation-is-detected (0.017256 sec)
+REMOTE CWD: action=agent-sidebar-visit remote-stat-calls=nil result=(user-error "Transcript has no existing local working directory")
+REMOTE CWD: action=agent-sidebar-visit-in-agent-shell remote-stat-calls=nil result=(user-error "Codex rollout has no existing local working directory")
+REMOTE CWD: action=agent-sidebar-new-session remote-stat-calls=nil result=(user-error "Selected transcript has no existing working directory")
+   passed  122/123  workflow-r2-local-codex-actions-reject-remote-cwd-before-stat (0.063147 sec)
+   passed  123/123  workflow-r2-mixed-agent-group-requires-row (0.015694 sec)
+
+Ran 123 tests, 123 results as expected, 0 unexpected (2026-09-08 15:55:05-0700, 6.814820 sec)
+

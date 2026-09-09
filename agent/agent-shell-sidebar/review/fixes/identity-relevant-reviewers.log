@@ -1,0 +1,26 @@
+Command argv: ["/Applications/Emacs.app/Contents/MacOS/Emacs", "-Q", "--batch", "-l", "jka-compr", "-L", "/Users/ducnguyen/.emacs.d/elpa/31/shell-maker-20260820.1245", "-L", "/Users/ducnguyen/.emacs.d/elpa/31/acp-20260821.1448", "-L", "/Users/ducnguyen/.emacs.d/elpa/31/agent-shell-20260823.1937", "-l", "/Users/ducnguyen/.emacs.d/agent/agent-shell-sidebar/review/fixes/identity.el", "-l", "/Users/ducnguyen/.emacs.d/agent/agent-shell-sidebar/review/round-1/ousterhout-probe.el", "-l", "/Users/ducnguyen/.emacs.d/agent/agent-shell-sidebar/review/round-1/torvalds-probe.el", "-l", "/Users/ducnguyen/.emacs.d/agent/agent-shell-sidebar/review/round-1/contrarian-workflow.el", "--eval", "(ert-run-tests-batch-and-exit '(or ousterhout-live-request-id-is-not-current-after-fallback\n                  ousterhout-substring-agent-resolution-reuses-started-session\n                  torvalds-refuses-owned-transcript-through-project-path-alias\n                  torvalds-control-preserves-owned-transcript-at-exact-path\n                  workflow-toggle-works-after-sidebar-buffer-switched-to-normal-window\n                  \"^workflow-control-\"))"]
+LANG=C.UTF-8 cannot be used, using en_US.UTF-8 instead.
+PROBE ENVIRONMENT: Emacs 31.1; agent-shell 0.74.3
+Running 10 tests (2026-09-08 13:09:26-0700, selector `(or ousterhout-live-request-id-is-not-current-after-fallback ousterhout-substring-agent-resolution-reuses-started-session torvalds-refuses-owned-transcript-through-project-path-alias torvalds-control-preserves-owned-transcript-at-exact-path workflow-toggle-works-after-sidebar-buffer-switched-to-normal-window "^workflow-control-")')
+Resuming unsupported by agent. Starting new session.
+OUSTERHOUT-1: actual-session="new-session" retained-request="old-session" old-row-reuses-new=nil
+   passed   1/10  ousterhout-live-request-id-is-not-current-after-fallback (0.000367 sec)
+OUSTERHOUT-3: recorded-agent=Claude Code resolved-agent=Claude visits=2 starts=1
+   passed   2/10  ousterhout-substring-agent-resolution-reuses-started-session (0.001838 sec)
+ALIAS: discovered=t same-file=t exact-owner-path-match=nil owner-listed=t
+Deleted 0. Retained 1 mark(s): Transcript belongs to an open agent-shell: /var/folders/20/4zczrx1s3lq2fv0xmm0gj1fr0000gn/T/sidebar-torvalds-alias-XwoLz3/alias/.agent-shell/transcripts/session.md
+DELETION: owned-file-exists=t retained-mark=delete
+   passed   3/10  torvalds-refuses-owned-transcript-through-project-path-alias (0.003034 sec)
+Deleted 0. Retained 1 mark(s): Transcript belongs to an open agent-shell: /var/folders/20/4zczrx1s3lq2fv0xmm0gj1fr0000gn/T/sidebar-torvalds-control-wbV2yj/.agent-shell/transcripts/session.md
+CONTROL: exact-owner-path owned-file-exists=t retained-mark=delete
+   passed   4/10  torvalds-control-preserves-owned-transcript-at-exact-path (0.001164 sec)
+Ordinary-window toggle: error=nil side=nil windows=2
+   passed   5/10  workflow-toggle-works-after-sidebar-buffer-switched-to-normal-window (0.000299 sec)
+   passed   6/10  workflow-control-cancel-agent-selector-never-starts (0.000064 sec)
+   passed   7/10  workflow-control-cancel-deletion-retains-marks (0.000219 sec)
+   passed   8/10  workflow-control-discovery-retains-only-normal-md-fixture (0.001139 sec)
+   passed   9/10  workflow-control-mru-disabled-preserves-dedicated-window (0.000132 sec)
+   passed  10/10  workflow-control-two-window-points-survive-redraw (0.000351 sec)
+
+Ran 10 tests, 10 results as expected, 0 unexpected (2026-09-08 13:09:26-0700, 0.008958 sec)
+

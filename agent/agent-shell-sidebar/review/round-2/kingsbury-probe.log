@@ -1,0 +1,15 @@
+LANG=C.UTF-8 cannot be used, using en_US.UTF-8 instead.
+Running 4 tests (2026-09-08 13:25:30-0700, selector `t')
+Deleted 1 transcript(s)
+Deletion schedule: old timer cannot restore the deleted transcript or its mark.
+   passed  1/4  kingsbury2-deletion-while-staged-cannot-resurrect-a-row (1.105583 sec)
+Sidebar redraw failed: Selecting deleted buffer
+Externally killed stage: one explicit renderer error, drained headers, manual refresh recovered.
+   passed  2/4  kingsbury2-external-stage-kill-produces-bounded-explicit-error (0.353554 sec)
+Owner cancellation: other sidebar completed after the first owner and its stage were killed.
+   passed  3/4  kingsbury2-killing-one-owner-does-not-cancel-the-other (0.627956 sec)
+Mark/unmark/filter/agent-fold schedule: exactly 200 Alpha rows, target mark retained.
+   passed  4/4  kingsbury2-mark-unmark-filter-agent-fold-schedule (0.692381 sec)
+
+Ran 4 tests, 4 results as expected, 0 unexpected (2026-09-08 13:25:33-0700, 2.779834 sec)
+

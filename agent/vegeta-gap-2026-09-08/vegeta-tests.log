@@ -1,0 +1,451 @@
+LANG=C.UTF-8 cannot be used, using en_US.UTF-8 instead.
+Running 13 tests (2026-09-08 16:52:06-0700, selector `t')
+Test gap-ambiguous-claude-recovery-does-not-guess backtrace:
+  ert-fail(((should-not (gap-call "--find-claude-session-for-transcrip
+  (if (not (unwind-protect (setq value-72 (apply fn-70 args-71)) (setq
+  (let (form-description-74) (if (not (unwind-protect (setq value-72 (
+  (let ((value-72 'ert-form-evaluation-aborted-73)) (let (form-descrip
+  (let* ((fn-70 #'gap-call) (args-71 (condition-case err (list "--find
+  (progn (fset v vnew) (let* ((fn-70 #'gap-call) (args-71 (condition-c
+  (unwind-protect (progn (fset v vnew) (let* ((fn-70 #'gap-call) (args
+  (let* ((v (gap-symbol "--claude-sessions-for-cwd")) (vnew #'(lambda 
+  (let ((time (float-time (date-to-time "2026-09-08T12:00:00Z")))) (le
+  #f(lambda () [t] (let ((time (float-time ...))) (let* ((v ...) (vnew
+  #f(compiled-function () #<bytecode -0x1664dbccd6f3b60a>)()
+  handler-bind-1(#f(compiled-function () #<bytecode -0x1664dbccd6f3b60
+  ert--run-test-internal(#s(ert--test-execution-info :test #s(ert-test
+  ert-run-test(#s(ert-test :name gap-ambiguous-claude-recovery-does-no
+  ert-run-or-rerun-test(#s(ert--stats :selector t :tests [... ... ... 
+  ert-run-tests(t #f(compiled-function (event-type &rest event-args) #
+  ert-run-tests-batch(nil)
+  ert-run-tests-batch-and-exit()
+  command-line-1(("-l" "jka-compr" "-L" "/Users/ducnguyen/.emacs.d/elp
+  command-line()
+  normal-top-level()
+Test gap-ambiguous-claude-recovery-does-not-guess condition:
+    (ert-test-failed
+     ((should-not
+       (gap-call "--find-claude-session-for-transcript" "Claude"
+		 "/private/tmp/" "2026-09-08T12:00:00Z"))
+      :form
+      (gap-call "--find-claude-session-for-transcript" "Claude"
+		"/private/tmp/" "2026-09-08T12:00:00Z")
+      :value "session-a"))
+   FAILED   1/13  gap-ambiguous-claude-recovery-does-not-guess (0.002420 sec) at agent/vegeta-gap-2026-09-08/gap-tests.el:115
+Test gap-cache-rechecks-file-on-action backtrace:
+  ert-fail(((should (equal "updated preview with a different size" (pl
+  (if (unwind-protect (setq value-57 (apply fn-55 args-56)) (setq form
+  (let (form-description-59) (if (unwind-protect (setq value-57 (apply
+  (let ((value-57 'ert-form-evaluation-aborted-58)) (let (form-descrip
+  (let* ((fn-55 #'equal) (args-56 (condition-case err (list "updated p
+  (progn (fset v #'ignore) (gap-call "-refresh") (setq entry (car (gap
+  (unwind-protect (progn (fset v #'ignore) (gap-call "-refresh") (setq
+  (let* ((v (gap-symbol "--start-parse-timer")) (old (symbol-function 
+  (progn (gap-call "-mode") (set (gap-symbol "-providers") (list (cons
+  (unwind-protect (progn (gap-call "-mode") (set (gap-symbol "-provide
+  (save-current-buffer (set-buffer temp-buffer) (unwind-protect (progn
+  (let ((temp-buffer (generate-new-buffer " *temp*" t))) (save-current
+  #f(lambda () [(entry (:provider claude-cli :id "/var/folders/20/4zcz
+  funcall(#f(lambda () [(entry (:provider claude-cli :id "/var/folders
+  (let ((vegeta-refresh-timer 'nil) (vegeta--parse-cache '#<hash-table
+  eval((let ((vegeta-refresh-timer 'nil) (vegeta--parse-cache '#<hash-
+  (let* ((syms (mapcar #'gap-symbol '("-refresh-timer" "--parse-cache"
+  (progn (let* ((syms (mapcar #'gap-symbol '("-refresh-timer" "--parse
+  (progn (let ((temp-file file) (temp-buffer (generate-new-buffer " *t
+  (unwind-protect (progn (let ((temp-file file) (temp-buffer (generate
+  (let* ((root (make-temp-file "vegeta-gap-" t)) (file (expand-file-na
+  #f(lambda () [t] (let* ((root (make-temp-file "vegeta-gap-" t)) (fil
+  #f(compiled-function () #<bytecode -0x1664dbccd6f3b60a>)()
+  handler-bind-1(#f(compiled-function () #<bytecode -0x1664dbccd6f3b60
+  ert--run-test-internal(#s(ert--test-execution-info :test #s(ert-test
+  ert-run-test(#s(ert-test :name gap-cache-rechecks-file-on-action :do
+  ert-run-or-rerun-test(#s(ert--stats :selector t :tests ... :test-map
+  ert-run-tests(t #f(compiled-function (event-type &rest event-args) #
+  ert-run-tests-batch(nil)
+  ert-run-tests-batch-and-exit()
+  command-line-1(("-l" "jka-compr" "-L" "/Users/ducnguyen/.emacs.d/elp
+  command-line()
+  normal-top-level()
+Test gap-cache-rechecks-file-on-action condition:
+    (ert-test-failed
+     ((should
+       (equal "updated preview with a different size"
+	      (plist-get ... :preview)))
+      :form (equal "updated preview with a different size" "old") :value
+      nil :explanation
+      (arrays-of-different-length 37 3
+				  "updated preview with a different size"
+				  "old" first-mismatch-at 0)))
+   FAILED   2/13  gap-cache-rechecks-file-on-action (0.001853 sec) at agent/vegeta-gap-2026-09-08/gap-tests.el:85
+Test gap-codex-provider-and-commands backtrace:
+  ert-fail(((should (alist-get 'codex-cli (gap-value "-providers"))) :
+  (if (unwind-protect (setq value-32 (apply fn-30 args-31)) (setq form
+  (let (form-description-34) (if (unwind-protect (setq value-32 (apply
+  (let ((value-32 'ert-form-evaluation-aborted-33)) (let (form-descrip
+  (let* ((fn-30 #'alist-get) (args-31 (condition-case err (list 'codex
+  #f(lambda () [t] (let* ((fn-30 #'alist-get) (args-31 (condition-case
+  #f(compiled-function () #<bytecode -0x1664dbccd6f3b60a>)()
+  handler-bind-1(#f(compiled-function () #<bytecode -0x1664dbccd6f3b60
+  ert--run-test-internal(#s(ert--test-execution-info :test #s(ert-test
+  ert-run-test(#s(ert-test :name gap-codex-provider-and-commands :docu
+  ert-run-or-rerun-test(#s(ert--stats :selector t :tests ... :test-map
+  ert-run-tests(t #f(compiled-function (event-type &rest event-args) #
+  ert-run-tests-batch(nil)
+  ert-run-tests-batch-and-exit()
+  command-line-1(("-l" "jka-compr" "-L" "/Users/ducnguyen/.emacs.d/elp
+  command-line()
+  normal-top-level()
+Test gap-codex-provider-and-commands condition:
+    (ert-test-failed
+     ((should (alist-get 'codex-cli (gap-value "-providers"))) :form
+      (alist-get codex-cli
+		 ((claude-cli :id claude-cli :name "Claude CLI" :list
+			      vegeta--claude-list :parse
+			      vegeta--claude-parse :visit ...)
+		  (agent-shell :id agent-shell :name "agent-shell" :list
+			       vegeta--agent-shell-list :parse
+			       vegeta--agent-shell-parse :visit ...)))
+      :value nil))
+   FAILED   3/13  gap-codex-provider-and-commands (0.000058 sec) at agent/vegeta-gap-2026-09-08/gap-tests.el:67
+   passed   4/13  gap-common-claude-metadata-and-date-group (0.001294 sec)
+   passed   5/13  gap-common-mode-and-navigation-bindings (0.000132 sec)
+Deleted 1 file(s)
+Test gap-delete-preserves-open-transcript backtrace:
+  ert-fail(((should (file-exists-p file)) :form (file-exists-p "/var/f
+  (if (unwind-protect (setq value-82 (apply fn-80 args-81)) (setq form
+  (let (form-description-84) (if (unwind-protect (setq value-82 (apply
+  (let ((value-82 'ert-form-evaluation-aborted-83)) (let (form-descrip
+  (let* ((fn-80 #'file-exists-p) (args-81 (condition-case err (list fi
+  (progn (save-current-buffer (set-buffer owner) (setq agent-shell--tr
+  (unwind-protect (progn (save-current-buffer (set-buffer owner) (setq
+  (let ((owner (generate-new-buffer " gap-owner")) (delete-by-moving-t
+  (progn (fset v #'ignore) (gap-call "-refresh") (setq entry (car (gap
+  (unwind-protect (progn (fset v #'ignore) (gap-call "-refresh") (setq
+  (let* ((v (gap-symbol "--start-parse-timer")) (old (symbol-function 
+  (progn (gap-call "-mode") (set (gap-symbol "-providers") (list (cons
+  (unwind-protect (progn (gap-call "-mode") (set (gap-symbol "-provide
+  (save-current-buffer (set-buffer temp-buffer) (unwind-protect (progn
+  (let ((temp-buffer (generate-new-buffer " *temp*" t))) (save-current
+  #f(lambda () [(entry (:provider claude-cli :id "/var/folders/20/4zcz
+  funcall(#f(lambda () [(entry (:provider claude-cli :id "/var/folders
+  (let ((vegeta-refresh-timer 'nil) (vegeta--parse-cache '#<hash-table
+  eval((let ((vegeta-refresh-timer 'nil) (vegeta--parse-cache '#<hash-
+  (let* ((syms (mapcar #'gap-symbol '("-refresh-timer" "--parse-cache"
+  (progn (let* ((syms (mapcar #'gap-symbol '("-refresh-timer" "--parse
+  (progn (let ((temp-file file) (temp-buffer (generate-new-buffer " *t
+  (unwind-protect (progn (let ((temp-file file) (temp-buffer (generate
+  (let* ((root (make-temp-file "vegeta-gap-" t)) (file (expand-file-na
+  #f(lambda () [t] (let* ((root (make-temp-file "vegeta-gap-" t)) (fil
+  #f(compiled-function () #<bytecode -0x1664dbccd6f3b60a>)()
+  handler-bind-1(#f(compiled-function () #<bytecode -0x1664dbccd6f3b60
+  ert--run-test-internal(#s(ert--test-execution-info :test ... :result
+  ert-run-test(#s(ert-test :name gap-delete-preserves-open-transcript 
+  ert-run-or-rerun-test(#s(ert--stats :selector t :tests ... :test-map
+  ert-run-tests(t #f(compiled-function (event-type &rest event-args) #
+  ert-run-tests-batch(nil)
+  ert-run-tests-batch-and-exit()
+  command-line-1(("-l" "jka-compr" "-L" "/Users/ducnguyen/.emacs.d/elp
+  command-line()
+  normal-top-level()
+Test gap-delete-preserves-open-transcript condition:
+    (ert-test-failed
+     ((should (file-exists-p file)) :form
+      (file-exists-p
+       "/var/folders/20/4zczrx1s3lq2fv0xmm0gj1fr0000gn/T/vegeta-gap-qxCixZ/11111111-1111-4111-8111-111111111111.jsonl")
+      :value nil))
+   FAILED   6/13  gap-delete-preserves-open-transcript (0.425472 sec) at agent/vegeta-gap-2026-09-08/gap-tests.el:136
+Test gap-open-transcript-uses-view-mode backtrace:
+  ert-fail(((should (buffer-local-value 'view-mode target)) :form (buf
+  (if (unwind-protect (setq value-77 (apply fn-75 args-76)) (setq form
+  (let (form-description-79) (if (unwind-protect (setq value-77 (apply
+  (let ((value-77 'ert-form-evaluation-aborted-78)) (let (form-descrip
+  (let* ((fn-75 #'buffer-local-value) (args-76 (condition-case err (li
+  (progn (fset v vnew) (gap-call "-open-transcript") (let* ((fn-75 #'b
+  (unwind-protect (progn (fset v vnew) (gap-call "-open-transcript") (
+  (let* ((v (gap-symbol "--pop-to")) (vnew #'(lambda (buffer) (setq ta
+  (unwind-protect (let* ((v (gap-symbol "--pop-to")) (vnew #'(lambda (
+  (let ((target nil) (inhibit-read-only t)) (erase-buffer) (insert "ro
+  (progn (fset v #'ignore) (gap-call "-refresh") (setq entry (car (gap
+  (unwind-protect (progn (fset v #'ignore) (gap-call "-refresh") (setq
+  (let* ((v (gap-symbol "--start-parse-timer")) (old (symbol-function 
+  (progn (gap-call "-mode") (set (gap-symbol "-providers") (list (cons
+  (unwind-protect (progn (gap-call "-mode") (set (gap-symbol "-provide
+  (save-current-buffer (set-buffer temp-buffer) (unwind-protect (progn
+  (let ((temp-buffer (generate-new-buffer " *temp*" t))) (save-current
+  #f(lambda () [(entry (:provider claude-cli :id "/var/folders/20/4zcz
+  funcall(#f(lambda () [(entry (:provider claude-cli :id "/var/folders
+  (let ((vegeta-refresh-timer 'nil) (vegeta--parse-cache '#<hash-table
+  eval((let ((vegeta-refresh-timer 'nil) (vegeta--parse-cache '#<hash-
+  (let* ((syms (mapcar #'gap-symbol '("-refresh-timer" "--parse-cache"
+  (progn (let* ((syms (mapcar #'gap-symbol '("-refresh-timer" "--parse
+  (progn (let ((temp-file file) (temp-buffer (generate-new-buffer " *t
+  (unwind-protect (progn (let ((temp-file file) (temp-buffer (generate
+  (let* ((root (make-temp-file "vegeta-gap-" t)) (file (expand-file-na
+  #f(lambda () [t] (let* ((root (make-temp-file "vegeta-gap-" t)) (fil
+  #f(compiled-function () #<bytecode -0x1664dbccd6f3b60a>)()
+  handler-bind-1(#f(compiled-function () #<bytecode -0x1664dbccd6f3b60
+  ert--run-test-internal(#s(ert--test-execution-info :test ... :result
+  ert-run-test(#s(ert-test :name gap-open-transcript-uses-view-mode :d
+  ert-run-or-rerun-test(#s(ert--stats :selector t :tests ... :test-map
+  ert-run-tests(t #f(compiled-function (event-type &rest event-args) #
+  ert-run-tests-batch(nil)
+  ert-run-tests-batch-and-exit()
+  command-line-1(("-l" "jka-compr" "-L" "/Users/ducnguyen/.emacs.d/elp
+  command-line()
+  normal-top-level()
+Test gap-open-transcript-uses-view-mode condition:
+    (ert-test-failed
+     ((should (buffer-local-value 'view-mode target)) :form
+      (buffer-local-value view-mode #<killed buffer>) :value nil))
+   FAILED   7/13  gap-open-transcript-uses-view-mode (0.003093 sec) at agent/vegeta-gap-2026-09-08/gap-tests.el:122
+Test gap-parse-state-is-buffer-local backtrace:
+  ert-fail(((should-not (gap-value "--parse-queue")) :form (gap-value 
+  (if (not (unwind-protect (setq value-67 (apply fn-65 args-66)) (setq
+  (let (form-description-69) (if (not (unwind-protect (setq value-67 (
+  (let ((value-67 'ert-form-evaluation-aborted-68)) (let (form-descrip
+  (let* ((fn-65 #'gap-value) (args-66 (condition-case err (list "--par
+  (save-current-buffer (set-buffer buffer-b) (gap-call "-mode") (let* 
+  #f(lambda () [(buffer-b #<killed buffer>) (buffer-a #<killed buffer>
+  funcall(#f(lambda () [(buffer-b #<killed buffer>) (buffer-a #<killed
+  (let ((vegeta-refresh-timer 'nil) (vegeta--parse-queue 'nil)) (funca
+  eval((let ((vegeta-refresh-timer 'nil) (vegeta--parse-queue 'nil)) (
+  (let* ((syms (list (gap-symbol "-refresh-timer") (gap-symbol "--pars
+  (progn (let* ((syms (list (gap-symbol "-refresh-timer") (gap-symbol 
+  (unwind-protect (progn (let* ((syms (list (gap-symbol "-refresh-time
+  (let ((buffer-a (generate-new-buffer " gap-a")) (buffer-b (generate-
+  #f(lambda () [t] (let ((buffer-a (generate-new-buffer " gap-a")) (bu
+  #f(compiled-function () #<bytecode -0x1664dbccd6f3b60a>)()
+  handler-bind-1(#f(compiled-function () #<bytecode -0x1664dbccd6f3b60
+  ert--run-test-internal(#s(ert--test-execution-info :test #s(ert-test
+  ert-run-test(#s(ert-test :name gap-parse-state-is-buffer-local :docu
+  ert-run-or-rerun-test(#s(ert--stats :selector t :tests ... :test-map
+  ert-run-tests(t #f(compiled-function (event-type &rest event-args) #
+  ert-run-tests-batch(nil)
+  ert-run-tests-batch-and-exit()
+  command-line-1(("-l" "jka-compr" "-L" "/Users/ducnguyen/.emacs.d/elp
+  command-line()
+  normal-top-level()
+Test gap-parse-state-is-buffer-local condition:
+    (ert-test-failed
+     ((should-not (gap-value "--parse-queue")) :form
+      (gap-value "--parse-queue") :value (fixture-a)))
+   FAILED   8/13  gap-parse-state-is-buffer-local (0.000151 sec) at agent/vegeta-gap-2026-09-08/gap-tests.el:101
+Test gap-parser-model-after-user backtrace:
+  ert-fail(((should (equal "claude-test-model" (plist-get (gap-call "-
+  (if (unwind-protect (setq value-42 (apply fn-40 args-41)) (setq form
+  (let (form-description-44) (if (unwind-protect (setq value-42 (apply
+  (let ((value-42 'ert-form-evaluation-aborted-43)) (let (form-descrip
+  (let* ((fn-40 #'equal) (args-41 (condition-case err (list "claude-te
+  (progn (fset v #'ignore) (gap-call "-refresh") (setq entry (car (gap
+  (unwind-protect (progn (fset v #'ignore) (gap-call "-refresh") (setq
+  (let* ((v (gap-symbol "--start-parse-timer")) (old (symbol-function 
+  (progn (gap-call "-mode") (set (gap-symbol "-providers") (list (cons
+  (unwind-protect (progn (gap-call "-mode") (set (gap-symbol "-provide
+  (save-current-buffer (set-buffer temp-buffer) (unwind-protect (progn
+  (let ((temp-buffer (generate-new-buffer " *temp*" t))) (save-current
+  #f(lambda () [(entry (:provider claude-cli :id "/var/folders/20/4zcz
+  funcall(#f(lambda () [(entry (:provider claude-cli :id "/var/folders
+  (let ((vegeta-refresh-timer 'nil) (vegeta--parse-cache '#<hash-table
+  eval((let ((vegeta-refresh-timer 'nil) (vegeta--parse-cache '#<hash-
+  (let* ((syms (mapcar #'gap-symbol '("-refresh-timer" "--parse-cache"
+  (progn (let* ((syms (mapcar #'gap-symbol '("-refresh-timer" "--parse
+  (progn (let ((temp-file file) (temp-buffer (generate-new-buffer " *t
+  (unwind-protect (progn (let ((temp-file file) (temp-buffer (generate
+  (let* ((root (make-temp-file "vegeta-gap-" t)) (file (expand-file-na
+  #f(lambda () [t] (let* ((root (make-temp-file "vegeta-gap-" t)) (fil
+  #f(compiled-function () #<bytecode -0x1664dbccd6f3b60a>)()
+  handler-bind-1(#f(compiled-function () #<bytecode -0x1664dbccd6f3b60
+  ert--run-test-internal(#s(ert--test-execution-info :test #s(ert-test
+  ert-run-test(#s(ert-test :name gap-parser-model-after-user :document
+  ert-run-or-rerun-test(#s(ert--stats :selector t :tests ... :test-map
+  ert-run-tests(t #f(compiled-function (event-type &rest event-args) #
+  ert-run-tests-batch(nil)
+  ert-run-tests-batch-and-exit()
+  command-line-1(("-l" "jka-compr" "-L" "/Users/ducnguyen/.emacs.d/elp
+  command-line()
+  normal-top-level()
+Test gap-parser-model-after-user condition:
+    (ert-test-failed
+     ((should (equal "claude-test-model" (plist-get ... :model))) :form
+      (equal "claude-test-model" nil) :value nil :explanation
+      (different-types "claude-test-model" nil)))
+   FAILED   9/13  gap-parser-model-after-user (0.001267 sec) at agent/vegeta-gap-2026-09-08/gap-tests.el:72
+Test gap-preview-storage-bound backtrace:
+  ert-fail(((should (<= (length (plist-get (gap-call "--ensure-parsed"
+  (if (unwind-protect (setq value-47 (apply fn-45 args-46)) (setq form
+  (let (form-description-49) (if (unwind-protect (setq value-47 (apply
+  (let ((value-47 'ert-form-evaluation-aborted-48)) (let (form-descrip
+  (let* ((fn-45 #'<=) (args-46 (condition-case err (list (length (plis
+  (progn (fset v #'ignore) (gap-call "-refresh") (setq entry (car (gap
+  (unwind-protect (progn (fset v #'ignore) (gap-call "-refresh") (setq
+  (let* ((v (gap-symbol "--start-parse-timer")) (old (symbol-function 
+  (progn (gap-call "-mode") (set (gap-symbol "-providers") (list (cons
+  (unwind-protect (progn (gap-call "-mode") (set (gap-symbol "-provide
+  (save-current-buffer (set-buffer temp-buffer) (unwind-protect (progn
+  (let ((temp-buffer (generate-new-buffer " *temp*" t))) (save-current
+  #f(lambda () [(entry (:provider claude-cli :id "/var/folders/20/4zcz
+  funcall(#f(lambda () [(entry (:provider claude-cli :id "/var/folders
+  (let ((vegeta-refresh-timer 'nil) (vegeta--parse-cache '#<hash-table
+  eval((let ((vegeta-refresh-timer 'nil) (vegeta--parse-cache '#<hash-
+  (let* ((syms (mapcar #'gap-symbol '("-refresh-timer" "--parse-cache"
+  (progn (let* ((syms (mapcar #'gap-symbol '("-refresh-timer" "--parse
+  (progn (let ((temp-file file) (temp-buffer (generate-new-buffer " *t
+  (unwind-protect (progn (let ((temp-file file) (temp-buffer (generate
+  (let* ((root (make-temp-file "vegeta-gap-" t)) (file (expand-file-na
+  #f(lambda () [t] (let* ((root (make-temp-file "vegeta-gap-" t)) (fil
+  #f(compiled-function () #<bytecode -0x1664dbccd6f3b60a>)()
+  handler-bind-1(#f(compiled-function () #<bytecode -0x1664dbccd6f3b60
+  ert--run-test-internal(#s(ert--test-execution-info :test #s(ert-test
+  ert-run-test(#s(ert-test :name gap-preview-storage-bound :documentat
+  ert-run-or-rerun-test(#s(ert--stats :selector t :tests ... :test-map
+  ert-run-tests(t #f(compiled-function (event-type &rest event-args) #
+  ert-run-tests-batch(nil)
+  ert-run-tests-batch-and-exit()
+  command-line-1(("-l" "jka-compr" "-L" "/Users/ducnguyen/.emacs.d/elp
+  command-line()
+  normal-top-level()
+Test gap-preview-storage-bound condition:
+    (ert-test-failed
+     ((should (<= (length ...) 200)) :form (<= 5000 200) :value nil))
+   FAILED  10/13  gap-preview-storage-bound (0.001475 sec) at agent/vegeta-gap-2026-09-08/gap-tests.el:76
+GAP redraw discovery calls: 3
+Test gap-redraw-does-not-rediscover backtrace:
+  ert-fail(((should (= before listings)) :form (= 3 6) :value nil))
+  (if (unwind-protect (setq value-62 (apply fn-60 args-61)) (setq form
+  (let (form-description-64) (if (unwind-protect (setq value-62 (apply
+  (let ((value-62 'ert-form-evaluation-aborted-63)) (let (form-descrip
+  (let* ((fn-60 #'=) (args-61 (condition-case err (list before listing
+  (let ((before listings)) (let ((upper-bound 3) (counter 0)) (while (
+  (progn (fset v #'ignore) (gap-call "-refresh") (setq entry (car (gap
+  (unwind-protect (progn (fset v #'ignore) (gap-call "-refresh") (setq
+  (let* ((v (gap-symbol "--start-parse-timer")) (old (symbol-function 
+  (progn (gap-call "-mode") (set (gap-symbol "-providers") (list (cons
+  (unwind-protect (progn (gap-call "-mode") (set (gap-symbol "-provide
+  (save-current-buffer (set-buffer temp-buffer) (unwind-protect (progn
+  (let ((temp-buffer (generate-new-buffer " *temp*" t))) (save-current
+  #f(lambda () [(entry (:provider claude-cli :id "/var/folders/20/4zcz
+  funcall(#f(lambda () [(entry (:provider claude-cli :id "/var/folders
+  (let ((vegeta-refresh-timer 'nil) (vegeta--parse-cache '#<hash-table
+  eval((let ((vegeta-refresh-timer 'nil) (vegeta--parse-cache '#<hash-
+  (let* ((syms (mapcar #'gap-symbol '("-refresh-timer" "--parse-cache"
+  (progn (let* ((syms (mapcar #'gap-symbol '("-refresh-timer" "--parse
+  (progn (let ((temp-file file) (temp-buffer (generate-new-buffer " *t
+  (unwind-protect (progn (let ((temp-file file) (temp-buffer (generate
+  (let* ((root (make-temp-file "vegeta-gap-" t)) (file (expand-file-na
+  #f(lambda () [t] (let* ((root (make-temp-file "vegeta-gap-" t)) (fil
+  #f(compiled-function () #<bytecode -0x1664dbccd6f3b60a>)()
+  handler-bind-1(#f(compiled-function () #<bytecode -0x1664dbccd6f3b60
+  ert--run-test-internal(#s(ert--test-execution-info :test #s(ert-test
+  ert-run-test(#s(ert-test :name gap-redraw-does-not-rediscover :docum
+  ert-run-or-rerun-test(#s(ert--stats :selector t :tests ... :test-map
+  ert-run-tests(t #f(compiled-function (event-type &rest event-args) #
+  ert-run-tests-batch(nil)
+  ert-run-tests-batch-and-exit()
+  command-line-1(("-l" "jka-compr" "-L" "/Users/ducnguyen/.emacs.d/elp
+  command-line()
+  normal-top-level()
+Test gap-redraw-does-not-rediscover condition:
+    (ert-test-failed
+     ((should (= before listings)) :form (= 3 6) :value nil))
+   FAILED  11/13  gap-redraw-does-not-rediscover (0.001781 sec) at agent/vegeta-gap-2026-09-08/gap-tests.el:94
+vegeta[claude-cli]: claude --resume 11111111-1111-4111-8111-111111111111 (cwd=/private/tmp/)
+vegeta[claude-cli]: claude --resume 11111111-1111-4111-8111-111111111111 (cwd=/private/tmp/)
+GAP terminal launch calls: 2
+Test gap-repeated-claude-visit-reuses-terminal backtrace:
+  ert-fail(((should (= 1 launches)) :form (= 1 2) :value nil))
+  (if (unwind-protect (setq value-92 (apply fn-90 args-91)) (setq form
+  (let (form-description-94) (if (unwind-protect (setq value-92 (apply
+  (let ((value-92 'ert-form-evaluation-aborted-93)) (let (form-descrip
+  (let* ((fn-90 #'=) (args-91 (condition-case err (list 1 launches) (e
+  (progn (fset v #'ignore) (fset v vnew) (fset v vnew) (gap-call "--cl
+  (unwind-protect (progn (fset v #'ignore) (fset v vnew) (fset v vnew)
+  (let* ((v (gap-symbol "--launch-terminal")) (vnew #'(lambda (&rest _
+  (unwind-protect (let* ((v (gap-symbol "--launch-terminal")) (vnew #'
+  (let ((launches 0) buffers) (unwind-protect (let* ((v (gap-symbol "-
+  (progn (fset v #'ignore) (gap-call "-refresh") (setq entry (car (gap
+  (unwind-protect (progn (fset v #'ignore) (gap-call "-refresh") (setq
+  (let* ((v (gap-symbol "--start-parse-timer")) (old (symbol-function 
+  (progn (gap-call "-mode") (set (gap-symbol "-providers") (list (cons
+  (unwind-protect (progn (gap-call "-mode") (set (gap-symbol "-provide
+  (save-current-buffer (set-buffer temp-buffer) (unwind-protect (progn
+  (let ((temp-buffer (generate-new-buffer " *temp*" t))) (save-current
+  #f(lambda () [(entry (:provider claude-cli :id "/var/folders/20/4zcz
+  funcall(#f(lambda () [(entry (:provider claude-cli :id "/var/folders
+  (let ((vegeta-refresh-timer 'nil) (vegeta--parse-cache '#<hash-table
+  eval((let ((vegeta-refresh-timer 'nil) (vegeta--parse-cache '#<hash-
+  (let* ((syms (mapcar #'gap-symbol '("-refresh-timer" "--parse-cache"
+  (progn (let* ((syms (mapcar #'gap-symbol '("-refresh-timer" "--parse
+  (progn (let ((temp-file file) (temp-buffer (generate-new-buffer " *t
+  (unwind-protect (progn (let ((temp-file file) (temp-buffer (generate
+  (let* ((root (make-temp-file "vegeta-gap-" t)) (file (expand-file-na
+  #f(lambda () [t] (let* ((root (make-temp-file "vegeta-gap-" t)) (fil
+  #f(compiled-function () #<bytecode -0x1664dbccd6f3b60a>)()
+  handler-bind-1(#f(compiled-function () #<bytecode -0x1664dbccd6f3b60
+  ert--run-test-internal(#s(ert--test-execution-info :test ... :result
+  ert-run-test(#s(ert-test :name gap-repeated-claude-visit-reuses-term
+  ert-run-or-rerun-test(#s(ert--stats :selector t :tests ... :test-map
+  ert-run-tests(t #f(compiled-function (event-type &rest event-args) #
+  ert-run-tests-batch(nil)
+  ert-run-tests-batch-and-exit()
+  command-line-1(("-l" "jka-compr" "-L" "/Users/ducnguyen/.emacs.d/elp
+  command-line()
+  normal-top-level()
+Test gap-repeated-claude-visit-reuses-terminal condition:
+    (ert-test-failed ((should (= 1 launches)) :form (= 1 2) :value nil))
+   FAILED  12/13  gap-repeated-claude-visit-reuses-terminal (0.001327 sec) at agent/vegeta-gap-2026-09-08/gap-tests.el:150
+Test gap-text-after-tool-result backtrace:
+  ert-fail(((should (equal "actual user text" (plist-get (gap-call "--
+  (if (unwind-protect (setq value-52 (apply fn-50 args-51)) (setq form
+  (let (form-description-54) (if (unwind-protect (setq value-52 (apply
+  (let ((value-52 'ert-form-evaluation-aborted-53)) (let (form-descrip
+  (let* ((fn-50 #'equal) (args-51 (condition-case err (list "actual us
+  (progn (fset v #'ignore) (gap-call "-refresh") (setq entry (car (gap
+  (unwind-protect (progn (fset v #'ignore) (gap-call "-refresh") (setq
+  (let* ((v (gap-symbol "--start-parse-timer")) (old (symbol-function 
+  (progn (gap-call "-mode") (set (gap-symbol "-providers") (list (cons
+  (unwind-protect (progn (gap-call "-mode") (set (gap-symbol "-provide
+  (save-current-buffer (set-buffer temp-buffer) (unwind-protect (progn
+  (let ((temp-buffer (generate-new-buffer " *temp*" t))) (save-current
+  #f(lambda () [(entry (:provider claude-cli :id "/var/folders/20/4zcz
+  funcall(#f(lambda () [(entry (:provider claude-cli :id "/var/folders
+  (let ((vegeta-refresh-timer 'nil) (vegeta--parse-cache '#<hash-table
+  eval((let ((vegeta-refresh-timer 'nil) (vegeta--parse-cache '#<hash-
+  (let* ((syms (mapcar #'gap-symbol '("-refresh-timer" "--parse-cache"
+  (progn (let* ((syms (mapcar #'gap-symbol '("-refresh-timer" "--parse
+  (progn (let ((temp-file file) (temp-buffer (generate-new-buffer " *t
+  (unwind-protect (progn (let ((temp-file file) (temp-buffer (generate
+  (let* ((root (make-temp-file "vegeta-gap-" t)) (file (expand-file-na
+  #f(lambda () [t] (let* ((root (make-temp-file "vegeta-gap-" t)) (fil
+  #f(compiled-function () #<bytecode -0x1664dbccd6f3b60a>)()
+  handler-bind-1(#f(compiled-function () #<bytecode -0x1664dbccd6f3b60
+  ert--run-test-internal(#s(ert--test-execution-info :test #s(ert-test
+  ert-run-test(#s(ert-test :name gap-text-after-tool-result :documenta
+  ert-run-or-rerun-test(#s(ert--stats :selector t :tests ... :test-map
+  ert-run-tests(t #f(compiled-function (event-type &rest event-args) #
+  ert-run-tests-batch(nil)
+  ert-run-tests-batch-and-exit()
+  command-line-1(("-l" "jka-compr" "-L" "/Users/ducnguyen/.emacs.d/elp
+  command-line()
+  normal-top-level()
+Test gap-text-after-tool-result condition:
+    (ert-test-failed
+     ((should (equal "actual user text" (plist-get ... :preview))) :form
+      (equal "actual user text" nil) :value nil :explanation
+      (different-types "actual user text" nil)))
+   FAILED  13/13  gap-text-after-tool-result (0.001488 sec) at agent/vegeta-gap-2026-09-08/gap-tests.el:80
+
+Ran 13 tests, 2 results as expected, 11 unexpected (2026-09-08 16:52:07-0700, 1.025715 sec)
+
+11 unexpected results:
+   FAILED  gap-ambiguous-claude-recovery-does-not-guess
+   FAILED  gap-cache-rechecks-file-on-action
+   FAILED  gap-codex-provider-and-commands
+   FAILED  gap-delete-preserves-open-transcript
+   FAILED  gap-open-transcript-uses-view-mode
+   FAILED  gap-parse-state-is-buffer-local
+   FAILED  gap-parser-model-after-user
+   FAILED  gap-preview-storage-bound
+   FAILED  gap-redraw-does-not-rediscover
+   FAILED  gap-repeated-claude-visit-reuses-terminal
+   FAILED  gap-text-after-tool-result
+

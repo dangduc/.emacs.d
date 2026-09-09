@@ -1,0 +1,15 @@
+LANG=C.UTF-8 cannot be used, using en_US.UTF-8 instead.
+Running 3 tests (2026-09-08 13:19:32-0700, selector `t')
+OUSTERHOUT-2: first-sidebar="▾ ousterhout-sidebar-NV2SVb (1)
+  ▾ Claude (1)
+      09-08 13:19: First prompt
+" pending=nil timer=nil
+   passed  1/3  ousterhout-global-cache-preserves-other-buffer-metadata (0.404364 sec)
+Resuming unsupported by agent. Starting new session.
+OUSTERHOUT-1: actual-session="new-session" retained-request="old-session" old-row-reuses-new=nil
+   passed  2/3  ousterhout-live-request-id-is-not-current-after-fallback (0.000469 sec)
+OUSTERHOUT-3: recorded-agent=Claude Code resolved-agent=Claude visits=2 starts=1
+   passed  3/3  ousterhout-substring-agent-resolution-reuses-started-session (0.005051 sec)
+
+Ran 3 tests, 3 results as expected, 0 unexpected (2026-09-08 13:19:32-0700, 0.410161 sec)
+

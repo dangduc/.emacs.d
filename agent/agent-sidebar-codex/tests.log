@@ -1,0 +1,41 @@
+LANG=C.UTF-8 cannot be used, using en_US.UTF-8 instead.
+Running 31 tests (2026-09-08 15:10:00-0700, selector `t')
+   passed   1/31  codex-bounded-records-and-malformed-session-id (0.365422 sec)
+   passed   2/31  codex-cli-ghostel-resume-argv-home-and-reuse (0.049630 sec)
+   passed   3/31  codex-discovery-ignores-archives-symlinks-pipes-and-unrelated-folders (0.003957 sec)
+   passed   4/31  codex-discovery-metadata-and-existing-providers (0.045354 sec)
+   passed   5/31  codex-fork-keeps-first-session-meta-and-prefers-user-event-preview (0.001520 sec)
+   passed   6/31  codex-markdown-agent-shell-uses-codex-config (0.010344 sec)
+   passed   7/31  codex-native-agent-shell-rejects-missing-cwd-before-start (0.024465 sec)
+Deleted 0. Retained 1 mark(s): Transcript belongs to an open session: /var/folders/20/4zczrx1s3lq2fv0xmm0gj1fr0000gn/T/agent-sidebar-merge-427ddK/codex/sessions/2026/09/08/rollout-2026-09-08T12-00-00-12345678-1234-7123-8123-123456789abc.jsonl
+Codex agent-shell client: session/load, session/new, reuse, cwd, and native-rollout ownership passed
+   passed   8/31  codex-native-real-agent-shell-client-load-new-reuse-and-ownership (0.522381 sec)
+   passed   9/31  codex-new-cli-and-prefix-agent-shell-select-codex (0.012469 sec)
+   passed  10/31  merge-buffer-isolation-and-legacy-buffer-upgrade (0.011683 sec)
+   passed  11/31  merge-cache-rechecks-size-and-recovers-read-permissions (0.040067 sec)
+   passed  12/31  merge-claude-directory-is-confirmed-not-guessed (0.028626 sec)
+   passed  13/31  merge-flat-date-filter-and-fold-preserve-marks (0.056967 sec)
+   passed  14/31  merge-ghostel-dispatch-and-failed-start-cleanup (0.000537 sec)
+   passed  15/31  merge-jsonl-nonregular-and-read-errors-are-explicit (0.002504 sec)
+   passed  16/31  merge-jsonl-read-is-bounded-and-preserves-complete-records (0.002264 sec)
+   passed  17/31  merge-jsonl-skips-meta-and-tools-and-reads-later-model (0.001211 sec)
+   passed  18/31  merge-jsonl-wrong-record-shapes-do-not-hide-valid-records (0.001104 sec)
+Provider tree: 420 reads, 1 scan, progressive publication observed
+   passed  19/31  merge-progressive-tree-does-not-rediscover-and-bounds-rows (0.504517 sec)
+   passed  20/31  merge-provider-collision-does-not-publish-partial-discovery (0.011855 sec)
+   passed  21/31  merge-provider-error-keeps-old-snapshot-and-work (0.030360 sec)
+   passed  22/31  merge-provider-replacement-invalidates-cached-metadata (0.022809 sec)
+   passed  23/31  merge-real-term-process-receives-exact-argv-and-cwd (0.036163 sec)
+   passed  24/31  merge-reentrant-refresh-does-not-lose-provider-entry (0.044675 sec)
+   passed  25/31  merge-session-id-recovery-is-unambiguous-and-invalidates (0.003682 sec)
+   passed  26/31  merge-shell-activation-uses-recovery-or-session-picker (0.030448 sec)
+   passed  27/31  merge-term-fallback-preserves-argv-with-metacharacters (0.000420 sec)
+   passed  28/31  merge-terminal-arguments-directory-and-reuse (0.014964 sec)
+Deleted 0. Retained 1 mark(s): Transcript belongs to an open session: /var/folders/20/4zczrx1s3lq2fv0xmm0gj1fr0000gn/T/agent-sidebar-merge-3psj1s/claude/-var-folders-20-4zczrx1s3lq2fv0xmm0gj1fr0000gn-T-agent-sidebar-merge-3psj1s-repo-with-space/owned.jsonl
+Deleted 1 transcript(s)
+   passed  29/31  merge-terminal-ownership-prevents-delete-until-process-exits (0.045841 sec)
+   passed  30/31  merge-two-providers-metadata-model-and-nesting (0.033937 sec)
+   passed  31/31  merge-vterm-launch-keeps-dedicated-sidebar-and-quotes-argv (0.000664 sec)
+
+Ran 31 tests, 31 results as expected, 0 unexpected (2026-09-08 15:10:02-0700, 1.962068 sec)
+

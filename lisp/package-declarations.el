@@ -489,11 +489,15 @@
 ^agent-shell^
 ^^^^^^^^----------------------------
   _c_: start Claude agent
+  _x_: start Codex agent
   _s_: agent-shell (any agent)
+  _b_: chat sidebar
   _r_: restart agent
   _h_: help menu "
     ("c" agent-shell-anthropic-start-claude-code)
+    ("x" agent-shell-openai-start-codex)
     ("s" agent-shell)
+    ("b" vegeta-toggle-sidebar)
     ("r" agent-shell-restart)
     ("h" agent-shell-help-menu))
   (defhydra hydra-submenu-help (:exit t :hint nil)
@@ -1120,7 +1124,6 @@ _p_/_a_: push notes         _i_: screenshot
   ;; Use fzf-native's multithreaded batch scorer (sets `fussy-score-ALL-fn' to
   ;; `fussy-fzf-score' and `fussy-filter-fn' to `fussy-filter-by-scoring').
   (fussy-setup-fzf)
-  (push 'fussy completion-styles)
   (setq
    ;; For example, project-find-file uses 'project-files which uses
    ;; substring completion by default. Set to nil to make sure it's using
@@ -1472,6 +1475,13 @@ while `company-capf' runs."
   (advice-add 'evil-ghostel-paste-before :around
               #'duc/ghostel--evil-paste-to-terminal))
 
+(use-package vegeta
+  :ensure nil
+  :commands (vegeta-toggle-sidebar
+             vegeta-show-sidebar
+             vegeta-hide-sidebar
+             vegeta-jump-to-sidebar))
+
 ;; `agent-shell' — an in-Emacs shell for coding agents over the Agent Client
 ;; Protocol (ACP), configured for the Claude agent.  It drives Claude through
 ;; the external `claude-agent-acp' bridge (install once with
@@ -1482,7 +1492,8 @@ while `company-capf' runs."
 (use-package agent-shell
   :commands (agent-shell
              agent-shell-help-menu
-             agent-shell-anthropic-start-claude-code)
+             agent-shell-anthropic-start-claude-code
+             agent-shell-openai-start-codex)
   :config
   (require 'cl-lib)
   (require 'map)

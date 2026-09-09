@@ -1,0 +1,15 @@
+LANG=C.UTF-8 cannot be used, using en_US.UTF-8 instead.
+Running 7 tests (2026-09-08 15:49:56-0700, selector `(or "^fix-group-" "^ousterhout-r2-")')
+Stale group: selected=/var/folders/20/4zczrx1s3lq2fv0xmm0gj1fr0000gn/T/agent-sidebar-merge-Np1aMN/repo-with space/ current-cwd=/var/folders/20/4zczrx1s3lq2fv0xmm0gj1fr0000gn/T/agent-sidebar-merge-Np1aMN/changed-repository-longer-name/ launched=nil result=(user-error "Group changed while reading; refresh or select a transcript row")
+   passed  1/7  ousterhout-r2-new-on-stale-repo-group-does-not-launch-another-repo (0.412139 sec)
+   passed  2/7  ousterhout-r2-filtered-group-resolves-visible-provider (0.047615 sec)
+Mutation control: ignoring membership filter produced ambiguity, as detected
+   passed  3/7  ousterhout-r2-filter-membership-mutation-is-detected (0.039495 sec)
+   passed  4/7  fix-group-changed-filter-membership-aborts (0.032741 sec)
+   passed  5/7  fix-group-changed-model-membership-aborts (0.015485 sec)
+EARLY AMBIGUITY: 20 discovered entries, 2 parser calls
+   passed  6/7  fix-group-stops-at-second-distinct-context (0.030473 sec)
+   passed  7/7  fix-group-warm-one-context-keeps-cache-and-discovery (0.023409 sec)
+
+Ran 7 tests, 7 results as expected, 0 unexpected (2026-09-08 15:49:56-0700, 0.601806 sec)
+

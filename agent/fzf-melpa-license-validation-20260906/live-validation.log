@@ -1,0 +1,20 @@
+Live Emacs PID=1115 version=31.1 platform=aarch64-apple-darwin22.6.0
+Built source-pr archive=/private/tmp/fzf-melpa-validation-20260906/source-pr/packages/fzf-native-20260907.242.tar bytes=5365760
+Built main archive=/private/tmp/fzf-melpa-validation-20260906/main/packages/fzf-native-20260831.1556.tar bytes=5355520
+Built stable archive=/private/tmp/fzf-melpa-validation-20260906/stable/packages/fzf-native-2.8.tar bytes=5355520
+Installed source-pr with package-install-file, byte-compiled Lisp at /private/tmp/fzf-melpa-validation-20260906/source-pr/installed/fzf-native-20260907.242
+Installed main with package-install-file, byte-compiled Lisp at /private/tmp/fzf-melpa-validation-20260906/main/installed/fzf-native-20260831.1556
+Installed stable with package-install-file, byte-compiled Lisp at /private/tmp/fzf-melpa-validation-20260906/stable/installed/fzf-native-2.8
+stable configure exit=0 log=/private/tmp/fzf-melpa-validation-20260906/stable/configure.log
+main configure exit=0 log=/private/tmp/fzf-melpa-validation-20260906/main/configure.log
+source-pr configure exit=0 log=/private/tmp/fzf-melpa-validation-20260906/source-pr/configure.log
+main build exit=0 log=/private/tmp/fzf-melpa-validation-20260906/main/build.log
+source-pr build exit=0 log=/private/tmp/fzf-melpa-validation-20260906/source-pr/build.log
+stable build exit=0 log=/private/tmp/fzf-melpa-validation-20260906/stable/build.log
+Live ERT total=168 unexpected=0 skipped=0 module=/private/tmp/fzf-melpa-validation-20260906/source-pr/installed/fzf-native-20260907.242/source-built/fzf-native-module.so
+source-pr smoke-source-built exit=0 log=/private/tmp/fzf-melpa-validation-20260906/source-pr/smoke-source-built.log
+main smoke-source-built exit=0 log=/private/tmp/fzf-melpa-validation-20260906/main/smoke-source-built.log
+main smoke-bundled exit=0 log=/private/tmp/fzf-melpa-validation-20260906/main/smoke-bundled.log
+source-pr smoke-bundled exit=0 log=/private/tmp/fzf-melpa-validation-20260906/source-pr/smoke-bundled.log
+stable smoke-bundled exit=0 log=/private/tmp/fzf-melpa-validation-20260906/stable/smoke-bundled.log
+stable smoke-source-built exit=0 log=/private/tmp/fzf-melpa-validation-20260906/stable/smoke-source-built.log

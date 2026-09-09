@@ -1,0 +1,12 @@
+{
+  "frontend": "ivy",
+  "mode": "flood",
+  "query": "alpha",
+  "error": null,
+  "child_status": 0,
+  "variant": "before-fix",
+  "sent": [],
+  "first_display": 0.17405915260314941,
+  "reader_done_at": 0.5479650497436523,
+  "visible_samples_before_eof": 16
+}

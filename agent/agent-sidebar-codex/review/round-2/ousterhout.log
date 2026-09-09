@@ -1,0 +1,43 @@
+LANG=C.UTF-8 cannot be used, using en_US.UTF-8 instead.
+Running 3 tests (2026-09-08 15:41:45-0700, selector `"^ousterhout-r2-"')
+Mutation control: ignoring membership filter produced ambiguity, as detected
+   passed  1/3  ousterhout-r2-filter-membership-mutation-is-detected (0.428965 sec)
+   passed  2/3  ousterhout-r2-filtered-group-resolves-visible-provider (0.040942 sec)
+Stale group: selected=/var/folders/20/4zczrx1s3lq2fv0xmm0gj1fr0000gn/T/agent-sidebar-merge-CkzeQR/repo-with space/ current-cwd=/var/folders/20/4zczrx1s3lq2fv0xmm0gj1fr0000gn/T/agent-sidebar-merge-CkzeQR/changed-repository-longer-name/ launched="/var/folders/20/4zczrx1s3lq2fv0xmm0gj1fr0000gn/T/agent-sidebar-merge-CkzeQR/changed-repository-longer-name/" result="/var/folders/20/4zczrx1s3lq2fv0xmm0gj1fr0000gn/T/agent-sidebar-merge-CkzeQR/changed-repository-longer-name/"
+Test ousterhout-r2-new-on-stale-repo-group-does-not-launch-another-repo backtrace:
+  ert-fail(((should-not launch) :form launch :value "/var/folders/20/4
+  (if (not (unwind-protect (setq value-943 launch) (setq form-descript
+  (let (form-description-944) (if (not (unwind-protect (setq value-943
+  (let ((value-943 (gensym "ert-form-evaluation-aborted-"))) (let (for
+  (let* ((file (codex-test--write agent-sidebar-codex-home root)) (new
+  (let ((agent-sidebar-codex-home (expand-file-name "codex/" temporary
+  (save-current-buffer (set-buffer buffer) (agent-sidebar-mode) (let (
+  (progn (fset 'input-pending-p vnew) (fset 'agent-shell-buffers vnew)
+  (unwind-protect (progn (fset 'input-pending-p vnew) (fset 'agent-she
+  (let* ((vnew #'(lambda nil nil)) (vnew #'(lambda nil nil)) (vnew #'(
+  (unwind-protect (let* ((vnew #'(lambda nil nil)) (vnew #'(lambda nil
+  (let* ((temporary (file-name-as-directory (make-temp-file "agent-sid
+  #f(lambda () [t] (let* ((temporary (file-name-as-directory ...)) (ro
+  #f(compiled-function () #<bytecode -0x1b5f9035105d4d92>)()
+  handler-bind-1(#f(compiled-function () #<bytecode -0x1b5f9035105d4d9
+  ert--run-test-internal(#s(ert--test-execution-info :test ... :result
+  ert-run-test(#s(ert-test :name ousterhout-r2-new-on-stale-repo-group
+  ert-run-or-rerun-test(#s(ert--stats :selector "^ousterhout-r2-" :tes
+  ert-run-tests("^ousterhout-r2-" #f(compiled-function (event-type &re
+  ert-run-tests-batch("^ousterhout-r2-")
+  ert-run-tests-batch-and-exit("^ousterhout-r2-")
+  eval((ert-run-tests-batch-and-exit '"^ousterhout-r2-") t)
+  command-line-1(("-l" "jka-compr" "-L" "/private/tmp/sidebar-review-y
+  command-line()
+  normal-top-level()
+Test ousterhout-r2-new-on-stale-repo-group-does-not-launch-another-repo condition:
+    (ert-test-failed
+     ((should-not launch) :form launch :value
+      "/var/folders/20/4zczrx1s3lq2fv0xmm0gj1fr0000gn/T/agent-sidebar-merge-CkzeQR/changed-repository-longer-name/"))
+   FAILED  3/3  ousterhout-r2-new-on-stale-repo-group-does-not-launch-another-repo (0.015300 sec) at agent/agent-sidebar-codex/review/round-2/ousterhout-tests.el:4
+
+Ran 3 tests, 2 results as expected, 1 unexpected (2026-09-08 15:41:46-0700, 0.545967 sec)
+
+1 unexpected results:
+   FAILED  ousterhout-r2-new-on-stale-repo-group-does-not-launch-another-repo
+

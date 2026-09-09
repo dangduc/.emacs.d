@@ -1,0 +1,10 @@
+LANG=C.UTF-8 cannot be used, using en_US.UTF-8 instead.
+Running 2 tests (2026-09-08 15:46:23-0700, selector `"^luu-r2-"')
+LUU-R2-GROUP (:files 300 :dense t :early-control nil :elapsed 2.297238 :parser-calls 300 :ambiguity-established-at 2)
+LUU-R2-GROUP (:files 300 :dense t :early-control t :elapsed 0.014368 :parser-calls 2 :ambiguity-established-at 2)
+   passed  1/2  luu-r2-cold-mixed-group-parses-after-ambiguity-is-proven (4.921491 sec)
+LUU-R2-WARM (:files 300 :elapsed 0.009069 :parses 0 :discoveries 0)
+   passed  2/2  luu-r2-warm-unambiguous-group-reuses-metadata-at-300-sessions (0.420672 sec)
+
+Ran 2 tests, 2 results as expected, 0 unexpected (2026-09-08 15:46:28-0700, 5.342392 sec)
+

@@ -1,0 +1,98 @@
+LANG=C.UTF-8 cannot be used, using en_US.UTF-8 instead.
+Running 76 tests (2026-09-08 13:20:18-0700, selector `t')
+   passed   1/76  contrarian-evidence-byte-limit-is-independent-of-boundary (0.001132 sec)
+   passed   2/76  contrarian-evidence-complete-id-at-byte-limit-is-retained (0.000999 sec)
+   passed   3/76  contrarian-evidence-first-message-is-a-boundary-without-separator (0.000752 sec)
+Created .agent-shell/transcripts/fixture.md
+Real writer: recorded="/var/folders/20/4zczrx1s3lq2fv0xmm0gj1fr0000gn/T/sidebar-evidence-t9qKk3/project " parsed="/var/folders/20/4zczrx1s3lq2fv0xmm0gj1fr0000gn/T/sidebar-evidence-t9qKk3/project " resolved="/var/folders/20/4zczrx1s3lq2fv0xmm0gj1fr0000gn/T/sidebar-evidence-t9qKk3/project /"
+   passed   4/76  contrarian-evidence-real-writer-preserves-directory-ending-in-space (0.001037 sec)
+Cutoff: complete="complete-session-identifier" parsed=nil start-session=nil file-bytes=8220 visit-error=(user-error "Transcript metadata exceeds the 8192-byte read limit")
+   passed   5/76  contrarian-evidence-session-id-cut-by-byte-limit-is-not-used (0.001044 sec)
+   passed   6/76  identity-active-session-replaces-pending-identity (0.000387 sec)
+   passed   7/76  identity-ambiguous-alias-obeys-explicit-selection-on-every-visit (0.377119 sec)
+Deleted 1 transcript(s)
+   passed   8/76  identity-deletion-ignores-absent-owner-paths (0.362314 sec)
+Deleted 0. Retained 1 mark(s): Transcript belongs to an open agent-shell: /var/folders/20/4zczrx1s3lq2fv0xmm0gj1fr0000gn/T/sidebar-identity-sJ9lwb/alias/.agent-shell/transcripts/session.md
+Deleted 0. Retained 1 mark(s): Transcript belongs to an open agent-shell: /var/folders/20/4zczrx1s3lq2fv0xmm0gj1fr0000gn/T/sidebar-identity-sJ9lwb/real/.agent-shell/transcripts/session.md
+   passed   9/76  identity-deletion-protects-directory-alias-in-both-directions (0.002097 sec)
+Deleted 1. Retained 1 mark(s): Transcript belongs to an open agent-shell: /var/folders/20/4zczrx1s3lq2fv0xmm0gj1fr0000gn/T/sidebar-identity-SO3WLm/hard-link.md
+   passed  10/76  identity-deletion-protects-hard-links-and-removes-distinct-copy (0.002865 sec)
+Deleted 0. Retained 1 mark(s): Fixture stat failure
+   passed  11/76  identity-deletion-retains-mark-when-ownership-stat-fails (0.002273 sec)
+   passed  12/76  identity-missing-agent-uses-selected-config-before-reuse (0.002012 sec)
+Installed Claude maker: fresh-alists=t equivalent=t visits=2 starts=1
+   passed  13/76  identity-real-config-maker-reuses-across-fresh-resolutions (0.001572 sec)
+   passed  14/76  identity-removed-config-retains-exact-live-session-access (0.001287 sec)
+   passed  15/76  identity-same-names-do-not-cross-config-directory-or-session (0.001730 sec)
+   passed  16/76  identity-substring-alias-reuses-connecting-and-active-shell (0.001646 sec)
+   passed  17/76  identity-toggle-preserves-ordinary-view-and-removes-only-side-window (0.003308 sec)
+   passed  18/76  identity-unconfigured-exact-name-still-refuses-multiple-configs (0.000275 sec)
+   passed  19/76  metadata-bounded-preview-does-not-invalidate-complete-header (0.001062 sec)
+   passed  20/76  metadata-byte-limit-retains-only-complete-lines (0.001476 sec)
+   passed  21/76  metadata-cache-belongs-to-each-sidebar-snapshot (0.711501 sec)
+   passed  22/76  metadata-discovery-and-parser-reject-special-files (0.001740 sec)
+   passed  23/76  metadata-empty-directory-is-distinct-from-whitespace-directory (0.001803 sec)
+   passed  24/76  metadata-growth-during-read-does-not-complete-a-cutoff-field (0.001771 sec)
+   passed  25/76  metadata-parser-rechecks-after-activation-attributes-were-read (0.003504 sec)
+   passed  26/76  metadata-permission-errors-retry-on-refresh-and-activation (0.003103 sec)
+Created .agent-shell/transcripts/fixture.md
+Created .agent-shell/transcripts/fixture.md
+Created .agent-shell/transcripts/fixture.md
+Created .agent-shell/transcripts/fixture.md
+   passed  27/76  metadata-real-writer-preserves-directory-whitespace (0.004044 sec)
+   passed  28/76  metadata-rechecks-a-discovered-file-before-reading (0.003333 sec)
+   passed  29/76  metadata-true-eof-retains-an-unterminated-complete-field (0.001220 sec)
+   passed  30/76  metadata-truncated-activation-fields-never-start-a-session (0.003722 sec)
+   passed  31/76  scheduling-disabled-refresh-skips-a-pending-callback (0.000390 sec)
+   passed  32/76  scheduling-idle-reset-rearms-both-timers-from-another-buffer (0.360369 sec)
+   passed  33/76  scheduling-input-and-mode-change-stop-staged-work (0.643574 sec)
+   passed  34/76  scheduling-persistent-hook-failure-is-bounded-and-visible (0.007044 sec)
+   passed  35/76  scheduling-publish-preserves-independent-window-views-and-marks (0.543168 sec)
+   passed  36/76  scheduling-quit-discards-a-partially-written-staging-row (0.567981 sec)
+   passed  37/76  scheduling-quit-retains-work-and-rearms (0.004589 sec)
+   passed  38/76  scheduling-refresh-cancels-snapshot-before-removing-a-file (0.618685 sec)
+Sidebar redraw failed: Injected render failure
+   passed  39/76  scheduling-render-error-stops-and-manual-refresh-recovers (0.353931 sec)
+   passed  40/76  scheduling-rendering-is-progressive-bounded-and-coherent (0.549130 sec)
+   passed  41/76  scheduling-snapshot-freezes-header-and-attribute-pair (0.636190 sec)
+   passed  42/76  scheduling-transient-standard-read-hook-retries-the-same-head (0.006719 sec)
+   passed  43/76  scheduling-user-redraw-invalidates-stale-filter-and-fold-snapshots (0.421089 sec)
+   passed  44/76  sidebar-ambiguous-config-name-never-selects-first (0.000111 sec)
+   passed  45/76  sidebar-cache-detects-size-change-with-identical-mtime (0.001866 sec)
+   passed  46/76  sidebar-chunks-are-bounded-and-preserve-selection (0.010133 sec)
+Deleted 1. Retained 2 mark(s): Transcript belongs to an open agent-shell: /var/folders/20/4zczrx1s3lq2fv0xmm0gj1fr0000gn/T/sidebar-test-XXcVa8/.agent-shell/transcripts/live.md; denied
+   passed  47/76  sidebar-delete-keeps-failed-and-live-transcript-marks (0.002228 sec)
+   passed  48/76  sidebar-discovery-skips-directories-and-remote-roots (0.041554 sec)
+   passed  49/76  sidebar-draw-and-fold-do-not-rescan (0.003427 sec)
+   passed  50/76  sidebar-empty-config-name-never-matches (0.000080 sec)
+   passed  51/76  sidebar-empty-prompt-does-not-preview-agent-message (0.000927 sec)
+   passed  52/76  sidebar-exact-config-beats-substring (0.000063 sec)
+   passed  53/76  sidebar-filter-preserves-marks-and-folds (0.004172 sec)
+   passed  54/76  sidebar-idle-chunks-rearm-after-elapsed-idle (0.000185 sec)
+   passed  55/76  sidebar-input-pending-yields-with-queue-intact (0.000933 sec)
+   passed  56/76  sidebar-jump-selects-window-even-when-toggle-does-not (0.002624 sec)
+   passed  57/76  sidebar-kill-and-mode-change-cancel-both-timers (0.000088 sec)
+   passed  58/76  sidebar-live-session-reuse-is-scoped-and-includes-connecting (0.000180 sec)
+300 transcripts: refresh 26.3 ms, max callback 38.7 ms, 1 scan, 300 reads, 10 parse chunks, 12 total callbacks
+   passed  59/76  sidebar-many-transcripts-use-one-scan-and-bounded-chunks (0.237143 sec)
+   passed  60/76  sidebar-metadata-is-confined-to-header (0.001491 sec)
+   passed  61/76  sidebar-missing-file-is-not-a-stale-cache-hit (0.003628 sec)
+   passed  62/76  sidebar-next-line-stays-on-final-row (0.001065 sec)
+   passed  63/76  sidebar-open-transcript-really-uses-view-mode (0.005789 sec)
+   passed  64/76  sidebar-parser-is-bounded-and-strips-quote (0.000874 sec)
+   passed  65/76  sidebar-pop-to-preserves-dedicated-sidebar (0.000130 sec)
+ACP fixture: session/load + session/new used recorded subdirectory; RET reused existing shell
+   passed  66/76  sidebar-real-acp-start-resume-and-reuse (0.114436 sec)
+   passed  67/76  sidebar-recorded-subdirectory-survives-agent-project-detection (0.000430 sec)
+   passed  68/76  sidebar-redraw-preserves-scroll-position (0.035128 sec)
+   passed  69/76  sidebar-refresh-scans-once-and-discards-obsolete-queue (0.001263 sec)
+   passed  70/76  sidebar-refuses-to-overwrite-non-sidebar-buffer (0.000046 sec)
+   passed  71/76  sidebar-root-labels-are-distinct (0.000132 sec)
+   passed  72/76  sidebar-timers-belong-to-their-buffer (0.000995 sec)
+   passed  73/76  sidebar-unknown-recorded-agent-does-not-use-preferred-agent (0.000044 sec)
+   passed  74/76  sidebar-visit-at-eol-starts-with-transcript-session (0.003474 sec)
+   passed  75/76  sidebar-working-directory-fallback-is-transcript-project (0.000889 sec)
+   passed  76/76  sidebar-zero-chunk-size-still-progresses (0.003643 sec)
+
+Ran 76 tests, 76 results as expected, 0 unexpected (2026-09-08 13:20:25-0700, 6.696514 sec)
+

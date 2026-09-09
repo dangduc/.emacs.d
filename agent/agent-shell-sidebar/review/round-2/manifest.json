@@ -1,0 +1,5 @@
+{
+  "source": "/Users/ducnguyen/.emacs.d/agent/agent-shell-sidebar/review/round-2/reviewed.el",
+  "sha256": "629a0b61dc25a1b9766936b34b655aea9e1775c57f0f2d98ebb9ef00fea1b6ed",
+  "integration_checks": "76/76 passed; includes all delegated regressions and independent parser controls"
+}

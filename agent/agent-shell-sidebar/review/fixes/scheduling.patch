@@ -1,0 +1,375 @@
+--- a/lisp/agent-shell-sidebar.el
++++ b/lisp/agent-shell-sidebar.el
+@@ -35,6 +35,8 @@
+ ;;; Code:
+ 
+ (require 'cl-lib)
++(require 'generator)
++(require 'text-property-search)
+ (require 'map)
+ (require 'seq)
+ (require 'subr-x)
+@@ -178,6 +180,33 @@
+   "Whether discovery scans remote projects.
+ Remote directory and file operations can wait for a connection."
+   :type 'boolean)
++
++(defvar-local agent-shell-sidebar--pending-count 0
++  "Number of headers still queued.")
++
++(defvar-local agent-shell-sidebar--parse-retry-file nil
++  "Queue head that has already failed once in this refresh.")
++
++(defvar-local agent-shell-sidebar--render-iterator nil
++  "Iterator constructing the next coherent metadata snapshot.")
++
++(defvar-local agent-shell-sidebar--render-buffer nil
++  "Staging buffer for the next metadata snapshot.")
++
++(defvar-local agent-shell-sidebar--render-dirty nil
++  "Non-nil when metadata changed since the current render began.")
++
++(defvar-local agent-shell-sidebar--render-error nil
++  "Rendering error, cleared by a manual redraw or refresh.")
++
++(defvar-local agent-shell-sidebar--project-names nil
++  "Disambiguated project names from the last synchronous redraw.")
++
++(defvar agent-shell-sidebar--timer-buffers nil
++  "Sidebar buffers whose timers must restart after input.")
++
++(defvar agent-shell-sidebar--resetting-idle nil
++  "Non-nil while resetting timer delays for a new idle period.")
+ 
+ ;;; Discovery
+ 
+@@ -326,42 +355,88 @@
+ (defun agent-shell-sidebar--queue-uncached (paths)
+   "Replace the parse queue with uncached PATHS from this refresh."
+   (setq agent-shell-sidebar--parse-queue
+-        (seq-remove #'agent-shell-sidebar--cached-header paths)))
++        (seq-remove #'agent-shell-sidebar--cached-header paths)
++        agent-shell-sidebar--pending-count (length agent-shell-sidebar--parse-queue)
++        agent-shell-sidebar--parse-retry-file nil))
+ 
+ (defun agent-shell-sidebar--idle-timer (delay function)
+   "Call FUNCTION with the current buffer after another DELAY idle seconds.
+ Add elapsed idle time so successive chunks also run during continuous idle."
+   (run-with-idle-timer
+-   (time-add (or (current-idle-time) 0) (max 0.01 delay)) nil
++   (time-add (if agent-shell-sidebar--resetting-idle 0
++               (or (current-idle-time) 0))
++             (max 0.01 delay)) nil
+    function (current-buffer)))
+ 
+ (defun agent-shell-sidebar--start-parse-timer ()
+-  "Schedule the next chunk if the queue is nonempty."
+-  (when (and agent-shell-sidebar--parse-queue
++  "Schedule the next chunk while parsing or rendering remains."
++  (when (and (or agent-shell-sidebar--parse-queue
++                 (and (not agent-shell-sidebar--render-error)
++                      (or agent-shell-sidebar--render-iterator
++                          agent-shell-sidebar--render-dirty)))
+              (not (timerp agent-shell-sidebar--parse-timer)))
+     (setq agent-shell-sidebar--parse-timer
+           (agent-shell-sidebar--idle-timer
+            agent-shell-sidebar-parse-idle-delay #'agent-shell-sidebar--parse-tick))))
+ 
+ (defun agent-shell-sidebar--parse-tick (&optional buffer)
+-  "Parse a bounded chunk in BUFFER, then redraw without scanning projects."
++  "Parse and render bounded portions of BUFFER without scanning projects."
+   (when (buffer-live-p (or buffer (current-buffer)))
+     (with-current-buffer (or buffer (current-buffer))
+       (when (derived-mode-p 'agent-shell-sidebar-mode)
+         (when (timerp agent-shell-sidebar--parse-timer)
+           (cancel-timer agent-shell-sidebar--parse-timer))
+         (setq agent-shell-sidebar--parse-timer nil)
+-        (let ((n 0))
+-          (while (and agent-shell-sidebar--parse-queue
+-                      (< n (max 1 agent-shell-sidebar-parse-chunk-size))
+-                      (not (input-pending-p)))
+-            (agent-shell-sidebar--ensure-parsed (pop agent-shell-sidebar--parse-queue))
+-            (cl-incf n))
+-          (when (> n 0) (agent-shell-sidebar--redraw)))
+-        (agent-shell-sidebar--start-parse-timer)))))
++        (unwind-protect
++            (let ((n 0) retry)
++              (while (and agent-shell-sidebar--parse-queue (not retry)
++                          (< n (max 1 agent-shell-sidebar-parse-chunk-size))
++                          (not (input-pending-p)))
++                (let ((file (car agent-shell-sidebar--parse-queue)))
++                  (condition-case err
++                      (agent-shell-sidebar--ensure-parsed file)
++                    (error
++                     (if (equal file agent-shell-sidebar--parse-retry-file)
++                         (puthash
++                          file
++                          (list :schema agent-shell-sidebar--cache-schema
++                                :signature (agent-shell-sidebar--signature
++                                            (gethash file agent-shell-sidebar--file-info))
++                                :header (list :error (error-message-string err)))
++                          agent-shell-sidebar--parse-cache)
++                       (setq agent-shell-sidebar--parse-retry-file file
++                             retry t))))
++                  ;; A quit also retains the head; cleanup below rearms work.
++                  (unless retry
++                    (pop agent-shell-sidebar--parse-queue)
++                    (setq agent-shell-sidebar--parse-retry-file nil
++                          agent-shell-sidebar--pending-count
++                          (max 0 (1- agent-shell-sidebar--pending-count))
++                          agent-shell-sidebar--render-dirty t)))
++                (cl-incf n))
++              (agent-shell-sidebar--render-tick)
++              (agent-shell-sidebar--update-header-line))
++          (agent-shell-sidebar--start-parse-timer))))))
++
++(defun agent-shell-sidebar--reset-idle-timers ()
++  "Restart pending timers after input anywhere in Emacs."
++  (let ((agent-shell-sidebar--resetting-idle t))
++    (dolist (buffer agent-shell-sidebar--timer-buffers)
++      (when (buffer-live-p buffer)
++        (with-current-buffer buffer
++          (dolist (timer (list agent-shell-sidebar--parse-timer
++                              agent-shell-sidebar--refresh-timer-object))
++            (when (timerp timer) (cancel-timer timer)))
++          (setq agent-shell-sidebar--parse-timer nil
++                agent-shell-sidebar--refresh-timer-object nil)
++          (agent-shell-sidebar--start-parse-timer)
++          (agent-shell-sidebar--schedule-refresh))))))
+ 
+ (defun agent-shell-sidebar--schedule-refresh ()
+   "Schedule another refresh for this buffer when auto-refresh is enabled."
++  (when (timerp agent-shell-sidebar--refresh-timer-object)
++    (cancel-timer agent-shell-sidebar--refresh-timer-object))
++  (setq agent-shell-sidebar--refresh-timer-object nil)
+   (when (and (numberp agent-shell-sidebar-refresh-timer)
+              (> agent-shell-sidebar-refresh-timer 0))
+     (setq agent-shell-sidebar--refresh-timer-object
+@@ -375,17 +450,27 @@
+       (setq agent-shell-sidebar--refresh-timer-object nil)
+       (when (derived-mode-p 'agent-shell-sidebar-mode)
+         (unwind-protect
+-            (when (get-buffer-window buffer t) (agent-shell-sidebar-refresh))
++            (when (and (numberp agent-shell-sidebar-refresh-timer)
++                       (> agent-shell-sidebar-refresh-timer 0)
++                       (get-buffer-window buffer t))
++              (agent-shell-sidebar-refresh))
+           (agent-shell-sidebar--schedule-refresh))))))
+ 
+ (defun agent-shell-sidebar--cleanup ()
+   "Cancel this buffer's timers and pending work."
++  (agent-shell-sidebar--cancel-render)
++  (setq agent-shell-sidebar--timer-buffers
++        (delq (current-buffer) agent-shell-sidebar--timer-buffers))
++  (unless agent-shell-sidebar--timer-buffers
++    (remove-hook 'post-command-hook #'agent-shell-sidebar--reset-idle-timers))
+   (dolist (timer (list agent-shell-sidebar--parse-timer
+                        agent-shell-sidebar--refresh-timer-object))
+     (when (timerp timer) (cancel-timer timer)))
+   (setq agent-shell-sidebar--parse-timer nil
+         agent-shell-sidebar--refresh-timer-object nil
+-        agent-shell-sidebar--parse-queue nil))
++        agent-shell-sidebar--parse-queue nil
++        agent-shell-sidebar--pending-count 0
++        agent-shell-sidebar--parse-retry-file nil))
+ 
+ ;;; Live-buffer + config lookups
+ 
+@@ -653,9 +738,10 @@
+   (goto-char (point-min))
+   (let ((key (car location)))
+     (when key
+-      (while (and (not (eobp))
+-                  (not (equal (cdr key) (get-text-property (point) (car key)))))
+-        (forward-line 1)))
++      (goto-char (or (let ((match (text-property-search-forward
++                                    (car key) (cdr key) #'equal)))
++                       (and match (prop-match-beginning match)))
++                     (point-max))))
+     (when (or (null key) (eobp))
+       (goto-char (point-min))
+       (forward-line (1- (cadr location)))
+@@ -666,6 +752,8 @@
+ (defun agent-shell-sidebar--redraw ()
+   "Redraw the current sidebar buffer, preserving point on the same file/project."
+   (when (derived-mode-p 'agent-shell-sidebar-mode)
++    (agent-shell-sidebar--cancel-render)
++    (setq agent-shell-sidebar--render-error nil)
+     (let* ((location (agent-shell-sidebar--row-location (point)))
+            (views (mapcar
+                    (lambda (window)
+@@ -685,6 +773,7 @@
+                               'face 'agent-shell-sidebar-placeholder-face))
+         (let ((names (agent-shell-sidebar--disambiguated-names
+                       (mapcar #'car groups))))
++          (setq agent-shell-sidebar--project-names names)
+           (dolist (group groups)
+             (let* ((root (car group))
+                    (paths (seq-filter #'agent-shell-sidebar--matches-filter-p (cdr group)))
+@@ -713,12 +802,7 @@
+                          p (gethash p agent-shell-sidebar--marks)))))))))))
+       (when (= (point-min) (point-max))
+         (insert "  (no matching transcripts)\n"))
+-      (setq header-line-format
+-            (format " RET resume  o read  TAB fold  / filter  N new  g refresh%s%s"
+-                    (if (string-empty-p agent-shell-sidebar--filter) ""
+-                      (concat " | " (replace-regexp-in-string "%" "%%" agent-shell-sidebar--filter)))
+-                    (if agent-shell-sidebar--parse-queue
+-                        (format " | %d pending" (length agent-shell-sidebar--parse-queue)) "")))
++      (agent-shell-sidebar--update-header-line)
+       (dolist (view views)
+         (when (window-live-p (car view))
+           (agent-shell-sidebar--restore-location (cadr view))
+@@ -726,6 +810,143 @@
+           (agent-shell-sidebar--restore-location (caddr view))
+           (set-window-point (car view) (point))))
+       (agent-shell-sidebar--restore-location location))))
++
++(defun agent-shell-sidebar--update-header-line ()
++  "Update controls and work status without traversing the parse queue."
++  (setq header-line-format
++        (format " RET resume  o read  TAB fold  / filter  N new  g refresh%s%s%s"
++                (if (string-empty-p agent-shell-sidebar--filter) ""
++                  (concat " | " (replace-regexp-in-string "%" "%%" agent-shell-sidebar--filter)))
++                (if agent-shell-sidebar--parse-queue
++                    (format " | %d pending" agent-shell-sidebar--pending-count) "")
++                (cond (agent-shell-sidebar--render-error " | redraw failed; g retries")
++                      (agent-shell-sidebar--render-iterator " | updating view")
++                      (t "")))))
++
++(defun agent-shell-sidebar--cancel-render ()
++  "Discard any unpublished snapshot and pending render request."
++  (setq agent-shell-sidebar--render-iterator nil
++        agent-shell-sidebar--render-dirty nil)
++  (when (buffer-live-p agent-shell-sidebar--render-buffer)
++    (kill-buffer agent-shell-sidebar--render-buffer))
++  (setq agent-shell-sidebar--render-buffer nil))
++
++(defun agent-shell-sidebar--append-item (queue item)
++  "Append ITEM to the (HEAD . TAIL) QUEUE in constant time."
++  (let ((cell (list item)))
++    (if (cdr queue) (setcdr (cdr queue) cell) (setcar queue cell))
++    (setcdr queue cell)))
++
++(iter-defun agent-shell-sidebar--render-snapshot (output groups names)
++  "Build a coherent view in OUTPUT, yielding after each path or row.
++GROUPS and NAMES come from the last refresh.  Capture metadata as each
++path is considered, so grouping and displayed rows use the same header."
++  (let ((cache (make-hash-table :test 'equal))
++        (info (make-hash-table :test 'equal))
++        (marks agent-shell-sidebar--marks))
++    (dolist (group groups)
++      (let* ((root (car group))
++             (collapsed (gethash root agent-shell-sidebar--collapsed))
++             (by-agent (make-hash-table :test 'equal))
++             (agents (cons nil nil))
++             (count 0))
++        (iter-yield nil)
++        (dolist (path (cdr group))
++          (puthash path (gethash path agent-shell-sidebar--parse-cache) cache)
++          (puthash path (gethash path agent-shell-sidebar--file-info) info)
++          (when (agent-shell-sidebar--matches-filter-p path)
++            (cl-incf count)
++            (unless collapsed
++              (let* ((agent (plist-get (agent-shell-sidebar--cached-header path) :agent))
++                     (entry (gethash agent by-agent)))
++                (unless entry
++                  ;; Each entry holds its name, count and a path queue.
++                  (setq entry (vector agent 0 (cons nil nil)))
++                  (puthash agent entry by-agent)
++                  (agent-shell-sidebar--append-item agents entry))
++                (cl-incf (aref entry 1))
++                (agent-shell-sidebar--append-item (aref entry 2) path))))
++          (iter-yield nil))
++        (when (or (> count 0) (string-empty-p agent-shell-sidebar--filter))
++          (with-current-buffer output
++            (agent-shell-sidebar--render-project-header
++             root count collapsed (gethash root names)))
++          (iter-yield nil))
++        (dolist (entry (car agents))
++          (let* ((agent (aref entry 0))
++                 (folded (gethash (cons root agent) agent-shell-sidebar--collapsed)))
++            (with-current-buffer output
++              (agent-shell-sidebar--render-agent-header root agent (aref entry 1) folded))
++            (iter-yield nil)
++            (unless folded
++              (dolist (path (car (aref entry 2)))
++                (with-current-buffer output
++                  (let ((agent-shell-sidebar--parse-cache cache)
++                        (agent-shell-sidebar--file-info info))
++                    (agent-shell-sidebar--render-transcript-row path (gethash path marks))))
++                (iter-yield nil)))))))
++    (with-current-buffer output
++      (when (= (buffer-size) 0)
++        (insert (if groups "  (no matching transcripts)\n"
++                  (propertize "  (no transcripts found)\n"
++                              'face 'agent-shell-sidebar-placeholder-face)))))))
++
++(defun agent-shell-sidebar--publish-render ()
++  "Publish the completed snapshot, preserving each current window view."
++  (let ((inhibit-quit t)
++        (location (agent-shell-sidebar--row-location (point)))
++        (views (mapcar
++                (lambda (window)
++                  (list window
++                        (agent-shell-sidebar--row-location (window-start window))
++                        (agent-shell-sidebar--row-location (window-point window))))
++                (get-buffer-window-list (current-buffer) nil t))))
++    (let ((inhibit-read-only t))
++      (erase-buffer)
++      (insert-buffer-substring agent-shell-sidebar--render-buffer))
++    (dolist (view views)
++      (when (window-live-p (car view))
++        (agent-shell-sidebar--restore-location (cadr view))
++        (set-window-start (car view) (line-beginning-position) t)
++        (agent-shell-sidebar--restore-location (caddr view))
++        (set-window-point (car view) (point))))
++    (agent-shell-sidebar--restore-location location))
++  (kill-buffer agent-shell-sidebar--render-buffer)
++  (setq agent-shell-sidebar--render-buffer nil
++        agent-shell-sidebar--render-iterator nil))
++
++(defun agent-shell-sidebar--render-tick ()
++  "Advance at most 300 path or row operations, coalescing parse updates.
++Publication copies a completed buffer and restores row locations."
++  (unless agent-shell-sidebar--render-error
++    (condition-case err
++        (progn
++          (when (and agent-shell-sidebar--render-dirty
++                     (not agent-shell-sidebar--render-iterator))
++            (setq agent-shell-sidebar--render-dirty nil
++                  agent-shell-sidebar--render-buffer
++                  (generate-new-buffer " *agent-shell-sidebar render*")
++                  agent-shell-sidebar--render-iterator
++                  (agent-shell-sidebar--render-snapshot
++                   agent-shell-sidebar--render-buffer agent-shell-sidebar--groups
++                   agent-shell-sidebar--project-names)))
++          (let ((n 0))
++            (while (and agent-shell-sidebar--render-iterator (< n 300)
++                        (not (input-pending-p)))
++              (condition-case nil
++                  (iter-next agent-shell-sidebar--render-iterator)
++                (iter-end-of-sequence (agent-shell-sidebar--publish-render)))
++              (cl-incf n))))
++      (error
++       (agent-shell-sidebar--cancel-render)
++       (setq agent-shell-sidebar--render-error (error-message-string err))
++       (message "Sidebar redraw failed: %s" agent-shell-sidebar--render-error))
++      (quit
++       (agent-shell-sidebar--cancel-render)
++       (setq agent-shell-sidebar--render-dirty t)
++       (signal (car err) (cdr err)))))
++  (when agent-shell-sidebar--render-error
++    (setq agent-shell-sidebar--render-dirty nil)))
+ 
+ ;;; Mode + keymap
+ 
+@@ -764,6 +985,8 @@
+   (setq-local cursor-in-non-selected-windows nil)
+   (setq-local agent-shell-sidebar--marks (make-hash-table :test 'equal))
+   (setq-local agent-shell-sidebar--collapsed (make-hash-table :test 'equal))
++  (cl-pushnew (current-buffer) agent-shell-sidebar--timer-buffers)
++  (add-hook 'post-command-hook #'agent-shell-sidebar--reset-idle-timers)
+   (add-hook 'kill-buffer-hook #'agent-shell-sidebar--cleanup nil t)
+   (add-hook 'change-major-mode-hook #'agent-shell-sidebar--cleanup nil t)
+   (agent-shell-sidebar--schedule-refresh))

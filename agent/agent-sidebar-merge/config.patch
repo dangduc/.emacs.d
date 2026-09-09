@@ -1,0 +1,25 @@
+--- /Users/ducnguyen/.emacs.d/agent/agent-sidebar-merge/config.el
++++ /Users/ducnguyen/.emacs.d/lisp/package-declarations.el
+@@ -495,7 +495,7 @@
+   _h_: help menu "
+     ("c" agent-shell-anthropic-start-claude-code)
+     ("s" agent-shell)
+-    ("b" agent-shell-sidebar-toggle-sidebar)
++    ("b" agent-sidebar-toggle-sidebar)
+     ("r" agent-shell-restart)
+     ("h" agent-shell-help-menu))
+   (defhydra hydra-submenu-help (:exit t :hint nil)
+@@ -1480,6 +1480,13 @@
+              agent-shell-sidebar-hide-sidebar
+              agent-shell-sidebar-jump-to-sidebar))
+ 
++(use-package agent-sidebar
++  :ensure nil
++  :commands (agent-sidebar-toggle-sidebar
++             agent-sidebar-show-sidebar
++             agent-sidebar-hide-sidebar
++             agent-sidebar-jump-to-sidebar))
++
+ ;; `agent-shell' — an in-Emacs shell for coding agents over the Agent Client
+ ;; Protocol (ACP), configured for the Claude agent.  It drives Claude through
+ ;; the external `claude-agent-acp' bridge (install once with

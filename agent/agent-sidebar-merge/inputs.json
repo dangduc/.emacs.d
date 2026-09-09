@@ -1,0 +1,17 @@
+{
+  "incoming": {
+    "source": "/Users/ducnguyen/Desktop/agent-sidebar.el",
+    "snapshot": "/Users/ducnguyen/.emacs.d/agent/agent-sidebar-merge/incoming.el",
+    "sha256": "f3041ae1f8b7e9cd14e6f5539979de71ab4691e1b22e062d29c55b170ee70b1d"
+  },
+  "core": {
+    "source": "/Users/ducnguyen/.emacs.d/lisp/agent-shell-sidebar.el",
+    "snapshot": "/Users/ducnguyen/.emacs.d/agent/agent-sidebar-merge/core.el",
+    "sha256": "4c2e73058c39fe01215d879ffc882005cb980f06f05d4a4e0f72c0461a7546b3"
+  },
+  "config": {
+    "source": "/Users/ducnguyen/.emacs.d/lisp/package-declarations.el",
+    "snapshot": "/Users/ducnguyen/.emacs.d/agent/agent-sidebar-merge/config.el",
+    "sha256": "acb35a36ef6fe1499ee8218255d23f95fb411a9a12089331d681c176d3aa7508"
+  }
+}

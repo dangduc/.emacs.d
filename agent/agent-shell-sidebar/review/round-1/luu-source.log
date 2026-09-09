@@ -1,0 +1,16 @@
+CASE scale files=300
+LUU {"kind":"environment","emacs":"31.1","system":"aarch64-apple-darwin22.6.0","compiled-sidebar":null,"gc-cons-threshold":800000,"gc-cons-percentage":1.0,"chunk-size":30,"method":"Direct synchronous callbacks; fresh metadata cache; OS cache not flushed; instrumented counts and timing; idle delays and display redisplay excluded"}
+LUU {"kind":"scale-cold","files":300,"initial-refresh-ms":25.98404884338379,"elapsed-ms":178.43890190124512,"tick-count":10,"tick-total-ms":152.44603157043457,"tick-median-ms":14.583110809326172,"tick-p95-ms":24.026155471801758,"tick-max-ms":24.026155471801758,"gc-count":1,"gc-ms":14.699999999999998,"conses-allocated":555171,"directory-scans":1,"collections":1,"collect-ms":4.003047943115234,"rows":3300,"redraws":11,"redraw-ms":139.57667350769043,"file-attributes-calls":300,"header-reads":300,"parse-ms":30.843734741210938}
+LUU {"kind":"scale-warm","files":300,"repeat":0,"elapsed-ms":7.683038711547852,"directory-scans":1,"collections":1,"collect-ms":4.004001617431641,"rows":300,"redraws":1,"redraw-ms":3.4101009368896484}
+LUU {"kind":"scale-warm","files":300,"repeat":1,"elapsed-ms":7.887125015258789,"directory-scans":1,"collections":1,"collect-ms":3.9238929748535156,"rows":300,"redraws":1,"redraw-ms":3.6919116973876953}
+LUU {"kind":"scale-warm","files":300,"repeat":2,"elapsed-ms":8.066892623901367,"directory-scans":1,"collections":1,"collect-ms":4.06193733215332,"rows":300,"redraws":1,"redraw-ms":3.732919692993164}
+LANG=C.UTF-8 cannot be used, using en_US.UTF-8 instead.
+
+
+CASE lifecycle files=120
+LUU {"kind":"environment","emacs":"31.1","system":"aarch64-apple-darwin22.6.0","compiled-sidebar":null,"gc-cons-threshold":800000,"gc-cons-percentage":1.0,"chunk-size":30,"method":"Direct synchronous callbacks; fresh metadata cache; OS cache not flushed; instrumented counts and timing; idle delays and display redisplay excluded"}
+LUU {"kind":"refresh-during-parse","remaining-before-refresh":90,"pending-after-drain":0,"directory-scans":2,"collections":2,"collect-ms":16.190767288208008,"rows":720,"redraws":6,"redraw-ms":33.65731239318848,"file-attributes-calls":120,"header-reads":120,"parse-ms":6.393671035766602}
+LUU {"kind":"hidden-parse","visible":null,"timer-after-hide":true,"pending-before-hidden-tick":120,"pending-after-hidden-tick":90,"header-reads-while-hidden":30,"rows-rendered-while-hidden":120,"timer-after-hidden-tick":true}
+LUU {"kind":"idle-reset","refresh-interval-seconds":30,"continuous-idle-thresholds":[30.0,60.0,90.0,120.0,150.0,180.0,210.0,240.0,270.0,300.0,330.0],"new-idle-period-seconds":30,"stored-refresh-threshold-seconds":330.0,"eligible-in-new-idle-period":null,"method":"Real timer objects and timer-event-handler; mocked current-idle-time and post-command-hook input reset; no real keyboard or wall-clock wait"}
+LANG=C.UTF-8 cannot be used, using en_US.UTF-8 instead.
+

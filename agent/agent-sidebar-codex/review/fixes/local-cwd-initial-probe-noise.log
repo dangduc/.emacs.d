@@ -1,0 +1,46 @@
+LANG=C.UTF-8 cannot be used, using en_US.UTF-8 instead.
+Running 7 tests (2026-09-08 15:50:18-0700, selector `(or "^fix-local-cwd-" "^workflow-r2-")')
+Warning (emacs): Redefining `expand-file-name' might break native compilation of trampolines.
+Test fix-local-cwd-invalid-values-rejected-before-expansion backtrace:
+  ert-fail(((should-not stats) :form stats :value ("/var/folders/20/4z
+  (if (not (unwind-protect (setq value-1016 stats) (setq form-descript
+  (let (form-description-1017) (if (not (unwind-protect (setq value-10
+  (let ((value-1016 (gensym "ert-form-evaluation-aborted-"))) (let (fo
+  (let (expanded stats) (let* ((vnew #'(lambda (_entry) (list :session
+  (let ((cwd (car tail))) (let (expanded stats) (let* ((vnew #'(lambda
+  (while tail (let ((cwd (car tail))) (let (expanded stats) (let* ((vn
+  (let ((tail '(nil 42 "" "relative/path"))) (while tail (let ((cwd (c
+  #f(lambda () [t] (let ((tail '...)) (while tail (let (...) (let ... 
+  #f(compiled-function () #<bytecode -0x1d948c3a6b6a63>)()
+  handler-bind-1(#f(compiled-function () #<bytecode -0x1d948c3a6b6a63>
+  ert--run-test-internal(#s(ert--test-execution-info :test #s(ert-test
+  ert-run-test(#s(ert-test :name fix-local-cwd-invalid-values-rejected
+  ert-run-or-rerun-test(#s(ert--stats :selector (or "^fix-local-cwd-" 
+  ert-run-tests((or "^fix-local-cwd-" "^workflow-r2-") #f(compiled-fun
+  ert-run-tests-batch((or "^fix-local-cwd-" "^workflow-r2-"))
+  ert-run-tests-batch-and-exit((or "^fix-local-cwd-" "^workflow-r2-"))
+  eval((ert-run-tests-batch-and-exit '(or "^fix-local-cwd-" "^workflow
+  command-line-1(("-l" "jka-compr" "-L" "/private/tmp/sidebar-review-3
+  command-line()
+  normal-top-level()
+Test fix-local-cwd-invalid-values-rejected-before-expansion condition:
+    (ert-test-failed
+     ((should-not stats) :form stats :value
+      ("/var/folders/20/4zczrx1s3lq2fv0xmm0gj1fr0000gn/T/emacs-int-comp-subr--trampoline-657870616e642d66696c652d6e616d65_expand_file_name_0-j6sXna.el")))
+   FAILED  1/7  fix-local-cwd-invalid-values-rejected-before-expansion (0.978345 sec) at agent/agent-sidebar-codex/review/fixes/local-cwd-tests.el:13
+   passed  2/7  fix-local-cwd-direct-launch-rejects-remote-before-stat (0.000083 sec)
+   passed  3/7  workflow-r2-collapsed-codex-group-retains-new-session-context (0.407527 sec)
+   passed  4/7  workflow-r2-derived-mode-binds-actions-and-preserves-core-keys (0.000696 sec)
+MUTATION: erasing :agent lets an ambiguous agent-shell group start, as detected
+   passed  5/7  workflow-r2-erasing-agent-identity-mutation-is-detected (0.015454 sec)
+REMOTE CWD: action=agent-sidebar-visit remote-stat-calls=nil result=(user-error "Transcript has no existing local working directory")
+REMOTE CWD: action=agent-sidebar-visit-in-agent-shell remote-stat-calls=nil result=(user-error "Codex rollout has no existing local working directory")
+REMOTE CWD: action=agent-sidebar-new-session remote-stat-calls=nil result=(user-error "Selected transcript has no existing working directory")
+   passed  6/7  workflow-r2-local-codex-actions-reject-remote-cwd-before-stat (0.068413 sec)
+   passed  7/7  workflow-r2-mixed-agent-group-requires-row (0.014944 sec)
+
+Ran 7 tests, 6 results as expected, 1 unexpected (2026-09-08 15:50:19-0700, 1.534625 sec)
+
+1 unexpected results:
+   FAILED  fix-local-cwd-invalid-values-rejected-before-expansion
+

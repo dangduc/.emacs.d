@@ -1,0 +1,1 @@
+(:pid 58644 :depth 0 :vegeta-feature t :definition "/Users/ducnguyen/.emacs.d/vendor/vegeta/vegeta.el" :menu hydra-submenu-agent-shell/vegeta-toggle-sidebar-and-exit :old-feature nil :old-command nil :providers (agent-shell claude-cli))

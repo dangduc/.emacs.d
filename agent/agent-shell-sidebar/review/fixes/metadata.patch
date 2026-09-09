@@ -1,0 +1,152 @@
+--- a/lisp/agent-shell-sidebar.el
++++ b/lisp/agent-shell-sidebar.el
+@@ -140,11 +140,11 @@
+ 
+ ;;; State
+ 
+-(defconst agent-shell-sidebar--cache-schema 3
++(defconst agent-shell-sidebar--cache-schema 4
+   "Bump when the parsed header format changes to invalidate old entries.")
+ 
+-(defvar agent-shell-sidebar--parse-cache (make-hash-table :test 'equal)
+-  "Maps transcript paths to schema, file signature, and header plists.
++(defvar-local agent-shell-sidebar--parse-cache nil
++  "Maps this buffer's paths to schema, file signature, and header plists.
+ The header plist has :agent :started :session-id :model :cwd :preview.")
+ 
+ (defvar-local agent-shell-sidebar--parse-timer nil
+@@ -180,6 +180,12 @@
+   :type 'boolean)
+ 
+ ;;; Discovery
++
++(defun agent-shell-sidebar--regular-file-attributes-p (attrs)
++  "Return non-nil when ATTRS describe a regular file, excluding symlinks."
++  (and attrs
++       (null (file-attribute-type attrs))
++       (string-prefix-p "-" (file-attribute-modes attrs))))
+ 
+ (defun agent-shell-sidebar--project-roots ()
+   "Return normalized roots from project lists and sidebar context."
+@@ -211,7 +217,7 @@
+                        (expand-file-name ".agent-shell/transcripts/" root)
+                        t "\\.md\\'" t))
+           (let ((file (car entry)) (attrs (cdr entry)))
+-            (when (null (file-attribute-type attrs))
++            (when (agent-shell-sidebar--regular-file-attributes-p attrs)
+               (puthash file attrs agent-shell-sidebar--file-info)
+               (push file paths))))
+         (sort paths #'agent-shell-sidebar--newer-p))
+@@ -253,26 +259,52 @@
+ (defun agent-shell-sidebar--parse-header-from-file (file)
+   "Read at most 8192 bytes of FILE and return transcript metadata.
+ Only fields before the header separator or first message are metadata.
+-Return an :error field when the file cannot be read."
++Return an :error field when FILE is not regular, cannot be read, or its
++metadata section extends past the byte limit.  Keep complete fields."
+   (with-temp-buffer
+     (condition-case err
+-        (progn
++        (let ((attrs (file-attributes file)) after)
++          ;; Discovery is only a snapshot: a path may have become a FIFO or
++          ;; another special file before its queued parse or activation.
++          (unless (agent-shell-sidebar--regular-file-attributes-p attrs)
++            (signal 'file-error (list "Not a regular transcript file" file)))
+           (insert-file-contents file nil 0 8192)
+-          (let ((end (save-excursion
+-                       (goto-char (point-min))
+-                       (if (re-search-forward "^\\(?:---[ \t]*$\\|## \\)" nil t)
+-                           (match-beginning 0)
+-                         (point-max))))
+-                header)
++          (setq after (file-attributes file))
++          (unless (agent-shell-sidebar--regular-file-attributes-p after)
++            (signal 'file-error (list "Transcript changed while reading; refresh and retry" file)))
++          (let* ((truncated (or (> (file-attribute-size attrs) 8192)
++                                (> (file-attribute-size after) 8192)))
++                 ;; The artificial end of a bounded read is not a line end.
++                 (complete-end (if truncated
++                                   (save-excursion
++                                     (goto-char (point-max))
++                                     (line-beginning-position))
++                                 (point-max)))
++                 (boundary (save-excursion
++                             (goto-char (point-min))
++                             (when (re-search-forward
++                                    "^\\(?:---[ \t]*$\\|## \\)" complete-end t)
++                               (match-beginning 0))))
++                 (end (or boundary complete-end))
++                 header)
+             (dolist (field '(("Agent" . :agent) ("Started" . :started)
+                              ("Session ID" . :session-id) ("Model" . :model)
+                              ("Working Directory" . :cwd)))
+               (goto-char (point-min))
+               (when (re-search-forward
+-                     (concat "^\\*\\*" (car field) ":\\*\\*[ \t]*\\(.*\\)$") end t)
+-                (let ((value (string-trim (match-string-no-properties 1))))
++                     (concat "^\\*\\*" (car field) ":\\*\\*"
++                             (if (eq (cdr field) :cwd) "[ \t]?" "[ \t]*")
++                             "\\(.*\\)$") end t)
++                (let ((value (match-string-no-properties 1)))
++                  ;; agent-shell writes one formatting space before CWD.
++                  ;; Any further whitespace belongs to the directory name.
++                  (unless (eq (cdr field) :cwd)
++                    (setq value (string-trim value)))
+                   (unless (string-empty-p value)
+                     (setq header (plist-put header (cdr field) value))))))
++            (when (and truncated (not boundary))
++              (setq header (plist-put header :error
++                                      "Transcript metadata exceeds the 8192-byte read limit")))
+             (goto-char end)
+             (when (re-search-forward "^## User\\(?:[ \t].*\\)?$" nil t)
+               (forward-line 1)
+@@ -299,7 +331,8 @@
+ (defun agent-shell-sidebar--cached-header (file &optional attrs)
+   "Return FILE's cached header when its signature matches ATTRS.
+ Use the discovery snapshot when ATTRS is nil.  Do not access the disk."
+-  (let ((entry (gethash file agent-shell-sidebar--parse-cache))
++  (let ((entry (and agent-shell-sidebar--parse-cache
++                    (gethash file agent-shell-sidebar--parse-cache)))
+         (signature (agent-shell-sidebar--signature
+                     (or attrs (and agent-shell-sidebar--file-info
+                                    (gethash file agent-shell-sidebar--file-info))))))
+@@ -309,9 +342,13 @@
+       (plist-get entry :header))))
+ 
+ (defun agent-shell-sidebar--ensure-parsed (file)
+-  "Read FILE's metadata if its current attributes differ from the cache."
+-  (let ((attrs (condition-case nil (file-attributes file) (file-error nil))))
+-    (or (and attrs (agent-shell-sidebar--cached-header file attrs))
++  "Read FILE's metadata when changed or when a previous read failed."
++  (unless agent-shell-sidebar--parse-cache
++    (setq agent-shell-sidebar--parse-cache (make-hash-table :test 'equal)))
++  (let* ((attrs (condition-case nil (file-attributes file) (file-error nil)))
++         (cached (and (agent-shell-sidebar--regular-file-attributes-p attrs)
++                      (agent-shell-sidebar--cached-header file attrs))))
++    (or (and cached (not (plist-get cached :error)) cached)
+         (let ((header (agent-shell-sidebar--parse-header-from-file file)))
+           (puthash file (list :schema agent-shell-sidebar--cache-schema
+                               :signature (agent-shell-sidebar--signature attrs)
+@@ -324,9 +361,12 @@
+ ;;; Async parse loop
+ 
+ (defun agent-shell-sidebar--queue-uncached (paths)
+-  "Replace the parse queue with uncached PATHS from this refresh."
++  "Queue PATHS missing successful cached metadata for this refresh."
+   (setq agent-shell-sidebar--parse-queue
+-        (seq-remove #'agent-shell-sidebar--cached-header paths)))
++        (seq-remove (lambda (file)
++                      (let ((header (agent-shell-sidebar--cached-header file)))
++                        (and header (not (plist-get header :error)))))
++                    paths)))
+ 
+ (defun agent-shell-sidebar--idle-timer (delay function)
+   "Call FUNCTION with the current buffer after another DELAY idle seconds.
+@@ -762,6 +802,7 @@
+   (setq-local truncate-lines t)
+   (setq-local window-size-fixed agent-shell-sidebar-window-fixed)
+   (setq-local cursor-in-non-selected-windows nil)
++  (setq-local agent-shell-sidebar--parse-cache (make-hash-table :test 'equal))
+   (setq-local agent-shell-sidebar--marks (make-hash-table :test 'equal))
+   (setq-local agent-shell-sidebar--collapsed (make-hash-table :test 'equal))
+   (add-hook 'kill-buffer-hook #'agent-shell-sidebar--cleanup nil t)

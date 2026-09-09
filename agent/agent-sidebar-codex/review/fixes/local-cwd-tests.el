@@ -1,0 +1,33 @@
+;;; local-cwd-tests.el --- Local terminal validation order -*- lexical-binding: t; -*-
+(load (expand-file-name "../round-2/contrarian-workflow-tests.el" (file-name-directory load-file-name)) nil t)
+
+(ert-deftest fix-local-cwd-direct-launch-rejects-remote-before-stat ()
+  (let ((file-name-handler-alist nil) probes)
+    (cl-letf (((symbol-function 'file-remote-p) (lambda (&rest _) "remote"))
+              ((symbol-function 'file-directory-p)
+               (lambda (path) (push path probes) nil)))
+      (should-error (agent-sidebar--launch-terminal "*unused*" "/bin/cat" nil "/ssh:review.invalid:/repo/")
+                    :type 'user-error))
+    (should-not probes)))
+
+(ert-deftest fix-local-cwd-invalid-values-rejected-before-expansion ()
+  ;; Exercise the shared terminal contract independently of providers that may
+  ;; discard invalid JSON types before activation reaches this helper.
+  (dolist (cwd '(nil 42 "" "relative/path"))
+    (let ((original-expand (symbol-function 'expand-file-name))
+          (original-directory-p (symbol-function 'file-directory-p))
+          expanded stats)
+      (cl-letf (((symbol-function 'agent-sidebar--ensure-parsed)
+                 (lambda (_entry) (list :session-id "valid-id" :cwd cwd)))
+                ((symbol-function 'expand-file-name)
+                 (lambda (value &rest args)
+                   (if (equal value cwd) (progn (push value expanded) value)
+                     (apply original-expand value args))))
+                ((symbol-function 'file-directory-p)
+                 (lambda (value)
+                   (if (equal value cwd) (progn (push value stats) nil)
+                     (funcall original-directory-p value)))))
+        (should-error (agent-sidebar--visit-terminal '(:provider codex-cli :id "unused") "codex" "codex" '("resume"))
+                      :type 'user-error))
+      (should-not expanded)
+      (should-not stats))))

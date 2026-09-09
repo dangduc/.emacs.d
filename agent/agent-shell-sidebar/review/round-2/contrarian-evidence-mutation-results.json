@@ -1,0 +1,226 @@
+[
+  {
+    "variant": "current",
+    "group": "combined",
+    "source_sha256": "629a0b61dc25a1b9766936b34b655aea9e1775c57f0f2d98ebb9ef00fea1b6ed",
+    "command": [
+      "python3",
+      "/Users/ducnguyen/.emacs.d/agent/agent-shell-sidebar/review/run-regressions.py",
+      "--source",
+      "/Users/ducnguyen/.emacs.d/agent/agent-shell-sidebar/review/round-2/reviewed.el",
+      "--log",
+      "/Users/ducnguyen/.emacs.d/agent/agent-shell-sidebar/review/round-2/contrarian-evidence-combined-current.log"
+    ],
+    "exit": 0,
+    "summary": [
+      "Ran 94 tests, 94 results as expected, 0 unexpected (2026-09-08 13:30:37-0700, 7.698467 sec)"
+    ]
+  },
+  {
+    "variant": "unbounded",
+    "group": "combined",
+    "source_sha256": "f99bf75ca5620d8e83ca48cefaf1631462904073462801a5a673a7b49eb1e46a",
+    "command": [
+      "python3",
+      "/Users/ducnguyen/.emacs.d/agent/agent-shell-sidebar/review/run-regressions.py",
+      "--source",
+      "/Users/ducnguyen/.emacs.d/agent/agent-shell-sidebar/review/round-2/contrarian-evidence-mutant-unbounded.el",
+      "--log",
+      "/Users/ducnguyen/.emacs.d/agent/agent-shell-sidebar/review/round-2/contrarian-evidence-combined-unbounded.log"
+    ],
+    "exit": 1,
+    "summary": [
+      "   FAILED   1/94  contrarian-evidence-byte-limit-is-independent-of-boundary (0.001763 sec) at agent/agent-shell-sidebar/review/round-1/contrarian-evidence-probe.el:29",
+      "   FAILED   5/94  contrarian-evidence-session-id-cut-by-byte-limit-is-not-used (0.001503 sec) at agent/agent-shell-sidebar/review/round-1/contrarian-evidence-probe.el:37",
+      "   FAILED  24/94  metadata-byte-limit-retains-only-complete-lines (0.002177 sec) at agent/agent-shell-sidebar/review/fixes/metadata-tests.el:63",
+      "   FAILED  28/94  metadata-growth-during-read-does-not-complete-a-cutoff-field (0.001649 sec) at agent/agent-shell-sidebar/review/fixes/metadata-tests.el:81",
+      "   FAILED  34/94  metadata-truncated-activation-fields-never-start-a-session (0.001117 sec) at agent/agent-shell-sidebar/review/fixes/metadata-tests.el:39",
+      "Ran 94 tests, 89 results as expected, 5 unexpected (2026-09-08 13:30:45-0700, 8.000197 sec)",
+      "   FAILED  contrarian-evidence-byte-limit-is-independent-of-boundary",
+      "   FAILED  contrarian-evidence-session-id-cut-by-byte-limit-is-not-used",
+      "   FAILED  metadata-byte-limit-retains-only-complete-lines",
+      "   FAILED  metadata-growth-during-read-does-not-complete-a-cutoff-field",
+      "   FAILED  metadata-truncated-activation-fields-never-start-a-session"
+    ]
+  },
+  {
+    "variant": "separator-only",
+    "group": "combined",
+    "source_sha256": "c72c8547208268e807a7823d3e2373654aa3a43a6d80c99bd313cb5fb1935666",
+    "command": [
+      "python3",
+      "/Users/ducnguyen/.emacs.d/agent/agent-shell-sidebar/review/run-regressions.py",
+      "--source",
+      "/Users/ducnguyen/.emacs.d/agent/agent-shell-sidebar/review/round-2/contrarian-evidence-mutant-separator-only.el",
+      "--log",
+      "/Users/ducnguyen/.emacs.d/agent/agent-shell-sidebar/review/round-2/contrarian-evidence-combined-separator-only.log"
+    ],
+    "exit": 1,
+    "summary": [
+      "   FAILED   3/94  contrarian-evidence-first-message-is-a-boundary-without-separator (0.000703 sec) at agent/agent-shell-sidebar/review/round-1/contrarian-evidence-probe.el:19",
+      "Ran 94 tests, 93 results as expected, 1 unexpected (2026-09-08 13:30:54-0700, 7.616677 sec)",
+      "   FAILED  contrarian-evidence-first-message-is-a-boundary-without-separator"
+    ]
+  },
+  {
+    "variant": "partial-lines",
+    "group": "combined",
+    "source_sha256": "233b618ce4aa3b272de519fde6bab360721a4b71d7dc36fd925a13e69180d7a9",
+    "command": [
+      "python3",
+      "/Users/ducnguyen/.emacs.d/agent/agent-shell-sidebar/review/run-regressions.py",
+      "--source",
+      "/Users/ducnguyen/.emacs.d/agent/agent-shell-sidebar/review/round-2/contrarian-evidence-mutant-partial-lines.el",
+      "--log",
+      "/Users/ducnguyen/.emacs.d/agent/agent-shell-sidebar/review/round-2/contrarian-evidence-combined-partial-lines.log"
+    ],
+    "exit": 1,
+    "summary": [
+      "   FAILED  24/94  metadata-byte-limit-retains-only-complete-lines (0.001662 sec) at agent/agent-shell-sidebar/review/fixes/metadata-tests.el:63",
+      "   FAILED  28/94  metadata-growth-during-read-does-not-complete-a-cutoff-field (0.001192 sec) at agent/agent-shell-sidebar/review/fixes/metadata-tests.el:81",
+      "   FAILED  34/94  metadata-truncated-activation-fields-never-start-a-session (0.001208 sec) at agent/agent-shell-sidebar/review/fixes/metadata-tests.el:39",
+      "Ran 94 tests, 91 results as expected, 3 unexpected (2026-09-08 13:31:02-0700, 7.781423 sec)",
+      "   FAILED  metadata-byte-limit-retains-only-complete-lines",
+      "   FAILED  metadata-growth-during-read-does-not-complete-a-cutoff-field",
+      "   FAILED  metadata-truncated-activation-fields-never-start-a-session"
+    ]
+  },
+  {
+    "variant": "trim-directory",
+    "group": "combined",
+    "source_sha256": "c082eb5b7260b84179741864b6f2a13248e3e87ade9446ad89ccf9a3b99deea4",
+    "command": [
+      "python3",
+      "/Users/ducnguyen/.emacs.d/agent/agent-shell-sidebar/review/run-regressions.py",
+      "--source",
+      "/Users/ducnguyen/.emacs.d/agent/agent-shell-sidebar/review/round-2/contrarian-evidence-mutant-trim-directory.el",
+      "--log",
+      "/Users/ducnguyen/.emacs.d/agent/agent-shell-sidebar/review/round-2/contrarian-evidence-combined-trim-directory.log"
+    ],
+    "exit": 1,
+    "summary": [
+      "   FAILED   4/94  contrarian-evidence-real-writer-preserves-directory-ending-in-space (0.001261 sec) at agent/agent-shell-sidebar/review/round-1/contrarian-evidence-probe.el:67",
+      "   FAILED  27/94  metadata-empty-directory-is-distinct-from-whitespace-directory (0.002354 sec) at agent/agent-shell-sidebar/review/fixes/metadata-tests.el:124",
+      "   FAILED  31/94  metadata-real-writer-preserves-directory-whitespace (0.000971 sec) at agent/agent-shell-sidebar/review/fixes/metadata-tests.el:105",
+      "Ran 94 tests, 91 results as expected, 3 unexpected (2026-09-08 13:31:11-0700, 7.766779 sec)",
+      "   FAILED  contrarian-evidence-real-writer-preserves-directory-ending-in-space",
+      "   FAILED  metadata-empty-directory-is-distinct-from-whitespace-directory",
+      "   FAILED  metadata-real-writer-preserves-directory-whitespace"
+    ]
+  },
+  {
+    "variant": "current",
+    "group": "controls",
+    "source_sha256": "629a0b61dc25a1b9766936b34b655aea9e1775c57f0f2d98ebb9ef00fea1b6ed",
+    "command": [
+      "python3",
+      "/Users/ducnguyen/.emacs.d/agent/agent-shell-sidebar/review/run-probe.py",
+      "/Users/ducnguyen/.emacs.d/agent/agent-shell-sidebar/review/round-2/contrarian-evidence-probe.el",
+      "--source",
+      "/Users/ducnguyen/.emacs.d/agent/agent-shell-sidebar/review/round-2/reviewed.el",
+      "--ert",
+      "--log",
+      "/Users/ducnguyen/.emacs.d/agent/agent-shell-sidebar/review/round-2/contrarian-evidence-controls-current.log"
+    ],
+    "exit": 0,
+    "summary": [
+      "CE2 SOURCE BEFORE=\"/Users/ducnguyen/.emacs.d/agent/agent-shell-sidebar/review/round-2/reviewed.el\"",
+      "Ran 4 tests, 4 results as expected, 0 unexpected (2026-09-08 13:32:14-0700, 0.015835 sec)",
+      "CE2 SOURCE AFTER=\"/Users/ducnguyen/.emacs.d/agent/agent-shell-sidebar/review/round-2/reviewed.el\""
+    ]
+  },
+  {
+    "variant": "unbounded",
+    "group": "controls",
+    "source_sha256": "f99bf75ca5620d8e83ca48cefaf1631462904073462801a5a673a7b49eb1e46a",
+    "command": [
+      "python3",
+      "/Users/ducnguyen/.emacs.d/agent/agent-shell-sidebar/review/run-probe.py",
+      "/Users/ducnguyen/.emacs.d/agent/agent-shell-sidebar/review/round-2/contrarian-evidence-probe.el",
+      "--source",
+      "/Users/ducnguyen/.emacs.d/agent/agent-shell-sidebar/review/round-2/contrarian-evidence-mutant-unbounded.el",
+      "--ert",
+      "--log",
+      "/Users/ducnguyen/.emacs.d/agent/agent-shell-sidebar/review/round-2/contrarian-evidence-controls-unbounded.log"
+    ],
+    "exit": 1,
+    "summary": [
+      "CE2 SOURCE BEFORE=\"/Users/ducnguyen/.emacs.d/agent/agent-shell-sidebar/review/round-2/contrarian-evidence-mutant-unbounded.el\"",
+      "   FAILED  1/4  ce2-bounded-read-excludes-late-field-without-any-boundary (0.001643 sec) at agent/agent-shell-sidebar/review/round-2/contrarian-evidence-probe.el:50",
+      "   FAILED  2/4  ce2-cutoff-matrix-distinguishes-bytes-lines-and-eof (0.002788 sec) at agent/agent-shell-sidebar/review/round-2/contrarian-evidence-probe.el:20",
+      "Ran 4 tests, 2 results as expected, 2 unexpected (2026-09-08 13:32:14-0700, 0.093305 sec)",
+      "   FAILED  ce2-bounded-read-excludes-late-field-without-any-boundary",
+      "   FAILED  ce2-cutoff-matrix-distinguishes-bytes-lines-and-eof",
+      "CE2 SOURCE AFTER=\"/Users/ducnguyen/.emacs.d/agent/agent-shell-sidebar/review/round-2/contrarian-evidence-mutant-unbounded.el\""
+    ]
+  },
+  {
+    "variant": "separator-only",
+    "group": "controls",
+    "source_sha256": "c72c8547208268e807a7823d3e2373654aa3a43a6d80c99bd313cb5fb1935666",
+    "command": [
+      "python3",
+      "/Users/ducnguyen/.emacs.d/agent/agent-shell-sidebar/review/run-probe.py",
+      "/Users/ducnguyen/.emacs.d/agent/agent-shell-sidebar/review/round-2/contrarian-evidence-probe.el",
+      "--source",
+      "/Users/ducnguyen/.emacs.d/agent/agent-shell-sidebar/review/round-2/contrarian-evidence-mutant-separator-only.el",
+      "--ert",
+      "--log",
+      "/Users/ducnguyen/.emacs.d/agent/agent-shell-sidebar/review/round-2/contrarian-evidence-controls-separator-only.log"
+    ],
+    "exit": 1,
+    "summary": [
+      "CE2 SOURCE BEFORE=\"/Users/ducnguyen/.emacs.d/agent/agent-shell-sidebar/review/round-2/contrarian-evidence-mutant-separator-only.el\"",
+      "   FAILED  3/4  ce2-first-metadata-boundary-wins (0.000944 sec) at agent/agent-shell-sidebar/review/round-2/contrarian-evidence-probe.el:39",
+      "Ran 4 tests, 3 results as expected, 1 unexpected (2026-09-08 13:32:14-0700, 0.073106 sec)",
+      "   FAILED  ce2-first-metadata-boundary-wins",
+      "CE2 SOURCE AFTER=\"/Users/ducnguyen/.emacs.d/agent/agent-shell-sidebar/review/round-2/contrarian-evidence-mutant-separator-only.el\""
+    ]
+  },
+  {
+    "variant": "partial-lines",
+    "group": "controls",
+    "source_sha256": "233b618ce4aa3b272de519fde6bab360721a4b71d7dc36fd925a13e69180d7a9",
+    "command": [
+      "python3",
+      "/Users/ducnguyen/.emacs.d/agent/agent-shell-sidebar/review/run-probe.py",
+      "/Users/ducnguyen/.emacs.d/agent/agent-shell-sidebar/review/round-2/contrarian-evidence-probe.el",
+      "--source",
+      "/Users/ducnguyen/.emacs.d/agent/agent-shell-sidebar/review/round-2/contrarian-evidence-mutant-partial-lines.el",
+      "--ert",
+      "--log",
+      "/Users/ducnguyen/.emacs.d/agent/agent-shell-sidebar/review/round-2/contrarian-evidence-controls-partial-lines.log"
+    ],
+    "exit": 1,
+    "summary": [
+      "CE2 SOURCE BEFORE=\"/Users/ducnguyen/.emacs.d/agent/agent-shell-sidebar/review/round-2/contrarian-evidence-mutant-partial-lines.el\"",
+      "   FAILED  2/4  ce2-cutoff-matrix-distinguishes-bytes-lines-and-eof (0.002177 sec) at agent/agent-shell-sidebar/review/round-2/contrarian-evidence-probe.el:20",
+      "Ran 4 tests, 3 results as expected, 1 unexpected (2026-09-08 13:32:15-0700, 0.067589 sec)",
+      "   FAILED  ce2-cutoff-matrix-distinguishes-bytes-lines-and-eof",
+      "CE2 SOURCE AFTER=\"/Users/ducnguyen/.emacs.d/agent/agent-shell-sidebar/review/round-2/contrarian-evidence-mutant-partial-lines.el\""
+    ]
+  },
+  {
+    "variant": "trim-directory",
+    "group": "controls",
+    "source_sha256": "c082eb5b7260b84179741864b6f2a13248e3e87ade9446ad89ccf9a3b99deea4",
+    "command": [
+      "python3",
+      "/Users/ducnguyen/.emacs.d/agent/agent-shell-sidebar/review/run-probe.py",
+      "/Users/ducnguyen/.emacs.d/agent/agent-shell-sidebar/review/round-2/contrarian-evidence-probe.el",
+      "--source",
+      "/Users/ducnguyen/.emacs.d/agent/agent-shell-sidebar/review/round-2/contrarian-evidence-mutant-trim-directory.el",
+      "--ert",
+      "--log",
+      "/Users/ducnguyen/.emacs.d/agent/agent-shell-sidebar/review/round-2/contrarian-evidence-controls-trim-directory.log"
+    ],
+    "exit": 1,
+    "summary": [
+      "CE2 SOURCE BEFORE=\"/Users/ducnguyen/.emacs.d/agent/agent-shell-sidebar/review/round-2/contrarian-evidence-mutant-trim-directory.el\"",
+      "   FAILED  4/4  ce2-real-writer-keeps-tab-and-space-path-suffix (0.001042 sec) at agent/agent-shell-sidebar/review/round-2/contrarian-evidence-probe.el:60",
+      "Ran 4 tests, 3 results as expected, 1 unexpected (2026-09-08 13:32:15-0700, 0.068344 sec)",
+      "   FAILED  ce2-real-writer-keeps-tab-and-space-path-suffix",
+      "CE2 SOURCE AFTER=\"/Users/ducnguyen/.emacs.d/agent/agent-shell-sidebar/review/round-2/contrarian-evidence-mutant-trim-directory.el\""
+    ]
+  }
+]

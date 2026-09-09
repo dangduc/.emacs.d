@@ -1,0 +1,12 @@
+{
+  "executable": "/Users/ducnguyen/.nvm/versions/node/v24.18.0/bin/codex-acp",
+  "agentInfo": {
+    "name": "@agentclientprotocol/codex-acp",
+    "title": "Codex",
+    "version": "1.10.0"
+  },
+  "protocolVersion": 1,
+  "loadSession": true,
+  "isolated_home": true,
+  "prompts_sent": 0
+}

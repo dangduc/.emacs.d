@@ -1,0 +1,14 @@
+COMPILE
+LANG=C.UTF-8 cannot be used, using en_US.UTF-8 instead.
+
+FILES 300
+SCHEDULING {"files":300,"emacs":"31.1","compiled":true,"initial-refresh-ms":22.192001342773438,"callbacks":12,"callback-median-ms":2.630949020385742,"callback-p95-ms":22.716045379638672,"callback-max-ms":22.716045379638672,"total-work-ms":128.31473350524902,"publish-total-ms":0.7419586181640625,"publish-max-ms":0.20313262939453125,"rows":1500,"max-callback-rows":296,"headers":300,"max-callback-headers":30,"collections":1,"publications":4,"progressive-publications":3,"gc-count":1,"gc-ms":12.575,"method":"Real timer-event-handler dispatch until both parsing and staging finish; all callbacks timed including native publication; idle delays and screen redisplay excluded; fresh metadata cache; OS cache not flushed"}
+LANG=C.UTF-8 cannot be used, using en_US.UTF-8 instead.
+
+FILES 1200
+SCHEDULING {"files":1200,"emacs":"31.1","compiled":true,"initial-refresh-ms":89.95795249938965,"callbacks":54,"callback-median-ms":3.68499755859375,"callback-p95-ms":23.077011108398438,"callback-max-ms":23.55194091796875,"total-work-ms":706.8474292755127,"publish-total-ms":3.576040267944336,"publish-max-ms":0.7660388946533203,"rows":8400,"max-callback-rows":300,"headers":1200,"max-callback-headers":30,"collections":1,"publications":6,"progressive-publications":4,"gc-count":2,"gc-ms":28.613,"method":"Real timer-event-handler dispatch until both parsing and staging finish; all callbacks timed including native publication; idle delays and screen redisplay excluded; fresh metadata cache; OS cache not flushed"}
+LANG=C.UTF-8 cannot be used, using en_US.UTF-8 instead.
+
+FILES 3000
+SCHEDULING {"files":3000,"emacs":"31.1","compiled":true,"initial-refresh-ms":228.66392135620117,"callbacks":126,"callback-median-ms":5.700826644897461,"callback-p95-ms":24.610042572021484,"callback-max-ms":42.86599159240723,"total-work-ms":1807.9135417938232,"publish-total-ms":27.830839157104492,"publish-max-ms":21.09694480895996,"rows":21000,"max-callback-rows":300,"headers":3000,"max-callback-headers":30,"collections":1,"publications":6,"progressive-publications":4,"gc-count":4,"gc-ms":73.386,"method":"Real timer-event-handler dispatch until both parsing and staging finish; all callbacks timed including native publication; idle delays and screen redisplay excluded; fresh metadata cache; OS cache not flushed"}
+LANG=C.UTF-8 cannot be used, using en_US.UTF-8 instead.

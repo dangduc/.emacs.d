@@ -1,0 +1,22 @@
+COMPILE
+LANG=C.UTF-8 cannot be used, using en_US.UTF-8 instead.
+
+CASE long-preview
+LUU {"kind":"full-workload","variant":"long-preview","files":3000,"compiled":true,"initial-ms":225.54707527160645,"callbacks":126,"parse-done-tick":100,"render-only-callbacks":26,"callback-median-ms":23.96392822265625,"callback-p95-ms":66.28608703613281,"callback-max-ms":89.07198905944824,"total-work-ms":3680.8273792266846,"publish-total-ms":134.5813274383545,"publish-max-ms":41.416168212890625,"rows":21000,"max-callback-rows":300,"max-callback-reads":30,"gc-count":6,"gc-ms":105.89400000000002,"publications":[{"tick":21,"pending":2370,"shown":30,"buffer-bytes":273434},{"tick":42,"pending":1740,"shown":720,"buffer-bytes":5111715},{"tick":63,"pending":1110,"shown":1410,"buffer-bytes":9949996},{"tick":84,"pending":480,"shown":2130,"buffer-bytes":14998635},{"tick":105,"pending":0,"shown":2820,"buffer-bytes":19836915},{"tick":126,"pending":0,"shown":3000,"buffer-bytes":21099057}],"method":"Real timer-event-handler until parsing and staging finish; native publication timed; shown-row scan included in callback time but excluded from publish time; idle delay and redisplay excluded; OS cache not flushed"}
+LUU {"kind":"warm","variant":"long-preview","files":3000,"refresh-ms":[682.9831600189209,651.4270305633545,673.4640598297119]}
+LANG=C.UTF-8 cannot be used, using en_US.UTF-8 instead.
+
+CASE unique-agents
+LUU {"kind":"full-workload","variant":"unique-agents","files":3000,"compiled":true,"initial-ms":229.09998893737793,"callbacks":159,"parse-done-tick":100,"render-only-callbacks":59,"callback-median-ms":2.471923828125,"callback-p95-ms":23.499011993408203,"callback-max-ms":39.05820846557617,"total-work-ms":1220.7443714141846,"publish-total-ms":49.58820343017578,"publish-max-ms":8.476018905639648,"rows":21000,"max-callback-rows":300,"max-callback-reads":30,"gc-count":4,"gc-ms":73.74099999999999,"publications":[{"tick":21,"pending":2370,"shown":30,"buffer-bytes":63988},{"tick":44,"pending":1680,"shown":720,"buffer-bytes":85378},{"tick":69,"pending":930,"shown":1471,"buffer-bytes":108659},{"tick":97,"pending":90,"shown":2310,"buffer-bytes":134667},{"tick":128,"pending":0,"shown":3000,"buffer-bytes":156039},{"tick":159,"pending":0,"shown":3000,"buffer-bytes":156039}],"method":"Real timer-event-handler until parsing and staging finish; native publication timed; shown-row scan included in callback time but excluded from publish time; idle delay and redisplay excluded; OS cache not flushed"}
+LUU {"kind":"warm","variant":"unique-agents","files":3000,"refresh-ms":[55.212974548339844,54.776906967163086,75.92511177062988]}
+LANG=C.UTF-8 cannot be used, using en_US.UTF-8 instead.
+
+CASE names
+LUU {"kind":"colliding-project-names","projects":300,"elapsed-ms":0.9529590606689453}
+LUU {"kind":"colliding-project-names","projects":1200,"elapsed-ms":7.080078125}
+LUU {"kind":"colliding-project-names","projects":3000,"elapsed-ms":33.109188079833984}
+LANG=C.UTF-8 cannot be used, using en_US.UTF-8 instead.
+
+CASE idle-reset
+LUU {"kind":"idle-reset","old-parse-seconds":300.1,"old-refresh-seconds":330.0,"new-parse-seconds":0.1,"new-refresh-seconds":30.0}
+LANG=C.UTF-8 cannot be used, using en_US.UTF-8 instead.

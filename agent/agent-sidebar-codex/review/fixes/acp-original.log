@@ -1,0 +1,12 @@
+LANG=C.UTF-8 cannot be used, using en_US.UTF-8 instead.
+Running 3 tests (2026-09-08 15:32:22-0700, selector `"^ousterhout-"')
+Reload home probe: selected=/var/folders/20/4zczrx1s3lq2fv0xmm0gj1fr0000gn/T/agent-sidebar-merge-X3rNu5/codex/ children=("/var/folders/20/4zczrx1s3lq2fv0xmm0gj1fr0000gn/T/agent-sidebar-merge-X3rNu5/codex/" "/var/folders/20/4zczrx1s3lq2fv0xmm0gj1fr0000gn/T/agent-sidebar-merge-X3rNu5/codex/")
+   passed  1/3  ousterhout-reload-preserves-selected-home (0.483805 sec)
+Multi-home reuse probe: returned= *right home* starts=0
+   passed  2/3  ousterhout-reuse-searches-all-matching-home-candidates (0.000962 sec)
+ACP client explicit CODEX_HOME entries=("CODEX_HOME=/var/folders/20/4zczrx1s3lq2fv0xmm0gj1fr0000gn/T/agent-sidebar-merge-VGVaoF/codex/")
+Configured home probe: selected=/var/folders/20/4zczrx1s3lq2fv0xmm0gj1fr0000gn/T/agent-sidebar-merge-VGVaoF/codex/ child=("/var/folders/20/4zczrx1s3lq2fv0xmm0gj1fr0000gn/T/agent-sidebar-merge-VGVaoF/codex/")
+   passed  3/3  ousterhout-selected-home-overrides-configured-acp-home (0.046543 sec)
+
+Ran 3 tests, 3 results as expected, 0 unexpected (2026-09-08 15:32:23-0700, 0.531625 sec)
+

@@ -1,0 +1,8 @@
+[ 16%] Building C object CMakeFiles/utf8proc.dir/utf8proc-2.10.0/utf8proc.c.o
+[ 33%] Linking C static library libutf8proc.a
+[ 33%] Built target utf8proc
+[ 50%] Building C object CMakeFiles/fzf-native-module.dir/fzf-native-module.c.o
+[ 66%] Building C object CMakeFiles/fzf-native-module.dir/fzf.c.o
+[ 83%] Building C object CMakeFiles/fzf-native-module.dir/fzf-additions.c.o
+[100%] Linking C shared module /private/tmp/fzf-melpa-validation-20260906/stable/installed/fzf-native-2.8/source-built/fzf-native-module.so
+[100%] Built target fzf-native-module

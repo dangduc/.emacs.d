@@ -1,0 +1,59 @@
+LANG=C.UTF-8 cannot be used, using en_US.UTF-8 instead.
+Loading /Users/ducnguyen/.emacs.d/agent/agent-shell-sidebar/review/round-2/contrarian-workflow.el (source)...
+CW2 reviewed source: /Users/ducnguyen/.emacs.d/agent/agent-shell-sidebar/review/integration/lisp/agent-shell-sidebar.el
+CW2 native policy before ERT: t
+Running 1 tests (2026-09-08 13:46:19-0700, selector `"^cw2-cancel-deletion-while-metadata-pending-keeps-marks-and-files$"')
+CW2 negative control attempts fixture deletion: /var/folders/20/4zczrx1s3lq2fv0xmm0gj1fr0000gn/T/sidebar-cw2-kpSMGS/.agent-shell/transcripts/0001.md
+Test cw2-cancel-deletion-while-metadata-pending-keeps-marks-and-files backtrace:
+  ert-fail("Deletion occurred after cancellation")
+  (if (member file files) (ert-fail "Deletion occurred after cancellat
+  delete-file("/var/folders/20/4zczrx1s3lq2fv0xmm0gj1fr0000gn/T/sideba
+  (let ((target (car (hash-table-keys agent-shell-sidebar--marks)))) (
+  agent-shell-sidebar-execute()
+  (condition-case nil (agent-shell-sidebar-execute) (quit nil))
+  (progn (fset 'delete-file vnew) (fset 'yes-or-no-p vnew) (condition-
+  (unwind-protect (progn (fset 'delete-file vnew) (fset 'yes-or-no-p v
+  (let* ((vnew #'(lambda (&rest _) (setq confirmed t) (if quit-p (sign
+  (let ((confirmed nil) (real-delete (symbol-function 'delete-file))) 
+  (let ((quit-p (car tail))) (let ((confirmed nil) (real-delete (symbo
+  (while tail (let ((quit-p (car tail))) (let ((confirmed nil) (real-d
+  (let ((tail '(nil t))) (while tail (let ((quit-p (car tail))) (let (
+  (progn (agent-shell-sidebar-mode) (agent-shell-sidebar-refresh) (cw2
+  (unwind-protect (progn (agent-shell-sidebar-mode) (agent-shell-sideb
+  (save-current-buffer (set-buffer temp-buffer) (unwind-protect (progn
+  (let ((temp-buffer (generate-new-buffer " *temp*" t))) (save-current
+  (progn (fset 'agent-shell-buffers vnew) (fset 'project-known-project
+  (unwind-protect (progn (fset 'agent-shell-buffers vnew) (fset 'proje
+  (let* ((vnew #'(lambda nil nil)) (vnew #'(lambda nil nil)) (old (sym
+  (unwind-protect (let* ((vnew #'(lambda nil nil)) (vnew #'(lambda nil
+  (let* ((root (file-name-as-directory (make-temp-file "sidebar-cw2-" 
+  #f(lambda () [t] (let* ((root (file-name-as-directory ...)) (default
+  #f(compiled-function () #<bytecode 0x1bc5845ebb14b88a>)()
+  handler-bind-1(#f(compiled-function () #<bytecode 0x1bc5845ebb14b88a
+  ert--run-test-internal(#s(ert--test-execution-info :test ... :result
+  ert-run-test(#s(ert-test :name cw2-cancel-deletion-while-metadata-pe
+  ert-run-or-rerun-test(#s(ert--stats :selector "^cw2-cancel-deletion-
+  ert-run-tests("^cw2-cancel-deletion-while-metadata-pending-keeps-mar
+  ert-run-tests-batch("^cw2-cancel-deletion-while-metadata-pending-kee
+  ert-run-tests-batch-and-exit("^cw2-cancel-deletion-while-metadata-pe
+  (progn (fset 'agent-shell-sidebar-execute vnew) (ert-run-tests-batch
+  (unwind-protect (progn (fset 'agent-shell-sidebar-execute vnew) (ert
+  (let* ((vnew #'(lambda nil (let ((target ...)) (message "CW2 negativ
+  (if (equal (getenv "CW2_NATIVE_CONTROL") "fixture-delete") (let* ((v
+  eval-buffer(#<buffer  *load*> nil "/Users/ducnguyen/.emacs.d/agent/a
+  load-with-code-conversion("/Users/ducnguyen/.emacs.d/agent/agent-she
+  load("/Users/ducnguyen/.emacs.d/agent/agent-shell-sidebar/review/rou
+  command-line-1(("-l" "jka-compr" "-L" "/Users/ducnguyen/.emacs.d/elp
+  command-line()
+  normal-top-level()
+Test cw2-cancel-deletion-while-metadata-pending-keeps-marks-and-files condition:
+    (ert-test-failed "Deletion occurred after cancellation")
+   FAILED  1/1  cw2-cancel-deletion-while-metadata-pending-keeps-marks-and-files (0.393304 sec) at agent/agent-shell-sidebar/review/round-2/contrarian-workflow.el:86
+
+Ran 1 tests, 0 results as expected, 1 unexpected (2026-09-08 13:46:20-0700, 0.480544 sec)
+
+1 unexpected results:
+   FAILED  cw2-cancel-deletion-while-metadata-pending-keeps-marks-and-files
+
+CW2 native policy after ERT: t
+CW2 final source: /Users/ducnguyen/.emacs.d/agent/agent-shell-sidebar/review/integration/lisp/agent-shell-sidebar.el

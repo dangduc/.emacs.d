@@ -1,0 +1,325 @@
+--- /Users/ducnguyen/.emacs.d/agent/agent-sidebar-codex/before-0-agent-sidebar.el
++++ /Users/ducnguyen/.emacs.d/lisp/agent-sidebar.el
+@@ -1,4 +1,4 @@
+-;;; agent-sidebar.el --- Browse agent-shell and Claude CLI chats -*- lexical-binding: t; coding: utf-8; -*-
++;;; agent-sidebar.el --- Browse agent-shell, Claude, and Codex chats -*- lexical-binding: t; coding: utf-8; -*-
+ 
+ ;; Author: James Nguyen <james@jojojames.com>
+ ;; Keywords: agent-shell, claude, codex, tools
+@@ -10,6 +10,7 @@
+ ;; staged rendering, window handling, and deletion checks.  Keep both files on
+ ;; load-path.  RET resumes; o reads; / filters; G changes grouping; N starts anew.
+ ;; Claude CLI sessions use ghostel, vterm, term, or a configured terminal runner.
++;; Codex CLI sessions use ghostel; A resumes the selected Codex chat in agent-shell.
+ 
+ ;;; Code:
+ (require 'agent-shell-sidebar)
+@@ -120,7 +121,7 @@
+                          (const model)
+                          (const date))))
+ 
+-(defcustom agent-sidebar-enabled-providers '(agent-shell claude-cli)
++(defcustom agent-sidebar-enabled-providers '(agent-shell claude-cli codex-cli)
+   "Provider ids to include in the sidebar.
+ See `agent-sidebar-providers' for available providers."
+   :type '(repeat symbol))
+@@ -138,6 +139,18 @@
+ (defcustom agent-sidebar-claude-cli-projects-dir
+   (expand-file-name "~/.claude/projects/")
+   "Directory where Claude CLI stores per-project session JSONLs."
++  :type 'directory)
++
++(defcustom agent-sidebar-codex-cli-command "codex"
++  "Executable used for Codex CLI sessions in ghostel."
++  :type 'string)
++
++(defcustom agent-sidebar-codex-home
++  (expand-file-name (or (getenv "CODEX_HOME") "~/.codex/"))
++  "Codex data directory used for discovery and sidebar-launched sessions.
++Active rollouts are discovered under sessions/YYYY/MM/DD.  Archived
++sessions are excluded.  This directory is passed to child processes as
++CODEX_HOME; the parent Emacs environment is unchanged."
+   :type 'directory)
+ 
+ (defcustom agent-sidebar-terminal-function nil
+@@ -185,6 +198,10 @@
+   "Directory-signature cache for session-id recovery.")
+ (defvar-local agent-sidebar--terminal-session nil "Provider session identity owned by this terminal.")
+ (defvar-local agent-sidebar--terminal-file nil "Transcript owned by this terminal.")
++(defvar-local agent-sidebar--agent-shell-file nil
++  "Native Codex rollout owned by this agent-shell buffer.")
++(defvar-local agent-sidebar--codex-session-home nil
++  "Codex data directory used to start this agent-shell buffer.")
+ 
+ (defun agent-sidebar-register-provider (provider)
+   "Register PROVIDER, a plist with a symbolic :id and callable operations."
+@@ -490,33 +507,179 @@
+     (agent-shell-sidebar--pop-to buffer)
+     buffer))
+ 
+-(defun agent-sidebar--claude-visit (entry)
+-  "Resume the Claude session in ENTRY, reusing a running terminal for the same
+-identity."
++(defun agent-sidebar--visit-terminal (entry name program args &optional scope)
++  "Resume ENTRY with PROGRAM, appending its session id to ARGS.
++NAME labels the terminal.  SCOPE further distinguishes storage locations."
+   (let* ((meta (agent-sidebar--ensure-parsed entry))
+          (session (plist-get meta :session-id))
+          (cwd (or (plist-get meta :cwd) (plist-get entry :repo)))
+-         (identity (list 'claude-cli session (and cwd (file-name-as-directory (expand-file-name cwd)))))
++         (identity (append (list (plist-get entry :provider) session
++                                 (and cwd (file-name-as-directory (expand-file-name cwd))))
++                           (when scope (list scope))))
+          (live (seq-find (lambda (buffer)
+                            (and (agent-sidebar--terminal-live-p buffer)
+                                 (equal identity (buffer-local-value 'agent-sidebar--terminal-session buffer))))
+                          (buffer-list))))
+     (unless (and (stringp session) (not (string-empty-p session))) (user-error "Transcript has no session id"))
+-    (unless (and cwd (file-directory-p cwd)) (user-error "Transcript has no existing working directory"))
++    (unless (and (stringp cwd) (file-name-absolute-p cwd) (file-directory-p cwd))
++      (user-error "Transcript has no existing working directory"))
+     (if live (agent-shell-sidebar--pop-to live)
+       (let ((buffer (agent-sidebar--launch-terminal
+-                     (format "*claude-resume: %s*" (substring session 0 (min 8 (length session))))
+-                     agent-sidebar-claude-cli-command
+-                     (append agent-sidebar-claude-cli-resume-args (list session)) cwd)))
++                     (format "*%s-resume: %s*" name (substring session 0 (min 8 (length session))))
++                     program (append args (list session)) cwd)))
+         (with-current-buffer buffer
+           (setq-local agent-sidebar--terminal-session identity)
+           (setq-local agent-sidebar--terminal-file (plist-get entry :id)))))))
+ 
++(defun agent-sidebar--claude-visit (entry)
++  "Resume ENTRY in a Claude CLI terminal, reusing its running session."
++  (agent-sidebar--visit-terminal entry "claude" agent-sidebar-claude-cli-command
++                                 agent-sidebar-claude-cli-resume-args))
++
++;;; Codex native rollouts and agent-shell
++
++(defun agent-sidebar--codex-list ()
++  "Discover regular Codex rollouts without following directory symlinks."
++  (let ((base (expand-file-name "sessions/" agent-sidebar-codex-home)) entries)
++    (unless (file-remote-p base)
++      (let ((pending (list (cons base 0))))
++        (while pending
++          (pcase-let ((`(,directory . ,depth) (pop pending)))
++            (unless (file-symlink-p directory)
++              (dolist (pair (condition-case nil
++                               (directory-files-and-attributes directory t "\\`[^.]" t)
++                             (file-error nil)))
++                (let* ((file (car pair)) (attrs (cdr pair))
++                       (name (file-name-nondirectory file)))
++                  (cond
++                   ((and (< depth 3) (eq t (file-attribute-type attrs))
++                         (string-match-p (if (= depth 0) "\\`[0-9]\\{4\\}\\'" "\\`[0-9]\\{2\\}\\'") name))
++                    (push (cons file (1+ depth)) pending))
++                   ((and (agent-shell-sidebar--regular-file-attributes-p attrs)
++                         (string-match-p "\\`rollout-.*\\.jsonl\\'" name))
++                    (push (list :provider 'codex-cli :id file :agent "Codex" :attrs attrs
++                                :extras (list :codex-home (expand-file-name agent-sidebar-codex-home)))
++                          entries))))))))))
++    entries))
++
++(defun agent-sidebar--codex-user-text (content)
++  "Extract a user prompt from CONTENT, excluding injected context blocks."
++  (seq-some
++   (lambda (block)
++     (let ((text (and (listp block) (equal (alist-get 'type block) "input_text")
++                      (alist-get 'text block))))
++       (when (stringp text)
++         (setq text (string-trim text))
++         (unless (or (string-empty-p text)
++                     (string-match-p
++                      "\\`\\(?:# AGENTS\\.md instructions\\|<\\(?:environment_context\\|INSTRUCTIONS\\|permissions\\|skills_instructions\\|user_instructions\\)\\(?:[ >]\\)\\)"
++                      text))
++           text))))
++   (and (listp content) content)))
++
++(defun agent-sidebar--codex-parse (entry)
++  "Read at most 262144 bytes of native Codex rollout metadata for ENTRY.
++Use the thread id in session_meta, never a prompt's claimed session id."
++  (condition-case err
++      (let (session cwd timestamp model preview fallback)
++        (dolist (object (agent-sidebar--read-jsonl (plist-get entry :id) 262144))
++          (let ((payload (alist-get 'payload object)))
++            (when (listp payload)
++              (pcase (alist-get 'type object)
++                ("session_meta"
++                 ;; Forked rollouts can contain older metadata after their own.
++                 (unless session
++                   (let ((id (alist-get 'id payload)))
++                     (when (and (stringp id) (not (string-empty-p id)))
++                       (setq session id cwd (alist-get 'cwd payload)
++                             timestamp (alist-get 'timestamp payload))))))
++                ("turn_context"
++                 (unless model
++                   (when (stringp (alist-get 'model payload))
++                     (setq model (alist-get 'model payload)))))
++                ("event_msg"
++                 (when (and (null preview) (equal (alist-get 'type payload) "user_message")
++                            (stringp (alist-get 'message payload))
++                            (not (string-empty-p (string-trim (alist-get 'message payload)))))
++                   (setq preview (alist-get 'message payload))))
++                ("response_item"
++                 (when (and (null fallback) (equal (alist-get 'type payload) "message")
++                            (equal (alist-get 'role payload) "user"))
++                   (setq fallback (agent-sidebar--codex-user-text (alist-get 'content payload)))))))))
++        (unless (and (stringp session)
++                     (string-match-p
++                      "\\`[[:xdigit:]]\\{8\\}-[[:xdigit:]]\\{4\\}-[[:xdigit:]]\\{4\\}-[[:xdigit:]]\\{4\\}-[[:xdigit:]]\\{12\\}\\'"
++                      session))
++          (user-error "No valid Codex thread id in rollout prefix"))
++        (setq preview (or preview fallback))
++        (list :agent "Codex" :session-id session :cwd (and (stringp cwd) cwd)
++              :timestamp (and (stringp timestamp) timestamp) :model model
++              :preview (and preview (car (split-string (string-trim preview) "\n" t)))))
++    (file-error (list :error (error-message-string err)))
++    (user-error (list :error (error-message-string err)))))
++
++(defun agent-sidebar--codex-environment ()
++  "Return a child environment using the sidebar's local Codex data directory."
++  (when (file-remote-p agent-sidebar-codex-home) (user-error "Codex home must be local"))
++  (cons (concat "CODEX_HOME=" (expand-file-name agent-sidebar-codex-home))
++        (seq-remove (lambda (value) (string-prefix-p "CODEX_HOME=" value)) process-environment)))
++
++(defun agent-sidebar--require-codex-terminal ()
++  "Make ghostel available for Codex unless a custom terminal runner is set."
++  (unless (or agent-sidebar-terminal-function (fboundp 'ghostel-exec)
++              (and (require 'ghostel nil t) (fboundp 'ghostel-exec)))
++    (user-error "Codex CLI requires ghostel or agent-sidebar-terminal-function")))
++
++(defun agent-sidebar--codex-visit (entry)
++  "Resume ENTRY as a Codex CLI session in ghostel."
++  (agent-sidebar--require-codex-terminal)
++  (let* ((agent-sidebar-codex-home (or (plist-get (plist-get entry :extras) :codex-home)
++                                      agent-sidebar-codex-home))
++         (process-environment (agent-sidebar--codex-environment)))
++    (agent-sidebar--visit-terminal entry "codex" agent-sidebar-codex-cli-command '("resume")
++                                   (file-truename agent-sidebar-codex-home))))
++
++(defun agent-sidebar--codex-start-agent-shell (directory &optional session)
++  "Start or reuse Codex through agent-shell in DIRECTORY for SESSION."
++  (let* ((config (agent-shell-sidebar--select-config "Codex"))
++         (home (file-truename (expand-file-name agent-sidebar-codex-home)))
++         (candidate (and session (agent-shell-sidebar--live-buffer-for-session session "Codex" directory config)))
++         (existing
++          (and candidate
++               (equal home (or (buffer-local-value 'agent-sidebar--codex-session-home candidate)
++                               (file-truename (expand-file-name (or (getenv "CODEX_HOME") "~/.codex/")))))
++               candidate))
++         (process-environment (agent-sidebar--codex-environment)))
++    (or existing
++        (let ((buffer (agent-shell-sidebar--start directory config session)))
++          (with-current-buffer buffer (setq-local agent-sidebar--codex-session-home home))
++          buffer))))
++
++(defun agent-sidebar--codex-agent-shell-visit (entry)
++  "Resume the native Codex rollout ENTRY through agent-shell."
++  (let* ((agent-sidebar-codex-home (or (plist-get (plist-get entry :extras) :codex-home)
++                                      agent-sidebar-codex-home))
++         (meta (agent-sidebar--ensure-parsed entry))
++         (directory (plist-get meta :cwd))
++         (session (plist-get meta :session-id)))
++    (unless (and (stringp directory) (file-name-absolute-p directory)
++                 (not (file-remote-p directory)) (file-directory-p directory))
++      (user-error "Codex rollout has no existing local working directory"))
++    (unless (and (stringp session) (not (string-empty-p session)))
++      (user-error "Codex rollout has no session id"))
++    (let ((buffer (agent-sidebar--codex-start-agent-shell (file-name-as-directory directory) session)))
++      (with-current-buffer buffer
++        (setq-local agent-sidebar--agent-shell-file (plist-get entry :id)))
++      (agent-sidebar--pop-to buffer))))
++
+ (defun agent-sidebar--owned-file-p (file)
+-  "Return non-nil if a live terminal owns FILE, including filesystem aliases."
++  "Return non-nil if a terminal or agent-shell owns FILE, including aliases."
+   (seq-some (lambda (buffer)
+-              (let ((owned (buffer-local-value 'agent-sidebar--terminal-file buffer)))
+-                (and (stringp owned) (agent-sidebar--terminal-live-p buffer)
++              (let ((owned (or (buffer-local-value 'agent-sidebar--terminal-file buffer)
++                               (buffer-local-value 'agent-sidebar--agent-shell-file buffer))))
++                (and (stringp owned)
++                     (or (agent-sidebar--terminal-live-p buffer)
++                         (with-current-buffer buffer (derived-mode-p 'agent-shell-mode)))
+                      (or (equal owned file) (file-equal-p owned file))))) (buffer-list)))
+ 
+ (agent-sidebar-register-provider
+@@ -525,6 +688,9 @@
+ (agent-sidebar-register-provider
+  (list :id 'claude-cli :name "Claude CLI" :list #'agent-sidebar--claude-list
+        :parse #'agent-sidebar--claude-parse :visit #'agent-sidebar--claude-visit))
++(agent-sidebar-register-provider
++ (list :id 'codex-cli :name "Codex CLI" :list #'agent-sidebar--codex-list
++       :parse #'agent-sidebar--codex-parse :visit #'agent-sidebar--codex-visit))
+ 
+ ;;; Grouping and staged rendering
+ 
+@@ -748,12 +914,26 @@
+   (mouse-set-point event)
+   (agent-sidebar-visit))
+ 
+-(defun agent-sidebar-new-session ()
+-  "Start a new session in the entry or repository at point."
++(defun agent-sidebar-visit-in-agent-shell ()
++  "Resume the selected Codex rollout or agent-shell transcript in agent-shell."
+   (interactive)
++  (let* ((displayed (get-text-property (line-beginning-position) 'agent-sidebar-entry))
++         (entry (and displayed (gethash (plist-get displayed :id) agent-sidebar--entries))))
++    (pcase (plist-get entry :provider)
++      ('codex-cli (agent-sidebar--codex-agent-shell-visit entry))
++      ('agent-shell (agent-sidebar--agent-shell-visit entry))
++      (_ (user-error "Select a Codex or agent-shell transcript")))))
++
++(defun agent-sidebar-new-session (&optional use-agent-shell)
++  "Start a new session in the entry or repository at point.
++On a Codex CLI row, USE-AGENT-SHELL (a prefix argument) starts agent-shell
++instead of ghostel."
++  (interactive "P")
+   (let* ((entry (get-text-property (line-beginning-position) 'agent-sidebar-entry))
+          (crumb (get-text-property (line-beginning-position) 'agent-sidebar-group))
+          (provider (or (plist-get entry :provider) (cdr (assq 'package crumb)) 'agent-shell))
++         (agent-sidebar-codex-home (or (plist-get (plist-get entry :extras) :codex-home)
++                                      agent-sidebar-codex-home))
+          (directory (or (and entry (agent-sidebar--entry-repo entry)) (cdr (assq 'repo crumb))
+                         (car agent-shell-sidebar--context-roots))))
+     (unless (and directory (file-directory-p directory)) (user-error "No existing project at point"))
+@@ -763,6 +943,12 @@
+                                directory (agent-shell-sidebar--select-config
+                                           (and entry (agent-sidebar--entry-agent entry))))))
+       ('claude-cli (agent-sidebar--launch-terminal "*claude-new*" agent-sidebar-claude-cli-command nil directory))
++      ('codex-cli
++       (if use-agent-shell
++           (agent-sidebar--pop-to (agent-sidebar--codex-start-agent-shell directory))
++         (agent-sidebar--require-codex-terminal)
++         (let ((process-environment (agent-sidebar--codex-environment)))
++           (agent-sidebar--launch-terminal "*codex-new*" agent-sidebar-codex-cli-command nil directory))))
+       (_ (user-error "Provider does not support new sessions: %s" provider)))))
+ 
+ (defvar agent-sidebar-mode-map
+@@ -770,7 +956,7 @@
+     (set-keymap-parent map agent-shell-sidebar-mode-map)
+     (dolist (binding '(("RET" . agent-sidebar-visit) ("TAB" . agent-sidebar-toggle-group)
+                        ("<tab>" . agent-sidebar-toggle-group) ("G" . agent-sidebar-set-grouping)
+-                       ("N" . agent-sidebar-new-session)))
++                       ("N" . agent-sidebar-new-session) ("A" . agent-sidebar-visit-in-agent-shell)))
+       (define-key map (kbd (car binding)) (cdr binding)))
+     (define-key map [mouse-2] #'agent-sidebar-mouse-visit)
+     map)
+@@ -779,6 +965,7 @@
+ (define-derived-mode agent-sidebar-mode agent-shell-sidebar-mode "AgentChats"
+   "Browse conversations across providers.
+ RET resumes, o reads, / filters, G changes grouping, and N starts a session.
++A resumes a Codex rollout through agent-shell; C-u N starts a Codex agent-shell.
+ The shared mode owns parsing, cache validation, marks, and timer cleanup."
+   :group 'agent-sidebar
+   (setq-local agent-sidebar--entries (make-hash-table :test 'equal))
+@@ -832,7 +1019,8 @@
+ 		      (kbd "RET") #'agent-sidebar-visit (kbd "TAB") #'agent-sidebar-toggle-group
+ 		      (kbd "^") #'agent-sidebar-toggle-group (kbd "-") #'agent-sidebar-toggle-group
+ 		      (kbd "/") #'agent-sidebar-set-filter (kbd "G") #'agent-sidebar-set-grouping
+-		      (kbd "N") #'agent-sidebar-new-session))
++                      (kbd "N") #'agent-sidebar-new-session
++                      (kbd "A") #'agent-sidebar-visit-in-agent-shell))
+   (when (fboundp 'evil-make-overriding-map)
+     (evil-make-overriding-map agent-sidebar-mode-map 'normal)))
+ 

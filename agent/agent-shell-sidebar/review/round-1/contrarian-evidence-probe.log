@@ -1,0 +1,78 @@
+LANG=C.UTF-8 cannot be used, using en_US.UTF-8 instead.
+Running 5 tests (2026-09-08 12:55:58-0700, selector `t')
+   passed  1/5  contrarian-evidence-byte-limit-is-independent-of-boundary (0.001630 sec)
+   passed  2/5  contrarian-evidence-complete-id-at-byte-limit-is-retained (0.001089 sec)
+   passed  3/5  contrarian-evidence-first-message-is-a-boundary-without-separator (0.000678 sec)
+Created .agent-shell/transcripts/fixture.md
+Real writer: recorded="/var/folders/20/4zczrx1s3lq2fv0xmm0gj1fr0000gn/T/sidebar-evidence-EcY6wr/project " parsed="/var/folders/20/4zczrx1s3lq2fv0xmm0gj1fr0000gn/T/sidebar-evidence-EcY6wr/project" resolved="/var/folders/20/4zczrx1s3lq2fv0xmm0gj1fr0000gn/T/sidebar-evidence-EcY6wr/project/"
+Test contrarian-evidence-real-writer-preserves-directory-ending-in-space backtrace:
+  ert-fail(((should (equal resolved (file-name-as-directory directory)
+  (if (unwind-protect (setq value-34 (apply fn-32 args-33)) (setq form
+  (let (form-description-36) (if (unwind-protect (setq value-34 (apply
+  (let ((value-34 'ert-form-evaluation-aborted-35)) (let (form-descrip
+  (let* ((fn-32 #'equal) (args-33 (condition-case err (list resolved (
+  (let* ((header (agent-shell-sidebar--parse-header-from-file file)) (
+  (let* ((directory (expand-file-name "project " root)) (trimmed (expa
+  (progn (make-directory (file-name-directory file) t) (let* ((directo
+  (unwind-protect (progn (make-directory (file-name-directory file) t)
+  (let* ((root (file-name-as-directory (make-temp-file "sidebar-eviden
+  #f(lambda () [t] (let* ((root (file-name-as-directory ...)) (file (e
+  #f(compiled-function () #<bytecode 0x10dcf5868ca5943>)()
+  handler-bind-1(#f(compiled-function () #<bytecode 0x10dcf5868ca5943>
+  ert--run-test-internal(#s(ert--test-execution-info :test #s(ert-test
+  ert-run-test(#s(ert-test :name contrarian-evidence-real-writer-prese
+  ert-run-or-rerun-test(#s(ert--stats :selector t :tests ... :test-map
+  ert-run-tests(t #f(compiled-function (event-type &rest event-args) #
+  ert-run-tests-batch(nil)
+  ert-run-tests-batch-and-exit()
+  command-line-1(("-l" "jka-compr" "-L" "/Users/ducnguyen/.emacs.d/elp
+  command-line()
+  normal-top-level()
+Test contrarian-evidence-real-writer-preserves-directory-ending-in-space condition:
+    (ert-test-failed
+     ((should (equal resolved (file-name-as-directory directory))) :form
+      (equal
+       "/var/folders/20/4zczrx1s3lq2fv0xmm0gj1fr0000gn/T/sidebar-evidence-EcY6wr/project/"
+       "/var/folders/20/4zczrx1s3lq2fv0xmm0gj1fr0000gn/T/sidebar-evidence-EcY6wr/project /")
+      :value nil :explanation
+      (arrays-of-different-length 81 82
+				  "/var/folders/20/4zczrx1s3lq2fv0xmm0gj1fr0000gn/T/sidebar-evidence-EcY6wr/project/"
+				  "/var/folders/20/4zczrx1s3lq2fv0xmm0gj1fr0000gn/T/sidebar-evidence-EcY6wr/project /"
+				  first-mismatch-at 80)))
+   FAILED  4/5  contrarian-evidence-real-writer-preserves-directory-ending-in-space (0.001036 sec) at agent/agent-shell-sidebar/review/round-1/contrarian-evidence-probe.el:67
+Cutoff: complete="complete-session-identifier" parsed="comp" start-session="comp" file-bytes=8220 visit-error=nil
+Test contrarian-evidence-session-id-cut-by-byte-limit-is-not-used backtrace:
+  ert-fail(((should (or (plist-get header :error) (not (plist-get head
+  (if (unwind-protect (setq value-20 (or (plist-get header :error) (no
+  (let (form-description-21) (if (unwind-protect (setq value-20 (or (p
+  (let ((value-20 (gensym "ert-form-evaluation-aborted-"))) (let (form
+  (let ((header (agent-shell-sidebar--parse-header-from-file file)) st
+  (let* ((prefix (format "# Agent Shell Transcript\n**Agent:** Mock\n*
+  (progn (make-directory (file-name-directory file) t) (let* ((prefix 
+  (unwind-protect (progn (make-directory (file-name-directory file) t)
+  (let* ((root (file-name-as-directory (make-temp-file "sidebar-eviden
+  #f(lambda () [t] (let* ((root (file-name-as-directory ...)) (file (e
+  #f(compiled-function () #<bytecode 0x10dcf5868ca5943>)()
+  handler-bind-1(#f(compiled-function () #<bytecode 0x10dcf5868ca5943>
+  ert--run-test-internal(#s(ert--test-execution-info :test #s(ert-test
+  ert-run-test(#s(ert-test :name contrarian-evidence-session-id-cut-by
+  ert-run-or-rerun-test(#s(ert--stats :selector t :tests ... :test-map
+  ert-run-tests(t #f(compiled-function (event-type &rest event-args) #
+  ert-run-tests-batch(nil)
+  ert-run-tests-batch-and-exit()
+  command-line-1(("-l" "jka-compr" "-L" "/Users/ducnguyen/.emacs.d/elp
+  command-line()
+  normal-top-level()
+Test contrarian-evidence-session-id-cut-by-byte-limit-is-not-used condition:
+    (ert-test-failed
+     ((should (or (plist-get header :error) (not ...))) :form
+      (or (plist-get header :error) (not (plist-get header :session-id)))
+      :value nil))
+   FAILED  5/5  contrarian-evidence-session-id-cut-by-byte-limit-is-not-used (0.001304 sec) at agent/agent-shell-sidebar/review/round-1/contrarian-evidence-probe.el:37
+
+Ran 5 tests, 3 results as expected, 2 unexpected (2026-09-08 12:55:58-0700, 0.077280 sec)
+
+2 unexpected results:
+   FAILED  contrarian-evidence-real-writer-preserves-directory-ending-in-space
+   FAILED  contrarian-evidence-session-id-cut-by-byte-limit-is-not-used
+

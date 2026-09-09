@@ -1,0 +1,38 @@
+[
+  {
+    "name": "leaked",
+    "command": [
+      "python3",
+      "/Users/ducnguyen/.emacs.d/agent/agent-shell-sidebar/review/run-probe.py",
+      "/Users/ducnguyen/.emacs.d/agent/agent-shell-sidebar/review/round-2/contrarian-evidence-policy-leaked.el",
+      "--source",
+      "/Users/ducnguyen/.emacs.d/agent/agent-shell-sidebar/review/round-2/reviewed.el",
+      "--log",
+      "/Users/ducnguyen/.emacs.d/agent/agent-shell-sidebar/review/round-2/contrarian-evidence-policy-leaked.log"
+    ],
+    "exit": 1,
+    "summary": [
+      "POLICY before=t after=nil selector-native=t source=\"/Users/ducnguyen/.emacs.d/agent/agent-shell-sidebar/review/round-2/reviewed.el\"",
+      "   FAILED  1/1  identity-ambiguous-alias-obeys-explicit-selection-on-every-visit (0.001766 sec) at agent/agent-shell-sidebar/review/fixes/identity-tests.el:113",
+      "Ran 1 tests, 0 results as expected, 1 unexpected (2026-09-08 13:28:11-0700, 0.066274 sec)",
+      "   FAILED  identity-ambiguous-alias-obeys-explicit-selection-on-every-visit"
+    ]
+  },
+  {
+    "name": "isolated",
+    "command": [
+      "python3",
+      "/Users/ducnguyen/.emacs.d/agent/agent-shell-sidebar/review/run-probe.py",
+      "/Users/ducnguyen/.emacs.d/agent/agent-shell-sidebar/review/round-2/contrarian-evidence-policy-isolated.el",
+      "--source",
+      "/Users/ducnguyen/.emacs.d/agent/agent-shell-sidebar/review/round-2/reviewed.el",
+      "--log",
+      "/Users/ducnguyen/.emacs.d/agent/agent-shell-sidebar/review/round-2/contrarian-evidence-policy-isolated.log"
+    ],
+    "exit": 0,
+    "summary": [
+      "POLICY before=t after=t selector-native=t source=\"/Users/ducnguyen/.emacs.d/agent/agent-shell-sidebar/review/round-2/reviewed.el\"",
+      "Ran 1 tests, 1 results as expected, 0 unexpected (2026-09-08 13:28:12-0700, 0.411707 sec)"
+    ]
+  }
+]
