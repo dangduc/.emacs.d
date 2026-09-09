@@ -27,3 +27,39 @@
 [submodule "agent/vegeta-gap-2026-09-08/vegeta"]
 	path = agent/vegeta-gap-2026-09-08/vegeta
 	url = https://github.com/dangduc/vegeta.git
+[submodule "vendor-30/auto-compile"]
+	path = vendor-30/auto-compile
+	url = git@github.com:emacscollective/auto-compile.git
+[submodule "vendor-30/fzf-native"]
+	path = vendor-30/fzf-native
+	url = https://github.com/dangduc/fzf-native.git
+[submodule "vendor-30/fzfa"]
+	path = vendor-30/fzfa
+	url = https://github.com/jojojames/fzfa
+[submodule "vendor-30/packed"]
+	path = vendor-30/packed
+	url = git@github.com:emacscollective/packed.git
+[submodule "vendor-30/pulsar"]
+	path = vendor-30/pulsar
+	url = https://gitlab.com/protesilaos/pulsar.git
+[submodule "vendor-30/vegeta"]
+	path = vendor-30/vegeta
+	url = https://github.com/dangduc/vegeta.git
+[submodule "vendor-31/auto-compile"]
+	path = vendor-31/auto-compile
+	url = git@github.com:emacscollective/auto-compile.git
+[submodule "vendor-31/fzf-native"]
+	path = vendor-31/fzf-native
+	url = https://github.com/dangduc/fzf-native.git
+[submodule "vendor-31/fzfa"]
+	path = vendor-31/fzfa
+	url = https://github.com/jojojames/fzfa
+[submodule "vendor-31/packed"]
+	path = vendor-31/packed
+	url = git@github.com:emacscollective/packed.git
+[submodule "vendor-31/pulsar"]
+	path = vendor-31/pulsar
+	url = https://gitlab.com/protesilaos/pulsar.git
+[submodule "vendor-31/vegeta"]
+	path = vendor-31/vegeta
+	url = https://github.com/dangduc/vegeta.git

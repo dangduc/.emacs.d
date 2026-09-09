@@ -120,14 +120,6 @@
 (when (> emacs-major-version 28)
   (pixel-scroll-precision-mode 1))
 
-;; Start emacs server
-;; e.g. ~/.zshrc
-;;   # (find-file) send to emacs server.
-;;   # ie, emacsclient -n file1 file2 ...
-;;   alias emacsff="emacsclient -n"
-(if (not (eq system-type 'windows-nt))
-    (and window-system (server-start)))
-
 ;; Don't open buffer for native compilation warnings.
 (setq warning-suppress-types '((comp)))
 
@@ -152,10 +144,7 @@
 ;; Vendor management
 ;;
 
-;; Stolen from [Aaron Bedra's Emacs 26 Configuration](http://aaronbedra.com/emacs.d/#vendor-directory)
-;; The vendor directory goes on `load-path' *after* `package-initialize' below,
-;; so vendored forks shadow same-named ELPA packages (see there).
-(defvar duc/vendor-dir (expand-file-name "vendor" user-emacs-directory))
+;; Each major version loads independent vendor sources from vendor-N/.
 
 ;; package management
 ;;
@@ -166,16 +155,8 @@
 (unless package--initialized
   (package-initialize))
 
-;; `package-initialize' pushes every installed ELPA directory onto the front of
-;; `load-path', so the vendor directories have to be added *after* it to win.
-;; Order matters for the vendored forks that are also installed from an archive
-;; (`fzf-native', `fzfa'): with vendor first, `require' picks up the working
-;; tree in `vendor/' and `fzf-native-load-dyn' loads the module under
-;; `vendor/fzf-native/bin/'.
-(add-to-list 'load-path duc/vendor-dir)
-(dolist (project (directory-files duc/vendor-dir t "\\w+"))
-  (when (file-directory-p project)
-    (add-to-list 'load-path project)))
+;; Source files and native modules belong to this major version's checkouts.
+(duc-startup-activate-vendor)
 
 (require 'use-package)
 ;; package.el equivalent of straight's `straight-use-package-by-default': every
@@ -183,20 +164,27 @@
 (setq use-package-always-ensure t)
 
 
-;; Setup personal lisp directory.
-(add-to-list 'load-path (expand-file-name "lisp" user-emacs-directory))
+;; Install missing dependencies before loading the shared configuration.
+(require 'duc-bootstrap)
+(require 'use-package-ensure)
+(setq use-package-ensure-function #'duc-bootstrap-ensure-package)
+(duc-bootstrap-parallel-install)
+;; package-initialize in the installer can put ELPA packages first again.
+(duc-startup-activate-vendor)
 
 ;; Package declarations
 ;;
 
 (require 'package-declarations)
 
+(add-hook 'after-init-hook #'duc-startup-prepare-lisp t)
+
 ;; End package declarations
 
 ;; Start an Emacs server so `emacsclient' can connect (and `emacsclient --eval'
 ;; can query/drive the running session). A daemon already starts its own server.
 (require 'server)
-(unless (server-running-p)
+(unless (or noninteractive (daemonp) (server-running-p server-name))
   (server-start))
 
 (custom-set-variables

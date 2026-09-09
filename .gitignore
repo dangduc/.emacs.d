@@ -71,3 +71,8 @@ local.el
 /package-quickstart-*.el
 .prd-saved-dices.el
 /tree-sitter/
+/user-lisp-[0-9]*/.user-lisp-autoloads.el
+/user-lisp/.user-lisp-autoloads.el
+/cache/vendor-lisp/
+projectile-frecency.eld
+/fzf-native.log

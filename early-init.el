@@ -1,5 +1,15 @@
 ;;;; -*- lexical-binding: t; -*-
 
+(when (eq system-type 'darwin)
+  ;; libgccjit needs Homebrew's GCC driver on PATH to locate its runtime
+  ;; libraries.  GUI startup can compile Lisp before the asynchronous shell
+  ;; environment import finishes, so supply these paths before any require.
+  (dolist (directory '("/usr/local/bin" "/opt/homebrew/bin"))
+    (when (file-directory-p directory)
+      (add-to-list 'exec-path directory)
+      (unless (member directory (split-string (or (getenv "PATH") "") path-separator t))
+        (setenv "PATH" (concat directory path-separator (getenv "PATH")))))))
+
 (require 'package)
 
 ;; Defined in Emacs 27 and above.
@@ -27,11 +37,38 @@
 ;; larger than the system default.
 (setq frame-inhibit-implied-resize t)
 
-;; Separate package directories according to Emacs version.
-;; Bytecode compiled in different Emacs versions are not
-;; guaranteed to work with another.
+;; Version directories accept shared configuration links and independent sources.
+(defvar user-lisp-directory nil)
 (setq package-user-dir
-      (format "%selpa/%s/" user-emacs-directory emacs-major-version))
+      (expand-file-name (format "elpa/%s/" emacs-major-version)
+                        user-emacs-directory)
+      user-lisp-directory
+      (file-name-as-directory
+       (expand-file-name
+        (if (memq system-type '(cygwin windows-nt ms-dos))
+            "user-lisp"
+          (format "user-lisp-%s" emacs-major-version))
+        user-emacs-directory)))
+
+;; Package activation happens in init.el.  Compile user Lisp after that,
+;; when use-package and the macros in the configuration are available.
+(setq user-lisp-auto-scrape nil)
+(load (expand-file-name "user-lisp/duc-startup.el" user-emacs-directory)
+      nil t t)
+(duc-startup-initialize)
+(when (fboundp 'startup-redirect-eln-cache)
+  (startup-redirect-eln-cache
+   (expand-file-name (format "eln-cache/%s/" emacs-major-version)
+                     user-emacs-directory)))
+
+;; Separate server sockets let agents address a specific Emacs version.
+;; Emacs 31 keeps the default socket for existing emacsclient commands.
+;; Preserve explicit --daemon=NAME / --fg-daemon=NAME selections.
+(require 'server)
+(unless (stringp (daemonp))
+  (setq server-name (if (= emacs-major-version 31)
+                        "server"
+                      (format "emacs-%s" emacs-major-version))))
 
 ;; `load-prefer-newer' makes Emacs pick FOO.el over an older FOO.elc.  In an
 ;; installed macOS bundle the shipped Lisp is gzipped, so when jka-compr.el.gz
@@ -44,20 +81,13 @@
 
 (setq load-prefer-newer t)
 
-(let ((dir (file-name-directory (or load-file-name buffer-file-name))))
-  (add-to-list 'load-path (expand-file-name "vendor/packed" dir))
-  (add-to-list 'load-path (expand-file-name "vendor/auto-compile" dir)))
-(require 'auto-compile)
-(auto-compile-on-load-mode)
-(auto-compile-on-save-mode)
+;; Compilation uses the versioned links after init.  Global auto-compile
+;; would also write bytecode beside shared source files opened for editing.
 
-;; Native-compilation warnings.  This config's utility library (`lisp/duc.el')
-;; and some third-party packages call functions from other packages that are
-;; only loaded lazily, so the native compiler emits many "the function ... is
-;; not known to be defined" warnings.  They are false positives — the functions
-;; exist at runtime once their package loads — but pop the *Warnings* buffer on
-;; every recompile.  `silent' still records them in `*Async-native-compile-log*'
-;; for debugging while keeping them out of your face.
+;; Compiler workers start without the parent session's loaded definitions.
+;; Optional functions and macros can therefore produce unresolved-reference
+;; warnings.  Keep these warnings in the logs without opening *Warnings*.
+;; Actual compiler errors still require investigation.
 (setq native-comp-async-report-warnings-errors 'silent)
 
 (setq package-enable-at-startup nil)

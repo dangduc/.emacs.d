@@ -1,0 +1,54 @@
+{
+  "major": 31,
+  "source": "/Users/ducnguyen/.emacs.d/vendor",
+  "packages": [
+    {
+      "name": "asy-mode"
+    },
+    {
+      "name": "auto-compile",
+      "commit": "ec4c700f5a7d6af6992b50d7b309c8d9a7c07a7c",
+      "source_status": "",
+      "snapshot_commit": "539bf738c6359aa26865164162e59b93d8a0cc2b"
+    },
+    {
+      "name": "fruity-theme"
+    },
+    {
+      "name": "fzf-native",
+      "commit": "acd36a8739d668a3b96b0b180394e08254d6531b",
+      "source_status": "",
+      "snapshot_commit": "c167042840bc535d1c16264c21b22d87a451d2ba"
+    },
+    {
+      "name": "fzf-native.zip"
+    },
+    {
+      "name": "fzfa",
+      "commit": "24799c887d3d929817026499c3cfd3ac4b9561f5",
+      "source_status": "",
+      "snapshot_commit": "814e4cedb912d0fd1048db029e92f7b3c39bb297"
+    },
+    {
+      "name": "not-elisp"
+    },
+    {
+      "name": "packed",
+      "commit": "ed63b4803899c3719aeeba461e249c473e5b26f0",
+      "source_status": "",
+      "snapshot_commit": "cf3d963fcd1103f4d090c7c31facf43ef3b62b3e"
+    },
+    {
+      "name": "pulsar",
+      "commit": "b2983c26281498a553c626ee38f2d5e4c07bfbc2",
+      "source_status": "",
+      "snapshot_commit": "8ab0c5d2013fe0ba36cf86d57d8acd0bd408ce8a"
+    },
+    {
+      "name": "vegeta",
+      "commit": "8f20c25212ffe56db8ae3e9d177102b44655e4eb",
+      "source_status": "",
+      "snapshot_commit": "77ed1218e1cfe104aa4c67e3ee16f5a7bc8e849e"
+    }
+  ]
+}

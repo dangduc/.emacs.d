@@ -71,7 +71,7 @@
     "file"
     [["navigate"
       ("f" "find file" find-file)
-      ("i" "package-declarations.el" (lambda () (interactive) (find-file "~/.emacs.d/lisp/package-declarations.el")))
+      ("i" "package-declarations.el" (lambda () (interactive) (find-file "~/.emacs.d/user-lisp/package-declarations.el")))
       ("I" "init.el" (lambda () (interactive) (find-file "~/.emacs.d/init.el")))
       ("1" "index.org" (lambda () (interactive) (find-file "~/dev/notes/index.org")))
       ("b" "sidebar" duc/sidebar-toggle)]
@@ -161,7 +161,7 @@
       ("h" "hydra" org-fc-hydra/body)]]))
 
 (use-package duc
-  :ensure nil ;; local package in lisp/
+  :ensure nil ;; local package in user-lisp/
   :init
                                         ; e.g., switch-to-buffer respects other-window-prefix
   (setq switch-to-buffer-obey-display-actions t)
@@ -624,24 +624,9 @@ _p_/_a_: push notes         _i_: screenshot
   (setq abbrev-file-name
         (expand-file-name "abbrev_defs.el" user-emacs-directory)))
 
-;; Built-in tree-sitter (Emacs 31+), replacing the third-party `tree-sitter' /
-;; `tree-sitter-langs' pair, which only did highlighting.
-;; `treesit-enabled-modes' t copies every entry of
-;; `treesit-major-mode-remap-alist' into `major-mode-remap-alist', so each
-;; language opens in its FOO-ts-mode.  That copying is done by the option's
-;; `:set' function, so the value has to be assigned after treesit.el is loaded
-;; -- hence `:demand' (the require costs ~10ms) and `setopt' over `setq'.
-;; `treesit-auto-install-grammar' defaults to `ask', which offers to build a
-;; missing grammar into `user-emacs-directory'/tree-sitter on first visit.
-;;
-;; The ts modes derive from FOO-base-mode rather than FOO-mode, so the hooks
-;; further down hang off the base mode where one exists (`sh-base-mode',
-;; `js-base-mode', `python-base-mode') and name both modes where none does.
-(use-package treesit
-  :ensure nil
-  :demand t
-  :config
-  (setopt treesit-enabled-modes t))
+;; Grammar recipes and mode selection work with each version's capabilities.
+;; The language hooks below use base-mode hooks where both modes share one.
+(require 'duc-treesit)
 
 ;; themes
 
@@ -706,8 +691,7 @@ _p_/_a_: push notes         _i_: screenshot
 ;  (setq fruity-want-dark-modeline t))
 
 (use-package fruity-theme
-  :ensure nil ;; local copy on load-path (vendor/fruity-theme)
-  :load-path "vendor/fruity-theme"
+  :ensure nil ;; local copy on load-path (vendor-N/fruity-theme)
   :init
   (setq fruity-want-transparent-line-numbers nil)
   (setq fruity-want-dark-modeline nil))
@@ -886,7 +870,7 @@ _p_/_a_: push notes         _i_: screenshot
 ;; native `fzf-native' batch path (see below).
 (use-package flx)
 
-;; Native fzf batch scorer, vendored fork in `vendor/fzf-native' (on `load-path'
+;; Native fzf batch scorer, vendored fork in `vendor-N/fzf-native' (on `load-path'
 ;; via init.el). It ships prebuilt dynamic modules under `bin/' — on Apple
 ;; Silicon `fzf-native-load-dyn' picks `bin/Darwin/arm64/fzf-native-module.so'.
 ;; `fussy-setup-fzf' points fussy at the native `fussy-fzf-score'; the module is
@@ -896,11 +880,11 @@ _p_/_a_: push notes         _i_: screenshot
   :defer t)
 
 ;; `fzfa' — async fuzzy pickers on top of `fzf-native'. Vendored fork in
-;; `vendor/fzfa' (ahead of the archive build; see the load-path note in
+;; `vendor-N/fzfa' (ahead of the archive build; see the load-path note in
 ;; init.el). A package.el install would hand us `fzfa-autoloads.el' at
 ;; activation, but a vendored tree gets no autoload file loaded for it, so the
 ;; stubs are declared here: one `use-package' per source file, mirroring the
-;; `;;;###autoload' cookies in that tree. `make autoloads' in `vendor/fzfa'
+;; `;;;###autoload' cookies in that tree. `make autoloads' in `vendor-N/fzfa'
 ;; regenerates the canonical list to re-mirror from when fzfa gains commands.
 ;; `:commands'/`:autoload' only define stubs, so every file stays off the
 ;; startup path; delete the forms for extensions you do not use.
@@ -1220,7 +1204,10 @@ while `company-capf' runs."
 (add-hook 'typescript-ts-base-mode-hook
           (lambda ()
             (with-eval-after-load 'evil
-              (setq-local evil-shift-width typescript-ts-indent-offset))))
+              (setq-local evil-shift-width
+                          (if (boundp 'typescript-ts-indent-offset)
+                              typescript-ts-indent-offset
+                            typescript-ts-mode-indent-offset)))))
 
 (use-package flycheck
   :init
@@ -1655,7 +1642,7 @@ mid-word or in paths.  A company-based replacement for
 
 (use-package asy-mode
   :after org-contrib
-  ;; Vendored single file from the asymptote repo (vendor/asy-mode/), on load-path.
+  ;; Vendored single file from the asymptote repo (vendor-N/asy-mode/), on load-path.
   :ensure nil)
 
 (use-package org
@@ -1683,8 +1670,8 @@ mid-word or in paths.  A company-based replacement for
   (setq org-link-descriptive nil)
 
   ;; org-babel
-  (setq org-ditaa-jar-path "~/.emacs.d/vendor/not-elisp/ditaa0_9.jar")
-  (setq org-plantuml-jar-path "~/.emacs.d/vendor/not-elisp/plantuml.jar")
+  (setq org-ditaa-jar-path (expand-file-name "not-elisp/ditaa0_9.jar" duc-vendor-directory))
+  (setq org-plantuml-jar-path (expand-file-name "not-elisp/plantuml.jar" duc-vendor-directory))
 
   (setq org-default-notes-file "~/dev/notes/notes.org")
   (setq org-capture-templates
@@ -1890,20 +1877,35 @@ mid-word or in paths.  A company-based replacement for
   :mode "\\.lua\\'")
 (use-package outline-indent)
 
-;; Local working copies under ~/dev; loaded only when present.
+;; Prefer this version's local package copy when one is present.
 (use-package rpgdm
   :ensure nil
-  :if (file-directory-p "~/dev/emacs-rpgdm")
-  :load-path "~/dev/emacs-rpgdm")
+  :if (or (duc-startup-local-library-p 'rpgdm)
+          (file-directory-p "~/dev/emacs-rpgdm"))
+  :load-path (lambda ()
+               (if (duc-startup-local-library-p 'rpgdm)
+                   (file-name-directory (locate-library "rpgdm"))
+                 "~/dev/emacs-rpgdm")))
 
 (use-package rpgdm-ironsworn
   :ensure nil
-  :if (file-directory-p "~/dev/emacs-ironsworn")
-  :load-path "~/dev/emacs-ironsworn"
+  :if (or (duc-startup-local-library-p 'rpgdm-ironsworn)
+          (file-directory-p "~/dev/emacs-ironsworn"))
+  :load-path (lambda ()
+               (if (duc-startup-local-library-p 'rpgdm-ironsworn)
+                   (file-name-directory (locate-library "rpgdm-ironsworn"))
+                 "~/dev/emacs-ironsworn"))
   ;; rpgdm-ironsworn.el calls `f-join' at load time but doesn't require `f';
   ;; it used to work only because a now-deferred package pulled `f' in early.
   :init
   (require 'f)
-  (setq rpgdm-ironsworn-project (expand-file-name "~/dev/emacs-ironsworn")))
+  (setq rpgdm-ironsworn-project
+        (directory-file-name (file-name-directory (locate-library "rpgdm-ironsworn")))))
 
 (provide 'package-declarations)
+
+;; Package installation must run with init.el's package setup.  Native
+;; compiler workers do not inherit that setup and can attempt VC installs.
+;; Local Variables:
+;; no-byte-compile: t
+;; End:

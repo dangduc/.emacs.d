@@ -11,6 +11,13 @@
 ;; otherwise Emacs signals "Defining as dynamic an already lexical var".
 (defvar ghostel-buffer-name)
 
+;; Native compiler workers do not load these optional packages first.
+;; These bindings must remain dynamic in both bytecode and native code.
+(defvar geiser-mode-eval-last-sexp-to-buffer)
+(defvar geiser-mode-eval-to-buffer-prefix)
+(defvar request-backend)
+(defvar json-array-type)
+
 (defvar duc/font-family (pcase system-type
                           ('gnu/linux "JetBrains Mono")
                           (_ "InconsolateG for Powerline")))
